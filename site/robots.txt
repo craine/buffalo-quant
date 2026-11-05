@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://buffaloquant.com/sitemap.xml

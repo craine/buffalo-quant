@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Ledger | Buffalo Quant Desk</title><meta name="description" content="Buffalo Bills and Sabres analytics with receipts.">
+<meta property="og:title" content="The Ledger | Buffalo Quant Desk"><meta property="og:description" content="Buffalo Bills and Sabres analytics with receipts.">
+<meta property="og:image" content="https://buffaloquant.com/analysis/defense-rank-shift.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg"><link rel="stylesheet" href="style.css"></head><body>
+<header class="site"><div class="wrap"><a class="mark" href="index.html">BUFFALO <b>QUANT</b> DESK</a><nav><a href="index.html" class="">Home</a><a href="analysis/" class="">Analysis</a><a href="ledger.html" class="on">Ledger</a><a href="about.html" class="">About</a></nav></div></header>
+<main class="wrap"><div class="kicker">The Ledger</div><h1>Every call. Every miss. Forever.</h1>
+<p class="dek">Each prediction is logged with a probability and a timestamp before kickoff, then graded
+from the play-by-play. Nothing is deleted or edited.</p><div class="stats"><div class="stat"><div class="n">0</div><div class="l">calls logged</div></div><div class="stat"><div class="n">0</div><div class="l">graded</div></div><div class="stat"><div class="n">&ndash;</div><div class="l">Brier score (lower is better)</div></div></div><div class="card"><h3>First card</h3>The first calls are logged before kickoff of Bills at Vikings, Monday Night Football, November 9. They appear here the moment they are logged.</div>
+<h2>How grading works</h2><ul class="rules">
+<li><b>Before kickoff or it doesn't count.</b> The system rejects any call logged after the game starts.</li>
+<li><b>Probabilities, not hot takes.</b> A 70% call should hit about 70% of the time. Calibration is the score.</li>
+<li><b>Brier score</b> = (probability &minus; outcome)&sup2;, averaged. 0 is perfect, 0.25 is a coin flip.</li>
+<li><b>Benchmarks</b> are a naive baseline and public models. Never betting lines.</li>
+<li><b>Append-only.</b> Corrections are new rows that reference the old one. The full record is downloadable as <a href="ledger/predictions.csv">CSV</a>.</li></ul></main>
+<footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
+(nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
+Buffalo Sabres, or the NFL.</div></footer></body></html>
