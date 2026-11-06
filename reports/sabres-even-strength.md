@@ -1,8 +1,8 @@
 # At even strength, these Sabres look like last year's Sabres
 
 **Finding: At 5-on-5 the Sabres are taking 52.0% of shot attempts (10th in the NHL) and
-50.2% of expected goals, about where they were last season (49.3% and 50.8%).
-Last year's difference was the bounces (5-on-5 PDO 1.021); this year's is special teams.**
+50.2% of expected goals, compared with 49.3% and 50.8% last season. Last year's edge was the bounces (5-on-5 PDO
+1.021). This year the bounces have evened out and the penalty kill is leaking.**
 
 *2026-27 is 15 games (7-5-3), a small sample.*
 
@@ -17,11 +17,12 @@ Last year's difference was the bounces (5-on-5 PDO 1.021); this year's is specia
 
 ## How the pieces fit
 
-Taken together with the companion pieces: the 5-on-5 team hasn't changed much, the goalies have gone from well above
-expected to about average, the finishing surplus left with Alex Tuch, and the penalty kill is allowing more. That's
-how a 109-point team turns into a 17-point start in 15 games.
+The 5-on-5 team hasn't changed much, but it's no longer getting last year's bounces (5-on-5 PDO 1.021
+then, 0.992 now). The goalies have gone from well above expected to about average. The returning
+shooters are slightly below expected, within normal variation. And the penalty kill is allowing more; it's the largest
+single change. That's how a 109-point team turns into a 17-point start in 15 games.
 
 ## Method and caveats
 
-- Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded.
+- Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.
 - 5-on-5 only, empty nets excluded from goals and expected goals. Shot-attempt share counts blocked shots.
