@@ -71,12 +71,13 @@ def main():
                   f"{(1 / cal.loc[PREV] - 1):+.1%} hot in 2025-26), so above-expected numbers are relative to that season's league average.")
     sample = f"2026-27 is {int(cur.gp)} games ({int(cur.w)}-{int(cur.l)}-{int(cur.otl)}), a small sample."
     stories = {}
+    sg = lambda x_: (f"{int(round(x_)):+d}" if int(round(x_)) else "0")
     tr = s[(s.unblocked == 1) & (s.empty_net_against == 0) & (s.season < CUR)]
     edges = [0, 10, 20, 30, 40, 50, 60, 200]; labs = ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60+"]
     by_d = tr.groupby(pd.cut(tr.dist, edges, right=False, labels=labs), observed=True).goal.agg(["mean", "size"])
     near, mid, far = by_d.loc["0-10", "mean"], by_d.loc["30-40", "mean"], by_d.loc["60+", "mean"]
     reb = tr.groupby("rebound").goal.mean(); pp = tr.groupby(tr.strength.isin(["5v4", "5v3", "4v3"])).goal.mean()
-    one_in = lambda r_: f"about 1 in {round(1 / r_)}"
+    one_in = lambda r_: f"about 1 in {round(1 / r_) if 1 / r_ < 50 else 5 * round(1 / r_ / 5)}"
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     ax.bar(labs, by_d["mean"], color=BLUE, width=0.62, zorder=2)
     for i, (r_, n_) in enumerate(zip(by_d["mean"], by_d["size"])):
@@ -92,7 +93,7 @@ def main():
 
 **The source:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
 it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
-we pull it straight from the league's own game feed.
+we pull it from the league's own public game feed.
 
 **The reasoning:** some shots are far more dangerous than others. We took {len(tr):,} NHL shots from the last three seasons
 and counted how often each kind actually went in.
@@ -107,8 +108,8 @@ and counted how often each kind actually went in.
 - On the power play, shots went in {pp.loc[True]:.1%} of the time, against {pp.loc[False]:.1%} otherwise.
 
 **The math:** a computer model combines all of those factors (distance, angle, shot type, rebound, rush, manpower)
-and gives every shot a probability of going in. A shot from in close is typically worth about {tr[tr.dist < 10].xg.median():.2f} of a goal;
-a long shot from 60 feet or more, about {tr[tr.dist >= 60].xg.median():.2f}. Add up every shot a team takes in a season and you get its **expected goals**: how many goals an
+and gives every shot a probability of going in. A shot from in close is worth about {tr[tr.dist < 10].xg.mean():.2f} of a goal;
+a long shot from 60 feet or more, about {tr[tr.dist >= 60].xg.mean():.2f}. Add up every shot a team takes in a season and you get its **expected goals**: how many goals an
 average NHL team would have scored with exactly the same shots.
 
 **The check:** we tested the model on a full season it had never seen. It predicted which shots would go in clearly
@@ -161,6 +162,7 @@ into the next season.
            "Points expected from a linear fit of points on xG differential, 2023-24 to 2025-26.")
     fig.savefig(OUT / "sabres-mirage.png"); plt.close(fig)
 
+    cur_exp_ppg = np.polyval(co, (b.loc[CUR, 'xGF'] - b.loc[CUR, 'xGA']) / cur.gp)
     lvl = lambda r_: "Strong" if r_ >= 0.6 else ("Some" if r_ >= 0.4 else "Weak")
     xgf_rk = lambda se: ordn(t[t.season == se]['xGF%'].rank(ascending=False, method='min')[(t.season == se) & (t.team == 'BUF')].iloc[0])
     pdo_rk = lambda se: ordn(t[t.season == se]['PDO'].rank(ascending=False, method='min')[(t.season == se) & (t.team == 'BUF')].iloc[0])
@@ -171,7 +173,7 @@ into the next season.
 
 **Finding: Based on the scoring chances they created and gave up, last year's Sabres played like a {bf.exp_pts:.0f}-point
 team. They finished with {int(bf.pts)}. Only one team in the NHL outran its chances by more. The difference came from hot
-goaltending and hot shooting, and those rarely last.**
+goaltending and hot shooting, and those usually fade.**
 
 *This season: {int(cur.gp)} games ({int(cur.w)}-{int(cur.l)}-{int(cur.otl)}). That's still a small sample.*
 
@@ -205,8 +207,7 @@ Last season the Sabres' shooting and goaltending luck combined ranked {pdo_rk(PR
 ## What it means for this season
 
 Through {int(cur.gp)} games the Sabres are earning {int(cur.pts)} points, about {cur.pts / cur.gp:.2f} a game. Last season's chances
-pointed to about {bf.exp_pts / 82:.2f} a game. **This isn't a collapse. It's the team their chances always said they were,
-without last year's luck.**
+pointed to about {bf.exp_pts / 82:.2f} a game, and this season's chances point to about {cur_exp_ppg:.2f}. **This isn't a collapse. Without last year's luck, they're about where their chances say they should be.**
 
 ## For the stat-heads
 
@@ -219,7 +220,7 @@ without last year's luck.**
   xGF% {b.loc[PREV, 'xGF%']:.1%} ({xgf_rk(PREV)}). This season xGF% {b.loc[CUR, 'xGF%']:.1%} ({xgf_rk(CUR)}), {b.loc[CUR, 'G-xG'] + b.loc[CUR, 'xGA-GA']:+.1f} vs xG.
 - Year-to-year correlations, 32 teams, {st['xGF%'][1]} team pairs: xGF% {st['xGF%'][0]:.2f}, shooting % {st['sh%'][0]:.2f},
   save % {st['sv%'][0]:.2f}, PDO {st['PDO'][0]:.2f}. "Strong" means 0.6 or higher, "Weak" means under 0.4. PDO (shooting % +
-  save %, 5-on-5) was {b.loc[PREV, 'PDO']:.3f} last season and is {b.loc[CUR, 'PDO']:.3f} now.
+  save %, all situations) was {b.loc[PREV, 'PDO']:.3f} last season and is {b.loc[CUR, 'PDO']:.3f} now.
 - Expected points: a straight-line fit of points on xG differential per game, all 96 team-seasons 2023-24 to 2025-26
   (r = {corr(None):.2f}; typical miss {resid_sd:.1f} points). Doesn't model overtime, shootouts or empty-net goals.
 """)
@@ -285,10 +286,10 @@ goals. {xg_plain}
   goalie would have. That's a big part of how a middle-of-the-pack team got 109 points.
 - **Lyon hasn't played this season.** He hasn't dressed for any NHL team in 2026-27.
 - **Luukkonen is seeing tougher shots.** An average goalie would stop {upl['xsv%']:.1%} of what he's faced this year, down from
-  {upl25['xsv%']:.1%} last year. The defense in front of him is giving up better looks.
+  {upl25['xsv%']:.1%} last year. That's partly a league-wide trend, but his rise in tough shots is bigger than the league's.
 - **Together, this year's goalies are dead even with average** ({tot26:+.1f} goals).
 
-Goaltending swings a lot from year to year, and {int(upl.shots_faced)} shots is a small sample. There's no evidence yet that
+Goaltending swings a lot from year to year, and {int(upl.shots_faced)} shots is a small sample. There isn't enough evidence yet to say
 Luukkonen has gotten worse.
 
 ## For the stat-heads
@@ -346,8 +347,8 @@ Luukkonen has gotten worse.
     cur_ind["fin"] = cur_ind.G - cur_ind.ixG; cur_ind["name"] = cur_ind.index.map(names)
     c_rows = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.1f} | {r_.fin:+.1f} |" for _, r_ in cur_ind.sort_values("G", ascending=False).head(5).iterrows())
     noise = np.sqrt((ret_cur.xg * (1 - ret_cur.xg)).sum())
-    t_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {r_.fin:+.0f} | {'Yes' if i in gone else ''} |" for i, r_ in top.iterrows())
-    c_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {r_.fin:+.0f} |" for _, r_ in cur_ind.sort_values("G", ascending=False).head(5).iterrows())
+    t_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {sg(r_.fin)} | {'Yes' if i in gone else ''} |" for i, r_ in top.iterrows())
+    c_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {sg(r_.fin)} |" for _, r_ in cur_ind.sort_values("G", ascending=False).head(5).iterrows())
     stories["sabres-same-chances-fewer-goals"] = (
         "As many chances, fewer goals: too early to call it a slump",
         "Buffalo is creating as many good chances as last year. Fewer are going in, and it isn't about who left.",
@@ -396,7 +397,7 @@ the lineup.
 ## Is it a slump or bad bounces?
 
 Too early to tell. The returning players have taken {len(ret_cur)} shots this season. Over that many shots, luck alone can
-swing the total by about {noise:.0f} goals either way. They're about {abs(ret_cur_fin):.0f} below. That's normal. And finishing is one of
+typically swing the total by about {noise:.0f} goals either way. They're about {abs(ret_cur_fin):.0f} below. That's normal. And finishing is one of
 the things that doesn't carry over well from one season to the next.
 
 **What to expect:** if the chances keep coming, goals should pick up, though probably not to last season's pace,
@@ -460,7 +461,7 @@ Two things are happening:
 1. **Bad luck.** Opponents have scored {int(pb.loc[CUR, 'GA'])} power-play goals on chances an average team would turn into about
    {pb.loc[CUR, 'xGA']:.0f}. That part tends to even out.
 2. **More dangerous chances.** The Sabres are allowing chances worth {pb.loc[CUR, 'xGA_pg']:.2f} goals a game while shorthanded, up from
-   {pb.loc[PREV, 'xGA_pg']:.2f} last year and above this season's league average of {lg_pk[CUR]:.2f}. Every team is allowing a bit more this
+   {pb.loc[PREV, 'xGA_pg']:.2f} last year and above this season's league average of {lg_pk[CUR]:.2f}. Most teams are allowing a bit more this
    year, but Buffalo is allowing more than most.
 
 **What to watch:** the luck should fade. The chances allowed are the part that has to get fixed. It's early, too:
@@ -520,7 +521,7 @@ puck more. **Who's getting the better chances?** {xg_plain}
 |---|---|---|---|
 {e_plain}
 
-Above 50% means the Sabres are winning that part of the game. They've been right around even all four seasons.
+Above 50% means the Sabres are winning that part of the game. They've been within a few points of even all four seasons.
 
 ## So what changed?
 

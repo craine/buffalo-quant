@@ -20,7 +20,7 @@ puck more. **Who's getting the better chances?** **Where "chances" comes from:**
 | 2025-26 | 49% (16th) | 51% (14th) | 194-156 |
 | 2026-27 | 52% (10th) | 50% (18th) | 30-29 |
 
-Above 50% means the Sabres are winning that part of the game. They've been right around even all four seasons.
+Above 50% means the Sabres are winning that part of the game. They've been within a few points of even all four seasons.
 
 ## So what changed?
 

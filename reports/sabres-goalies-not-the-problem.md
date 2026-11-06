@@ -29,10 +29,10 @@ goals. **Where "chances" comes from:** the NHL logs where every shot is taken an
   goalie would have. That's a big part of how a middle-of-the-pack team got 109 points.
 - **Lyon hasn't played this season.** He hasn't dressed for any NHL team in 2026-27.
 - **Luukkonen is seeing tougher shots.** An average goalie would stop 88.1% of what he's faced this year, down from
-  89.9% last year. The defense in front of him is giving up better looks.
+  89.9% last year. That's partly a league-wide trend, but his rise in tough shots is bigger than the league's.
 - **Together, this year's goalies are dead even with average** (+0.2 goals).
 
-Goaltending swings a lot from year to year, and 261 shots is a small sample. There's no evidence yet that
+Goaltending swings a lot from year to year, and 261 shots is a small sample. There isn't enough evidence yet to say
 Luukkonen has gotten worse.
 
 ## For the stat-heads

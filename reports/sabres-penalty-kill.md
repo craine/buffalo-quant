@@ -24,7 +24,7 @@ Two things are happening:
 1. **Bad luck.** Opponents have scored 16 power-play goals on chances an average team would turn into about
    12. That part tends to even out.
 2. **More dangerous chances.** The Sabres are allowing chances worth 0.80 goals a game while shorthanded, up from
-   0.57 last year and above this season's league average of 0.68. Every team is allowing a bit more this
+   0.57 last year and above this season's league average of 0.68. Most teams are allowing a bit more this
    year, but Buffalo is allowing more than most.
 
 **What to watch:** the luck should fade. The chances allowed are the part that has to get fixed. It's early, too:

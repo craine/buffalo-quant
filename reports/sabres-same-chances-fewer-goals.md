@@ -41,7 +41,7 @@ goals than their chances were worth. This season they're about 4 below.
 |---|---|---|---|
 | Tage Thompson | 10 | 7 | +3 |
 | Jack Quinn | 8 | 6 | +2 |
-| Noah Ostlund | 4 | 4 | -0 |
+| Noah Ostlund | 4 | 4 | 0 |
 | Olen Zellweger | 3 | 2 | +1 |
 | Josh Norris | 2 | 3 | -1 |
 
@@ -51,7 +51,7 @@ the lineup.
 ## Is it a slump or bad bounces?
 
 Too early to tell. The returning players have taken 552 shots this season. Over that many shots, luck alone can
-swing the total by about 6 goals either way. They're about 4 below. That's normal. And finishing is one of
+typically swing the total by about 6 goals either way. They're about 4 below. That's normal. And finishing is one of
 the things that doesn't carry over well from one season to the next.
 
 **What to expect:** if the chances keep coming, goals should pick up, though probably not to last season's pace,
