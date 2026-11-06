@@ -1,0 +1,31 @@
+name: NHL ingest
+# Pulls NHL play-by-play from the public NHL API and publishes parquet files as release assets
+# (tag nhl-raw), the same pattern nflverse uses. Full refresh of all seasons each run.
+on:
+  push:
+    branches: [nhl-ingest]
+    paths: [scripts/nhl_fetch.py, .github/workflows/nhl-ingest.yml]
+  schedule:
+    - cron: "17 10 * * *"   # daily, ~5-6 AM ET, after the night's games
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pandas pyarrow
+      - run: python scripts/nhl_fetch.py
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view nhl-raw >/dev/null 2>&1 || gh release create nhl-raw --title "NHL raw data" --notes "NHL API play-by-play, refreshed daily by the NHL ingest workflow." --prerelease
+          gh release upload nhl-raw out/*.parquet --clobber
