@@ -80,8 +80,8 @@ Kyler Murray is out with a strained hamstring, so Carson Wentz starts. The two h
 | Carson Wentz | 2025 | 5 | 196 | +0.04 | +0.04 | 9.7% |
 
 Among 30 quarterbacks with 150+ dropbacks this season, Murray ranks 23rd. Wentz's 2026 number looks better, but
-47 dropbacks is far too few to read much into. Over the last two seasons combined (243 dropbacks), Wentz has been right
-at league average. The catch:
+47 dropbacks is far too few to read much into. Over the last two seasons combined (243 dropbacks), Wentz has been about
+league average. The catch:
 he's been sacked more often than average (3.8 percentage points above the league rate), and Minnesota's offense already
 allows sacks at the 3rd-highest rate in the league. That's an opening for a Bills pass rush that hasn't found many.
 
@@ -114,7 +114,8 @@ which were mostly Murray's games. That moved call 1 from 58% to 65% and call 3 f
   2018-2026 regular season. League mean EPA/play by season ranges -0.021 to +0.043.
   Correlation of 2026 team EPA/play with points per drive: 0.91 (n = 32).
 - QB splits by gsis id (`COALESCE(passer_player_id, rusher_player_id)`), `qb_dropback == 1`, EPA not null, no two-point
-  tries. League average = all such dropbacks that season.
+  tries. League average in the QB table = all such dropbacks that season (play-weighted); the model calls use the
+  mean of team-game values instead, which differs slightly (2026 EPA/dropback 0.054 vs 0.056).
 - Draft calls: Ledger model v0.1-locshift (`src/ledger/model_v01.py`), shrink 0.5. Expected game value = league +
   0.5 x (offense vs league + defense vs league); probability from the 2026 within-team game-to-game spread.
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 (243 dropbacks): EPA/dropback

@@ -233,8 +233,8 @@ Kyler Murray is out with a strained hamstring, so Carson Wentz starts. The two h
 | Carson Wentz | 2025 | {int(w25.g)} | {int(w25.db)} | {pts(w25.epa)} | {pts(lg.loc[2025, 'epa'])} | {w25.sk:.1%} |
 
 Among {int(murray_rk.n_q)} quarterbacks with 150+ dropbacks this season, Murray ranks {ordn(murray_rk.rk)}. Wentz's 2026 number looks better, but
-{int(w26.db)} dropbacks is far too few to read much into. Over the last two seasons combined ({n_db} dropbacks), Wentz has been right
-at league average. The catch:
+{int(w26.db)} dropbacks is far too few to read much into. Over the last two seasons combined ({n_db} dropbacks), Wentz has been about
+league average. The catch:
 he's been sacked more often than average ({w_sk * 100:.1f} percentage points above the league rate), and Minnesota's offense already
 allows sacks at the {ordn(33 - mo.sack_rate_rk)}-highest rate in the league. That's an opening for a Bills pass rush that hasn't found many.
 
@@ -267,7 +267,8 @@ which were mostly Murray's games. That moved call 1 from {c1b['p']:.0%} to {c1['
   {EP_SEASONS[0]}-{EP_SEASONS[1]} regular season. League mean EPA/play by season ranges {lg_mean.min():+.3f} to {lg_mean.max():+.3f}.
   Correlation of 2026 team EPA/play with points per drive: {r_pts:.2f} (n = 32).
 - QB splits by gsis id (`COALESCE(passer_player_id, rusher_player_id)`), `qb_dropback == 1`, EPA not null, no two-point
-  tries. League average = all such dropbacks that season.
+  tries. League average in the QB table = all such dropbacks that season (play-weighted); the model calls use the
+  mean of team-game values instead, which differs slightly (2026 EPA/dropback 0.054 vs 0.056).
 - Draft calls: Ledger model {VERSION} (`src/ledger/model_v01.py`), shrink {SHRINK}. Expected game value = league +
   {SHRINK} x (offense vs league + defense vs league); probability from the 2026 within-team game-to-game spread.
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 ({n_db} dropbacks): EPA/dropback
