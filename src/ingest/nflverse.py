@@ -1,0 +1,58 @@
+"""nflverse-data releases -> raw_* tables. Idempotent: a season's rows are replaced, never duplicated.
+
+Fails loudly if a source is unreachable. Never substitutes data.
+"""
+import io
+import sys
+import urllib.request
+
+import pandas as pd
+import yaml
+
+from src.db import ROOT, connect, write
+
+BASE = "https://github.com/nflverse/nflverse-data/releases/download/"
+SOURCES = {  # config key -> (table, path template)
+    "pbp": ("raw_pbp", "pbp/play_by_play_{y}.parquet"),
+    "team_week": ("raw_team_week", "stats_team/stats_team_week_{y}.parquet"),
+    "player_week": ("raw_player_week", "stats_player/stats_player_week_{y}.parquet"),
+    "pfr_pass": ("raw_pfr_pass", "pfr_advstats/advstats_week_pass_{y}.parquet"),
+    "pfr_def": ("raw_pfr_def", "pfr_advstats/advstats_week_def_{y}.parquet"),
+}
+
+
+def fetch(path):
+    with urllib.request.urlopen(BASE + path, timeout=300) as r:
+        return pd.read_parquet(io.BytesIO(r.read()))
+
+
+def table_exists(con, t):
+    return con.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (t,)).fetchone()
+
+
+def load_season(con, table, df, season):
+    if table_exists(con, table):
+        con.execute(f"DELETE FROM {table} WHERE season = ?", (season,))
+    write(df, table, con)
+
+
+def main():
+    cfg = yaml.safe_load(open(ROOT / "config" / "seasons.yaml"))
+    con = connect()
+    write(fetch("schedules/games.parquet"), "raw_schedules", con, if_exists="replace")
+    print("raw_schedules ok", flush=True)
+    for key, (table, tmpl) in SOURCES.items():
+        lo, hi = cfg[key]
+        for y in range(lo, hi + 1):
+            try:
+                df = fetch(tmpl.format(y=y))
+            except Exception as e:  # stop, do not substitute
+                sys.exit(f"BLOCKED: {table} {y}: {e}")
+            load_season(con, table, df, y)
+            print(table, y, len(df), flush=True)
+        con.commit()
+    con.close()
+
+
+if __name__ == "__main__":
+    main()

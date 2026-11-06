@@ -1,0 +1,5 @@
+data/
+*.db
+*.parquet
+__pycache__/
+.pytest_cache/

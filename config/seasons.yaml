@@ -1,0 +1,6 @@
+# Season ranges per source. Extend pbp back to 1999 when needed.
+pbp: [2023, 2026]
+team_week: [2023, 2026]
+player_week: [2023, 2026]
+pfr_pass: [2023, 2026]   # 2018 hard floor
+pfr_def: [2023, 2026]    # 2018 hard floor
