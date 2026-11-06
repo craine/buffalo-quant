@@ -1,6 +1,8 @@
-# Season ranges per source. Extend pbp back to 1999 when needed.
-pbp: [2023, 2026]
-team_week: [2023, 2026]
-player_week: [2023, 2026]
-pfr_pass: [2023, 2026]   # 2018 hard floor
-pfr_def: [2023, 2026]    # 2018 hard floor
+# Season ranges per source. Allen career starts 2018 (also the PFR charting floor).
+pbp: [2018, 2026]
+team_week: [2018, 2026]
+player_week: [2018, 2026]
+pfr_pass: [2018, 2026]   # 2018 hard floor
+pfr_def: [2018, 2026]    # 2018 hard floor
+ftn: [2022, 2026]        # FTN charting starts 2022
+participation: [2018, 2025]  # 2026 not published as of 2026-11-05
