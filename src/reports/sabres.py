@@ -71,9 +71,59 @@ def main():
                   f"{(1 / cal.loc[PREV] - 1):+.1%} hot in 2025-26), so above-expected numbers are relative to that season's league average.")
     sample = f"2026-27 is {int(cur.gp)} games ({int(cur.w)}-{int(cur.l)}-{int(cur.otl)}), a small sample."
     stories = {}
-    xg_plain = ("**Expected goals**, in one sentence: we looked at more than " + f"{n_shots // 1000:,},000" + " NHL shots and worked out how "
-                "often each kind (by distance, angle, shot type, rebound or rush) goes in. Add those odds up and you get how many "
-                "goals an average team, or an average goalie, would produce from the same shots.")
+    tr = s[(s.unblocked == 1) & (s.empty_net_against == 0) & (s.season < CUR)]
+    edges = [0, 10, 20, 30, 40, 50, 60, 200]; labs = ["0-10", "10-20", "20-30", "30-40", "40-50", "50-60", "60+"]
+    by_d = tr.groupby(pd.cut(tr.dist, edges, right=False, labels=labs), observed=True).goal.agg(["mean", "size"])
+    near, mid, far = by_d.loc["0-10", "mean"], by_d.loc["30-40", "mean"], by_d.loc["60+", "mean"]
+    reb = tr.groupby("rebound").goal.mean(); pp = tr.groupby(tr.strength.isin(["5v4", "5v3", "4v3"])).goal.mean()
+    one_in = lambda r_: f"about 1 in {round(1 / r_)}"
+    fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
+    ax.bar(labs, by_d["mean"], color=BLUE, width=0.62, zorder=2)
+    for i, (r_, n_) in enumerate(zip(by_d["mean"], by_d["size"])):
+        ax.text(i, r_, f"{r_:.1%}\n{one_in(r_)}", ha="center", va="bottom", fontsize=9, color=INK)
+    ax.set_xlabel("Distance from the net (feet)"); ax.set_ylabel("Share of shots that went in")
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
+    ax.set_ylim(0, by_d["mean"].max() * 1.3); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+    finish(fig, "Where a shot comes from decides how often it goes in",
+           f"Every unblocked NHL shot, 2023-24 to 2025-26 ({len(tr):,} shots), empty nets excluded.",
+           "Our expected-goals model also weighs angle, shot type, rebounds, rush chances and power plays.")
+    fig.savefig(OUT / "sabres-shot-odds.png"); plt.close(fig)
+    xg_source = f"""## Where "chances" comes from
+
+**The data:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
+it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
+we pull it straight from the league's own game feed.
+
+**The idea:** some shots are far more dangerous than others. We took {len(tr):,} NHL shots from the last three seasons
+and counted how often each kind actually went in.
+
+![Shot odds](sabres-shot-odds.png)
+
+- A shot from within 10 feet of the net went in {near:.1%} of the time ({one_in(near)}).
+- From 30 to 40 feet: {mid:.1%} ({one_in(mid)}).
+- From 60 feet or more, around the blue line: {far:.1%} ({one_in(far)}).
+- A rebound (a shot within three seconds of a teammate's shot) went in {reb.loc[1]:.1%} of the time, against {reb.loc[0]:.1%} for
+  other shots.
+- On the power play, shots went in {pp.loc[True]:.1%} of the time, against {pp.loc[False]:.1%} otherwise.
+
+**The math:** a computer model combines all of those factors (distance, angle, shot type, rebound, rush, manpower)
+and gives every shot a probability of going in. A shot from in close is typically worth about {tr[tr.dist < 10].xg.median():.2f} of a goal;
+a long shot from 60 feet or more, about {tr[tr.dist >= 60].xg.median():.2f}. Add up every shot a team takes in a season and you get its **expected goals**: how many goals an
+average NHL team would have scored with exactly the same shots.
+
+**The check:** we tested the model on a full season it had never seen. It predicted which shots would go in clearly
+better than a simple distance-and-angle model, and over a season its totals land within a few percent of the
+actual goals scored league-wide.
+
+So when we say "their chances were worth {b.loc[PREV, 'xGF']:.0f} goals," that's the sum of those odds over every Sabres shot. When a
+team scores a lot more than that, it's either elite finishing or luck, and the rest of this story shows which
+one usually lasts.
+"""
+    xg_plain = (f"**Where \"chances\" comes from:** the NHL logs where every shot is taken and what kind it is. Across "
+                f"{len(tr):,} shots, those from within 10 feet went in {near:.1%} of the time; from 60 feet or more, {far:.1%}. Our model "
+                f"gives every shot those odds, and adding them up gives **expected goals**: what an average team (or goalie) "
+                f"would produce from the same shots. The full explanation is in our lead Sabres story, "
+                f"[The 50-win mirage](sabres-50-win-mirage.html).")
 
     # ---------- 1. The 50-win mirage
     full = t[t.season < CUR].copy()
@@ -126,18 +176,10 @@ goaltending and hot shooting, and those rarely last.**
 
 ![Mirage](sabres-mirage.png)
 
-## How we measure "chances"
-
-Not every shot is equal. A rebound from the top of the crease goes in far more often than a wrist shot from the blue
-line. We looked at more than {n_shots // 1000:,},000 NHL shots from the last three seasons and worked out how often each kind of shot actually goes in. Add that up for a team and you get **expected goals**: how
-many goals an average team would score with the same chances.
-
-A team that scores far more than its expected goals is either very skilled or very lucky, and history says that kind of
-edge usually doesn't last.
-
+{xg_source}
 ## Last season, in plain numbers
 
-| | What happened | What their chances said | Difference |
+| | What happened | What their shots were worth (expected goals) | Difference |
 |---|---|---|---|
 | Goals the Sabres scored | {b.loc[PREV, 'GF']:.0f} | {b.loc[PREV, 'xGF']:.0f} | **{fin25:+.0f}** (hot shooting) |
 | Goals the Sabres allowed | {b.loc[PREV, 'GA']:.0f} | {b.loc[PREV, 'xGA']:.0f} | **{sav25:+.0f}** (hot goaltending) |

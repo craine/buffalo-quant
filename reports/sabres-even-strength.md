@@ -11,7 +11,7 @@ good chances. What changed is that last year's lucky bounces have evened out, an
 ## How we measure who's controlling the game
 
 Two simple questions. **Who's shooting more?** If you take more than half the shot attempts, you usually have the
-puck more. **Who's getting the better chances?** **Expected goals**, in one sentence: we looked at more than 336,000 NHL shots and worked out how often each kind (by distance, angle, shot type, rebound or rush) goes in. Add those odds up and you get how many goals an average team, or an average goalie, would produce from the same shots.
+puck more. **Who's getting the better chances?** **Where "chances" comes from:** the NHL logs where every shot is taken and what kind it is. Across 336,462 shots, those from within 10 feet went in 13.8% of the time; from 60 feet or more, 0.8%. Our model gives every shot those odds, and adding them up gives **expected goals**: what an average team (or goalie) would produce from the same shots. The full explanation is in our lead Sabres story, [The 50-win mirage](sabres-50-win-mirage.html).
 
 | Season | Share of shot attempts (rank) | Share of good chances (rank) | Goals for-against at 5-on-5 |
 |---|---|---|---|

@@ -8,18 +8,40 @@ goaltending and hot shooting, and those rarely last.**
 
 ![Mirage](sabres-mirage.png)
 
-## How we measure "chances"
+## Where "chances" comes from
 
-Not every shot is equal. A rebound from the top of the crease goes in far more often than a wrist shot from the blue
-line. We looked at more than 336,000 NHL shots from the last three seasons and worked out how often each kind of shot actually goes in. Add that up for a team and you get **expected goals**: how
-many goals an average team would score with the same chances.
+**The data:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
+it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
+we pull it straight from the league's own game feed.
 
-A team that scores far more than its expected goals is either very skilled or very lucky, and history says that kind of
-edge usually doesn't last.
+**The idea:** some shots are far more dangerous than others. We took 336,462 NHL shots from the last three seasons
+and counted how often each kind actually went in.
+
+![Shot odds](sabres-shot-odds.png)
+
+- A shot from within 10 feet of the net went in 13.8% of the time (about 1 in 7).
+- From 30 to 40 feet: 5.6% (about 1 in 18).
+- From 60 feet or more, around the blue line: 0.8% (about 1 in 124).
+- A rebound (a shot within three seconds of a teammate's shot) went in 11.5% of the time, against 6.3% for
+  other shots.
+- On the power play, shots went in 9.9% of the time, against 6.2% otherwise.
+
+**The math:** a computer model combines all of those factors (distance, angle, shot type, rebound, rush, manpower)
+and gives every shot a probability of going in. A shot from in close is typically worth about 0.11 of a goal;
+a long shot from 60 feet or more, about 0.01. Add up every shot a team takes in a season and you get its **expected goals**: how many goals an
+average NHL team would have scored with exactly the same shots.
+
+**The check:** we tested the model on a full season it had never seen. It predicted which shots would go in clearly
+better than a simple distance-and-angle model, and over a season its totals land within a few percent of the
+actual goals scored league-wide.
+
+So when we say "their chances were worth 237 goals," that's the sum of those odds over every Sabres shot. When a
+team scores a lot more than that, it's either elite finishing or luck, and the rest of this story shows which
+one usually lasts.
 
 ## Last season, in plain numbers
 
-| | What happened | What their chances said | Difference |
+| | What happened | What their shots were worth (expected goals) | Difference |
 |---|---|---|---|
 | Goals the Sabres scored | 256 | 237 | **+19** (hot shooting) |
 | Goals the Sabres allowed | 221 | 238 | **+17** (hot goaltending) |
