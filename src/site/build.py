@@ -15,9 +15,13 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
-ARTICLES = [  # (slug, report file, date, dek)
-    ("bills-defense-fixed", "2026-defense-baseline.md", "2026-11-05",
-     "The run defense improved. The pass defense collapsed. Seven games of evidence, opponent-adjusted."),
+ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("josh-allen-2018-to-now", "2026-josh-allen.md", "2026-11-05", "Bills &middot; Josh Allen",
+     "Nine seasons, four play-callers, every dropback. He's the most efficient passer in football, and he's winning off script.",
+     "allen-seasons.png"),
+    ("bills-defense-fixed", "2026-defense-baseline.md", "2026-11-05", "Bills &middot; Defense",
+     "The run defense improved. The pass defense collapsed. Seven games of evidence, opponent-adjusted.",
+     "defense-rank-shift.png"),
 ]
 
 CSS = """
@@ -59,7 +63,7 @@ footer{border-top:1px solid var(--line);margin-top:70px;padding:26px 0 40px;font
 NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("ledger.html", "Ledger"), ("about.html", "About")]
 
 
-def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts."):
+def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png"):
     up = "../" * depth
     links = "".join(f'<a href="{up}{h}" class="{"on" if n == active else ""}">{n}</a>' for h, n in NAV)
     t = html.escape(title)
@@ -67,7 +71,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{t}</title><meta name="description" content="{html.escape(desc)}">
 <meta property="og:title" content="{t}"><meta property="og:description" content="{html.escape(desc)}">
-<meta property="og:image" content="{DOMAIN}/analysis/defense-rank-shift.png"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{DOMAIN}/analysis/{og}"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{up}favicon.svg"><link rel="stylesheet" href="{up}style.css"></head><body>
 <header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
 <main class="wrap">{body}</main>
@@ -130,32 +134,36 @@ def build_articles():
     out = SITE / "analysis"
     out.mkdir(parents=True, exist_ok=True)
     cards = []
-    for slug, src, date, dek in ARTICLES:
+    for slug, src, date, kicker, dek, hero in ARTICLES:
         text = (ROOT / "reports" / src).read_text()
         title = re.match(r"# (.+)", text).group(1)
         text = re.sub(r"^# .+\n", "", text, count=1)
         for img in re.findall(r"\]\(([^)]+\.png)\)", text):
             shutil.copy(ROOT / "reports" / img, out / img)
         when = datetime.strptime(date, "%Y-%m-%d").strftime("%B %-d, %Y")
-        body = (f'<div class="kicker">Bills &middot; Defense</div><h1>{html.escape(title)}</h1>'
+        body = (f'<div class="kicker">{kicker}</div><h1>{html.escape(title)}</h1>'
                 f'<p class="dek">{html.escape(dek)}</p><div class="meta">{when} &middot; Buffalo Quant Desk</div>'
                 + md_to_html(text))
-        (out / f"{slug}.html").write_text(page(f"{title} | Buffalo Quant Desk", body, "Analysis", 1, dek))
+        (out / f"{slug}.html").write_text(page(f"{title} | Buffalo Quant Desk", body, "Analysis", 1, dek, hero))
         cards.append(f'<div class="card"><h3>{when}</h3><a href="{slug}.html"><b>{html.escape(title)}</b></a><br>{html.escape(dek)}</div>')
     idx = '<div class="kicker">Analysis</div><h1>The work</h1>' + "".join(cards)
     (out / "index.html").write_text(page("Analysis | Buffalo Quant Desk", idx, "Analysis", 1))
-    return ARTICLES[0], (ROOT / "reports" / ARTICLES[0][1]).read_text()
+    return ARTICLES, {a[0]: (ROOT / "reports" / a[1]).read_text() for a in ARTICLES}
 
 
-def build_home(latest, text):
-    slug, _, date, dek = latest
+def build_home(articles, texts):
+    slug, _, date, kicker, dek, hero = articles[0]
+    text = texts[slug]
+    title = re.match(r"# (.+)", text).group(1)
     finding = re.search(r"\*\*Finding: (.+?)\*\*", text, re.S).group(1).replace("\n", " ")
+    more = "".join(f'<li><a href="analysis/{a[0]}.html">{html.escape(re.match(r"# (.+)", texts[a[0]]).group(1))}</a></li>' for a in articles[1:])
     body = f"""<div class="kicker">Buffalo sports, by the numbers</div>
 <h1>The quant desk for the Bills and Sabres.</h1>
 <p class="dek">Predictive analysis built on every play, with a public, graded record of every call we make.</p>
-<div class="card"><h3>Latest</h3><a href="analysis/{slug}.html"><b>Is the Bills defense actually fixed?</b></a>
+<div class="card"><h3>Latest</h3><a href="analysis/{slug}.html"><b>{html.escape(title)}</b></a>
 <blockquote>{html.escape(finding)}</blockquote>
-<a href="analysis/{slug}.html"><img src="analysis/defense-rank-shift.png" alt="Bills defensive league ranks, 2025 vs 2026"></a></div>
+<a href="analysis/{slug}.html"><img src="analysis/{hero}" alt="{html.escape(title)}"></a>
+{f'<p><b>Also:</b></p><ul class="rules">{more}</ul>' if more else ''}</div>
 <div class="card"><h3>The Ledger</h3>Every prediction is timestamped before kickoff and graded after.
 First card: <b>Bills at Vikings, Monday Night Football</b>. <a href="ledger.html">See the record &rarr;</a></div>
 <h2>The rules</h2><ul class="rules">
@@ -189,8 +197,8 @@ def main():
     (SITE / "style.css").write_text(CSS)
     (SITE / "favicon.svg").write_text('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="6" fill="#00338D"/>'
                                       '<path d="M8 22h4V14H8zm6 0h4V9h-4zm6 0h4v-5h-4z" fill="#fff"/><rect x="7" y="24" width="18" height="2" fill="#C60C30"/></svg>')
-    latest, text = build_articles()
-    build_home(latest, text)
+    articles, texts = build_articles()
+    build_home(articles, texts)
     build_ledger()
     build_about()
     (SITE / "ledger").mkdir(exist_ok=True)

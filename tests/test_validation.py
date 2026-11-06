@@ -20,21 +20,23 @@ def test_all_configured_seasons_present():
 
 def test_full_seasons_have_expected_rows():
     c = query("SELECT season, COUNT(*) n, COUNT(DISTINCT game_id) g FROM raw_pbp WHERE season < 2026 GROUP BY season")
-    assert c.n.between(45000, 52000).all() and (c.g >= 284).all()
+    assert c.n.between(45000, 52000).all()
+    exp = c.season.map(lambda s: 267 if s <= 2020 else 284)  # 16-game seasons through 2020
+    assert (c.g >= exp).all(), c.to_dict("records")
 
 
 def test_pbp_scores_match_schedule():
     m = query("""
         SELECT s.game_id, s.home_score, s.away_score, MAX(p.total_home_score) h, MAX(p.total_away_score) a
         FROM raw_schedules s LEFT JOIN raw_pbp p ON p.game_id = s.game_id
-        WHERE s.season >= 2023 AND s.home_score IS NOT NULL GROUP BY s.game_id""")
+        WHERE s.season >= 2018 AND s.home_score IS NOT NULL GROUP BY s.game_id""")
     assert m.h.notna().all(), "completed games missing from pbp"
     bad = m[(m.h != m.home_score) | (m.a != m.away_score)]
     assert bad.empty, bad.head().to_dict("records")
 
 
 def test_bills_games_reconcile():
-    s = query("""SELECT season, COUNT(*) n FROM raw_schedules WHERE season >= 2023 AND game_type = 'REG'
+    s = query("""SELECT season, COUNT(*) n FROM raw_schedules WHERE season >= 2018 AND game_type = 'REG'
                  AND home_score IS NOT NULL AND (home_team='BUF' OR away_team='BUF') GROUP BY season""")
     p = query("""SELECT season, COUNT(DISTINCT game_id) n FROM raw_pbp WHERE season_type = 'REG'
                  AND (home_team='BUF' OR away_team='BUF') GROUP BY season""")

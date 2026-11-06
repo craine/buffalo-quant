@@ -18,7 +18,11 @@ SOURCES = {  # config key -> (table, path template)
     "player_week": ("raw_player_week", "stats_player/stats_player_week_{y}.parquet"),
     "pfr_pass": ("raw_pfr_pass", "pfr_advstats/advstats_week_pass_{y}.parquet"),
     "pfr_def": ("raw_pfr_def", "pfr_advstats/advstats_week_def_{y}.parquet"),
+    "ftn": ("raw_ftn", "ftn_charting/ftn_charting_{y}.parquet"),
+    "participation": ("raw_participation", "pbp_participation/pbp_participation_{y}.parquet"),
 }
+SINGLE_FILE = {"raw_schedules": "schedules/games.parquet",
+               "raw_ngs_passing": "nextgen_stats/ngs_passing.parquet"}
 
 
 def fetch(path):
@@ -33,14 +37,19 @@ def table_exists(con, t):
 def load_season(con, table, df, season):
     if table_exists(con, table):
         con.execute(f"DELETE FROM {table} WHERE season = ?", (season,))
+        have = {r[1] for r in con.execute(f"PRAGMA table_info({table})")}
+        for col in df.columns:  # source schemas grow over the years: add, never drop
+            if col not in have:
+                con.execute(f'ALTER TABLE {table} ADD COLUMN "{col}"')
     write(df, table, con)
 
 
 def main():
     cfg = yaml.safe_load(open(ROOT / "config" / "seasons.yaml"))
     con = connect()
-    write(fetch("schedules/games.parquet"), "raw_schedules", con, if_exists="replace")
-    print("raw_schedules ok", flush=True)
+    for table, path in SINGLE_FILE.items():
+        write(fetch(path), table, con, if_exists="replace")
+        print(table, "ok", flush=True)
     for key, (table, tmpl) in SOURCES.items():
         lo, hi = cfg[key]
         for y in range(lo, hi + 1):
@@ -48,6 +57,8 @@ def main():
                 df = fetch(tmpl.format(y=y))
             except Exception as e:  # stop, do not substitute
                 sys.exit(f"BLOCKED: {table} {y}: {e}")
+            if "season" not in df.columns:
+                df["season"] = y
             load_season(con, table, df, y)
             print(table, y, len(df), flush=True)
         con.commit()
