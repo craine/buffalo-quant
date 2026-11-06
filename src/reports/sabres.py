@@ -546,6 +546,19 @@ That's how a 109-point team turns into a {int(cur.pts)}-point start in {int(cur.
 PDO = 5-on-5 shooting % + save %, a common luck gauge: {e5.loc[PREV, 'PDO']:.3f} last season, {e5.loc[CUR, 'PDO']:.3f} now.
 """)
 
+    import json
+    others = "Only one NHL team" if bf.over_rk == 2 else f"{bf.over_rk - 1} NHL teams"
+    (OUT / "sabres-50-win-mirage.hero.json").write_text(json.dumps({
+        "label": "2025-26 Sabres points",
+        "big": [[int(bf.pts), "What they got"], [int(round(bf.exp_pts)), "What their chances said"]],
+        "note": f"{others} outran its chances by more.",
+        "explainer": {
+            "kicker": "How we know", "title": "Not every shot is equal.",
+            "text": (f"We counted how often {len(tr):,} NHL shots actually went in. From within 10 feet, {one_in(near)}. "
+                     f"From 60 feet or more, {one_in(far)}. Add those odds up and you know what a team's chances were really worth."),
+            "bars": [["0-10 ft", round(float(near), 4)], ["30-40 ft", round(float(mid), 4)], ["60+ ft", round(float(far), 4)]]},
+    }, indent=1))
+
     for slug, (title, dek, md) in stories.items():
         (OUT / f"{slug}.md").write_text(md)
     print("\n\n".join(md for _, _, md in stories.values()))

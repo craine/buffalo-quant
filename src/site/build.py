@@ -33,12 +33,12 @@ CSS = """
 body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif}
 a{color:var(--navy)}a:hover{color:var(--red)}
 .wrap{max-width:860px;margin:0 auto;padding:0 22px}
-header.site{border-bottom:4px solid var(--navy);background:#fff}
+header.site{background:#0B1B3F}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
-.mark{font-weight:900;letter-spacing:.14em;font-size:15px;text-decoration:none;color:var(--ink);white-space:nowrap}
-.mark b{color:var(--red)}
-nav a{margin-left:22px;text-decoration:none;font-weight:600;font-size:15px;color:var(--ink)}
-nav a.on{color:var(--red)}
+.mark{font-weight:900;letter-spacing:.16em;font-size:15px;text-decoration:none;color:#fff;white-space:nowrap}
+.mark b{color:#FF5A6E}
+nav a{margin-left:22px;text-decoration:none;font-weight:600;font-size:15px;color:#fff}
+nav a.on{color:#FFB3BD}nav a:hover{color:#FFB3BD}
 .kicker{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin:44px 0 8px}
 h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;letter-spacing:-.01em}
 h2{font-family:Georgia,serif;font-size:26px;margin:40px 0 10px}
@@ -60,13 +60,44 @@ td:not(:first-child),th:not(:first-child){font-variant-numeric:tabular-nums}
 .hit{color:#0A7A3E;font-weight:700}.miss{color:var(--red);font-weight:700}.open{color:var(--muted)}
 blockquote{margin:18px 0;padding:4px 0 4px 18px;border-left:4px solid var(--red);font-size:19px}
 footer{border-top:1px solid var(--line);margin-top:70px;padding:26px 0 40px;font-size:13px;color:var(--muted)}
+.hero{background:var(--navy);color:#fff}
+.hgrid{display:flex;flex-wrap:wrap;gap:44px;align-items:center;padding-top:56px;padding-bottom:64px;max-width:1160px}
+.hcopy{flex:1 1 480px;min-width:0}.hk{font-size:13px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:#FFB3BD}
+.hero h1{font-family:Inter,-apple-system,"Segoe UI",sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,50px);line-height:1.06;letter-spacing:-.02em;margin:14px 0 16px;color:#fff}
+.hdek{font-size:20px;line-height:1.5;color:#D6E0F5;margin:0 0 26px}
+.btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;font-weight:700;padding:14px 22px;border-radius:8px}.btn:hover{color:#fff;background:#A50A28}
+.hpanel{flex:1 1 360px;min-width:0;background:#0B1B3F;border-radius:16px;padding:30px}.hpanel img{border:0}
+.hlabel{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#9FB3DA}
+.bigs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:18px 0 24px}
+.bign{font-size:clamp(56px,8vw,86px);font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.bign.dim{color:#9FB3DA}
+.bigl{font-size:15px;color:#D6E0F5;margin-top:8px}
+.hbar{display:flex;align-items:center;gap:12px;margin:8px 0}.hbar span{display:block;height:14px;background:#fff;border-radius:4px}.hbar span.dim{background:#9FB3DA}.hbar b{font-size:14px;font-weight:600}
+.hnote{font-size:14px;color:#9FB3DA;margin:18px 0 0}
+main.home .wrap{max-width:1160px}main.home .wrap>section{margin-top:52px}main.home h2{font-family:Inter,-apple-system,"Segoe UI",sans-serif;font-weight:800;letter-spacing:-.01em}
+header.site .wrap,footer .wrap{max-width:1160px}
+.shead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:10px}.shead h2{margin:0}
+.sdek{color:var(--muted);margin:6px 0 18px}.small{font-size:13px;color:var(--muted);margin-top:12px}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.lcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px}.lcard.wide{grid-column:span 2}
+.lk{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}.lt{font-weight:800;font-size:20px;margin-top:6px}
+.lp{font-size:40px;font-weight:800;color:var(--navy);line-height:1.1}.ls{font-size:15px;color:#4A5160;margin-top:6px}
+.agrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:18px}
+.acard{display:flex;flex-direction:column;gap:8px;background:#fff;border:1px solid var(--line);border-top:8px solid var(--navy);border-radius:12px;padding:20px 22px;text-decoration:none;color:var(--ink)}
+.acard.sabres{border-top-color:var(--red)}.acard:hover{border-color:#B9C2D3}
+.ak{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--navy)}.acard.sabres .ak{color:var(--red)}
+.at{font-weight:800;font-size:19px;line-height:1.3}.ad{font-size:15px;color:#4A5160;line-height:1.5}
+.how{background:#fff;border:1px solid var(--line);border-radius:16px;padding:30px;display:flex;flex-wrap:wrap;gap:32px;align-items:center}
+.how>div:first-child{flex:1 1 400px;min-width:0}.how .kicker{margin:0 0 6px}.how h2{margin:0 0 10px}.how p{color:#4A5160;margin:0 0 10px}
+.xbars{flex:1 1 340px;min-width:0}.xbar{display:flex;align-items:center;gap:12px;margin:10px 0}
+.xl{width:72px;font-size:14px;color:#4A5160}.xt{flex:1}.xt span{display:block;height:22px;background:var(--navy);border-radius:4px}.xv{width:52px;font-size:14px;font-variant-numeric:tabular-nums}
+@media(max-width:600px){.lcard.wide{grid-column:auto}.hgrid{padding-top:36px;padding-bottom:40px}}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
 """
 
 NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("ledger.html", "Ledger"), ("about.html", "About")]
 
 
-def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png"):
+def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png", full=False):
     up = "../" * depth
     links = "".join(f'<a href="{up}{h}" class="{"on" if n == active else ""}">{n}</a>' for h, n in NAV)
     t = html.escape(title)
@@ -77,7 +108,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <meta property="og:image" content="{DOMAIN}/analysis/{og}"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{up}favicon.svg"><link rel="stylesheet" href="{up}style.css"></head><body>
 <header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
-<main class="wrap">{body}</main>
+<main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
 Buffalo Sabres, or the NFL.</div></footer></body></html>"""
@@ -154,28 +185,62 @@ def build_articles():
     return ARTICLES, {a[0]: (ROOT / "reports" / a[1]).read_text() for a in ARTICLES}
 
 
+def team_of(kicker):
+    return "sabres" if kicker.lower().startswith("sabres") else "bills"
+
+
 def build_home(articles, texts):
-    slug, _, date, kicker, dek, hero = articles[0]
-    text = texts[slug]
-    title = re.match(r"# (.+)", text).group(1)
-    finding = re.search(r"\*\*Finding: (.+?)\*\*", text, re.S).group(1).replace("\n", " ")
-    more = "".join(f'<li><a href="analysis/{a[0]}.html">{html.escape(re.match(r"# (.+)", texts[a[0]]).group(1))}</a></li>' for a in articles[1:])
-    body = f"""<div class="kicker">Buffalo sports, by the numbers</div>
-<h1>The quant desk for the Bills and Sabres.</h1>
-<p class="dek">Predictive analysis built on every play, with a public, graded record of every call we make.</p>
-<div class="card"><h3>Latest</h3><a href="analysis/{slug}.html"><b>{html.escape(title)}</b></a>
-<blockquote>{html.escape(finding)}</blockquote>
-<a href="analysis/{slug}.html"><img src="analysis/{hero}" alt="{html.escape(title)}"></a>
-{f'<p><b>Also:</b></p><ul class="rules">{more}</ul>' if more else ''}</div>
-<div class="card"><h3>The Ledger</h3>Every prediction is timestamped before kickoff and graded after.
-First card: <b>Bills at Vikings, Monday Night Football</b>. <a href="ledger.html">See the record &rarr;</a></div>
-<h2>The rules</h2><ul class="rules">
-<li><b>Receipts.</b> Every call is logged before kickoff and graded in public. Misses stay up.</li>
-<li><b>Predictive over descriptive.</b> What happens next, and why.</li>
-<li><b>Plain English.</b> One sentence you can repeat, one chart you can read.</li>
-<li><b>Traceable.</b> Every number is computed from public play-by-play, and every method is written down.</li>
-<li><b>No betting content.</b> This is analysis. No odds, no picks, no lines.</li></ul>"""
-    (SITE / "index.html").write_text(page("Buffalo Quant Desk | Bills and Sabres analytics", body, "Home"))
+    import json
+    slug, src, date, kicker, dek, hero = articles[0]
+    title = re.match(r"# (.+)", texts[slug]).group(1)
+    hj = ROOT / "reports" / src.replace(".md", ".hero.json")
+    hd = json.loads(hj.read_text()) if hj.exists() else None
+    if hd:
+        top = max(n for n, _ in hd["big"])
+        nums = "".join(f'<div><div class="bign{" dim" if i else ""}">{n}</div><div class="bigl">{html.escape(l)}</div></div>'
+                       for i, (n, l) in enumerate(hd["big"]))
+        bars = "".join(f'<div class="hbar"><span style="width:{n / top:.0%}"{" class=dim" if i else ""}></span><b>{n}</b></div>'
+                       for i, (n, l) in enumerate(hd["big"]))
+        panel = (f'<div class="hpanel"><div class="hlabel">{html.escape(hd["label"])}</div><div class="bigs">{nums}</div>'
+                 f'{bars}<p class="hnote">{html.escape(hd["note"])}</p></div>')
+    else:
+        panel = f'<div class="hpanel"><img src="analysis/{hero}" alt=""></div>'
+    m, _ = ledger_rows()
+    if m.empty:
+        lcards = ('<div class="lcard"><div class="lk">Next up</div><div class="lt">Bills at Vikings</div>'
+                  '<div class="ls">Monday Night Football, Nov. 9</div></div>'
+                  '<div class="lcard wide"><div class="ls">The first calls are logged before kickoff and appear here the moment '
+                  'they are. Every one gets graded after the game, hit or miss.</div></div>')
+        record = "No calls graded yet."
+    else:
+        open_ = m[~m.outcome.astype(str).isin(["0", "1", "0.0", "1.0"])].tail(3)
+        show = open_ if len(open_) else m.tail(3)
+        lcards = "".join(f'<div class="lcard"><div class="lp">{float(r.probability):.0%}</div>'
+                         f'<div class="ls">{html.escape(r.claim_text)}</div></div>' for r in show.itertuples())
+        g = m[m.outcome.astype(str).isin(["0", "1", "0.0", "1.0"])]
+        hits = sum((g.probability.astype(float) >= .5) == (g.outcome.astype(float) == 1))
+        record = f"Record so far: {hits}-{len(g) - hits} on {len(g)} graded calls." if len(g) else "No calls graded yet."
+    cards = "".join(
+        f'<a class="acard {team_of(k)}" href="analysis/{s}.html"><span class="ak">{k}</span>'
+        f'<span class="at">{html.escape(re.match(r"# (.+)", texts[s]).group(1))}</span><span class="ad">{html.escape(d)}</span></a>'
+        for s, _, _, k, d, _ in articles)
+    how = ""
+    if hd and "explainer" in hd:
+        e = hd["explainer"]; mx = max(v for _, v in e["bars"])
+        rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
+                       f'<span class="xv">{v:.1%}</span></div>' for l, v in e["bars"])
+        how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
+               f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
+    body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
+<div class="hk">{kicker}</div><h1>{html.escape(title)}</h1><p class="hdek">{html.escape(dek)}</p>
+<a class="btn" href="analysis/{slug}.html">Read the story</a></div>{panel}</div></section>
+<div class="wrap">
+<section><div class="shead"><h2>The Ledger</h2><a href="ledger.html">Every call, graded in public &rarr;</a></div>
+<p class="sdek">Every prediction is timestamped before kickoff and graded after. Misses stay up.</p>
+<div class="lgrid">{lcards}</div><p class="small">{record}</p></section>
+<section><div class="shead"><h2>Latest analysis</h2><a href="analysis/">All stories &rarr;</a></div><div class="agrid">{cards}</div></section>
+{how}</div>"""
+    (SITE / "index.html").write_text(page("Buffalo Quant Desk | Bills and Sabres analytics", body, "Home", full=True))
 
 
 def build_about():

@@ -1,0 +1,33 @@
+{
+ "label": "2025-26 Sabres points",
+ "big": [
+  [
+   109,
+   "What they got"
+  ],
+  [
+   91,
+   "What their chances said"
+  ]
+ ],
+ "note": "Only one NHL team outran its chances by more.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Not every shot is equal.",
+  "text": "We counted how often 336,462 NHL shots actually went in. From within 10 feet, about 1 in 7. From 60 feet or more, about 1 in 125. Add those odds up and you know what a team's chances were really worth.",
+  "bars": [
+   [
+    "0-10 ft",
+    0.1375
+   ],
+   [
+    "30-40 ft",
+    0.0557
+   ],
+   [
+    "60+ ft",
+    0.0081
+   ]
+  ]
+ }
+}
