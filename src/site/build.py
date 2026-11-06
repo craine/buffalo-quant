@@ -94,6 +94,9 @@ header.site .wrap,footer .wrap{max-width:1160px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
 """
 
+import hashlib
+CSS_V = hashlib.sha1(CSS.encode()).hexdigest()[:8]  # changes whenever the CSS changes, so browsers refetch it
+
 NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("ledger.html", "Ledger"), ("about.html", "About")]
 
 
@@ -106,7 +109,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <title>{t}</title><meta name="description" content="{html.escape(desc)}">
 <meta property="og:title" content="{t}"><meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:image" content="{DOMAIN}/analysis/{og}"><meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="{up}favicon.svg"><link rel="stylesheet" href="{up}style.css"></head><body>
+<link rel="icon" href="{up}favicon.svg"><link rel="stylesheet" href="{up}style.css?v={CSS_V}"></head><body>
 <header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
