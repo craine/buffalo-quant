@@ -20,7 +20,7 @@ ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
      "Based on the chances they created, last year's Sabres should have had about 91 points. They got 109. Here's what that means now.",
      "sabres-mirage.png"),
     ("josh-allen-2018-to-now", "2026-josh-allen.md", "2026-11-05", "Bills &middot; Josh Allen",
-     "Nine seasons, four play-callers, every dropback. He's the most efficient passer in football, and he's winning off script.",
+     "Nine seasons, three play-callers, every dropback. Through week 8 he leads the league in passing efficiency, and he's winning off script.",
      "allen-seasons.png"),
     ("bills-defense-fixed", "2026-defense-baseline.md", "2026-11-05", "Bills &middot; Defense",
      "The run defense improved. The pass defense collapsed. Seven games of evidence, opponent-adjusted.",

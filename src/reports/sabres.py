@@ -77,7 +77,7 @@ def main():
     by_d = tr.groupby(pd.cut(tr.dist, edges, right=False, labels=labs), observed=True).goal.agg(["mean", "size"])
     near, mid, far = by_d.loc["0-10", "mean"], by_d.loc["30-40", "mean"], by_d.loc["60+", "mean"]
     reb = tr.groupby("rebound").goal.mean(); pp = tr.groupby(tr.strength.isin(["5v4", "5v3", "4v3"])).goal.mean()
-    one_in = lambda r_: f"about 1 in {round(1 / r_) if 1 / r_ < 50 else 5 * round(1 / r_ / 5)}"
+    one_in = lambda r_: f"about 1 in {round(1 / r_) if 1 / r_ < 100 else 5 * round(1 / r_ / 5)}"
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     ax.bar(labs, by_d["mean"], color=BLUE, width=0.62, zorder=2)
     for i, (r_, n_) in enumerate(zip(by_d["mean"], by_d["size"])):
