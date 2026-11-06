@@ -4,7 +4,8 @@ Eras for Josh Allen (offensive play-caller), verified from reporting 2026-11-05:
   daboll      2018 - 2021
   dorsey      2022 - 2023 week 10   (fired Nov 14 2023 after the week 10 loss to DEN)
   brady_oc    2023 week 11 - 2025   (first game: week 11 vs NYJ)
-  brady_hc    2026 -                (Brady head coach, Carmichael OC)
+  brady_hc    2026 -                (Brady head coach AND still the play-caller; Carmichael is a
+                                     non-play-calling OC. Verified from reporting 2026-11-05.)
 """
 import numpy as np
 import pandas as pd
@@ -13,7 +14,7 @@ from src.db import query
 
 ERA_ORDER = ["daboll", "dorsey", "brady_oc", "brady_hc"]
 ERA_LABEL = {"daboll": "Daboll OC\n2018-21", "dorsey": "Dorsey OC\n2022-23 wk10",
-             "brady_oc": "Brady OC\n2023 wk11-25", "brady_hc": "Brady HC\n2026"}
+             "brady_oc": "Brady OC\n2023 wk11-25", "brady_hc": "Brady HC + play-caller\n2026"}
 
 
 def buf_era(season, week):
@@ -51,16 +52,24 @@ def dropbacks(seasons=(2018, 2026), season_type="REG", con=None):
     return d
 
 
+ALLEN_ID = "00-0034857"  # match by gsis id: nflverse spells him both "J.Allen" and "Jos.Allen"
+
+
 def is_allen(df):
-    return (df.qb == "J.Allen") & (df.posteam == "BUF")
+    return df.qb_id == ALLEN_ID
+
+
+def names(df):
+    """Most common display name per qb_id."""
+    return df.groupby("qb_id").qb.agg(lambda s: s.mode().iat[0] if s.notna().any() else None)
 
 
 def allen_runs(con=None):
     """Josh Allen designed runs (non-scramble rushes) and scrambles."""
     return query("""SELECT p.season, p.week, p.epa, p.success, r.qb_scramble
                     FROM clean_plays p JOIN raw_pbp r ON r.game_id = p.game_id AND r.play_id = p.play_id
-                    WHERE p.season_type='REG' AND p.posteam='BUF' AND r.rusher_player_name='J.Allen'
-                      AND p.rush = 1""", con=con)
+                    WHERE p.season_type='REG' AND r.rusher_player_id = ?
+                      AND p.rush = 1""", params=(ALLEN_ID,), con=con)
 
 
 def rate(x):

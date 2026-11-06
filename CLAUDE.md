@@ -90,6 +90,15 @@ and add it to this table when you do.
 - PFR charting data does not exist before 2018. Do not backfill or impute.
 - pandas 3.x: strings are Arrow-backed by default; be explicit with dtypes when writing to SQLite.
 - Team abbreviations change across eras (OAK/LV, SD/LAC, STL/LA). Normalize in `clean_*`.
+- **Identify players by gsis id, never by name.** nflverse spells the same player differently across
+  games (Josh Allen is both `J.Allen` and `Jos.Allen`; also Minshew, Rodgers, T.Taylor, RG3).
+- On scrambles the QB is the *rusher*: use `COALESCE(passer_player_id, rusher_player_id)` for dropbacks.
+- NFL participation data (pressure, coverage) does not chart sacks or scrambles before 2023. Use pass
+  attempts only for multi-year series that cross 2022/2023, or split at 2023.
+- `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
+- `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
+- 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.
+- Every article goes through an independent QA review before publishing.
 
 ## Analysis conventions
 

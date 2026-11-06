@@ -1,111 +1,142 @@
 # Josh Allen, 2018 to now: what the data actually says
 
-**Finding: Through week 8, Josh Allen leads the NFL in EPA per dropback (+0.303), and he is getting
-there by leaving the pocket more than ever: 30% of his dropbacks, 5th-most in the league,
-at +0.49 EPA per play, his best since charting began.**
+**Finding: Through week 8, Josh Allen leads the NFL in EPA per dropback (+0.303, unfiltered), narrowly
+ahead of B.Purdy (+0.287). With garbage time removed he ranks #2. He is leaving the
+pocket more than ever, and those plays are working again after a down 2025.**
 
-*All QB numbers are per dropback and include scrambles and sacks. Regular season only.
-2026 is 237 dropbacks: small sample.*
+*All QB numbers are per dropback, including scrambles and sacks, unless labeled. Regular season only.
+2026 is 237 dropbacks through week 8: small sample.*
 
 ![Allen by season](allen-seasons.png)
 
 ## The short version
 
-1. **He's the most efficient passer in football right now**, at +0.303 EPA per dropback, ahead of
-   B.Purdy (+0.287). He has improved under every play-caller he's had.
-2. **More off script than ever, and it's working again.** 30% of dropbacks outside the pocket
-   (league: 20%), producing +0.49 EPA per play.
-3. **2025 was when it broke.** Under pressure he fell from #1 to #15
-   (-0.38 EPA), off-script plays lost more than half their value, and his sack rate nearly tripled.
-4. **Cold is not his problem.** Weather-adjusted, he ranks **4th of 48** since 2018, and his edge
-   over the league is biggest **below freezing** (+0.139).
-5. **Man coverage is the soft spot.** 10th of 45 against zone, 23rd against man (2018-25).
+1. **Best start in the league, by a hair.** +0.303 EPA per dropback leads 30 qualifying QBs,
+   +0.016 ahead of B.Purdy. With win probability limited to 10-90% (garbage time out)
+   he is #2 (+0.274), behind C.Williams (+0.336 on 158).
+2. **Every coaching era has been better than the last.** +0.130 under Daboll,
+   +0.199 under Dorsey, +0.222 with Brady calling plays as OC, and
+   +0.303 with Brady still calling plays as head coach (7 games so far).
+3. **Off script, it's working again.** 30% of his dropbacks are outside the pocket (5th-most;
+   league 20%), worth +0.49 EPA per play on 71 plays
+   (league +0.02; 2nd behind D.Maye). In 2025 those plays were worth +0.16.
+4. **2025's dip was mostly sacks.** Counting sacks, his rank when pressured fell from #1 to
+   #15. On pass attempts alone it went from #5 to #9, and his sack rate rose
+   from 2.6% to 7.3% (league 6.5%).
+5. **Weather doesn't slow him down relative to the league.** Weather-adjusted he ranks **4th of 49**
+   since 2018. Below freezing his edge over the league is +0.139, similar to his +0.110 in all warmer
+   outdoor games, on a small sample (398 dropbacks in 12 games).
 
-## 1. By coaching era
+## 1. Season by season, and by coaching era
 
-Play-caller eras: Daboll (2018-21); Dorsey (2022 to week 10 of 2023, fired Nov. 14, 2023); Brady as
-OC (week 11 of 2023 through 2025); Brady as head coach with Carmichael calling plays (2026).
+| Season | Dropbacks | EPA/db | League avg | Rank |
+|---|---|---|---|---|
+| 2018 | 394 | -0.025 | +0.056 | #30 of 36 |
+| 2019 | 540 | +0.008 | +0.042 | #22 of 34 |
+| 2020 | 627 | +0.289 | +0.078 | #3 of 36 |
+| 2021 | 718 | +0.169 | +0.040 | #7 of 35 |
+| 2022 | 650 | +0.216 | +0.015 | #3 of 35 |
+| 2023 | 649 | +0.166 | -0.001 | #4 of 39 |
+| 2024 | 539 | +0.304 | +0.052 | #2 of 40 |
+| 2025 | 547 | +0.172 | +0.043 | #6 of 38 |
+| 2026 | 237 | +0.303 | +0.053 | #1 of 30 |
 
-| Era | Games | Dropbacks | EPA/db | Success | CPOE | Avg depth of target | Sack rate | Out of pocket | Play action |
-|---|---|---|---|---|---|---|---|---|---|
-| Daboll OC 2018-21 | 57 | 2132 | +0.120 | 48.7% | +0.8 | 9.0 | 5.4% | n/a | n/a |
-| Dorsey OC 2022-23 wk10 | 26 | 1038 | +0.199 | 52.8% | +3.6 | 8.9 | 4.4% | 19.7% | 19.1% |
-| Brady OC 2023 wk11-25 | 39 | 1347 | +0.222 | 48.7% | +1.9 | 8.1 | 4.8% | 24.2% | 20.6% |
-| Brady HC 2026 | 7 | 237 | +0.303 | 48.1% | +4.0 | 9.0 | 5.5% | 30.0% | 26.6% |
+Staff eras: Daboll as OC (2018-21); Dorsey as OC (2022 to week 10 of 2023; fired Nov. 14, 2023); Brady as OC
+(week 11 of 2023 through 2025); Brady as head coach, still calling plays, with Pete Carmichael as a non-play-calling
+OC (2026). The last two eras have the same play-caller.
 
-EPA per dropback has risen under every play-caller. The 2026 offense throws deeper (average depth of target
-9.0 yards, up from 8.1) and uses more play action
-(27% vs 21%).
+| Era | Games | Dropbacks | EPA/db | League EPA/db | Success | CPOE | Avg depth of target | Sack rate | Out of pocket | Play action |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Daboll OC 2018-21 | 61 | 2,279 | +0.130 | +0.054 | 48.8% | +1.1 | 9.0 | 5.2% | n/a | n/a |
+| Dorsey OC 2022-23 wk10 | 26 | 1,038 | +0.199 | +0.008 | 52.8% | +3.6 | 8.9 | 4.4% | 19.7% | 19.1% |
+| Brady OC 2023 wk11-25 | 39 | 1,347 | +0.222 | +0.040 | 48.7% | +1.9 | 8.1 | 4.8% | 24.2% | 20.6% |
+| Brady HC + play-caller 2026 | 7 | 237 | +0.303 | +0.053 | 48.1% | +4.0 | 9.0 | 5.5% | 30.0% | 26.6% |
 
-| Season | Dropbacks | EPA/db | League rank |
-|---|---|---|---|
-| 2018 | 394 | -0.025 | #30 of 36 |
-| 2019 | 438 | -0.041 | #30 of 35 |
-| 2020 | 627 | +0.289 | #3 of 36 |
-| 2021 | 673 | +0.152 | #10 of 36 |
-| 2022 | 650 | +0.216 | #3 of 35 |
-| 2023 | 649 | +0.166 | #4 of 39 |
-| 2024 | 539 | +0.304 | #2 of 40 |
-| 2025 | 547 | +0.172 | #6 of 38 |
-| 2026 | 237 | +0.303 | #1 of 30 |
+The 2026 offense throws deeper than Brady's OC version (average depth of target 9.0 yards vs
+8.1) and uses more play action (27% vs 21%).
 
 ## 2. Off script
 
 ![Off script](allen-offscript.png)
 
-| Season | Dropbacks | Out of pocket | EPA out of pocket | EPA in pocket |
-|---|---|---|---|---|
-| 2022 | 650 | 17.8% | +0.392 | +0.178 |
-| 2023 | 649 | 22.2% | +0.345 | +0.115 |
-| 2024 | 539 | 24.3% | +0.358 | +0.287 |
-| 2025 | 547 | 25.4% | +0.159 | +0.176 |
-| 2026 | 237 | 30.0% | +0.487 | +0.225 |
+| Season | Dropbacks | Out of pocket | League | Out-of-pocket plays | EPA out of pocket | League | EPA in pocket |
+|---|---|---|---|---|---|---|---|
+| 2022 | 650 | 17.8% | 15.8% | 116 | +0.392 | -0.013 | +0.178 |
+| 2023 | 649 | 22.2% | 17.2% | 144 | +0.345 | -0.008 | +0.115 |
+| 2024 | 539 | 24.3% | 18.6% | 131 | +0.358 | +0.044 | +0.287 |
+| 2025 | 547 | 25.4% | 20.5% | 139 | +0.159 | -0.007 | +0.176 |
+| 2026 | 237 | 30.0% | 20.0% | 71 | +0.487 | +0.022 | +0.225 |
 
-2026 out-of-pocket rate ranks 5th among QBs with 150+ dropbacks; league average 20%.
-The 2025 dip is the story inside the story: he left the pocket as often as ever, but the plays stopped working.
+He is out of the pocket a bit more often, but frequency isn't what changed: holding his 2025 per-play values fixed,
+the extra 5% of plays outside the pocket adds essentially nothing (-0.001 EPA per dropback).
+The jump is in what those plays are worth, on 71 plays so far.
 
 ## 3. Under pressure
 
 ![Pressure](allen-pressure.png)
 
-| Season | Pressure rate | EPA clean | EPA pressured | Rank pressured |
+The NFL's participation data does not chart sacks and scrambles before 2023, so the consistent long-run view uses
+**pass attempts only**:
+
+| Season | Attempts | Pressured attempts | EPA clean | League | EPA pressured | League | Rank pressured |
+|---|---|---|---|---|---|---|---|
+| 2018 | 319 | 107 | +0.020 | +0.254 | -0.041 | -0.013 | #19 of 34 |
+| 2019 | 458 | 122 | +0.148 | +0.223 | -0.013 | +0.002 | #21 of 34 |
+| 2020 | 572 | 198 | +0.406 | +0.271 | +0.260 | -0.041 | #3 of 36 |
+| 2021 | 646 | 194 | +0.255 | +0.217 | -0.021 | -0.033 | #19 of 35 |
+| 2022 | 566 | 154 | +0.249 | +0.188 | +0.263 | -0.051 | #1 of 34 |
+| 2023 | 577 | 136 | +0.287 | +0.195 | -0.116 | -0.162 | #15 of 35 |
+| 2024 | 482 | 115 | +0.366 | +0.232 | +0.170 | -0.063 | #5 of 40 |
+| 2025 | 459 | 84 | +0.343 | +0.245 | -0.022 | -0.159 | #9 of 38 |
+
+He has beaten the league's pressured average in 6 of 8 seasons (every season since 2020).
+Career, pass attempts: +0.274 clean, +0.076 pressured (league +0.228 / -0.060).
+
+From 2023, sacks are charted, so here is the full-dropback view:
+
+| Season | Dropbacks | Pressured | EPA pressured | Rank |
 |---|---|---|---|---|
-| 2018 | 33.5% | +0.020 | -0.041 | #18 of 33 |
-| 2019 | 27.7% | +0.084 | +0.042 | #12 of 33 |
-| 2020 | 34.6% | +0.406 | +0.260 | #3 of 36 |
-| 2021 | 29.5% | +0.247 | -0.067 | #21 of 34 |
-| 2022 | 27.2% | +0.249 | +0.263 | #1 of 33 |
-| 2023 | 28.2% | +0.315 | -0.215 | #4 of 39 |
-| 2024 | 28.0% | +0.397 | +0.066 | #1 of 40 |
-| 2025 | 26.7% | +0.373 | -0.382 | #15 of 38 |
+| 2023 | 649 | 183 | -0.215 | #4 of 39 |
+| 2024 | 539 | 151 | +0.066 | #1 of 40 |
+| 2025 | 547 | 146 | -0.382 | #15 of 38 |
 
-Career: +0.284 clean, -0.004 pressured; league over the same span
-+0.232 clean, -0.198 pressured. His pressured EPA is about +0.19 better than the league's.
+**How much should we read into one year under pressure?** Across 182 QB season-pairs since 2018 (pass
+attempts only), pressured EPA correlates 0.24 with the next season, clean-pocket EPA 0.37.
+Pressured performance is the less repeatable of the two, so one bad year under pressure is weak evidence of decline.
+2026 pressure data has not been published yet.
 
-**Checked a second way:** is pressured performance just noise? Across 183 QB season-pairs since 2018,
-pressured EPA correlates 0.49 with the next season, clean-pocket EPA 0.38. Pressure performance
-is at least as repeatable as clean-pocket play, so 2025 should be read as a real dip, not bad luck.
-2026 pressure data (NFL participation) is not yet published; PFR's separate charting has his 2026 pressure rate narrowly the lowest of his career.
-
-Sack rate by season: 2018: 7.1% · 2019: 8.0% · 2020: 4.1% · 2021: 3.9% · 2022: 5.1% · 2023: 3.7% · 2024: 2.6% · 2025: 7.3% · 2026: 5.5%.
+| Season | Allen sack rate | League |
+|---|---|---|
+| 2018 | 7.1% | 6.5% |
+| 2019 | 7.0% | 6.4% |
+| 2020 | 4.1% | 5.7% |
+| 2021 | 3.6% | 6.0% |
+| 2022 | 5.1% | 6.4% |
+| 2023 | 3.7% | 6.8% |
+| 2024 | 2.6% | 6.5% |
+| 2025 | 7.3% | 6.5% |
+| 2026 | 5.5% | 6.2% |
 
 ## 4. Weather
 
-Outdoor games only. Each dropback compared with the league average in the same temperature and wind band.
+Outdoor games with recorded weather. Each dropback is compared with the league average in the same temperature and wind band.
 
-| Temperature | Allen dropbacks | Allen EPA | League EPA | Allen edge |
-|---|---|---|---|---|
-| <=32F | 398 | +0.162 | +0.023 | +0.139 |
-| 33-45 | 845 | +0.089 | +0.003 | +0.086 |
-| 46-60 | 922 | +0.137 | +0.044 | +0.093 |
-| 61-75 | 911 | +0.211 | +0.055 | +0.156 |
-| 76+ | 536 | +0.144 | +0.057 | +0.087 |
+| Temperature | Games | Allen dropbacks | Allen EPA | League EPA | Allen edge |
+|---|---|---|---|---|---|
+| 32F and below | 12 | 398 | +0.162 | +0.023 | +0.139 |
+| 33-45 | 25 | 868 | +0.095 | +0.003 | +0.093 |
+| 46-60 | 25 | 965 | +0.131 | +0.044 | +0.086 |
+| 61-75 | 27 | 992 | +0.228 | +0.055 | +0.173 |
+| 76+ | 14 | 536 | +0.144 | +0.057 | +0.087 |
 
-| Wind | Allen dropbacks | Allen EPA | League EPA | Allen edge |
-|---|---|---|---|---|
-| 0-9 mph | 2025 | +0.197 | +0.059 | +0.137 |
-| 10-14 | 866 | +0.078 | +0.011 | +0.068 |
-| 15+ | 721 | +0.096 | -0.008 | +0.104 |
+| Wind | Games | Allen dropbacks | Allen EPA | League EPA | Allen edge |
+|---|---|---|---|---|---|
+| 0-9 mph | 56 | 2,025 | +0.197 | +0.059 | +0.137 |
+| 10-14 | 26 | 945 | +0.087 | +0.011 | +0.076 |
+| 15+ | 21 | 789 | +0.122 | -0.008 | +0.130 |
+
+His edge holds in every temperature band. The biggest is in mild weather (61-75F); the sub-freezing sample
+(12 games) is too small to rank the bands against each other.
 
 ![Weather leaderboard](allen-weather.png)
 
@@ -114,7 +145,7 @@ Outdoor games only. Each dropback compared with the league average in the same t
 | 1 | B.Purdy | 1,226 | +0.195 |
 | 2 | P.Mahomes | 3,954 | +0.180 |
 | 3 | L.Jackson | 2,725 | +0.148 |
-| 4 | J.Allen | 3,612 | +0.119 |
+| 4 | J.Allen | 3,759 | +0.125 |
 | 5 | J.Love | 1,355 | +0.104 |
 | 6 | D.Maye | 1,099 | +0.103 |
 | 7 | M.Stafford | 1,343 | +0.103 |
@@ -122,37 +153,60 @@ Outdoor games only. Each dropback compared with the league average in the same t
 | 9 | K.Murray | 1,031 | +0.096 |
 | 10 | P.Rivers | 1,320 | +0.093 |
 
-Domes: +0.264 EPA per dropback in 20 dome games vs +0.160 outdoors.
-League: +0.044 in domes, +0.040 outdoors. Monday's game in Minnesota is indoors.
+The 4th-place ranking holds across reasonable choices (3rd with a 1,500 or 2,000 dropback minimum; 5th for 2018-25
+only; 5th unadjusted). Temperature is missing for some outdoor games in the source data, mostly 2022 and 2026;
+427 Allen outdoor dropbacks are excluded for that reason.
+
+By roof type: fixed dome: +0.419 in 11 games (league +0.037) · closed retractable roof: +0.087 in 9 games (league +0.053) · outdoors: +0.164 in 113 games (league +0.039). The fixed-dome figure is 11 games.
 
 ## 5. Turnovers
 
-Interception-worthy throw rate (FTN): 2022: 5.2% · 2023: 3.9% · 2024: 2.4% · 2025: 3.3% · 2026: 3.0%. The 2022-23 turnover problem is gone.
+Interception-worthy plays, from FTN charting. Rank 1 = fewest.
 
-## 6. Coverage (2018-25)
+| Season | Int-worthy plays | Per dropback | Per attempt | League per dropback | Rank | Actual INT rate |
+|---|---|---|---|---|---|---|
+| 2022 | 34 | 5.2% | 5.7% | 4.7% | 26th of 35 | 2.3% |
+| 2023 | 25 | 3.9% | 4.2% | 3.6% | 30th of 39 | 3.0% |
+| 2024 | 13 | 2.4% | 2.6% | 2.9% | 12th of 40 | 1.2% |
+| 2025 | 18 | 3.3% | 3.6% | 2.8% | 30th of 38 | 2.0% |
+| 2026 | 7 | 3.0% | 3.2% | 2.7% | 19th of 30 | 2.3% |
+
+The rate is down from the 2022 peak and was better than average in 2024, but in 2025 and 2026 it is above the league
+average again, and his actual interception rate is up from 2024 and 2025.
+
+## 6. Coverage
 
 | Season | Man dropbacks | EPA vs man | Zone dropbacks | EPA vs zone |
 |---|---|---|---|---|
 | 2018 | 136 | -0.138 | 183 | +0.102 |
-| 2019 | 202 | +0.069 | 162 | +0.077 |
+| 2019 | 247 | +0.047 | 211 | +0.175 |
 | 2020 | 231 | +0.397 | 341 | +0.327 |
-| 2021 | 218 | +0.062 | 385 | +0.207 |
+| 2021 | 227 | +0.079 | 419 | +0.223 |
 | 2022 | 191 | +0.162 | 375 | +0.299 |
 | 2023 | 300 | +0.199 | 347 | +0.143 |
 | 2024 | 303 | +0.319 | 236 | +0.284 |
 | 2025 | 229 | +0.086 | 317 | +0.228 |
 
-Career +0.170 vs man (23rd of 45), +0.223 vs zone (10th).
-2026 coverage data is not yet published.
+2018-22 rows exclude sacks and scrambles (not charted then); 2023-25 include them.
+
+- 2023-25: +0.212 vs man (4th of 40), +0.210 vs zone (2nd).
+  League +0.034 vs man, +0.032 vs zone.
+- 2018-22, pass attempts: +0.129 vs man (34th of 52), +0.244 vs zone (10th).
+
+Man coverage gave him trouble early in his career. Since 2023 he has been among the best in the league against both.
 
 ## Designed runs
 
-EPA per designed run (not scrambles), with attempts: 2018: +0.13 (36) · 2019: +0.01 (40) · 2020: -0.07 (51) · 2021: +0.22 (62) · 2022: +0.08 (56) · 2023: +0.39 (54) · 2024: +0.47 (51) · 2025: +0.44 (46) · 2026: +0.13 (28). The 2026 number is on only a few dozen runs, but so far the offense is getting much less from his legs by design.
+EPA per designed run (not scrambles), by season: 2018: +0.13 on 36 · 2019: +0.21 on 52 · 2020: -0.07 on 51 · 2021: +0.18 on 64 · 2022: +0.08 on 56 · 2023: +0.39 on 54 · 2024: +0.47 on 51 · 2025: +0.44 on 46 · 2026: +0.13 on 28. The 2026 figure is on a small number of runs.
 
 ## Method and caveats
 
-- Dropbacks from nflverse play-by-play; QB on a scramble is the rusher, so scrambles are credited correctly.
-- Pressure, coverage and time to throw come from NFL participation data (2018-25). Out-of-pocket, play action and
-  interception-worthy throws from FTN charting (2022+). Different charters define pressure differently.
-- Weather bands: temperature &le;32, 33-45, 46-60, 61-75, 76+ F; wind 0-9, 10-14, 15+ mph. Domes and closed roofs excluded from the weather model.
-- Eras are play-caller eras, verified against reporting on the November 2023 change.
+- Players are identified by NFL player ID; the source spells Allen two ways in some 2019 and 2021 games.
+- Dropbacks come from nflverse play-by-play. On a scramble the QB is recorded as the rusher and is credited here.
+- Garbage-time filter: win probability between 10% and 90%. The headline uses unfiltered numbers and reports both.
+- Pressure, coverage and time to throw come from NFL participation data (2018-25). Before 2023 it does not chart sacks
+  or scrambles, which is why the long-run pressure series uses pass attempts only.
+- Out-of-pocket, play action and interception-worthy plays come from FTN charting (2022+).
+- Weather bands: temperature 32F and below, 33-45, 46-60, 61-75, 76+; wind 0-9, 10-14, 15+ mph. Domes and roofs excluded.
+- Coaching eras checked against reporting on the November 2023 coordinator change and the 2026 staff.
+- Independently reviewed by our QA process before publication.
