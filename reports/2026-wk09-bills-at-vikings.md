@@ -87,8 +87,7 @@ allows sacks at the 3rd-highest rate in the league. That's an opening for a Bill
 
 ## What we're watching
 
-**Draft, not yet logged. Pending Charlie's approval.** These go on the Ledger only after approval, timestamped before
-kickoff, and are graded after the game.
+**Our model's numbers for this game.** A call only counts once it's logged on the [Ledger](../ledger.html) before kickoff, and every logged call is graded after the game.
 
 | # | What we expect | Chance |
 |---|---|---|

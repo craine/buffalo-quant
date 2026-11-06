@@ -75,6 +75,15 @@ def main():
     lg_mean = query(f"SELECT season, AVG(epa) e FROM raw_pbp WHERE season BETWEEN {EP_SEASONS[0]} AND {EP_SEASONS[1]} "
                     "AND season_type='REG' AND (pass=1 OR rush=1) AND epa IS NOT NULL GROUP BY 1").e
 
+    from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
+    lp = _read(PRED_CSV, PRED_COLS)
+    lp = lp[lp.game_id == "2026_09_BUF_MIN"] if not lp.empty else lp
+    if len(lp):
+        ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before kickoff.** "
+                         "These are graded after the game, hit or miss, and stay up either way.")
+    else:
+        ledger_status = ("**Our model's numbers for this game.** A call only counts once it's logged on the "
+                         "[Ledger](../ledger.html) before kickoff, and every logged call is graded after the game.")
     # model calls (draft)
     w_db, n_db = qb_relative(WENTZ, "dropback_epa", [2025, 2026])
     w_sk, n_sk = qb_relative(WENTZ, "sack_rate", [2025, 2026])
@@ -240,8 +249,7 @@ allows sacks at the {ordn(33 - mo.sack_rate_rk)}-highest rate in the league. Tha
 
 ## What we're watching
 
-**Draft, not yet logged. Pending Charlie's approval.** These go on the Ledger only after approval, timestamped before
-kickoff, and are graded after the game.
+{ledger_status}
 
 | # | What we expect | Chance |
 |---|---|---|
@@ -282,6 +290,21 @@ which were mostly Murray's games. That moved call 1 from {c1b['p']:.0%} to {c1['
   hurt in the week 8 loss to Detroit). Source: ESPN, Nov. 5, 2026.
 """
     (OUT / "2026-wk09-bills-at-vikings.md").write_text(md_text)
+    import json
+    (OUT / "2026-wk09-bills-at-vikings.hero.json").write_text(json.dumps({
+        "label": f"Through week {THRU}, efficiency per play",
+        "big": [[f"#{int(bo.epa_play_rk)}", "Bills offense"], [f"#{int(md.epa_play_rk)}", "Vikings defense"]],
+        "note": (f"Counting every play. With garbage time removed: Bills {ordn(bo.epa_play_neutral_rk)}, "
+                 f"Vikings {ordn(md.epa_play_neutral_rk)}. Something has to give Monday night."),
+        "explainer": {
+            "kicker": "How we know", "title": "Every play is worth points.",
+            "text": (f"We judge every snap by how many points it adds to or takes away from the drive. "
+                     f"On 3rd-and-8, a conversion adds about {third.loc['conv', 'epa']:+.1f} points; a sack costs about "
+                     f"{abs(third.loc['sack', 'epa']):.1f}. Here's what 1st-and-10 is worth depending on where you start."),
+            "fmt": "pts",
+            "bars": [["Own 25", round(float(ep.loc[75, 'ep']), 2)], ["Midfield", round(float(ep.loc[50, 'ep']), 2)],
+                     ["Opp. 25", round(float(ep.loc[25, 'ep']), 2)], ["Opp. 10", round(float(ep.loc[10, 'ep']), 2)]]},
+    }, indent=1))
     print(md_text)
 
 
