@@ -95,6 +95,8 @@ and add it to this table when you do.
 - On scrambles the QB is the *rusher*: use `COALESCE(passer_player_id, rusher_player_id)` for dropbacks.
 - NFL participation data (pressure, coverage) does not chart sacks or scrambles before 2023. Use pass
   attempts only for multi-year series that cross 2022/2023, or split at 2023.
+- nflverse `pass_attempt` counts sacks. Use `pass_attempt == 1 and sack == 0` for true attempts.
+- Participation pressure charting changed definition in 2023 even for pass attempts; compare within season.
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.

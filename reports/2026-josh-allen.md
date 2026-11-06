@@ -14,9 +14,11 @@ pocket more than ever, and those plays are working again after a down 2025.**
 1. **Best start in the league, by a hair.** +0.303 EPA per dropback leads 30 qualifying QBs,
    +0.016 ahead of B.Purdy. With win probability limited to 10-90% (garbage time out)
    he is #2 (+0.274), behind C.Williams (+0.336 on 158).
-2. **Every coaching era has been better than the last.** +0.130 under Daboll,
+2. **In raw EPA, every coaching era has been better than the last.** +0.130 under Daboll,
    +0.199 under Dorsey, +0.222 with Brady calling plays as OC, and
-   +0.303 with Brady still calling plays as head coach (7 games so far).
+   +0.303 with Brady still calling plays as head coach (7 games so far). Relative to the league,
+   the edge is +0.076, +0.191,
+   +0.183 and +0.250, so the Brady-OC years were about level with Dorsey's.
 3. **Off script, it's working again.** 30% of his dropbacks are outside the pocket (5th-most;
    league 20%), worth +0.49 EPA per play on 71 plays
    (league +0.02; 2nd behind D.Maye). In 2025 those plays were worth +0.16.
@@ -75,8 +77,9 @@ The jump is in what those plays are worth, on 71 plays so far.
 
 ![Pressure](allen-pressure.png)
 
-The NFL's participation data does not chart sacks and scrambles before 2023, so the consistent long-run view uses
-**pass attempts only**:
+The NFL's participation data does not chart sacks and scrambles before 2023, so the most consistent long-run view
+available uses **pass attempts only**. Pressure charting itself also changed in 2023 (league pressure rates drop), so
+compare ranks and gaps to the league within a season rather than raw levels across years.
 
 | Season | Attempts | Pressured attempts | EPA clean | League | EPA pressured | League | Rank pressured |
 |---|---|---|---|---|---|---|---|
@@ -100,9 +103,10 @@ From 2023, sacks are charted, so here is the full-dropback view:
 | 2024 | 539 | 151 | +0.066 | #1 of 40 |
 | 2025 | 547 | 146 | -0.382 | #15 of 38 |
 
-**How much should we read into one year under pressure?** Across 182 QB season-pairs since 2018 (pass
-attempts only), pressured EPA correlates 0.24 with the next season, clean-pocket EPA 0.37.
-Pressured performance is the less repeatable of the two, so one bad year under pressure is weak evidence of decline.
+**How much should we read into 2025?** On pass attempts, how a QB does under pressure carries over less from year to
+year than clean-pocket play (0.24 vs 0.37 correlation across 182 QB season-pairs since
+2018), though the gap is not statistically firm. Sack rate is more stable (0.46 league-wide across
+209 pairs), and sacks drove his 2025 dip, so that part deserves more weight.
 2026 pressure data has not been published yet.
 
 | Season | Allen sack rate | League |
@@ -163,13 +167,13 @@ By roof type: fixed dome: +0.419 in 11 games (league +0.037) · closed retractab
 
 Interception-worthy plays, from FTN charting. Rank 1 = fewest.
 
-| Season | Int-worthy plays | Per dropback | Per attempt | League per dropback | Rank | Actual INT rate |
+| Season | Int-worthy plays | Per dropback | Per pass attempt (excl. sacks) | League per dropback | Rank | INT rate (per attempt) |
 |---|---|---|---|---|---|---|
-| 2022 | 34 | 5.2% | 5.7% | 4.7% | 26th of 35 | 2.3% |
-| 2023 | 25 | 3.9% | 4.2% | 3.6% | 30th of 39 | 3.0% |
-| 2024 | 13 | 2.4% | 2.6% | 2.9% | 12th of 40 | 1.2% |
-| 2025 | 18 | 3.3% | 3.6% | 2.8% | 30th of 38 | 2.0% |
-| 2026 | 7 | 3.0% | 3.2% | 2.7% | 19th of 30 | 2.3% |
+| 2022 | 34 | 5.2% | 6.0% | 4.7% | 26th of 35 | 2.5% |
+| 2023 | 25 | 3.9% | 4.3% | 3.6% | 30th of 39 | 3.1% |
+| 2024 | 13 | 2.4% | 2.7% | 2.9% | 12th of 40 | 1.2% |
+| 2025 | 18 | 3.3% | 3.9% | 2.8% | 30th of 38 | 2.2% |
+| 2026 | 7 | 3.0% | 3.4% | 2.7% | 19th of 30 | 2.4% |
 
 The rate is down from the 2022 peak and was better than average in 2024, but in 2025 and 2026 it is above the league
 average again, and his actual interception rate is up from 2024 and 2025.
@@ -191,13 +195,17 @@ average again, and his actual interception rate is up from 2024 and 2025.
 
 - 2023-25: +0.212 vs man (4th of 40), +0.210 vs zone (2nd).
   League +0.034 vs man, +0.032 vs zone.
-- 2018-22, pass attempts: +0.129 vs man (34th of 52), +0.244 vs zone (10th).
+- 2023-25, pass attempts only (same basis as below): +0.233 vs man (10th of 38),
+  +0.279 vs zone (5th).
+- 2018-22, pass attempts: +0.129 vs man (34th of 52), +0.244 vs zone
+  (10th). League +0.149 vs man, +0.156 vs zone.
 
-Man coverage gave him trouble early in his career. Since 2023 he has been among the best in the league against both.
+Early in his career he was below the league average against man coverage. Since 2023 he has been among the best in the
+league against both, on either basis.
 
 ## Designed runs
 
-EPA per designed run (not scrambles), by season: 2018: +0.13 on 36 · 2019: +0.21 on 52 · 2020: -0.07 on 51 · 2021: +0.18 on 64 · 2022: +0.08 on 56 · 2023: +0.39 on 54 · 2024: +0.47 on 51 · 2025: +0.44 on 46 · 2026: +0.13 on 28. The 2026 figure is on a small number of runs.
+EPA per designed run (not scrambles), by season: 2018: +0.13 on 36 (QBs league-wide -0.02) · 2019: +0.21 on 52 (QBs league-wide -0.13) · 2020: -0.07 on 51 (QBs league-wide +0.03) · 2021: +0.18 on 64 (QBs league-wide -0.01) · 2022: +0.08 on 56 (QBs league-wide +0.03) · 2023: +0.39 on 54 (QBs league-wide -0.10) · 2024: +0.47 on 51 (QBs league-wide -0.04) · 2025: +0.44 on 46 (QBs league-wide -0.03) · 2026: +0.13 on 28 (QBs league-wide +0.05). The 2026 figure is on a small number of runs.
 
 ## Method and caveats
 
@@ -207,6 +215,6 @@ EPA per designed run (not scrambles), by season: 2018: +0.13 on 36 · 2019: +0.2
 - Pressure, coverage and time to throw come from NFL participation data (2018-25). Before 2023 it does not chart sacks
   or scrambles, which is why the long-run pressure series uses pass attempts only.
 - Out-of-pocket, play action and interception-worthy plays come from FTN charting (2022+).
-- Weather bands: temperature 32F and below, 33-45, 46-60, 61-75, 76+; wind 0-9, 10-14, 15+ mph. Domes and roofs excluded.
+- Weather bands: temperature 32F and below, 33-45, 46-60, 61-75, 76+; wind 0-9, 10-14, 15+ mph. Fixed domes and closed roofs excluded; open-roof games kept.
 - Coaching eras checked against reporting on the November 2023 coordinator change and the 2026 staff.
-- Independently reviewed by our QA process before publication.
+- Independently reviewed by our QA process before publication: every number recomputed from source data.

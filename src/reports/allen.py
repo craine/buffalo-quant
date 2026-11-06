@@ -58,6 +58,11 @@ def pressure_tables(d):
     nx = g.copy(); nx["season"] -= 1
     m = g.merge(nx, on=["qb_id", "season"], suffixes=("", "_n"))
     yoy = {"pairs": len(m), "pres": m.epa_pres.corr(m.epa_pres_n), "clean": m.epa_clean.corr(m.epa_clean_n)}
+    # sack rate stability (league QB-seasons, 200+ dropbacks)
+    sk = d.groupby(["season", "qb_id"]).agg(db=("epa", "size"), sr=("sack", "mean")).reset_index()
+    sk = sk[sk.db >= 200]; skn = sk.copy(); skn["season"] -= 1
+    sm = sk.merge(skn, on=["qb_id", "season"], suffixes=("", "_n"))
+    yoy["sack"] = sm.sr.corr(sm.sr_n); yoy["sack_pairs"] = len(sm)
     return g, lg, h, yoy
 
 
@@ -126,7 +131,7 @@ def chart_weather(wq, rank):
     fig.tight_layout(rect=(0, 0.03, 1, 1)); fig.savefig(OUT / "allen-weather.png"); plt.close(fig)
 
 
-def chart_pressure(ap, lg):
+def chart_pressure(ap, lg, edges):
     fig, ax = plt.subplots(figsize=(9, 4.8), dpi=200)
     x = [str(s) for s in ap.season]
     ax.plot(x, ap.epa_clean, color=BLUE, lw=2, marker="o", ms=8, zorder=3)
@@ -141,9 +146,9 @@ def chart_pressure(ap, lg):
     ax.axhline(0, color=INK, lw=1); ax.set_xlim(-0.4, len(x) + 1.0)
     ax.set_ylim(min(ap.epa_pres.min(), lg[1.0].min()) - 0.2, ap.epa_clean.max() + 0.08)
     ax.set_ylabel("EPA per pass attempt"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    fig.suptitle("Under pressure, Allen has beaten the league average every year since 2020", x=0.02, ha="left",
+    fig.suptitle(f"Under pressure, Allen has beaten the league average in {int((edges > 0).sum())} of {len(edges)} seasons", x=0.02, ha="left",
                  fontsize=14.5, fontweight="bold", color=INK)
-    ax.set_title("Pass attempts only (sacks and scrambles excluded for a consistent 2018-25 series). "
+    ax.set_title("Pass attempts only (sacks not charted before 2023). "
                  "Dashed = league. # = rank when pressured.", loc="left", fontsize=8.6, color=MUTED, pad=8)
     foot(fig, "Source: nflverse play-by-play, NFL participation data (2026 not yet published). Regular season. Buffalo Quant Desk. Attempt counts in the table.")
     fig.tight_layout(rect=(0, 0.03, 1, 1)); fig.savefig(OUT / "allen-pressure.png"); plt.close(fig)
@@ -235,9 +240,10 @@ def main():
 
     # ---- 5. turnovers (FTN 2022+)
     iw_rows = []
+    fd = fd.assign(_att=((fd.pass_attempt == 1) & (fd.sack == 0)).astype(int))
     for s, x in fd.groupby("season"):
         q = x.groupby("qb_id").agg(db=("epa", "size"), iw=("is_interception_worthy", "mean"),
-                                   att=("pass_attempt", "sum"), iwn=("is_interception_worthy", "sum"),
+                                   att=("_att", "sum"), iwn=("is_interception_worthy", "sum"),
                                    ints=("interception", "sum")).reset_index()
         q = q[q.db >= (150 if s == 2026 else 200)]
         q["rk"] = q.iw.rank(method="min").astype(int)  # 1 = fewest
@@ -260,18 +266,27 @@ def main():
         return q
     c_rec = cov_rank(cv[cv.season >= 2023], 150, 300)
     c_old = cov_rank(cv[(cv.season <= 2022) & (cv.sack == 0) & (cv.qb_scramble == 0)], 150, 300)
-    cr, co = c_rec.loc[ALLEN_ID], c_old.loc[ALLEN_ID]
+    c_rec_pa = cov_rank(cv[(cv.season >= 2023) & (cv.sack == 0) & (cv.qb_scramble == 0)], 150, 300)
+    cr, co, crp = c_rec.loc[ALLEN_ID], c_old.loc[ALLEN_ID], c_rec_pa.loc[ALLEN_ID]
+    old_pa = cv[(cv.season <= 2022) & (cv.sack == 0) & (cv.qb_scramble == 0)]
+    lg_cov_old = old_pa.groupby("man_zone").epa.mean()
     lg_cov_rec = cv[cv.season >= 2023].groupby("man_zone").epa.mean()
     cs = cv[cv.qb_id == ALLEN_ID].groupby(["season", "man_zone"]).epa.agg(["size", "mean"]).unstack("man_zone")
 
     # ---- designed runs
     runs = allen_runs()
     runs_s = runs[runs.qb_scramble == 0].groupby("season").epa.agg(["size", "mean"])
+    from src.db import query
+    qbr = query("""SELECT p.season, p.epa FROM clean_plays p JOIN raw_pbp r ON r.game_id = p.game_id AND r.play_id = p.play_id
+                   JOIN (SELECT DISTINCT passer_player_id AS pid FROM raw_pbp WHERE passer_player_id IS NOT NULL
+                         GROUP BY passer_player_id HAVING COUNT(*) >= 200) q ON q.pid = r.rusher_player_id
+                   WHERE p.season_type='REG' AND p.rush = 1 AND COALESCE(r.qb_scramble, 0) = 0""")
+    lg_run = qbr.groupby("season").epa.mean()
 
     chart_seasons(sr, lg_db, wk, int(af26.rk))
     chart_offscript(off, lg_oop_rate, lg_oop_epa)
     chart_weather(wq, w_rank)
-    chart_pressure(ap, lg_p)
+    chart_pressure(ap, lg_p, edges)
 
     # ---- text
     e = eras
@@ -291,7 +306,7 @@ def main():
     iw_rowsmd = "\n".join(f"| {r['season']} | {r['iwn']} | {r['per_db']:.1%} | {r['per_att']:.1%} | {r['lg']:.1%} | {ordn(r['rk'])} of {r['n']} | {r['int_rate']:.1%} |" for r in iw_rows)
     sack_rows = "\n".join(f"| {s} | {sack[s]:.1%} | {lg_sack[s]:.1%} |" for s in sack.index)
     c_rows = "\n".join(f"| {s} | {int(r[('size', 'MAN_COVERAGE')])} | {r[('mean', 'MAN_COVERAGE')]:+.3f} | {int(r[('size', 'ZONE_COVERAGE')])} | {r[('mean', 'ZONE_COVERAGE')]:+.3f} |" for s, r in cs.iterrows())
-    run_line = " · ".join(f"{s}: {r['mean']:+.2f} on {int(r['size'])}" for s, r in runs_s.iterrows())
+    run_line = " · ".join(f"{s}: {r['mean']:+.2f} on {int(r['size'])} (QBs league-wide {lg_run[s]:+.2f})" for s, r in runs_s.iterrows())
     roof_line = " · ".join(f"{k.replace('closed', 'closed retractable roof').replace('dome', 'fixed dome')}: {roof.loc[k, 'epa']:+.3f} in {int(roof.loc[k, 'games'])} games (league {lg_roof[k]:+.3f})"
                            for k in ["dome", "closed", "open", "outdoors"] if k in roof.index)
     p24, p25 = af.loc[2024], af.loc[2025]
@@ -313,9 +328,11 @@ pocket more than ever, and those plays are working again after a down 2025.**
 1. **Best start in the league, by a hair.** {a26.v:+.3f} EPA per dropback leads {int(a26.n)} qualifying QBs,
    {a26.v - second.v:+.3f} ahead of {nm[second.qb_id]}. With win probability limited to 10-90% (garbage time out)
    he is #{af26.rk} ({af26.v:+.3f}), behind {nm[fl26.qb_id]} ({fl26.v:+.3f} on {int(fl26.db)}).
-2. **Every coaching era has been better than the last.** {e.loc['daboll', 'epa']:+.3f} under Daboll,
+2. **In raw EPA, every coaching era has been better than the last.** {e.loc['daboll', 'epa']:+.3f} under Daboll,
    {e.loc['dorsey', 'epa']:+.3f} under Dorsey, {e.loc['brady_oc', 'epa']:+.3f} with Brady calling plays as OC, and
-   {e.loc['brady_hc', 'epa']:+.3f} with Brady still calling plays as head coach (7 games so far).
+   {e.loc['brady_hc', 'epa']:+.3f} with Brady still calling plays as head coach (7 games so far). Relative to the league,
+   the edge is {e.loc['daboll', 'epa'] - lg_era['daboll']:+.3f}, {e.loc['dorsey', 'epa'] - lg_era['dorsey']:+.3f},
+   {e.loc['brady_oc', 'epa'] - lg_era['brady_oc']:+.3f} and {e.loc['brady_hc', 'epa'] - lg_era['brady_hc']:+.3f}, so the Brady-OC years were about level with Dorsey's.
 3. **Off script, it's working again.** {o26a.oop:.0%} of his dropbacks are outside the pocket ({ordn(oop_rk26)}-most;
    league {lg_oop_rate[2026]:.0%}), worth {o26a.epa_oop:+.2f} EPA per play on {int(o26a.n_oop)} plays
    (league {lg_oop_epa[2026]:+.2f}; {ordn(oe_rk)} behind {nm[oe_top]}). In 2025 those plays were worth {o25.epa_oop:+.2f}.
@@ -359,8 +376,9 @@ The jump is in what those plays are worth, on {int(o26a.n_oop)} plays so far.
 
 ![Pressure](allen-pressure.png)
 
-The NFL's participation data does not chart sacks and scrambles before 2023, so the consistent long-run view uses
-**pass attempts only**:
+The NFL's participation data does not chart sacks and scrambles before 2023, so the most consistent long-run view
+available uses **pass attempts only**. Pressure charting itself also changed in 2023 (league pressure rates drop), so
+compare ranks and gaps to the league within a season rather than raw levels across years.
 
 | Season | Attempts | Pressured attempts | EPA clean | League | EPA pressured | League | Rank pressured |
 |---|---|---|---|---|---|---|---|
@@ -375,9 +393,10 @@ From 2023, sacks are charted, so here is the full-dropback view:
 |---|---|---|---|---|
 {f_rows}
 
-**How much should we read into one year under pressure?** Across {yoy['pairs']} QB season-pairs since 2018 (pass
-attempts only), pressured EPA correlates {yoy['pres']:.2f} with the next season, clean-pocket EPA {yoy['clean']:.2f}.
-Pressured performance is the less repeatable of the two, so one bad year under pressure is weak evidence of decline.
+**How much should we read into 2025?** On pass attempts, how a QB does under pressure carries over less from year to
+year than clean-pocket play ({yoy['pres']:.2f} vs {yoy['clean']:.2f} correlation across {yoy['pairs']} QB season-pairs since
+2018), though the gap is not statistically firm. Sack rate is more stable ({yoy['sack']:.2f} league-wide across
+{yoy['sack_pairs']} pairs), and sacks drove his 2025 dip, so that part deserves more weight.
 2026 pressure data has not been published yet.
 
 | Season | Allen sack rate | League |
@@ -415,7 +434,7 @@ By roof type: {roof_line}. The fixed-dome figure is 11 games.
 
 Interception-worthy plays, from FTN charting. Rank 1 = fewest.
 
-| Season | Int-worthy plays | Per dropback | Per attempt | League per dropback | Rank | Actual INT rate |
+| Season | Int-worthy plays | Per dropback | Per pass attempt (excl. sacks) | League per dropback | Rank | INT rate (per attempt) |
 |---|---|---|---|---|---|---|
 {iw_rowsmd}
 
@@ -432,9 +451,13 @@ average again, and his actual interception rate is up from 2024 and 2025.
 
 - 2023-25: {cr.mean_man:+.3f} vs man ({ordn(cr.man_rk)} of {len(c_rec)}), {cr.mean_zone:+.3f} vs zone ({ordn(cr.zone_rk)}).
   League {lg_cov_rec['MAN_COVERAGE']:+.3f} vs man, {lg_cov_rec['ZONE_COVERAGE']:+.3f} vs zone.
-- 2018-22, pass attempts: {co.mean_man:+.3f} vs man ({ordn(co.man_rk)} of {len(c_old)}), {co.mean_zone:+.3f} vs zone ({ordn(co.zone_rk)}).
+- 2023-25, pass attempts only (same basis as below): {crp.mean_man:+.3f} vs man ({ordn(crp.man_rk)} of {len(c_rec_pa)}),
+  {crp.mean_zone:+.3f} vs zone ({ordn(crp.zone_rk)}).
+- 2018-22, pass attempts: {co.mean_man:+.3f} vs man ({ordn(co.man_rk)} of {len(c_old)}), {co.mean_zone:+.3f} vs zone
+  ({ordn(co.zone_rk)}). League {lg_cov_old['MAN_COVERAGE']:+.3f} vs man, {lg_cov_old['ZONE_COVERAGE']:+.3f} vs zone.
 
-Man coverage gave him trouble early in his career. Since 2023 he has been among the best in the league against both.
+Early in his career he was below the league average against man coverage. Since 2023 he has been among the best in the
+league against both, on either basis.
 
 ## Designed runs
 
@@ -448,9 +471,9 @@ EPA per designed run (not scrambles), by season: {run_line}. The 2026 figure is 
 - Pressure, coverage and time to throw come from NFL participation data (2018-25). Before 2023 it does not chart sacks
   or scrambles, which is why the long-run pressure series uses pass attempts only.
 - Out-of-pocket, play action and interception-worthy plays come from FTN charting (2022+).
-- Weather bands: temperature 32F and below, 33-45, 46-60, 61-75, 76+; wind 0-9, 10-14, 15+ mph. Domes and roofs excluded.
+- Weather bands: temperature 32F and below, 33-45, 46-60, 61-75, 76+; wind 0-9, 10-14, 15+ mph. Fixed domes and closed roofs excluded; open-roof games kept.
 - Coaching eras checked against reporting on the November 2023 coordinator change and the 2026 staff.
-- Independently reviewed by our QA process before publication.
+- Independently reviewed by our QA process before publication: every number recomputed from source data.
 """
     (OUT / "2026-josh-allen.md").write_text(md)
     print(md)
