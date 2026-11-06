@@ -81,6 +81,21 @@ Other candidate sources (FTN charting, participation, Next Gen Stats, injuries, 
 are **unverified**. Confirm the URL returns 200 and inspect the schema before relying on one,
 and add it to this table when you do.
 
+### NHL (Sabres)
+
+The NHL API (`api-web.nhle.com/v1/gamecenter/{id}/play-by-play`) is not reachable from the agent shell. A GitHub
+Action (`.github/workflows/nhl-ingest.yml`, daily) runs `scripts/nhl_fetch.py` and publishes
+`nhl_{games,plays,rosters}_{season}.parquet` to the `nhl-raw` release; `src/ingest/nhl.py` downloads them via the
+REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 2023-24 onward.
+
+- `details_eventOwnerTeamId` is the shooting team for every shot attempt, including blocked shots.
+- `situationCode` digits are [away goalie][away skaters][home skaters][home goalie].
+- `homeTeamDefendingSide` gives the net being attacked (x = +/-89); compute distance per period from it.
+- xG model: `src/metrics/nhl_xg.py`, unblocked non-empty-net shots only. Validated out of sample on 2025-26. It has no
+  season term and drifts (ran 3% hot in 2025-26): rescale per season so league xG = league goals before any G-xG or GSAx.
+- Penalty attribution via eventOwner is unverified. Don't publish penalty counts until checked.
+- "Departed" players come from game rosters; a player who hasn't dressed yet is not necessarily gone.
+
 ## Known gotchas
 
 - Do **not** use the `nfl_data_py` pip package. It is outdated and its URLs 404. Use the
@@ -101,6 +116,16 @@ and add it to this table when you do.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.
 - Every article goes through an independent QA review before publishing.
+
+## Writing for fans (standing rule from Charlie)
+
+- **No jargon in the story body.** Jargon is boring. Say "chances," "goals saved vs. an average goalie" and
+  "carries over to next season," not xGF%, GSAx, PDO, Corsi or correlation. Stat terms go only in a
+  "For the stat-heads" section at the end.
+- **Show the behind-the-scenes reasoning every time.** Every story explains where its key number comes from:
+  the source data, the reasoning (with real computed examples, e.g. "shots from within 10 feet go in 13.8% of
+  the time"), the math in one plain paragraph, and how we checked it. Include the chart that shows it.
+- Tie the explanation back to the headline number ("their chances were worth 237 goals; they scored 256").
 
 ## Analysis conventions
 
