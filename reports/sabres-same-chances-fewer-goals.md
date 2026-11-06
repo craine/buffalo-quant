@@ -13,7 +13,7 @@ dip is within normal game-to-game variation.**
 
 Tuch was last season's best finisher relative to his chances (32 goals on 23.1 expected, +8.9),
 and he now plays for Washington. But the 13 skaters not on a Buffalo roster this season who shot for Buffalo last season combined for
-49 goals on 47.5 expected (+1.5). Tuch's surplus was cancelled out by others who left.
+49 goals on 47.5 expected (+1.5). Tuch's surplus was largely cancelled out by others who left.
 
 2025-26 leaders, all situations, empty nets excluded:
 

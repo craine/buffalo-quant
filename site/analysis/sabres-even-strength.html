@@ -1,0 +1,66 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>At even strength, these Sabres look like last year&#x27;s Sabres | Buffalo Quant Desk</title><meta name="description" content="Five-on-five, Buffalo is controlling as much of the play as last season. The difference is elsewhere.">
+<meta property="og:title" content="At even strength, these Sabres look like last year&#x27;s Sabres | Buffalo Quant Desk"><meta property="og:description" content="Five-on-five, Buffalo is controlling as much of the play as last season. The difference is elsewhere.">
+<meta property="og:image" content="https://buffaloquant.com/analysis/sabres-5v5.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../style.css"></head><body>
+<header class="site"><div class="wrap"><a class="mark" href="../index.html">BUFFALO <b>QUANT</b> DESK</a><nav><a href="../index.html" class="">Home</a><a href="../analysis/" class="on">Analysis</a><a href="../ledger.html" class="">Ledger</a><a href="../about.html" class="">About</a></nav></div></header>
+<main class="wrap"><div class="kicker">Sabres &middot; 5-on-5</div><h1>At even strength, these Sabres look like last year&#x27;s Sabres</h1><p class="dek">Five-on-five, Buffalo is controlling as much of the play as last season. The difference is elsewhere.</p><div class="meta">November 6, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: At 5-on-5 the Sabres are taking 52.0% of shot attempts (10th in the NHL) and
+50.2% of expected goals, compared with 49.3% and 50.8% last season. Last year's edge was the bounces (5-on-5 PDO
+1.021). This year the bounces have evened out and the penalty kill is leaking.</strong></p>
+<p><em>2026-27 is 15 games (7-5-3), a small sample.</em></p>
+<p><img alt="5v5" src="sabres-5v5.png" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Season</th>
+<th>Shot-attempt share (rank)</th>
+<th>Expected-goal share (rank)</th>
+<th>5v5 goals for-against</th>
+<th>PDO</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2023-24</td>
+<td>50.7% (16th)</td>
+<td>49.7% (19th)</td>
+<td>174-159</td>
+<td>1.002</td>
+</tr>
+<tr>
+<td>2024-25</td>
+<td>49.7% (17th)</td>
+<td>47.3% (27th)</td>
+<td>185-184</td>
+<td>1.005</td>
+</tr>
+<tr>
+<td>2025-26</td>
+<td>49.3% (16th)</td>
+<td>50.8% (14th)</td>
+<td>194-156</td>
+<td>1.021</td>
+</tr>
+<tr>
+<td>2026-27</td>
+<td>52.0% (10th)</td>
+<td>50.2% (18th)</td>
+<td>30-29</td>
+<td>0.992</td>
+</tr>
+</tbody>
+</table></div>
+<h2>How the pieces fit</h2>
+<p>The 5-on-5 team hasn't changed much, but it's no longer getting last year's bounces (5-on-5 PDO 1.021
+then, 0.992 now). The goalies have gone from well above expected to about average. The returning
+shooters are slightly below expected, within normal variation. And the penalty kill is allowing more; it's the largest
+single change. That's how a 109-point team turns into a 17-point start in 15 games.</p>
+<h2>Method and caveats</h2>
+<ul>
+<li>Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.</li>
+<li>5-on-5 only, empty nets excluded from goals and expected goals. Shot-attempt share counts blocked shots.</li>
+</ul></main>
+<footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
+(nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
+Buffalo Sabres, or the NFL.</div></footer></body></html>

@@ -38,7 +38,7 @@ def bars(ax, labels, vals, fmt, hi_last=True, lg=None):
     cols = [RED if (hi_last and i == len(vals) - 1) else BLUE for i in range(len(vals))]
     ax.bar(labels, vals, color=cols, width=0.6, zorder=2)
     for i, v in enumerate(vals):
-        ax.text(i, v * 0.94, fmt.format(v), ha="center", va="top", fontsize=10, color="white", fontweight="bold", zorder=4)
+        ax.text(i, v * 0.5, fmt.format(v), ha="center", va="center", fontsize=10, color="white", fontweight="bold", zorder=4)
     if lg is not None:
         ax.plot(labels, lg, color=INK, lw=1.2, ls="--", marker="o", ms=5, zorder=3)
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
@@ -285,7 +285,7 @@ dip is within normal game-to-game variation.**
 
 Tuch was last season's best finisher relative to his chances ({int(tuch.G)} goals on {tuch.ixG:.1f} expected, {tuch.fin:+.1f}),
 and he now plays for Washington. But the {len(gone_fin)} skaters not on a Buffalo roster this season who shot for Buffalo last season combined for
-{int(gone_fin.G.sum())} goals on {gone_fin.ixG.sum():.1f} expected ({gone_fin.fin.sum():+.1f}). Tuch's surplus was cancelled out by others who left.
+{int(gone_fin.G.sum())} goals on {gone_fin.ixG.sum():.1f} expected ({gone_fin.fin.sum():+.1f}). Tuch's surplus was largely cancelled out by others who left.
 
 2025-26 leaders, all situations, empty nets excluded:
 

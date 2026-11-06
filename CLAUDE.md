@@ -91,7 +91,8 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
 - `details_eventOwnerTeamId` is the shooting team for every shot attempt, including blocked shots.
 - `situationCode` digits are [away goalie][away skaters][home skaters][home goalie].
 - `homeTeamDefendingSide` gives the net being attacked (x = +/-89); compute distance per period from it.
-- xG model: `src/metrics/nhl_xg.py`, unblocked non-empty-net shots only. Validated out of sample on 2025-26.
+- xG model: `src/metrics/nhl_xg.py`, unblocked non-empty-net shots only. Validated out of sample on 2025-26. It has no
+  season term and drifts (ran 3% hot in 2025-26): rescale per season so league xG = league goals before any G-xG or GSAx.
 - Penalty attribution via eventOwner is unverified. Don't publish penalty counts until checked.
 - "Departed" players come from game rosters; a player who hasn't dressed yet is not necessarily gone.
 

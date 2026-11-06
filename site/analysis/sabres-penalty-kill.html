@@ -1,0 +1,73 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Sabres&#x27; penalty kill is where this season is leaking | Buffalo Quant Desk</title><meta name="description" content="Last year&#x27;s 4th-best penalty kill is allowing more goals, and more chances.">
+<meta property="og:title" content="The Sabres&#x27; penalty kill is where this season is leaking | Buffalo Quant Desk"><meta property="og:description" content="Last year&#x27;s 4th-best penalty kill is allowing more goals, and more chances.">
+<meta property="og:image" content="https://buffaloquant.com/analysis/sabres-pk.png"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../style.css"></head><body>
+<header class="site"><div class="wrap"><a class="mark" href="../index.html">BUFFALO <b>QUANT</b> DESK</a><nav><a href="../index.html" class="">Home</a><a href="../analysis/" class="on">Analysis</a><a href="../ledger.html" class="">Ledger</a><a href="../about.html" class="">About</a></nav></div></header>
+<main class="wrap"><div class="kicker">Sabres &middot; Special teams</div><h1>The Sabres&#x27; penalty kill is where this season is leaking</h1><p class="dek">Last year&#x27;s 4th-best penalty kill is allowing more goals, and more chances.</p><div class="meta">November 6, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: Shorthanded, the Sabres are allowing 0.80 expected goals per game (25th of 32,
+where 1st is best), up from 0.57 (11th) last season. They've allowed 16 power-play
+goals in 15 games, 30th in the league. Last season's kill ranked 4th in goals allowed.</strong></p>
+<p><em>2026-27 is 15 games (7-5-3), a small sample.</em></p>
+<p><img alt="Penalty kill" src="sabres-pk.png" /></p>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Season</th>
+<th>PP goals allowed</th>
+<th>Expected</th>
+<th>Goals allowed/game (rank)</th>
+<th>Expected/game (rank)</th>
+<th>League expected/game</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2023-24</td>
+<td>49</td>
+<td>50.4</td>
+<td>0.60 (16th)</td>
+<td>0.61 (22nd)</td>
+<td>0.61</td>
+</tr>
+<tr>
+<td>2024-25</td>
+<td>57</td>
+<td>47.1</td>
+<td>0.70 (30th)</td>
+<td>0.57 (24th)</td>
+<td>0.54</td>
+</tr>
+<tr>
+<td>2025-26</td>
+<td>39</td>
+<td>46.7</td>
+<td>0.48 (4th)</td>
+<td>0.57 (11th)</td>
+<td>0.60</td>
+</tr>
+<tr>
+<td>2026-27</td>
+<td>16</td>
+<td>12.1</td>
+<td>1.07 (30th)</td>
+<td>0.80 (25th)</td>
+<td>0.68</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ranks: 1 = fewest allowed. The league as a whole is allowing more shorthanded chances this season
+(0.68 per game, up from 0.60), so not all of the rise is Buffalo's, but the Sabres are
++0.13 per game worse than average. It isn't unprecedented, either: in 2024-25 the kill ranked
+30th in goals allowed. Part of this season's damage is bad luck (16 goals on 12.1 expected),
+and part is more chances allowed. Both are early-season numbers (103 unblocked shots against while
+shorthanded); the chances allowed are the part to watch.</p>
+<h2>Method and caveats</h2>
+<ul>
+<li>Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.</li>
+<li>Shorthanded situations are 4-on-5, 3-on-5 and 3-on-4 (excludes the rare 4-on-6 and 3-on-6 with the goalie pulled). Per-game rates do not adjust for how often the team is
+  shorthanded; time-on-ice data is not in our dataset yet.</li>
+</ul></main>
+<footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
+(nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
+Buffalo Sabres, or the NFL.</div></footer></body></html>
