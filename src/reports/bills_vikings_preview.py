@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from src.db import ROOT, query
-from src.ledger.model_v01 import SHRINK, VERSION, prob_over, qb_relative
+from src.ledger.model_v01 import SHRINK, VERSION, game_values, prob_over, qb_relative
 from src.metrics.team import season_table
 from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
 
@@ -268,7 +268,7 @@ which were mostly Murray's games. That moved call 1 from {c1b['p']:.0%} to {c1['
   Correlation of 2026 team EPA/play with points per drive: {r_pts:.2f} (n = 32).
 - QB splits by gsis id (`COALESCE(passer_player_id, rusher_player_id)`), `qb_dropback == 1`, EPA not null, no two-point
   tries. League average in the QB table = all such dropbacks that season (play-weighted); the model calls use the
-  mean of team-game values instead, which differs slightly (2026 EPA/dropback 0.054 vs 0.056).
+  mean of team-game values instead, which differs slightly (2026 EPA/dropback {lg.loc[2026, 'epa']:.3f} play-weighted vs {game_values(2026, 'dropback_epa').query("side == 'off'").v.mean():.3f} team-game mean).
 - Draft calls: Ledger model {VERSION} (`src/ledger/model_v01.py`), shrink {SHRINK}. Expected game value = league +
   {SHRINK} x (offense vs league + defense vs league); probability from the 2026 within-team game-to-game spread.
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 ({n_db} dropbacks): EPA/dropback

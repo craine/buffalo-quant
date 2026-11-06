@@ -115,7 +115,7 @@ which were mostly Murray's games. That moved call 1 from 58% to 65% and call 3 f
   Correlation of 2026 team EPA/play with points per drive: 0.91 (n = 32).
 - QB splits by gsis id (`COALESCE(passer_player_id, rusher_player_id)`), `qb_dropback == 1`, EPA not null, no two-point
   tries. League average in the QB table = all such dropbacks that season (play-weighted); the model calls use the
-  mean of team-game values instead, which differs slightly (2026 EPA/dropback 0.054 vs 0.056).
+  mean of team-game values instead, which differs slightly (2026 EPA/dropback 0.053 play-weighted vs 0.056 team-game mean).
 - Draft calls: Ledger model v0.1-locshift (`src/ledger/model_v01.py`), shrink 0.5. Expected game value = league +
   0.5 x (offense vs league + defense vs league); probability from the 2026 within-team game-to-game spread.
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 (243 dropbacks): EPA/dropback
