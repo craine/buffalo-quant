@@ -5,20 +5,98 @@
 <meta property="og:image" content="https://buffaloquant.com/analysis/sabres-goalies.png"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../style.css"></head><body>
 <header class="site"><div class="wrap"><a class="mark" href="../index.html">BUFFALO <b>QUANT</b> DESK</a><nav><a href="../index.html" class="">Home</a><a href="../analysis/" class="on">Analysis</a><a href="../ledger.html" class="">Ledger</a><a href="../about.html" class="">About</a></nav></div></header>
-<main class="wrap"><div class="kicker">Sabres &middot; Goaltending</div><h1>The Sabres&#x27; goalies aren&#x27;t the problem. They&#x27;re just not the bailout anymore.</h1><p class="dek">Luukkonen&#x27;s save percentage looks ugly. The shots he&#x27;s facing explain most of it.</p><div class="meta">November 6, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: Ukko-Pekka Luukkonen's .874 save percentage looks like a collapse, but his expected save percentage,
-based on the shots he's faced, is .881. He is -2.0 goals against expectation and
-Colten Ellis is +2.2. Last year Sabres goalies were +17.4, and about half of that was Alex Lyon, who hasn't dressed for an NHL game this season.</strong></p>
-<p><em>2026-27 is 15 games (7-5-3), a small sample. 261 shots for Luukkonen, 147 for Ellis.</em></p>
+<main class="wrap"><div class="kicker">Sabres &middot; Goaltending</div><h1>The Sabres&#x27; goalies aren&#x27;t the problem. They&#x27;re just not the bailout anymore.</h1><p class="dek">Luukkonen&#x27;s save percentage looks ugly. The shots he&#x27;s facing explain most of it.</p><div class="meta">November 6, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: Ukko-Pekka Luukkonen is stopping 87.4% of shots, which looks bad. But he's facing some of the hardest
+shots in the league (9th toughest of 62 goalies), and an average goalie would stop only about 88.1% of them.
+He's close to average. What's missing is last year's bonus: Sabres goalies saved about 17 more goals than an
+average goalie would have, and about half of that was Alex Lyon, who hasn't played an NHL game this season.</strong></p>
+<p><em>2026-27 is 15 games (7-5-3), a small sample. Luukkonen has faced 261 shots, Colten Ellis 147.</em></p>
 <p><img alt="Goalies" src="sabres-goalies.png" /></p>
+<h2>How we judge a goalie</h2>
+<p>Save percentage alone is unfair to goalies behind a leaky defense. So we ask a better question: <strong>given the exact
+shots he faced, how many goals would an average NHL goalie have allowed?</strong> If he allowed fewer, he saved his team
+goals. <strong>Expected goals</strong>, in one sentence: we looked at more than 336,000 NHL shots and worked out how often each kind (by distance, angle, shot type, rebound or rush) goes in. Add those odds up and you get how many goals an average team, or an average goalie, would produce from the same shots.</p>
 <div class="tablewrap"><table>
 <thead>
 <tr>
 <th>Season</th>
 <th>Goalie</th>
 <th>Shots faced</th>
-<th>Save %</th>
-<th>Expected save %</th>
-<th>Goals saved above expected</th>
+<th>Stopped</th>
+<th>Average goalie would stop</th>
+<th>Goals saved vs. average</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-26</td>
+<td>Alex Lyon</td>
+<td>980</td>
+<td>90.6%</td>
+<td>89.7%</td>
+<td>+9</td>
+</tr>
+<tr>
+<td>2025-26</td>
+<td>Ukko-Pekka Luukkonen</td>
+<td>931</td>
+<td>90.9%</td>
+<td>89.9%</td>
+<td>+9</td>
+</tr>
+<tr>
+<td>2025-26</td>
+<td>Colten Ellis</td>
+<td>455</td>
+<td>90.3%</td>
+<td>90.5%</td>
+<td>-1</td>
+</tr>
+<tr>
+<td>2026-27</td>
+<td>Ukko-Pekka Luukkonen</td>
+<td>261</td>
+<td>87.4%</td>
+<td>88.1%</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>2026-27</td>
+<td>Colten Ellis</td>
+<td>147</td>
+<td>89.1%</td>
+<td>87.6%</td>
+<td>+2</td>
+</tr>
+</tbody>
+</table></div>
+<h2>What changed</h2>
+<ul>
+<li><strong>Last year the goalies stole games.</strong> Lyon and Luukkonen saved about 9 and 9 goals more than an average
+  goalie would have. That's a big part of how a middle-of-the-pack team got 109 points.</li>
+<li><strong>Lyon hasn't played this season.</strong> He hasn't dressed for any NHL team in 2026-27.</li>
+<li><strong>Luukkonen is seeing tougher shots.</strong> An average goalie would stop 88.1% of what he's faced this year, down from
+  89.9% last year. The defense in front of him is giving up better looks.</li>
+<li><strong>Together, this year's goalies are dead even with average</strong> (+0.2 goals).</li>
+</ul>
+<p>Goaltending swings a lot from year to year, and 261 shots is a small sample. There's no evidence yet that
+Luukkonen has gotten worse.</p>
+<h2>For the stat-heads</h2>
+<ul>
+<li>Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.</li>
+<li>Goals saved above expected (GSAx) = xG on unblocked shots faced minus goals allowed; save % and expected save % use
+  shots on goal. Blocked shots and empty nets excluded. Goalies with 100+ shots faced. League save % on these shots:
+  0.896 (2025-26), 0.890 (2026-27).</li>
+<li>Full history:</li>
+</ul>
+<div class="tablewrap"><table>
+<thead>
+<tr>
+<th>Season</th>
+<th>Goalie</th>
+<th>Shots</th>
+<th>Sv%</th>
+<th>xSv%</th>
+<th>GSAx</th>
 </tr>
 </thead>
 <tbody>
@@ -111,24 +189,7 @@ Colten Ellis is +2.2. Last year Sabres goalies were +17.4, and about half of tha
 <td>+2.2</td>
 </tr>
 </tbody>
-</table></div>
-<p>League save % on these shots: 0.896 in 2025-26, 0.890 in 2026-27. League expected save %:
-0.896 and 0.890.</p>
-<h2>What changed</h2>
-<ul>
-<li><strong>Lyon hasn't played.</strong> He was +8.9 on 980 shots last season and has not dressed for any NHL team in 2026-27.</li>
-<li><strong>Luukkonen is facing harder shots.</strong> His expected save % is 0.881, against 0.899 last season;
-  among 62 goalies with 100+ shots this season that is 9th-hardest.</li>
-<li><strong>Combined</strong>, Sabres goalies are +0.2 this season after +17.4 last season.</li>
-</ul>
-<p>Save percentage is one of the least stable stats in the sport (see the companion piece on last season). A
-261-shot sample says very little about Luukkonen either way.</p>
-<h2>Method and caveats</h2>
-<ul>
-<li>Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.</li>
-<li>Goals saved above expected = expected goals on unblocked shots faced minus goals allowed. Blocked shots and
-  empty-net situations are excluded; deflections and screens are only partly captured.</li>
-</ul></main>
+</table></div></main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
 Buffalo Sabres, or the NFL.</div></footer></body></html>

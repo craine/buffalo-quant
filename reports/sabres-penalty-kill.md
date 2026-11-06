@@ -1,29 +1,44 @@
 # The Sabres' penalty kill is where this season is leaking
 
-**Finding: Shorthanded, the Sabres are allowing 0.80 expected goals per game (25th of 32,
-where 1st is best), up from 0.57 (11th) last season. They've allowed 16 power-play
-goals in 15 games, 30th in the league. Last season's kill ranked 4th in goals allowed.**
+**Finding: When the Sabres are a man down, they've given up 16 goals in 15 games, 30th of 32 teams.
+Last season they were 4th. Some of that is bad luck, but they're also giving up more dangerous chances than
+most teams (25th of 32). Of everything that's changed since last season, this is the biggest.**
 
 *2026-27 is 15 games (7-5-3), a small sample.*
 
 ![Penalty kill](sabres-pk.png)
 
-| Season | PP goals allowed | Expected | Goals allowed/game (rank) | Expected/game (rank) | League expected/game |
+## What the numbers say
+
+**Expected goals**, in one sentence: we looked at more than 336,000 NHL shots and worked out how often each kind (by distance, angle, shot type, rebound or rush) goes in. Add those odds up and you get how many goals an average team, or an average goalie, would produce from the same shots.
+
+| Season | Power-play goals allowed | League rank (1 = fewest) | Danger of chances allowed per game (rank) | League average |
+|---|---|---|---|---|
+| 2023-24 | 49 | 16th | 0.61 (22nd) | 0.61 |
+| 2024-25 | 57 | 30th | 0.57 (24th) | 0.54 |
+| 2025-26 | 39 | 4th | 0.57 (11th) | 0.60 |
+| 2026-27 | 16 | 30th | 0.80 (25th) | 0.68 |
+
+Two things are happening:
+
+1. **Bad luck.** Opponents have scored 16 power-play goals on chances an average team would turn into about
+   12. That part tends to even out.
+2. **More dangerous chances.** The Sabres are allowing chances worth 0.80 goals a game while shorthanded, up from
+   0.57 last year and above this season's league average of 0.68. Every team is allowing a bit more this
+   year, but Buffalo is allowing more than most.
+
+**What to watch:** the luck should fade. The chances allowed are the part that has to get fixed. It's early, too:
+103 shots against while shorthanded. A bad penalty kill isn't new, either. In 2024-25 it ranked 30th in goals allowed.
+
+## For the stat-heads
+
+- Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.
+- Shorthanded = 4-on-5, 3-on-5, 3-on-4 (excludes 4-on-6 and 3-on-6 with a goalie pulled). "Danger of chances" =
+  xGA per game. Per-game rates don't adjust for how often a team is shorthanded; time-on-ice isn't in our dataset yet.
+
+| Season | PP GA | xGA | GA/gm (rank) | xGA/gm (rank) | League xGA/gm |
 |---|---|---|---|---|---|
 | 2023-24 | 49 | 50.4 | 0.60 (16th) | 0.61 (22nd) | 0.61 |
 | 2024-25 | 57 | 47.1 | 0.70 (30th) | 0.57 (24th) | 0.54 |
 | 2025-26 | 39 | 46.7 | 0.48 (4th) | 0.57 (11th) | 0.60 |
 | 2026-27 | 16 | 12.1 | 1.07 (30th) | 0.80 (25th) | 0.68 |
-
-Ranks: 1 = fewest allowed. The league as a whole is allowing more shorthanded chances this season
-(0.68 per game, up from 0.60), so not all of the rise is Buffalo's, but the Sabres are
-+0.13 per game worse than average. It isn't unprecedented, either: in 2024-25 the kill ranked
-30th in goals allowed. Part of this season's damage is bad luck (16 goals on 12.1 expected),
-and part is more chances allowed. Both are early-season numbers (103 unblocked shots against while
-shorthanded); the chances allowed are the part to watch.
-
-## Method and caveats
-
-- Expected goals (xG) come from our own model: gradient-boosted trees on shot distance, angle, type, rebounds, rush chances and manpower, trained on 336,462 unblocked shots from 2023-24 to 2025-26. Tested on a season it never saw (2025-26), it beat a distance-and-angle model (AUC 0.77 vs 0.71). Empty-net shots are excluded. Values for 2023-24 to 2025-26 come from a model fit on those seasons; 2026-27 is out of sample. Each season is rescaled so league expected goals equal league goals (the raw model ran +3.0% hot in 2025-26), so above-expected numbers are relative to that season's league average.
-- Shorthanded situations are 4-on-5, 3-on-5 and 3-on-4 (excludes the rare 4-on-6 and 3-on-6 with the goalie pulled). Per-game rates do not adjust for how often the team is
-  shorthanded; time-on-ice data is not in our dataset yet.

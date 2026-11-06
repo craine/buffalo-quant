@@ -71,6 +71,9 @@ def main():
                   f"{(1 / cal.loc[PREV] - 1):+.1%} hot in 2025-26), so above-expected numbers are relative to that season's league average.")
     sample = f"2026-27 is {int(cur.gp)} games ({int(cur.w)}-{int(cur.l)}-{int(cur.otl)}), a small sample."
     stories = {}
+    xg_plain = ("**Expected goals**, in one sentence: we looked at more than " + f"{n_shots // 1000:,},000" + " NHL shots and worked out how "
+                "often each kind (by distance, angle, shot type, rebound or rush) goes in. Add those odds up and you get how many "
+                "goals an average team, or an average goalie, would produce from the same shots.")
 
     # ---------- 1. The 50-win mirage
     full = t[t.season < CUR].copy()
@@ -100,65 +103,82 @@ def main():
     ax.scatter([bf.xgd_pg], [bf.pts], s=120, color=RED, zorder=3, edgecolor="white", lw=2)
     ax.annotate(f"Sabres: {int(bf.pts)} pts\nexpected {bf.exp_pts:.0f}", (bf.xgd_pg, bf.pts), xytext=(-14, 6), ha="right",
                 textcoords="offset points", fontsize=10, color=INK, fontweight="bold")
-    ax.set_xlabel("Expected-goal differential per game"); ax.set_ylabel("Points")
+    ax.set_xlabel("Quality of chances: created minus allowed, per game  →  better"); ax.set_ylabel("Points")
     ax.grid(color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Last year's Sabres outran their chances by 18 points" if round(bf.over) == 18 else "Last year's Sabres outran their chances",
-           "2025-26 regular season, all 32 teams. Dashed line = points expected from shot quality (2023-26 fit).",
+           "2025-26, all 32 NHL teams. Each dot is a team. Dashed line = points a team usually gets with those chances.",
            "Points expected from a linear fit of points on xG differential, 2023-24 to 2025-26.")
     fig.savefig(OUT / "sabres-mirage.png"); plt.close(fig)
 
+    lvl = lambda r_: "Strong" if r_ >= 0.6 else ("Some" if r_ >= 0.4 else "Weak")
+    xgf_rk = lambda se: ordn(t[t.season == se]['xGF%'].rank(ascending=False, method='min')[(t.season == se) & (t.team == 'BUF')].iloc[0])
+    pdo_rk = lambda se: ordn(t[t.season == se]['PDO'].rank(ascending=False, method='min')[(t.season == se) & (t.team == 'BUF')].iloc[0])
     stories["sabres-50-win-mirage"] = (
         "The Sabres' 50-win season was built on goals that weren't supposed to happen",
-        "Shot quality said last year's team was a 91-point team. They got 109. Here's what that means now.",
+        "Based on the chances they created, last year's team should have had about 91 points. They got 109.",
         f"""# The Sabres' 50-win season was built on goals that weren't supposed to happen
 
-**Finding: By the quality of chances they created and allowed, the 2025-26 Sabres played like a {bf.exp_pts:.0f}-point
-team. They finished with {int(bf.pts)}: {bf.over:+.0f} points over expectation, the {ordn(bf.over_rk)}-largest gap in the NHL.
-The extra came from goaltending and finishing, the two least repeatable of the stats we tested.**
+**Finding: Based on the scoring chances they created and gave up, last year's Sabres played like a {bf.exp_pts:.0f}-point
+team. They finished with {int(bf.pts)}. Only one team in the NHL outran its chances by more. The difference came from hot
+goaltending and hot shooting, and those rarely last.**
 
-*{sample}*
+*This season: {int(cur.gp)} games ({int(cur.w)}-{int(cur.l)}-{int(cur.otl)}). That's still a small sample.*
 
 ![Mirage](sabres-mirage.png)
 
-## Where the extra points came from
+## How we measure "chances"
 
-| | Goals | Expected | Difference |
+Not every shot is equal. A rebound from the top of the crease goes in far more often than a wrist shot from the blue
+line. We looked at more than {n_shots // 1000:,},000 NHL shots from the last three seasons and worked out how often each kind of shot actually goes in. Add that up for a team and you get **expected goals**: how
+many goals an average team would score with the same chances.
+
+A team that scores far more than its expected goals is either very skilled or very lucky, and history says that kind of
+edge usually doesn't last.
+
+## Last season, in plain numbers
+
+| | What happened | What their chances said | Difference |
 |---|---|---|---|
-| Goals scored | {b.loc[PREV, 'GF']:.0f} | {b.loc[PREV, 'xGF']:.1f} | {fin25:+.1f} (finishing) |
-| Goals allowed | {b.loc[PREV, 'GA']:.0f} | {b.loc[PREV, 'xGA']:.1f} | {sav25:+.1f} (goaltending) |
+| Goals the Sabres scored | {b.loc[PREV, 'GF']:.0f} | {b.loc[PREV, 'xGF']:.0f} | **{fin25:+.0f}** (hot shooting) |
+| Goals the Sabres allowed | {b.loc[PREV, 'GA']:.0f} | {b.loc[PREV, 'xGA']:.0f} | **{sav25:+.0f}** (hot goaltending) |
 
-That is {fin25 + sav25:+.0f} goals better than their chances, all situations, empty nets excluded. Their expected-goal share
-was {b.loc[PREV, 'xGF%']:.1%} ({ordn(t[t.season == PREV]['xGF%'].rank(ascending=False, method='min')[(t.season == PREV) & (t.team == 'BUF')].iloc[0])} in the NHL):
-a league-average team by process.
+That's about {fin25 + sav25:.0f} goals better than their chances, roughly one extra goal every two games. By chances
+alone they were a middle-of-the-pack team ({xgf_rk(PREV)} of 32).
 
-## Why that was unlikely to repeat
+## Why it didn't carry over
 
-Year-to-year correlation for all 32 teams, 2023-24 to 2025-26 ({st['xGF%'][1]} team pairs):
+We checked every NHL team over three seasons. Some things a team does well one year, it usually does well the next.
+Other things bounce around.
 
-| Stat | What it measures | Correlation with next season |
-|---|---|---|
-| Expected-goal share | Chances created vs. allowed | {st['xGF%'][0]:.2f} |
-| PDO | Shooting % + save % | {st['PDO'][0]:.2f} |
-| Shooting % | Finishing | {st['sh%'][0]:.2f} |
-| Save % | Goaltending | {st['sv%'][0]:.2f} |
+| What we measured | Does it carry over to next season? |
+|---|---|
+| Creating more good chances than you give up | **{lvl(st['xGF%'][0])}** |
+| Shooting percentage (finishing) | **{lvl(st['sh%'][0])}** |
+| Save percentage (goaltending) | **{lvl(st['sv%'][0])}** |
 
-Shot quality carries over. Shooting and save percentages mostly don't. The Sabres' PDO was
-{b.loc[PREV, 'PDO']:.3f} ({ordn(t[t.season == PREV]['PDO'].rank(ascending=False, method='min')[(t.season == PREV) & (t.team == 'BUF')].iloc[0])} in the NHL).
-This season it is {b.loc[CUR, 'PDO']:.3f} ({ordn(t[t.season == CUR]['PDO'].rank(ascending=False, method='min')[(t.season == CUR) & (t.team == 'BUF')].iloc[0])}).
+Last season the Sabres' shooting and goaltending luck combined ranked {pdo_rk(PREV)} in the league. This season it ranks
+{pdo_rk(CUR)}.
 
-## What it says about this season
+## What it means for this season
 
-Through {int(cur.gp)} games their expected-goal share is {b.loc[CUR, 'xGF%']:.1%} ({ordn(t[t.season == CUR]['xGF%'].rank(ascending=False, method='min')[(t.season == CUR) & (t.team == 'BUF')].iloc[0])}) and they are {b.loc[CUR, 'G-xG'] + b.loc[CUR, 'xGA-GA']:+.1f}
-goals against their chances. In other words, the 2026-27 record looks a lot like what last year's underlying numbers
-suggested, without the luck.
+Through {int(cur.gp)} games the Sabres are earning {int(cur.pts)} points, about {cur.pts / cur.gp:.2f} a game. Last season's chances
+pointed to about {bf.exp_pts / 82:.2f} a game. **This isn't a collapse. It's the team their chances always said they were,
+without last year's luck.**
 
-## Method and caveats
+## For the stat-heads
 
-- {model_note}
-- Expected points: a straight-line fit of points on xG differential per game across all 96 team-seasons, 2023-24 to
-  2025-26 (correlation {corr(None):.2f}; typical miss {resid_sd:.1f} points). "Expected" is a model estimate, not a guarantee. Points also
-  depend on overtime and shootout results and on empty-net goals, which this fit doesn't model.
-- Goaltending here = expected goals against minus goals against on unblocked shots, empty nets excluded.
+- Expected goals (xG): our own gradient-boosted model on shot distance, angle, type, rebounds, rush chances and
+  manpower, trained on {n_shots:,} unblocked shots, 2023-24 to 2025-26. Out of sample on 2025-26 it beat a
+  distance-and-angle model (AUC {v['auc_gbm']:.2f} vs {v['auc_dist_angle']:.2f}). 2023-26 values are in-sample; 2026-27 is out of sample. Each
+  season is rescaled so league xG equals league goals (the raw model ran {(1 / cal.loc[PREV] - 1):+.1%} hot in 2025-26). Empty nets
+  excluded.
+- Last season: goals {b.loc[PREV, 'GF']:.0f} vs xG {b.loc[PREV, 'xGF']:.1f}; goals against {b.loc[PREV, 'GA']:.0f} vs xGA {b.loc[PREV, 'xGA']:.1f}.
+  xGF% {b.loc[PREV, 'xGF%']:.1%} ({xgf_rk(PREV)}). This season xGF% {b.loc[CUR, 'xGF%']:.1%} ({xgf_rk(CUR)}), {b.loc[CUR, 'G-xG'] + b.loc[CUR, 'xGA-GA']:+.1f} vs xG.
+- Year-to-year correlations, 32 teams, {st['xGF%'][1]} team pairs: xGF% {st['xGF%'][0]:.2f}, shooting % {st['sh%'][0]:.2f},
+  save % {st['sv%'][0]:.2f}, PDO {st['PDO'][0]:.2f}. "Strong" means 0.6 or higher, "Weak" means under 0.4. PDO (shooting % +
+  save %, 5-on-5) was {b.loc[PREV, 'PDO']:.3f} last season and is {b.loc[CUR, 'PDO']:.3f} now.
+- Expected points: a straight-line fit of points on xG differential per game, all 96 team-seasons 2023-24 to 2025-26
+  (r = {corr(None):.2f}; typical miss {resid_sd:.1f} points). Doesn't model overtime, shootouts or empty-net goals.
 """)
 
     # ---------- 2. Goalies
@@ -181,49 +201,64 @@ suggested, without the luck.
     ax.bar(lab, rows.GSAx, color=cols, width=0.6, zorder=2)
     for i, (gs, sf) in enumerate(zip(rows.GSAx, rows.shots_faced)):
         ax.text(i, gs + (0.3 if gs >= 0 else -0.3), f"{gs:+.1f}\n({int(sf)} shots)", ha="center", va="bottom" if gs >= 0 else "top", fontsize=9, color=INK)
-    ax.axhline(0, color=INK, lw=1); ax.set_ylabel("Goals saved above expected")
+    ax.axhline(0, color=INK, lw=1); ax.set_ylabel("Goals saved vs. an average goalie")
     ax.set_ylim(min(rows.GSAx.min(), 0) - 3, rows.GSAx.max() + 3.5)
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Last year's goalies beat expectations. This year they're about average.",
-           "Goals saved above expected (GSAx), Sabres goalies with 100+ shots faced. Above zero = better than expected.",
+           "Goals each Sabres goalie saved compared with an average goalie facing the same shots. Above zero = better.",
            "Unblocked shots, empty nets excluded. 2026-27 small sample.")
     fig.savefig(OUT / "sabres-goalies.png"); plt.close(fig)
     g_rows = "\n".join(f"| {LBL[r_.season]} | {r_['name']} | {int(r_.shots_faced)} | {r_['sv%']:.3f} | {r_['xsv%']:.3f} | {r_.GSAx:+.1f} |" for _, r_ in gb.iterrows())
+    g_recent = gb[gb.season >= PREV]
+    g_plain = "\n".join(f"| {LBL[r_.season]} | {r_['name']} | {int(r_.shots_faced)} | {r_['sv%']:.1%} | {r_['xsv%']:.1%} | {r_.GSAx:+.0f} |" for _, r_ in g_recent.iterrows())
+    upl_rk = ordn(g26.set_index('name').loc[upl['name'], 'xsv_rk'])
     stories["sabres-goalies-not-the-problem"] = (
         "The Sabres' goalies aren't the problem. They're just not the bailout anymore.",
         "Luukkonen's save percentage looks ugly. The shots he's facing explain most of it.",
         f"""# The Sabres' goalies aren't the problem. They're just not the bailout anymore.
 
-**Finding: Ukko-Pekka Luukkonen's .{int(round(upl['sv%'] * 1000)):03d} save percentage looks like a collapse, but his expected save percentage,
-based on the shots he's faced, is .{int(round(upl['xsv%'] * 1000)):03d}. He is {upl.GSAx:+.1f} goals against expectation and
-Colten Ellis is {ell.GSAx:+.1f}. Last year Sabres goalies were {tot25:+.1f}, and about half of that was Alex Lyon, who hasn't dressed for an NHL game this season.**
+**Finding: Ukko-Pekka Luukkonen is stopping {upl['sv%']:.1%} of shots, which looks bad. But he's facing some of the hardest
+shots in the league ({upl_rk} toughest of {len(g26)} goalies), and an average goalie would stop only about {upl['xsv%']:.1%} of them.
+He's close to average. What's missing is last year's bonus: Sabres goalies saved about {tot25:.0f} more goals than an
+average goalie would have, and about half of that was Alex Lyon, who hasn't played an NHL game this season.**
 
-*{sample} {int(upl.shots_faced)} shots for Luukkonen, {int(ell.shots_faced)} for Ellis.*
+*{sample} Luukkonen has faced {int(upl.shots_faced)} shots, Colten Ellis {int(ell.shots_faced)}.*
 
 ![Goalies](sabres-goalies.png)
 
-| Season | Goalie | Shots faced | Save % | Expected save % | Goals saved above expected |
-|---|---|---|---|---|---|
-{g_rows}
+## How we judge a goalie
 
-League save % on these shots: {lg_sv[PREV]:.3f} in 2025-26, {lg_sv[CUR]:.3f} in 2026-27. League expected save %:
-{lg_xsv[PREV]:.3f} and {lg_xsv[CUR]:.3f}.
+Save percentage alone is unfair to goalies behind a leaky defense. So we ask a better question: **given the exact
+shots he faced, how many goals would an average NHL goalie have allowed?** If he allowed fewer, he saved his team
+goals. {xg_plain}
+
+| Season | Goalie | Shots faced | Stopped | Average goalie would stop | Goals saved vs. average |
+|---|---|---|---|---|---|
+{g_plain}
 
 ## What changed
 
-- **Lyon hasn't played.** He was {lyon.GSAx:+.1f} on {int(lyon.shots_faced)} shots last season and has not dressed for any NHL team in 2026-27.
-- **Luukkonen is facing harder shots.** His expected save % is {upl['xsv%']:.3f}, against {upl25['xsv%']:.3f} last season;
-  among {len(g26)} goalies with 100+ shots this season that is {ordn(g26.set_index('name').loc[upl['name'], 'xsv_rk'])}-hardest.
-- **Combined**, Sabres goalies are {tot26:+.1f} this season after {tot25:+.1f} last season.
+- **Last year the goalies stole games.** Lyon and Luukkonen saved about {lyon.GSAx:.0f} and {upl25.GSAx:.0f} goals more than an average
+  goalie would have. That's a big part of how a middle-of-the-pack team got 109 points.
+- **Lyon hasn't played this season.** He hasn't dressed for any NHL team in 2026-27.
+- **Luukkonen is seeing tougher shots.** An average goalie would stop {upl['xsv%']:.1%} of what he's faced this year, down from
+  {upl25['xsv%']:.1%} last year. The defense in front of him is giving up better looks.
+- **Together, this year's goalies are dead even with average** ({tot26:+.1f} goals).
 
-Save percentage is one of the least stable stats in the sport (see the companion piece on last season). A
-{int(upl.shots_faced)}-shot sample says very little about Luukkonen either way.
+Goaltending swings a lot from year to year, and {int(upl.shots_faced)} shots is a small sample. There's no evidence yet that
+Luukkonen has gotten worse.
 
-## Method and caveats
+## For the stat-heads
 
 - {model_note}
-- Goals saved above expected = expected goals on unblocked shots faced minus goals allowed. Blocked shots and
-  empty-net situations are excluded; deflections and screens are only partly captured.
+- Goals saved above expected (GSAx) = xG on unblocked shots faced minus goals allowed; save % and expected save % use
+  shots on goal. Blocked shots and empty nets excluded. Goalies with 100+ shots faced. League save % on these shots:
+  {lg_sv[PREV]:.3f} (2025-26), {lg_sv[CUR]:.3f} (2026-27).
+- Full history:
+
+| Season | Goalie | Shots | Sv% | xSv% | GSAx |
+|---|---|---|---|---|---|
+{g_rows}
 """)
 
     # ---------- 3. Same chances, fewer goals
@@ -251,15 +286,15 @@ Save percentage is one of the least stable stats in the sport (see the companion
 
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     xs_ = np.arange(len(LBL)); w = 0.36
-    ax.bar(xs_ - w / 2, [pg[se][1] for se in LBL], w, color=GRAY, label="Expected goals per game", zorder=2)
-    ax.bar(xs_ + w / 2, [pg[se][0] for se in LBL], w, color=[RED if se == CUR else BLUE for se in LBL], label="Goals per game", zorder=2)
+    ax.bar(xs_ - w / 2, [pg[se][1] for se in LBL], w, color=GRAY, label="Goals their chances were worth", zorder=2)
+    ax.bar(xs_ + w / 2, [pg[se][0] for se in LBL], w, color=[RED if se == CUR else BLUE for se in LBL], label="Goals actually scored", zorder=2)
     for i, se in enumerate(LBL):
         ax.text(i - w / 2, pg[se][1], f"{pg[se][1]:.2f}", ha="center", va="bottom", fontsize=9, color=INK)
         ax.text(i + w / 2, pg[se][0], f"{pg[se][0]:.2f}", ha="center", va="bottom", fontsize=9, color=INK)
     ax.set_xticks(xs_, list(LBL.values())); ax.legend(frameon=False, loc="upper left", fontsize=9)
     ax.set_ylim(0, max(max(v_) for v_ in pg.values()) * 1.25); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "At least as many chances as last year. Fewer go in.",
-           "Sabres expected goals vs. actual goals per game, all situations, empty-net goals excluded.",
+           "Sabres per game. Gray = goals an average team would score from the same chances. Empty-net goals excluded.",
            "2026-27 small sample.")
     fig.savefig(OUT / "sabres-finishing.png"); plt.close(fig)
     top = ind.sort_values("fin", ascending=False).head(5)
@@ -267,58 +302,72 @@ Save percentage is one of the least stable stats in the sport (see the companion
     cur_ind = u[u.season == CUR].groupby("shooter_id").agg(G=("goal", "sum"), ixG=("xg", "sum"))
     cur_ind["fin"] = cur_ind.G - cur_ind.ixG; cur_ind["name"] = cur_ind.index.map(names)
     c_rows = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.1f} | {r_.fin:+.1f} |" for _, r_ in cur_ind.sort_values("G", ascending=False).head(5).iterrows())
+    noise = np.sqrt((ret_cur.xg * (1 - ret_cur.xg)).sum())
+    t_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {r_.fin:+.0f} | {'Yes' if i in gone else ''} |" for i, r_ in top.iterrows())
+    c_plain = "\n".join(f"| {r_['name']} | {int(r_.G)} | {r_.ixG:.0f} | {r_.fin:+.0f} |" for _, r_ in cur_ind.sort_values("G", ascending=False).head(5).iterrows())
     stories["sabres-same-chances-fewer-goals"] = (
         "As many chances, fewer goals: too early to call it a slump",
-        "Buffalo is creating as much as last year. The finishing hasn't matched last season's, and it isn't about who left.",
+        "Buffalo is creating as many good chances as last year. Fewer are going in, and it isn't about who left.",
         f"""# As many chances, fewer goals: too early to call it a slump
 
-**Finding: The Sabres are generating {pg[CUR][1]:.2f} expected goals per game, at least as many as last season's {pg[PREV][1]:.2f},
-but scoring {pg[CUR][0]:.2f} a game, down from {pg[PREV][0]:.2f}. Last season's finishing surplus came from players who are
-still here: they scored {ret_prev.fin.sum():+.1f} goals above expected then and are {ret_cur_fin:+.1f} this season. That
-dip is within normal game-to-game variation.**
+**Finding: The Sabres are creating at least as many good scoring chances as last season, but they're scoring
+{pg[CUR][0]:.2f} goals a game instead of {pg[PREV][0]:.2f}. It isn't because Alex Tuch left. The players who are still here were
+scoring well above their chances last year, and this year they're a little below. Fifteen games in, that's within
+normal ups and downs.**
 
-*{sample} League average: {lg_pg[CUR]:.2f} expected goals per team per game this season.*
+*{sample}*
 
 ![Finishing](sabres-finishing.png)
 
+## Chances vs. goals
+
+{xg_plain}
+
+This season the Sabres' chances are worth {pg[CUR][1]:.2f} goals a game, about the same as last season ({pg[PREV][1]:.2f}) and right at
+the league average ({lg_pg[CUR]:.2f}). The chances are there. Fewer are going in.
+
 ## It isn't Alex Tuch
 
-Tuch was last season's best finisher relative to his chances ({int(tuch.G)} goals on {tuch.ixG:.1f} expected, {tuch.fin:+.1f}),
-and he now plays for Washington. But the {len(gone_fin)} skaters not on a Buffalo roster this season who shot for Buffalo last season combined for
-{int(gone_fin.G.sum())} goals on {gone_fin.ixG.sum():.1f} expected ({gone_fin.fin.sum():+.1f}). Tuch's surplus was largely cancelled out by others who left.
+Tuch was last season's best finisher: {int(tuch.G)} goals on chances an average shooter turns into about {tuch.ixG:.0f}. He now
+plays in Washington. But the other players who are gone mostly scored *below* their chances, so as a group the
+departures were roughly a wash ({int(gone_fin.G.sum())} goals on chances worth about {gone_fin.ixG.sum():.0f}).
 
-2025-26 leaders, all situations, empty nets excluded:
+The finishing that drove last season came from players who are still on the team. They scored about {ret_prev.fin.sum():.0f} more
+goals than their chances were worth. This season they're about {abs(ret_cur_fin):.0f} below.
 
-| Player | Goals | Expected | Above expected | Gone? |
+**Last season's best finishers**
+
+| Player | Goals | Goals expected from his chances | Difference | No longer with Buffalo? |
 |---|---|---|---|---|
-{t_rows}
+{t_plain}
 
-## This season's leading scorers
+**This season's leading goal scorers**
 
-| Player | Goals | Expected | Above expected |
+| Player | Goals | Goals expected from his chances | Difference |
 |---|---|---|---|
-{c_rows}
+{c_plain}
 
-The top of the lineup is still finishing (Tage Thompson and Jack Quinn are above expected), so the shortfall is
-spread through the rest of the roster.
+Tage Thompson and Jack Quinn are still finishing above their chances. The shortfall is spread through the rest of
+the lineup.
 
-## How much of this is noise?
+## Is it a slump or bad bounces?
 
-Returning players have taken {len(ret_cur)} unblocked shots worth {ret_cur.xg.sum():.1f} expected goals this season. Random
-variation alone on that many shots is about {np.sqrt((ret_cur.xg * (1 - ret_cur.xg)).sum()):.1f} goals either way, so
-{ret_cur_fin:+.1f} is well within normal. It's the right thing to watch, not yet a slump.
+Too early to tell. The returning players have taken {len(ret_cur)} shots this season. Over that many shots, luck alone can
+swing the total by about {noise:.0f} goals either way. They're about {abs(ret_cur_fin):.0f} below. That's normal. And finishing is one of
+the things that doesn't carry over well from one season to the next.
 
-## Why it matters going forward
+**What to expect:** if the chances keep coming, goals should pick up, though probably not to last season's pace,
+which was itself unusually hot.
 
-Finishing above or below expected moves a lot from year to year (team shooting % has a year-to-year correlation
-of about 0.3). The chances are still there. If finishing returns to normal, goals would likely follow, though
-probably not to last season's level, which was itself above normal.
-
-## Method and caveats
+## For the stat-heads
 
 - {model_note}
-- Individual expected goals count a player's own unblocked shots. "Not on a Buffalo roster" = dressed for Buffalo in 2025-26 and
-  not yet in 2026-27, from game rosters; some may be injured or in the minors rather than gone. Per-game rates use all {int(cur.gp)} games.
+- Team xG/game: {pg[PREV][1]:.2f} (2025-26), {pg[CUR][1]:.2f} (2026-27); league {lg_pg[CUR]:.2f}. Goals/game {pg[PREV][0]:.2f} to {pg[CUR][0]:.2f}.
+- Returning skaters G-xG: {ret_prev.fin.sum():+.1f} (2025-26), {ret_cur_fin:+.1f} (2026-27) on {len(ret_cur)} unblocked shots, {ret_cur.xg.sum():.1f} xG;
+  binomial SD {noise:.1f}. Departed: {len(gone_fin)} skaters, {int(gone_fin.G.sum())} G on {gone_fin.ixG.sum():.1f} xG ({gone_fin.fin.sum():+.1f}). Tuch {tuch.fin:+.1f}.
+- Year-to-year correlation of team shooting %: {st['sh%'][0]:.2f}.
+- "No longer with Buffalo" = dressed for Buffalo in 2025-26 and not yet in 2026-27, from game rosters; some may be
+  injured or in the minors. Individual xG counts a player's own unblocked shots. Empty nets excluded.
 """)
 
     # ---------- 4. Penalty kill
@@ -334,42 +383,55 @@ probably not to last season's level, which was itself above normal.
     lg_pk = pk.groupby("season").xGA_pg.mean()
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     bars(ax, list(LBL.values()), [pb.loc[se, "xGA_pg"] for se in LBL], "{:.2f}", lg=[lg_pk[se] for se in LBL])
-    ax.set_ylabel("Expected goals allowed per game, shorthanded")
+    ax.set_ylabel("Danger of chances allowed per game")
     ax.set_ylim(0, max(pb.xGA_pg.max(), lg_pk.max()) * 1.25)
     finish(fig, "The penalty kill is where this season is leaking",
-           "Sabres expected goals allowed per game while shorthanded. Dashed = league average.",
-           f"Shorthanded = 4v5, 3v5, 3v4. 2026-27: {n_pk} unblocked shots against.")
+           "When the Sabres are a man down: goals an average team would score from the chances they allow. Dashed = league average.",
+           f"Man-down situations only (4-on-5, 3-on-5, 3-on-4). 2026-27: {n_pk} shots against.")
     fig.savefig(OUT / "sabres-pk.png"); plt.close(fig)
     pk_rows = "\n".join(f"| {LBL[se]} | {int(pb.loc[se, 'GA'])} | {pb.loc[se, 'xGA']:.1f} | {pb.loc[se, 'GA_pg']:.2f} ({ordn(pb.loc[se, 'GA_rk'])}) | {pb.loc[se, 'xGA_pg']:.2f} ({ordn(pb.loc[se, 'xGA_rk'])}) | {lg_pk[se]:.2f} |" for se in LBL)
+    pk_plain = "\n".join(f"| {LBL[se]} | {int(pb.loc[se, 'GA'])} | {ordn(pb.loc[se, 'GA_rk'])} | {pb.loc[se, 'xGA_pg']:.2f} ({ordn(pb.loc[se, 'xGA_rk'])}) | {lg_pk[se]:.2f} |" for se in LBL)
     stories["sabres-penalty-kill"] = (
         "The Sabres' penalty kill is where this season is leaking",
-        "Last year's 4th-best penalty kill is allowing more, and better, chances.",
+        "Last year's 4th-best penalty kill is giving up more goals, and more dangerous chances.",
         f"""# The Sabres' penalty kill is where this season is leaking
 
-**Finding: Shorthanded, the Sabres are allowing {pb.loc[CUR, 'xGA_pg']:.2f} expected goals per game ({ordn(pb.loc[CUR, 'xGA_rk'])} of 32,
-where 1st is best), up from {pb.loc[PREV, 'xGA_pg']:.2f} ({ordn(pb.loc[PREV, 'xGA_rk'])}) last season. They've allowed {int(pb.loc[CUR, 'GA'])} power-play
-goals in {int(cur.gp)} games, {ordn(pb.loc[CUR, 'GA_rk'])} in the league. Last season's kill ranked {ordn(pb.loc[PREV, 'GA_rk'])} in goals allowed.**
+**Finding: When the Sabres are a man down, they've given up {int(pb.loc[CUR, 'GA'])} goals in {int(cur.gp)} games, {ordn(pb.loc[CUR, 'GA_rk'])} of 32 teams.
+Last season they were {ordn(pb.loc[PREV, 'GA_rk'])}. Some of that is bad luck, but they're also giving up more dangerous chances than
+most teams ({ordn(pb.loc[CUR, 'xGA_rk'])} of 32). Of everything that's changed since last season, this is the biggest.**
 
 *{sample}*
 
 ![Penalty kill](sabres-pk.png)
 
-| Season | PP goals allowed | Expected | Goals allowed/game (rank) | Expected/game (rank) | League expected/game |
-|---|---|---|---|---|---|
-{pk_rows}
+## What the numbers say
 
-Ranks: 1 = fewest allowed. The league as a whole is allowing more shorthanded chances this season
-({lg_pk[CUR]:.2f} per game, up from {lg_pk[PREV]:.2f}), so not all of the rise is Buffalo's, but the Sabres are
-{pb.loc[CUR, 'xGA_pg'] - lg_pk[CUR]:+.2f} per game worse than average. It isn't unprecedented, either: in 2024-25 the kill ranked
-{ordn(pb.loc[20242025, 'GA_rk'])} in goals allowed. Part of this season's damage is bad luck ({int(pb.loc[CUR, 'GA'])} goals on {pb.loc[CUR, 'xGA']:.1f} expected),
-and part is more chances allowed. Both are early-season numbers ({n_pk} unblocked shots against while
-shorthanded); the chances allowed are the part to watch.
+{xg_plain}
 
-## Method and caveats
+| Season | Power-play goals allowed | League rank (1 = fewest) | Danger of chances allowed per game (rank) | League average |
+|---|---|---|---|---|
+{pk_plain}
+
+Two things are happening:
+
+1. **Bad luck.** Opponents have scored {int(pb.loc[CUR, 'GA'])} power-play goals on chances an average team would turn into about
+   {pb.loc[CUR, 'xGA']:.0f}. That part tends to even out.
+2. **More dangerous chances.** The Sabres are allowing chances worth {pb.loc[CUR, 'xGA_pg']:.2f} goals a game while shorthanded, up from
+   {pb.loc[PREV, 'xGA_pg']:.2f} last year and above this season's league average of {lg_pk[CUR]:.2f}. Every team is allowing a bit more this
+   year, but Buffalo is allowing more than most.
+
+**What to watch:** the luck should fade. The chances allowed are the part that has to get fixed. It's early, too:
+{n_pk} shots against while shorthanded. A bad penalty kill isn't new, either. In 2024-25 it ranked {ordn(pb.loc[20242025, 'GA_rk'])} in goals allowed.
+
+## For the stat-heads
 
 - {model_note}
-- Shorthanded situations are 4-on-5, 3-on-5 and 3-on-4 (excludes the rare 4-on-6 and 3-on-6 with the goalie pulled). Per-game rates do not adjust for how often the team is
-  shorthanded; time-on-ice data is not in our dataset yet.
+- Shorthanded = 4-on-5, 3-on-5, 3-on-4 (excludes 4-on-6 and 3-on-6 with a goalie pulled). "Danger of chances" =
+  xGA per game. Per-game rates don't adjust for how often a team is shorthanded; time-on-ice isn't in our dataset yet.
+
+| Season | PP GA | xGA | GA/gm (rank) | xGA/gm (rank) | League xGA/gm |
+|---|---|---|---|---|---|
+{pk_rows}
 """)
 
     # ---------- 5. Even strength
@@ -378,7 +440,7 @@ shorthanded); the chances allowed are the part to watch.
         t5r[c_ + "_rk"] = t5r.groupby("season")[c_].rank(ascending=False, method="min").astype(int)
     e5 = t5r[t5r.team == "BUF"].set_index("season")
     fig, axes = plt.subplots(1, 2, figsize=(9.5, 4.8), dpi=200)
-    for ax, col, title in [(axes[0], "CF%", "Share of shot attempts"), (axes[1], "xGF%", "Share of expected goals")]:
+    for ax, col, title in [(axes[0], "CF%", "Share of all shot attempts"), (axes[1], "xGF%", "Share of good chances")]:
         vals = [e5.loc[se, col] for se in LBL]
         ax.bar(list(LBL.values()), vals, color=[RED if se == CUR else BLUE for se in LBL], width=0.6, zorder=2)
         for i, (vv, se) in enumerate(zip(vals, LBL)):
@@ -387,39 +449,57 @@ shorthanded); the chances allowed are the part to watch.
         ax.set_ylim(0.44, 0.56); ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", color=INK)
         ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
         ax.tick_params(axis="x", labelsize=8.5)
-    finish(fig, "At 5-on-5, this is the same team, maybe a bit better",
-           "Sabres 5-on-5 share of shot attempts and expected goals. Dashed line = even. Rank among 32 teams.",
+    finish(fig, "At full strength, this is the same team, maybe a bit better",
+           "Sabres at full strength (5-on-5). Above the dashed line = winning that part of the game. Rank among 32 teams.",
            f"2026-27: {int(e5.loc[CUR, 'CF'] + e5.loc[CUR, 'CA']):,} 5-on-5 shot attempts.")
     fig.savefig(OUT / "sabres-5v5.png"); plt.close(fig)
     e_rows = "\n".join(f"| {LBL[se]} | {e5.loc[se, 'CF%']:.1%} ({ordn(e5.loc[se, 'CF%_rk'])}) | {e5.loc[se, 'xGF%']:.1%} ({ordn(e5.loc[se, 'xGF%_rk'])}) | {int(e5.loc[se, 'GF'])}-{int(e5.loc[se, 'GA'])} | {e5.loc[se, 'PDO']:.3f} |" for se in LBL)
+    e_plain = "\n".join(f"| {LBL[se]} | {e5.loc[se, 'CF%']:.0%} ({ordn(e5.loc[se, 'CF%_rk'])}) | {e5.loc[se, 'xGF%']:.0%} ({ordn(e5.loc[se, 'xGF%_rk'])}) | {int(e5.loc[se, 'GF'])}-{int(e5.loc[se, 'GA'])} |" for se in LBL)
     stories["sabres-even-strength"] = (
         "At even strength, these Sabres look like last year's Sabres",
         "Five-on-five, Buffalo is controlling as much of the play as last season. The difference is elsewhere.",
         f"""# At even strength, these Sabres look like last year's Sabres
 
-**Finding: At 5-on-5 the Sabres are taking {e5.loc[CUR, 'CF%']:.1%} of shot attempts ({ordn(e5.loc[CUR, 'CF%_rk'])} in the NHL) and
-{e5.loc[CUR, 'xGF%']:.1%} of expected goals, compared with {e5.loc[PREV, 'CF%']:.1%} and {e5.loc[PREV, 'xGF%']:.1%} last season. Last year's edge was the bounces (5-on-5 PDO
-{e5.loc[PREV, 'PDO']:.3f}). This year the bounces have evened out and the penalty kill is leaking.**
+**Finding: When both teams are at full strength, which is most of every game, the Sabres are playing as well as last
+season, maybe a bit better. They're taking {e5.loc[CUR, 'CF%']:.0%} of the shot attempts ({ordn(e5.loc[CUR, 'CF%_rk'])} in the NHL) and an even share of the
+good chances. What changed is that last year's lucky bounces have evened out, and the penalty kill is leaking.**
 
 *{sample}*
 
 ![5v5](sabres-5v5.png)
 
-| Season | Shot-attempt share (rank) | Expected-goal share (rank) | 5v5 goals for-against | PDO |
+## How we measure who's controlling the game
+
+Two simple questions. **Who's shooting more?** If you take more than half the shot attempts, you usually have the
+puck more. **Who's getting the better chances?** {xg_plain}
+
+| Season | Share of shot attempts (rank) | Share of good chances (rank) | Goals for-against at 5-on-5 |
+|---|---|---|---|
+{e_plain}
+
+Above 50% means the Sabres are winning that part of the game. They've been right around even all four seasons.
+
+## So what changed?
+
+Put all five of our Sabres stories together and the picture is simple:
+
+- **At full strength, it's the same team.** It's no longer getting last year's lucky bounces.
+- **The goalies** went from stealing games to about average.
+- **The shooters who stayed** went from scoring way above their chances to slightly below, within normal ups and downs.
+- **The penalty kill** is giving up a lot more. That's the biggest single change.
+
+That's how a 109-point team turns into a {int(cur.pts)}-point start in {int(cur.gp)} games.
+
+## For the stat-heads
+
+- {model_note}
+- 5-on-5 only, empty nets excluded. Shot-attempt share = CF% (Corsi, blocked shots included). Good-chance share = xGF%.
+
+| Season | CF% (rank) | xGF% (rank) | 5v5 GF-GA | PDO |
 |---|---|---|---|---|
 {e_rows}
 
-## How the pieces fit
-
-The 5-on-5 team hasn't changed much, but it's no longer getting last year's bounces (5-on-5 PDO {e5.loc[PREV, 'PDO']:.3f}
-then, {e5.loc[CUR, 'PDO']:.3f} now). The goalies have gone from well above expected to about average. The returning
-shooters are slightly below expected, within normal variation. And the penalty kill is allowing more; it's the largest
-single change. That's how a 109-point team turns into a {int(cur.pts)}-point start in {int(cur.gp)} games.
-
-## Method and caveats
-
-- {model_note}
-- 5-on-5 only, empty nets excluded from goals and expected goals. Shot-attempt share counts blocked shots.
+PDO = 5-on-5 shooting % + save %, a common luck gauge: {e5.loc[PREV, 'PDO']:.3f} last season, {e5.loc[CUR, 'PDO']:.3f} now.
 """)
 
     for slug, (title, dek, md) in stories.items():
