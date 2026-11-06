@@ -1,8 +1,9 @@
 # Bills at Vikings: the NFL's best offense meets its best defense, and Minnesota's backup QB
 
 **Finding: Through eight weeks, the Bills have the most efficient offense in football and the Vikings have the most
-efficient defense. Something has to give Monday night. Buffalo's weak spot is its pass defense (24th of 32), and
-Minnesota is starting Carson Wentz, who has been a better passer than injured starter Kyler Murray this season.**
+efficient defense (counting every play; with garbage time removed they rank 3rd and 2nd). Something has to give
+Monday night. Buffalo's weak spot is its pass defense (24th of 32), and with Kyler Murray hurt, Minnesota starts Carson
+Wentz, who has been about an average NFL passer over the last two seasons. Murray was below average this year.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Both teams have played
 7 games. Numbers count every play unless noted.*
@@ -25,7 +26,7 @@ snap: down, distance, field position, time left and what happened.
 - 1st-and-10 at your own 25 is worth about **1.1 points** on average.
 - At midfield, about **2.6**. At the opponent's 25, about **4.2**.
 - Every play moves that number. On 3rd-and-8, a quarterback who drops back and converts adds about **+2.4 points**.
-  If he throws incomplete or comes up short, the drive loses about **1.2**. If he's sacked, about **1.9**.
+  If he doesn't convert (an incompletion, a short gain or a turnover), the drive loses about **1.2**. If he's sacked, about **1.9**.
 
 **The math:** take the points the drive was worth after the play, subtract what it was worth before, and you have that
 play's value. Average it over every play a team runs and you get its **points per play**. The "points a drive is worth"
@@ -68,7 +69,7 @@ just changed.
 
 ## The quarterback change
 
-Kyler Murray is out with a hamstring injury, so Carson Wentz starts. Wentz has been the more efficient passer:
+Kyler Murray is out with a strained hamstring, so Carson Wentz starts. The two have been different kinds of passers:
 
 ![Quarterbacks](wk09-qbs.png)
 
@@ -78,8 +79,9 @@ Kyler Murray is out with a hamstring injury, so Carson Wentz starts. Wentz has b
 | Carson Wentz | 2026 | 2 | 47 (small sample) | +0.08 | +0.05 | 12.8% |
 | Carson Wentz | 2025 | 5 | 196 | +0.04 | +0.04 | 9.7% |
 
-Among 30 quarterbacks with 150+ dropbacks this season, Murray ranks 23rd. Over the last two seasons
-combined, Wentz has been right at the level of an average NFL passer (-0.000 points per dropback against the league average). The catch:
+Among 30 quarterbacks with 150+ dropbacks this season, Murray ranks 23rd. Wentz's 2026 number looks better, but
+47 dropbacks is far too few to read much into. Over the last two seasons combined (243 dropbacks), Wentz has been right
+at league average. The catch:
 he's been sacked more often than average (3.8 percentage points above the league rate), and Minnesota's offense already
 allows sacks at the 3rd-highest rate in the league. That's an opening for a Bills pass rush that hasn't found many.
 
@@ -116,7 +118,11 @@ which were mostly Murray's games. That moved call 1 from 58% to 65% and call 3 f
 - Draft calls: Ledger model v0.1-locshift (`src/ledger/model_v01.py`), shrink 0.5. Expected game value = league +
   0.5 x (offense vs league + defense vs league); probability from the 2026 within-team game-to-game spread.
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 (243 dropbacks): EPA/dropback
-  -0.0001, sack rate +0.0383. Expected values: call 1 +0.076 (team-based +0.037);
+  -0.0073, sack rate +0.0378. Expected values: call 1 +0.072 (team-based +0.037);
   call 2 -0.154; call 3 0.078 (team-based 0.074).
+- off_override replaces Minnesota's whole 2026 offensive level (line and receivers included) with Wentz's own number;
+  196 of his 243 dropbacks came with Minnesota in 2025, so the supporting cast is mostly the same. The team value it
+  replaces includes Wentz's 47 dropbacks from weeks 1-2. Baseline for both is the mean of team-game values.
 - Small samples throughout: 7 games per team; Wentz 2026 is 47 dropbacks.
-- Injury news: Murray ruled out (hamstring) by Vikings coach Kevin O'Connell on Nov. 5, 2026 (ESPN, Minnesota Star Tribune).
+- Injury news: Vikings coach Kevin O'Connell announced Nov. 5, 2026 that Wentz starts with Murray out (strained hamstring,
+  hurt in the week 8 loss to Detroit). Source: ESPN, Nov. 5, 2026.

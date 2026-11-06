@@ -50,7 +50,7 @@ QB_METRICS = {"dropback_epa": "epa", "sack_rate": "sack"}
 
 
 def qb_relative(player_id, metric, seasons, con=None):
-    """A QB's dropback-weighted value of `metric` relative to each season's league average.
+    """A QB's dropback-weighted value of `metric` relative to each season's league average (mean of team-game values).
 
     Dropbacks = qb_dropback plays with EPA, regular season, no two-point tries; the QB is
     COALESCE(passer_player_id, rusher_player_id) so scrambles count. Returns (relative value, dropbacks).
@@ -60,7 +60,8 @@ def qb_relative(player_id, metric, seasons, con=None):
     ph = ",".join("?" * len(seasons))
     base = (f"FROM raw_pbp WHERE season IN ({ph}) AND season_type='REG' AND qb_dropback=1 AND epa IS NOT NULL "
             "AND COALESCE(two_point_attempt,0)=0")
-    lg = query(f"SELECT season, AVG({col}) v {base} GROUP BY season", params=seasons, con=con).set_index("season").v
+    # baseline = mean of team-game values, the same league baseline prob_over uses
+    lg = pd.Series({s: game_values(s, metric, con).query("side == 'off'").v.mean() for s in seasons})
     q = query(f"SELECT season, COUNT(*) n, AVG({col}) v {base} AND COALESCE(passer_player_id, rusher_player_id)=? GROUP BY season",
               params=seasons + (player_id,), con=con)
     if q.empty:

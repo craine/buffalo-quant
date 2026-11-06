@@ -145,7 +145,7 @@ def main():
     ax.axhline(0, color="#D5D8DE", lw=1)
     lo = min(min(v3), 0) - 0.05; hi = max(max(v3), lg.epa.max()) + 0.06; ax.set_ylim(lo, hi)
     ax.set_ylabel("Points added per dropback"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Wentz has been the better Vikings passer",
+    finish(fig, "Wentz has been about average; Murray was below it this year",
            "Points added per dropback (passes, sacks and scrambles). Dashed = league average that season.",
            f"Wentz 2026 is {int(w26.db)} dropbacks over {int(w26.g)} games: a very small sample. Murray: {int(m26.db)} dropbacks, {int(m26.g)} games.")
     fig.savefig(OUT / "wk09-qbs.png"); plt.close(fig)
@@ -154,8 +154,9 @@ def main():
     md_text = f"""# Bills at Vikings: the NFL's best offense meets its best defense, and Minnesota's backup QB
 
 **Finding: Through eight weeks, the Bills have the most efficient offense in football and the Vikings have the most
-efficient defense. Something has to give Monday night. Buffalo's weak spot is its pass defense ({ordn(bd.dropback_epa_rk)} of 32), and
-Minnesota is starting Carson Wentz, who has been a better passer than injured starter Kyler Murray this season.**
+efficient defense (counting every play; with garbage time removed they rank {ordn(bo.epa_play_neutral_rk)} and {ordn(md.epa_play_neutral_rk)}). Something has to give
+Monday night. Buffalo's weak spot is its pass defense ({ordn(bd.dropback_epa_rk)} of 32), and with Kyler Murray hurt, Minnesota starts Carson
+Wentz, who has been about an average NFL passer over the last two seasons. Murray was below average this year.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Both teams have played
 {int(bo.games)} games. Numbers count every play unless noted.*
@@ -178,7 +179,7 @@ snap: down, distance, field position, time left and what happened.
 - 1st-and-10 at your own 25 is worth about **{ep.loc[75, 'ep']:.1f} points** on average.
 - At midfield, about **{ep.loc[50, 'ep']:.1f}**. At the opponent's 25, about **{ep.loc[25, 'ep']:.1f}**.
 - Every play moves that number. On 3rd-and-8, a quarterback who drops back and converts adds about **{third.loc['conv', 'epa']:+.1f} points**.
-  If he throws incomplete or comes up short, the drive loses about **{abs(third.loc['fail', 'epa']):.1f}**. If he's sacked, about **{abs(third.loc['sack', 'epa']):.1f}**.
+  If he doesn't convert (an incompletion, a short gain or a turnover), the drive loses about **{abs(third.loc['fail', 'epa']):.1f}**. If he's sacked, about **{abs(third.loc['sack', 'epa']):.1f}**.
 
 **The math:** take the points the drive was worth after the play, subtract what it was worth before, and you have that
 play's value. Average it over every play a team runs and you get its **points per play**. The "points a drive is worth"
@@ -221,7 +222,7 @@ just changed.
 
 ## The quarterback change
 
-Kyler Murray is out with a hamstring injury, so Carson Wentz starts. Wentz has been the more efficient passer:
+Kyler Murray is out with a strained hamstring, so Carson Wentz starts. The two have been different kinds of passers:
 
 ![Quarterbacks](wk09-qbs.png)
 
@@ -231,8 +232,9 @@ Kyler Murray is out with a hamstring injury, so Carson Wentz starts. Wentz has b
 | Carson Wentz | 2026 | {int(w26.g)} | {int(w26.db)} (small sample) | {pts(w26.epa)} | {pts(lg.loc[2026, 'epa'])} | {w26.sk:.1%} |
 | Carson Wentz | 2025 | {int(w25.g)} | {int(w25.db)} | {pts(w25.epa)} | {pts(lg.loc[2025, 'epa'])} | {w25.sk:.1%} |
 
-Among {int(murray_rk.n_q)} quarterbacks with 150+ dropbacks this season, Murray ranks {ordn(murray_rk.rk)}. Over the last two seasons
-combined, Wentz has been right at the level of an average NFL passer ({w_db:+.3f} points per dropback against the league average). The catch:
+Among {int(murray_rk.n_q)} quarterbacks with 150+ dropbacks this season, Murray ranks {ordn(murray_rk.rk)}. Wentz's 2026 number looks better, but
+{int(w26.db)} dropbacks is far too few to read much into. Over the last two seasons combined ({n_db} dropbacks), Wentz has been right
+at league average. The catch:
 he's been sacked more often than average ({w_sk * 100:.1f} percentage points above the league rate), and Minnesota's offense already
 allows sacks at the {ordn(33 - mo.sack_rate_rk)}-highest rate in the league. That's an opening for a Bills pass rush that hasn't found many.
 
@@ -271,8 +273,12 @@ which were mostly Murray's games. That moved call 1 from {c1b['p']:.0%} to {c1['
   Wentz substitution (`off_override`): dropback-weighted, league-relative, 2025-26 ({n_db} dropbacks): EPA/dropback
   {w_db:+.4f}, sack rate {w_sk:+.4f}. Expected values: call 1 {c1['expected']:+.3f} (team-based {c1b['expected']:+.3f});
   call 2 {c2['expected']:+.3f}; call 3 {c3['expected']:.3f} (team-based {c3b['expected']:.3f}).
+- off_override replaces Minnesota's whole 2026 offensive level (line and receivers included) with Wentz's own number;
+  196 of his 243 dropbacks came with Minnesota in 2025, so the supporting cast is mostly the same. The team value it
+  replaces includes Wentz's 47 dropbacks from weeks 1-2. Baseline for both is the mean of team-game values.
 - Small samples throughout: {int(bo.games)} games per team; Wentz 2026 is {int(w26.db)} dropbacks.
-- Injury news: Murray ruled out (hamstring) by Vikings coach Kevin O'Connell on Nov. 5, 2026 (ESPN, Minnesota Star Tribune).
+- Injury news: Vikings coach Kevin O'Connell announced Nov. 5, 2026 that Wentz starts with Murray out (strained hamstring,
+  hurt in the week 8 loss to Detroit). Source: ESPN, Nov. 5, 2026.
 """
     (OUT / "2026-wk09-bills-at-vikings.md").write_text(md_text)
     print(md_text)
