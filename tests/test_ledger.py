@@ -44,3 +44,24 @@ def test_probability_bounds():
 
 def test_kickoff_is_monday_night_et():
     assert L.kickoff_utc(GAME).strftime("%Y-%m-%d %H:%M") == "2026-11-10 01:15"
+
+
+def test_off_override_matches_team_mean_when_equal():
+    from src.ledger.model_v01 import game_values, prob_over
+    base = prob_over("MIN", "BUF", "dropback_epa", 0.0)
+    rel = base["off_mean"] - base["league"]
+    same = prob_over("MIN", "BUF", "dropback_epa", 0.0, off_override=rel)
+    assert abs(same["expected"] - base["expected"]) < 1e-12 and same["p"] == base["p"]
+
+
+def test_off_override_moves_expected_by_half():
+    from src.ledger.model_v01 import SHRINK, prob_over
+    a = prob_over("MIN", "BUF", "dropback_epa", 0.0, off_override=0.0)
+    b = prob_over("MIN", "BUF", "dropback_epa", 0.0, off_override=0.10)
+    assert abs((b["expected"] - a["expected"]) - SHRINK * 0.10) < 1e-12 and b["p"] >= a["p"]
+
+
+def test_qb_relative_wentz():
+    from src.ledger.model_v01 import qb_relative
+    rel, n = qb_relative("00-0032950", "dropback_epa", [2025, 2026])
+    assert n > 200 and -0.3 < rel < 0.3
