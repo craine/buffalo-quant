@@ -11,10 +11,10 @@ goaltending and hot shooting, and those rarely last.</strong></p>
 <p><em>This season: 15 games (7-5-3). That's still a small sample.</em></p>
 <p><img alt="Mirage" src="sabres-mirage.png" /></p>
 <h2>Where "chances" comes from</h2>
-<p><strong>The data:</strong> the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
+<p><strong>The source:</strong> the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
 it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
 we pull it straight from the league's own game feed.</p>
-<p><strong>The idea:</strong> some shots are far more dangerous than others. We took 336,462 NHL shots from the last three seasons
+<p><strong>The reasoning:</strong> some shots are far more dangerous than others. We took 336,462 NHL shots from the last three seasons
 and counted how often each kind actually went in.</p>
 <p><img alt="Shot odds" src="sabres-shot-odds.png" /></p>
 <ul>
@@ -32,9 +32,10 @@ average NHL team would have scored with exactly the same shots.</p>
 <p><strong>The check:</strong> we tested the model on a full season it had never seen. It predicted which shots would go in clearly
 better than a simple distance-and-angle model, and over a season its totals land within a few percent of the
 actual goals scored league-wide.</p>
-<p>So when we say "their chances were worth 237 goals," that's the sum of those odds over every Sabres shot. When a
-team scores a lot more than that, it's either elite finishing or luck, and the rest of this story shows which
-one usually lasts.</p>
+<p>So when we say last year's Sabres had chances worth 237 goals, it means: add up the odds on every Sabres shot
+last season and that's what you get. They scored 256. Scoring 19 more than an average team would from the
+same shots is either elite finishing or luck, and the rest of this story shows that kind of edge usually doesn't carry
+into the next season.</p>
 <h2>Last season, in plain numbers</h2>
 <div class="tablewrap"><table>
 <thead>

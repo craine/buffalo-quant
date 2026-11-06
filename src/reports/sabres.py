@@ -90,11 +90,11 @@ def main():
     fig.savefig(OUT / "sabres-shot-odds.png"); plt.close(fig)
     xg_source = f"""## Where "chances" comes from
 
-**The data:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
+**The source:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
 it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
 we pull it straight from the league's own game feed.
 
-**The idea:** some shots are far more dangerous than others. We took {len(tr):,} NHL shots from the last three seasons
+**The reasoning:** some shots are far more dangerous than others. We took {len(tr):,} NHL shots from the last three seasons
 and counted how often each kind actually went in.
 
 ![Shot odds](sabres-shot-odds.png)
@@ -115,9 +115,10 @@ average NHL team would have scored with exactly the same shots.
 better than a simple distance-and-angle model, and over a season its totals land within a few percent of the
 actual goals scored league-wide.
 
-So when we say "their chances were worth {b.loc[PREV, 'xGF']:.0f} goals," that's the sum of those odds over every Sabres shot. When a
-team scores a lot more than that, it's either elite finishing or luck, and the rest of this story shows which
-one usually lasts.
+So when we say last year's Sabres had chances worth {b.loc[PREV, 'xGF']:.0f} goals, it means: add up the odds on every Sabres shot
+last season and that's what you get. They scored {b.loc[PREV, 'GF']:.0f}. Scoring {b.loc[PREV, 'GF'] - b.loc[PREV, 'xGF']:.0f} more than an average team would from the
+same shots is either elite finishing or luck, and the rest of this story shows that kind of edge usually doesn't carry
+into the next season.
 """
     xg_plain = (f"**Where \"chances\" comes from:** the NHL logs where every shot is taken and what kind it is. Across "
                 f"{len(tr):,} shots, those from within 10 feet went in {near:.1%} of the time; from 60 feet or more, {far:.1%}. Our model "

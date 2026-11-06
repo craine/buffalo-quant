@@ -10,11 +10,11 @@ goaltending and hot shooting, and those rarely last.**
 
 ## Where "chances" comes from
 
-**The data:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
+**The source:** the NHL logs every shot in every game: where on the ice it was taken (to the foot), what kind of shot
 it was, whether it came right after another shot, and how many players each team had on the ice. It's public, and
 we pull it straight from the league's own game feed.
 
-**The idea:** some shots are far more dangerous than others. We took 336,462 NHL shots from the last three seasons
+**The reasoning:** some shots are far more dangerous than others. We took 336,462 NHL shots from the last three seasons
 and counted how often each kind actually went in.
 
 ![Shot odds](sabres-shot-odds.png)
@@ -35,9 +35,10 @@ average NHL team would have scored with exactly the same shots.
 better than a simple distance-and-angle model, and over a season its totals land within a few percent of the
 actual goals scored league-wide.
 
-So when we say "their chances were worth 237 goals," that's the sum of those odds over every Sabres shot. When a
-team scores a lot more than that, it's either elite finishing or luck, and the rest of this story shows which
-one usually lasts.
+So when we say last year's Sabres had chances worth 237 goals, it means: add up the odds on every Sabres shot
+last season and that's what you get. They scored 256. Scoring 19 more than an average team would from the
+same shots is either elite finishing or luck, and the rest of this story shows that kind of edge usually doesn't carry
+into the next season.
 
 ## Last season, in plain numbers
 

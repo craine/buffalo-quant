@@ -117,6 +117,16 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.
 - Every article goes through an independent QA review before publishing.
 
+## Writing for fans (standing rule from Charlie)
+
+- **No jargon in the story body.** Jargon is boring. Say "chances," "goals saved vs. an average goalie" and
+  "carries over to next season," not xGF%, GSAx, PDO, Corsi or correlation. Stat terms go only in a
+  "For the stat-heads" section at the end.
+- **Show the behind-the-scenes reasoning every time.** Every story explains where its key number comes from:
+  the source data, the reasoning (with real computed examples, e.g. "shots from within 10 feet go in 13.8% of
+  the time"), the math in one plain paragraph, and how we checked it. Include the chart that shows it.
+- Tie the explanation back to the headline number ("their chances were worth 237 goals; they scored 256").
+
 ## Analysis conventions
 
 - Regular season only unless stated. Playoffs tagged separately, never mixed silently.
