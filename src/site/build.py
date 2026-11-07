@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-at-vikings-week-9", "2026-wk09-bills-at-vikings.md", "2026-11-08", "Bills &middot; Week 9 preview",
+     "Both rank 1st through week 8. Kyler Murray is out, Carson Wentz starts, and the Bills' pass defense is their weak spot.",
+     "wk09-matchup.png"),
     ("sabres-50-win-mirage", "sabres-50-win-mirage.md", "2026-11-06", "Sabres &middot; Why they fell off",
      "Based on the chances they created, last year's Sabres should have had about 91 points. They got 109. Here's what that means now.",
      "sabres-mirage.png"),
@@ -91,6 +94,8 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .xbars{flex:1 1 340px;min-width:0}.xbar{display:flex;align-items:center;gap:12px;margin:10px 0}
 .xl{width:72px;font-size:14px;color:#4A5160}.xt{flex:1}.xt span{display:block;height:22px;background:var(--navy);border-radius:4px}.xv{width:52px;font-size:14px;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.lcard.wide{grid-column:auto}.hgrid{padding-top:36px;padding-bottom:40px}}
+.bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
+.bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
 """
 
@@ -113,7 +118,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
-(nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
+(NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
 Buffalo Sabres, or the NFL.</div></footer></body></html>"""
 
 
@@ -199,11 +204,12 @@ def build_home(articles, texts):
     hj = ROOT / "reports" / src.replace(".md", ".hero.json")
     hd = json.loads(hj.read_text()) if hj.exists() else None
     if hd:
-        top = max(n for n, _ in hd["big"])
+        numeric = all(isinstance(n, (int, float)) for n, _ in hd["big"])
+        top = max(n for n, _ in hd["big"]) if numeric else 1
         nums = "".join(f'<div><div class="bign{" dim" if i else ""}">{n}</div><div class="bigl">{html.escape(l)}</div></div>'
                        for i, (n, l) in enumerate(hd["big"]))
         bars = "".join(f'<div class="hbar"><span style="width:{n / top:.0%}"{" class=dim" if i else ""}></span><b>{n}</b></div>'
-                       for i, (n, l) in enumerate(hd["big"]))
+                       for i, (n, l) in enumerate(hd["big"])) if numeric else ""
         panel = (f'<div class="hpanel"><div class="hlabel">{html.escape(hd["label"])}</div><div class="bigs">{nums}</div>'
                  f'{bars}<p class="hnote">{html.escape(hd["note"])}</p></div>')
     else:
@@ -231,7 +237,7 @@ def build_home(articles, texts):
     if hd and "explainer" in hd:
         e = hd["explainer"]; mx = max(v for _, v in e["bars"])
         rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
-                       f'<span class="xv">{v:.1%}</span></div>' for l, v in e["bars"])
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
@@ -246,18 +252,34 @@ def build_home(articles, texts):
     (SITE / "index.html").write_text(page("Buffalo Quant Desk | Bills and Sabres analytics", body, "Home", full=True))
 
 
+LINKEDIN = "https://www.linkedin.com/in/charliecraine/"
+
+
 def build_about():
-    body = """<div class="kicker">About</div><h1>Buffalo's quant desk.</h1>
-<p class="dek">Built by a data scientist and lifelong Buffalo fan, using the same methods
-behind systematic trading models and competitive machine learning.</p>
-<p>Most sports coverage tells you what happened. We try to tell you what happens next, attach a
-probability to it, and show our work. Every number on this site is computed from public
-play-by-play data, with the method published alongside it. Every prediction lives on the <a href="ledger.html">Ledger</a>,
-graded in public.</p>
-<h2>What we cover</h2><ul class="rules"><li><b>Bills:</b> weekly post-game reports, Thursday previews with logged calls, coaching and roster deep dives.</li>
-<li><b>Sabres:</b> coming this season, built on our own expected-goals model.</li></ul>
+    body = f"""<div class="kicker">About</div><h1>Buffalo's quant desk.</h1>
+<p class="dek">Most sports coverage tells you what happened. We try to tell you what happens next,
+put a probability on it, and show our work.</p>
+<section class="bio"><img src="charlie.jpg" alt="Charlie Craine" width="180" height="180">
+<div><h2>Charlie Craine</h2>
+<p>Charlie grew up in Western New York and has been a Bills and Sabres fan his whole life. He has spent two decades
+building digital products and data teams, including nearly ten years as a CTO.</p>
+<p>He also spent more than three years at Amazon Web Services as Global Head of Startups for Digital Customer Experience, across AWS's
+$6 billion startup business.</p>
+<p>He's a Kaggle Grandmaster, the top tier of the world's largest data science competition platform, and builds
+AI and machine-learning systems, including his own stock trading models. Buffalo Quant Desk uses the same approach on
+the Bills and Sabres: start from every play, measure what actually repeats, put a probability on what happens next, and
+keep score in public.</p>
+<p><a class="btn" href="{LINKEDIN}" rel="noopener">Connect on LinkedIn</a></p></div></section>
+<h2>How we work</h2><ul class="rules">
+<li><b>Every play, every shot.</b> Everything starts from the leagues' own public play-by-play. Nothing is hand-entered.</li>
+<li><b>Plain English.</b> Every story explains where its numbers come from, with real examples, and saves the jargon for the end.</li>
+<li><b>Receipts.</b> Every prediction lives on the <a href="ledger.html">Ledger</a>, logged before kickoff and graded in public.</li>
+<li><b>Checked twice.</b> Every story is recomputed by an independent review before it's published.</li></ul>
+<h2>What we cover</h2><ul class="rules"><li><b>Bills:</b> game previews with logged predictions, post-game reports, and deep dives on players and coaches.</li>
+<li><b>Sabres:</b> built on our own expected-goals model, which measures how good a team's scoring chances really are.</li></ul>
 <h2>What we don't do</h2><p>Betting content. No odds, lines, picks or units. Projections are analysis, not wagering advice.</p>
-<h2>Media</h2><p>Available for radio, podcast and TV segments on the Bills and Sabres.</p>"""
+<h2>Media</h2><p>Available for radio, podcast and TV segments on the Bills and Sabres. Reach Charlie on
+<a href="{LINKEDIN}" rel="noopener">LinkedIn</a>.</p>"""
     (SITE / "about.html").write_text(page("About | Buffalo Quant Desk", body, "About"))
 
 
@@ -272,6 +294,7 @@ def main():
     build_home(articles, texts)
     build_ledger()
     build_about()
+    shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):
         if f.exists():
