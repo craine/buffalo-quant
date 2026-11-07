@@ -62,4 +62,6 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .xbars{flex:1 1 340px;min-width:0}.xbar{display:flex;align-items:center;gap:12px;margin:10px 0}
 .xl{width:72px;font-size:14px;color:#4A5160}.xt{flex:1}.xt span{display:block;height:22px;background:var(--navy);border-radius:4px}.xv{width:52px;font-size:14px;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.lcard.wide{grid-column:auto}.hgrid{padding-top:36px;padding-bottom:40px}}
+.bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
+.bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
