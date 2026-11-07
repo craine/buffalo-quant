@@ -94,6 +94,8 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .xbars{flex:1 1 340px;min-width:0}.xbar{display:flex;align-items:center;gap:12px;margin:10px 0}
 .xl{width:72px;font-size:14px;color:#4A5160}.xt{flex:1}.xt span{display:block;height:22px;background:var(--navy);border-radius:4px}.xv{width:52px;font-size:14px;font-variant-numeric:tabular-nums}
 @media(max-width:600px){.lcard.wide{grid-column:auto}.hgrid{padding-top:36px;padding-bottom:40px}}
+.bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
+.bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
 """
 
@@ -250,18 +252,36 @@ def build_home(articles, texts):
     (SITE / "index.html").write_text(page("Buffalo Quant Desk | Bills and Sabres analytics", body, "Home", full=True))
 
 
+LINKEDIN = "https://www.linkedin.com/in/charliecraine/"
+
+
 def build_about():
-    body = """<div class="kicker">About</div><h1>Buffalo's quant desk.</h1>
-<p class="dek">Built by a data scientist and lifelong Buffalo fan, using the same methods
-behind systematic trading models and competitive machine learning.</p>
-<p>Most sports coverage tells you what happened. We try to tell you what happens next, attach a
-probability to it, and show our work. Every number on this site is computed from public
-play-by-play data, with the method published alongside it. Every prediction lives on the <a href="ledger.html">Ledger</a>,
-graded in public.</p>
-<h2>What we cover</h2><ul class="rules"><li><b>Bills:</b> weekly post-game reports, Thursday previews with logged calls, coaching and roster deep dives.</li>
-<li><b>Sabres:</b> coming this season, built on our own expected-goals model.</li></ul>
+    body = f"""<div class="kicker">About</div><h1>Buffalo's quant desk.</h1>
+<p class="dek">Most sports coverage tells you what happened. We try to tell you what happens next,
+put a probability on it, and show our work.</p>
+<section class="bio"><img src="charlie.jpg" alt="Charlie Craine" width="180" height="180">
+<div><h2>Charlie Craine</h2>
+<p>Charlie grew up in Western New York and has been a Bills and Sabres fan his whole life. He has spent two decades
+building digital products and data teams, including nearly ten years as a CTO.</p>
+<p>As Chief Digital Data Officer and CTO at Meister Media Worldwide, he turned a print publisher into a digital media
+company, growing digital revenue 350% and the audience from 250,000 to 6 million. At Amazon Web Services he was Global
+Head of Startups for Digital Customer Experience, across AWS's $6 billion startup business. Earlier he ran digital media
+at Future US in New York and at the Deseret News, and founded an entertainment site that grew to 5 million monthly page views.</p>
+<p>He's a Kaggle Grandmaster, the top tier of the world's largest data science competition platform, and builds
+AI and machine-learning systems, including his own stock trading models. Buffalo Quant Desk uses the same approach on
+the Bills and Sabres: start from every play, measure what actually repeats, put a probability on what happens next, and
+keep score in public.</p>
+<p><a class="btn" href="{LINKEDIN}" rel="noopener">Connect on LinkedIn</a></p></div></section>
+<h2>How we work</h2><ul class="rules">
+<li><b>Every play, every shot.</b> Everything starts from the leagues' own public play-by-play. Nothing is hand-entered.</li>
+<li><b>Plain English.</b> Every story explains where its numbers come from, with real examples, and saves the jargon for the end.</li>
+<li><b>Receipts.</b> Every prediction lives on the <a href="ledger.html">Ledger</a>, logged before kickoff and graded in public.</li>
+<li><b>Checked twice.</b> Every story is recomputed by an independent review before it's published.</li></ul>
+<h2>What we cover</h2><ul class="rules"><li><b>Bills:</b> game previews with logged predictions, post-game reports, and deep dives on players and coaches.</li>
+<li><b>Sabres:</b> built on our own expected-goals model, which measures how good a team's scoring chances really are.</li></ul>
 <h2>What we don't do</h2><p>Betting content. No odds, lines, picks or units. Projections are analysis, not wagering advice.</p>
-<h2>Media</h2><p>Available for radio, podcast and TV segments on the Bills and Sabres.</p>"""
+<h2>Media</h2><p>Available for radio, podcast and TV segments on the Bills and Sabres. Reach Charlie on
+<a href="{LINKEDIN}" rel="noopener">LinkedIn</a>.</p>"""
     (SITE / "about.html").write_text(page("About | Buffalo Quant Desk", body, "About"))
 
 
@@ -276,6 +296,7 @@ def main():
     build_home(articles, texts)
     build_ledger()
     build_about()
+    shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):
         if f.exists():
