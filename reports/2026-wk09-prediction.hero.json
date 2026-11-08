@@ -1,0 +1,29 @@
+{
+ "label": "Our projection for Monday night",
+ "big": [
+  [
+   23,
+   "Bills, projected points"
+  ],
+  [
+   23,
+   "Vikings, projected points"
+  ]
+ ],
+ "note": "Bills win 52% of the time in our model. Seven calls go on the Ledger before kickoff; one planned call failed its test and is out.",
+ "explainer": {
+  "kicker": "How we checked it",
+  "title": "Tested on games it never saw.",
+  "text": "Before trusting the win chance, we ran it on 617 games from 2024-26 the model had never seen. How often the team it favored won, vs. always taking the home team:",
+  "bars": [
+   [
+    "Our model",
+    0.632
+   ],
+   [
+    "Home team",
+    0.524
+   ]
+  ]
+ }
+}

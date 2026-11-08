@@ -1,4 +1,4 @@
-"""Log part 1's call (Minnesota scores 20+ vs. Buffalo, week 9) before kickoff. Run once, only on Charlie's go-ahead.
+"""SUPERSEDED by src/ledger/log_wk09_part3.py, do not run. Log part 1's call (Minnesota scores 20+ vs. Buffalo, week 9) before kickoff. Run once, only on Charlie's go-ahead.
 
 The probability is recomputed here from points model v0.1 with data pinned to 2026 week 8, the same inputs the story uses.
 """
