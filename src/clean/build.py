@@ -4,6 +4,7 @@ clean_plays            filtered offensive plays (pass or rush, EPA not null), RE
 clean_drives           one row per offensive drive with points and red-zone flag
 clean_team_week        one row per team-week, offense AND defense side, unfiltered + neutral
 """
+import numpy as np
 import pandas as pd
 
 from src.db import connect, query, write
@@ -40,18 +41,21 @@ def build_plays(con):
 
 
 def build_drives(con):
+    """One row per possession (nflverse fixed_drive). Offensive points count a touchdown only when the offense scored
+    it (td_team == posteam); defensive and return touchdowns are not credited to the offense."""
     d = query("""
-        SELECT season, season_type, week, game_id, posteam, defteam, drive,
-               MAX(fixed_drive_result) AS result, MIN(yardline_100) AS best_yardline
+        SELECT season, season_type, week, game_id, posteam, defteam, fixed_drive AS drive,
+               MAX(fixed_drive_result) AS result, MIN(yardline_100) AS best_yardline,
+               MAX(CASE WHEN touchdown = 1 AND td_team = posteam THEN 1 ELSE 0 END) AS off_td
         FROM raw_pbp
-        WHERE drive IS NOT NULL AND posteam IS NOT NULL AND defteam IS NOT NULL
-        GROUP BY season, season_type, week, game_id, posteam, defteam, drive""", con=con)
+        WHERE fixed_drive IS NOT NULL AND posteam IS NOT NULL AND defteam IS NOT NULL
+        GROUP BY season, season_type, week, game_id, posteam, defteam, fixed_drive""", con=con)
     for c in ("posteam", "defteam"):
         d[c] = d[c].replace(TEAM_NORMALIZE)
-    d["points"] = d.result.map(DRIVE_POINTS).fillna(0).astype(int)
+    d["points"] = np.where(d.off_td == 1, 7, np.where(d.result == "Field goal", 3, 0)).astype(int)
     d["red_zone"] = (d.best_yardline <= 20).astype(int)
-    d["rz_td"] = ((d.red_zone == 1) & (d.result == "Touchdown")).astype(int)
-    return d
+    d["rz_td"] = ((d.red_zone == 1) & (d.off_td == 1)).astype(int)
+    return d.drop(columns="off_td")
 
 
 def side_week(plays, drives, side):
