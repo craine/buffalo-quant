@@ -1,11 +1,11 @@
 # Bills at Vikings: our prediction for Monday night
 
 **Finding: Our model sees a coin flip with a small Buffalo edge. It projects the Bills to score about 23 points and the Vikings
-about 23, and gives Buffalo a 52% chance to win. Strength meets strength on the Bills' side of the ball,
+about 23, and gives Buffalo a 53% chance to win. Strength meets strength on the Bills' side of the ball,
 and the model splits the difference: Buffalo's offense has been the best in football, Minnesota's defense the best at
 stopping it. On the other side, a below-average Vikings offense (1.78 points per drive after our adjustment; league 2.07)
 meets a below-average Bills defense (2.23 allowed). We're putting seven calls on the [Ledger](../ledger.html), every one from
-a model we tested on past games first. One call we planned to make, on sacks, failed its test, so it's out.**
+a kind of model we tested on past games first (one adjustment, swapping in Wentz's numbers, is untested; details below). One call we planned to make, on sacks, failed its test, so it's out.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). This is part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -17,7 +17,7 @@ covered Josh Allen and the Bills offense against Minnesota's defense. Numbers ar
 
 | Call | Our chance | Where it comes from |
 |---|---|---|
-| Bills win (any result, including overtime) | **52%** | Points model, win chance |
+| Bills win (overtime counts; a tie counts as a miss) | **53%** | Points model, win chance |
 | Bills score 20 or more points | **63%** | Points model |
 | Vikings score 20 or more points (from part 1) | **61%** | Points model |
 | Bills' pass plays gain points overall | **57%** | Matchup model |
@@ -30,7 +30,7 @@ covered Josh Allen and the Bills offense against Minnesota's defense. Numbers ar
 "Gain points" and "lose points" mean what part 1 and part 2 explained: every play moves a drive closer to points or further
 away, and we add it up over the night. A team's runs "lose points" if, all added together, its running plays left it worse off
 than when they started. That happens a lot: in the 990 past team-games we tested on (2023-2025), a team's runs lost points overall 64% of the time.
-So 63% for the Bills is actually a vote of confidence in their run game; it's a little *below* the usual rate.
+So 63% for the Bills is about the usual rate, a shade better; the Vikings' 81% is well above it.
 
 **These are our model's numbers.** They count once they're logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
 
@@ -57,25 +57,26 @@ close to simply adding the two strengths together.
 
 ## Who wins?
 
-**Our model gives the Bills a 52% chance and the Vikings 48%.** With the two teams projected less than a point
+**Our model gives the Bills a 53% chance and the Vikings 47%.** With the two teams projected less than a point
 apart, that's close to even.
 
 **Where it comes from.** A projection is never exactly right, so we ask how wrong it tends to be. We took the 1,247 games
 from 2019-2023 the model was built on, and for each one wrote down how far each team's real score landed from its projection.
 Then we replay those 1,247 pairs of misses on top of Monday's two projections, as if this game were played 1,247 times. The
-Bills finish ahead in 52% of them (a tie counts as half for each side, since overtime is close to a coin flip). Keeping each game's two misses
+Bills finish ahead in 53% of them (a game level after regulation counts as half for each side, since overtime is close to a coin flip). On the Ledger, a game that ends
+in a tie counts as a miss for this call. Keeping each game's two misses
 together keeps any link between them; in practice there's almost none (how far one team misses says almost nothing about the other).
 
 ## How we checked it
 
-**The win chance.** Before using it, we had the model give a win chance for every 2024, 2025 and 2026 game (2026 through week 8),
+**The win chance.** Before using it, we had the model give a win chance for every game from week 2 on in 2024, 2025 and 2026 (2026 through week 8),
 617 games it had never seen, using only what was known before kickoff. The team it favored won 63% of the time.
 Just taking the home team every time would have been right 52% of the time. And its percentages mean what they say:
 
 ![Win chance test](wk09c-win-test.png)
 
-When it called a game close (50-60%), the favorite won 58% of the time. When it leaned 60-70%, 65%.
-Our miss score (explained under "For the stat-heads") was 0.227, better than a 50/50 guess on every game (0.249) and better than
+When it called a game close (50-60%), the favorite won 56% of the time. When it leaned 60-70%, 67%.
+Our miss score (explained under "For the stat-heads") was 0.226, better than a 50/50 guess on every game (0.249) and better than
 giving the home team its usual 53% (0.249). Lower is better.
 
 **The points.** The points model was tested the same way in part 1: an average miss of 7.5 points on 1,234 team-games
@@ -87,7 +88,7 @@ what each defense has allowed, and how much a team's games normally swing around
 
 | Kind of call | Our model's miss score | League rate's | Verdict |
 |---|---|---|---|
-| Pass plays gain points | 0.230 | 0.245 | Better, and its percentages held up |
+| Pass plays gain points | 0.230 | 0.245 | Better; its percentages held up in the range where Monday's calls sit |
 | Runs gain or lose points | 0.226 | 0.231 | A little better |
 | Sacks on more than 6% of dropbacks | 0.254 | 0.252 | **Worse. Dropped.** |
 
@@ -102,11 +103,11 @@ happened 46%, on only 52 games). Neither of Monday's run calls is in that range.
 
 ## What the models don't know
 
-- **Wentz.** The points model doesn't know Minnesota changed quarterbacks; its numbers come mostly from Kyler Murray's games. The
+- **Wentz.** The points model doesn't know Minnesota changed quarterbacks; its numbers come mostly from Kyler Murray's games and last season's. The
   Vikings' pass call does swap in Wentz's own numbers (2025 and 2026, 243 dropbacks), but that swap wasn't part of the test above.
-- **Injuries.** Both Bills starting tackles were on this week's injury report. None of our models know who plays; check the final report
+- **Injuries.** Both Bills starting tackles were on this week's injury report (ClutchPoints, Nov. 5). None of our models know who plays; check the final report
   before kickoff.
-- **One game is one game.** A 52% chance means the Bills lose this one about half the time. That's the point of the Ledger: one call
+- **One game is one game.** A 53% chance means the Bills lose this one about half the time. That's the point of the Ledger: one call
   doesn't prove anything, but a season of graded calls does.
 
 ## For the stat-heads
@@ -115,9 +116,9 @@ happened 46%, on only 52 games). Neither of Monday's run calls is in that range.
   season's gap; raw = (league + off gap + def gap) x average pace; calibrated score = 7.07 + 0.679 x raw + 1.45 x home,
   fit on 2019-23. Ranges and 20+ chances use the empirical training residuals.
 - Win chance (points-win-v0.1): 1,247 same-game (home miss, away miss) residual pairs from training, added to Monday's two projections;
-  ties within half a point split 50/50. Residual correlation 0.035. Out of sample (2024-26, n=617): Brier 0.2269 vs 0.2492
+  ties within half a point split 50/50. Residual correlation 0.035. Out of sample (2024-26, n=617): Brier 0.2263 vs 0.2492
   (50/50) and 0.2486 (training home-win rate 0.534). "Miss score" in the story is the Brier score: the average squared gap between
-  the chance we gave and what happened (1 or 0).
+  the chance we gave and what happened (1 or 0); tied test games count as 0.5 there and in the chart, and as misses in "the team it favored won".
 - Matchup model v0.1-locshift (`src/ledger/model_v01.py`): expected = league + 0.5 x (offense gap + defense gap), plus the pooled within-team game-to-game
   spread; P = share of that spread above the threshold. Metrics: EPA per dropback (with scrambles and sacks), EPA per designed rush.
   Bills dropback EPA expected +0.031 (offense +0.309, Vikings defense -0.247, league +0.056);

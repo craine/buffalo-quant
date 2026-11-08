@@ -100,7 +100,7 @@ def matchup_calls():
 def ledger_status():
     from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
     lp = _read(PRED_CSV, PRED_COLS)
-    lp = lp[(lp.game_id == GAME) & lp.model_version.isin([pm.VERSION, WIN_VERSION, V01])] if not lp.empty else lp
+    lp = lp[(lp.game_id == GAME) & lp.model_version.isin([pm.VERSION, WIN_VERSION, V01, V01 + "+qb"])] if not lp.empty else lp
     if len(lp):
         return (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.max()} UTC, before kickoff.** All {len(lp)} calls "
                 "are graded after the game, hit or miss, and stay up either way.")
@@ -114,7 +114,7 @@ def main():
     pb, pmn = P["proj"]["BUF"], P["proj"]["MIN"]
     wt, mae = P["wt"], P["mae"]
     calls = [  # (plain-English call, our chance, which model, test key)
-        ("Bills win (any result, including overtime)", P["p_buf"], "Points model, win chance", "win"),
+        ("Bills win (overtime counts; a tie counts as a miss)", P["p_buf"], "Points model, win chance", "win"),
         ("Bills score 20 or more points", P["p20"]["BUF"], "Points model", "pts"),
         ("Vikings score 20 or more points (from part 1)", P["p20"]["MIN"], "Points model", "pts"),
         ("Bills' pass plays gain points overall", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
@@ -159,7 +159,7 @@ def main():
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Seven calls for Monday night",
-           "Our chance that each one happens. Every one comes from a model we tested on past games before trusting it.",
+           "Our chance that each one happens. Every one comes from a kind of model we tested on past games before trusting it.",
            f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Logged on the Ledger before kickoff.")
     fig.savefig(OUT / "wk09c-calls.png"); plt.close(fig)
 
@@ -190,7 +190,7 @@ about {pmn:.0f}, and gives Buffalo a {P['p_buf']:.0%} chance to win. Strength me
 and the model splits the difference: Buffalo's offense has been the best in football, Minnesota's defense the best at
 stopping it. On the other side, a below-average Vikings offense ({P['off_m']:.2f} points per drive after our adjustment; league {P['lg']:.2f})
 meets a below-average Bills defense ({P['def_b']:.2f} allowed). We're putting seven calls on the [Ledger](../ledger.html), every one from
-a model we tested on past games first. One call we planned to make, on sacks, failed its test, so it's out.**
+a kind of model we tested on past games first (one adjustment, swapping in Wentz's numbers, is untested; details below). One call we planned to make, on sacks, failed its test, so it's out.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). This is part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -209,7 +209,7 @@ covered Josh Allen and the Bills offense against Minnesota's defense. Numbers ar
 "Gain points" and "lose points" mean what part 1 and part 2 explained: every play moves a drive closer to points or further
 away, and we add it up over the night. A team's runs "lose points" if, all added together, its running plays left it worse off
 than when they started. That happens a lot: in the {ru['n']} past team-games we tested on (2023-2025), a team's runs lost points overall {1 - ru['rate']:.0%} of the time.
-So {1 - C['buf_ru']['p']:.0%} for the Bills is actually a vote of confidence in their run game; it's a little *below* the usual rate.
+So {1 - C['buf_ru']['p']:.0%} for the Bills is about the usual rate, a shade better; the Vikings' {1 - C['min_ru']['p']:.0%} is well above it.
 
 {ledger_status()}
 
@@ -242,12 +242,13 @@ apart, that's close to even.
 **Where it comes from.** A projection is never exactly right, so we ask how wrong it tends to be. We took the {wt['n_pairs']:,} games
 from 2019-2023 the model was built on, and for each one wrote down how far each team's real score landed from its projection.
 Then we replay those {wt['n_pairs']:,} pairs of misses on top of Monday's two projections, as if this game were played {wt['n_pairs']:,} times. The
-Bills finish ahead in {P['p_buf']:.0%} of them (a tie counts as half for each side, since overtime is close to a coin flip). Keeping each game's two misses
+Bills finish ahead in {P['p_buf']:.0%} of them (a game level after regulation counts as half for each side, since overtime is close to a coin flip). On the Ledger, a game that ends
+in a tie counts as a miss for this call. Keeping each game's two misses
 together keeps any link between them; in practice there's almost none (how far one team misses says almost nothing about the other).
 
 ## How we checked it
 
-**The win chance.** Before using it, we had the model give a win chance for every 2024, 2025 and 2026 game (2026 through week {THRU}),
+**The win chance.** Before using it, we had the model give a win chance for every game from week 2 on in 2024, 2025 and 2026 (2026 through week {THRU}),
 {wt['n']} games it had never seen, using only what was known before kickoff. The team it favored won {wt['right']:.0%} of the time.
 Just taking the home team every time would have been right {wt['home_won']:.0%} of the time. And its percentages mean what they say:
 
@@ -266,7 +267,7 @@ what each defense has allowed, and how much a team's games normally swing around
 
 | Kind of call | Our model's miss score | League rate's | Verdict |
 |---|---|---|---|
-| Pass plays gain points | {db['brier']:.3f} | {db['brier_base']:.3f} | Better, and its percentages held up |
+| Pass plays gain points | {db['brier']:.3f} | {db['brier_base']:.3f} | Better; its percentages held up in the range where Monday's calls sit |
 | Runs gain or lose points | {ru['brier']:.3f} | {ru['brier_base']:.3f} | A little better |
 | Sacks on more than 6% of dropbacks | {sk['brier']:.3f} | {sk['brier_base']:.3f} | **Worse. Dropped.** |
 
@@ -281,9 +282,9 @@ happened {(ru_hi.happened * ru_hi.n).sum() / ru_hi.n.sum():.0%}, on only {int(ru
 
 ## What the models don't know
 
-- **Wentz.** The points model doesn't know Minnesota changed quarterbacks; its numbers come mostly from Kyler Murray's games. The
+- **Wentz.** The points model doesn't know Minnesota changed quarterbacks; its numbers come mostly from Kyler Murray's games and last season's. The
   Vikings' pass call does swap in Wentz's own numbers (2025 and 2026, {n_db} dropbacks), but that swap wasn't part of the test above.
-- **Injuries.** Both Bills starting tackles were on this week's injury report. None of our models know who plays; check the final report
+- **Injuries.** Both Bills starting tackles were on this week's injury report (ClutchPoints, Nov. 5). None of our models know who plays; check the final report
   before kickoff.
 - **One game is one game.** A {P['p_buf']:.0%} chance means the Bills lose this one about half the time. That's the point of the Ledger: one call
   doesn't prove anything, but a season of graded calls does.
@@ -296,7 +297,7 @@ happened {(ru_hi.happened * ru_hi.n).sum() / ru_hi.n.sum():.0%}, on only {int(ru
 - Win chance ({WIN_VERSION}): {wt['n_pairs']:,} same-game (home miss, away miss) residual pairs from training, added to Monday's two projections;
   ties within half a point split 50/50. Residual correlation {wt['corr']:.3f}. Out of sample (2024-26, n={wt['n']}): Brier {wt['brier']:.4f} vs {wt['brier_half']:.4f}
   (50/50) and {wt['brier_home']:.4f} (training home-win rate {wt['home_rate']:.3f}). "Miss score" in the story is the Brier score: the average squared gap between
-  the chance we gave and what happened (1 or 0).
+  the chance we gave and what happened (1 or 0); tied test games count as 0.5 there and in the chart, and as misses in "the team it favored won".
 - Matchup model {V01} (`src/ledger/model_v01.py`): expected = league + 0.5 x (offense gap + defense gap), plus the pooled within-team game-to-game
   spread; P = share of that spread above the threshold. Metrics: EPA per dropback (with scrambles and sacks), EPA per designed rush.
   Bills dropback EPA expected {C['buf_db']['expected']:+.3f} (offense {C['buf_db']['off_mean']:+.3f}, Vikings defense {C['buf_db']['def_mean']:+.3f}, league {C['buf_db']['league']:+.3f});

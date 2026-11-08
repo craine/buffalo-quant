@@ -25,7 +25,7 @@ def calls():
         ("BUF pass offense", "Bills' pass plays add points overall (EPA per dropback above zero)", "BUF_off_dropback_epa_over", "0.0",
          C["buf_db"]["p"], V01, f"expected={C['buf_db']['expected']:.3f}"),
         ("BUF pass defense", "Vikings' pass plays add points overall (EPA per dropback above zero), with Carson Wentz at QB",
-         "MIN_off_dropback_epa_over", "0.0", C["min_db"]["p"], V01,
+         "MIN_off_dropback_epa_over", "0.0", C["min_db"]["p"], V01 + "+qb",
          f"expected={C['min_db']['expected']:.3f}; Wentz override, {n_db} dropbacks 2025-26"),
         ("BUF run offense", "Bills' designed runs lose points overall (rush EPA below zero)", "BUF_off_rush_epa_under", "0.0",
          1 - C["buf_ru"]["p"], V01, f"expected={C['buf_ru']['expected']:.3f}"),

@@ -156,9 +156,8 @@ def paired_misses(con=None):
 def win_chance(pred_home, pred_away, pairs):
     """Chance the home team wins: replay every training game's pair of misses on top of today's projections.
     A tie after regulation is split 50/50 (overtime)."""
-    hs = pred_home + pairs[:, 0]
-    as_ = pred_away + pairs[:, 1]
-    return float(np.mean(hs > as_) + 0.5 * np.mean(np.isclose(hs, as_, atol=0.5)))
+    d = (pred_home + pairs[:, 0]) - (pred_away + pairs[:, 1])
+    return float(np.mean(d > 0.5) + 0.5 * np.mean(np.abs(d) <= 0.5))
 
 
 def backtest_win(con=None, test=None):

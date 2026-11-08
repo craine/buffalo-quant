@@ -10,7 +10,7 @@
    "Vikings, projected points"
   ]
  ],
- "note": "Bills win 52% of the time in our model. Seven calls go on the Ledger before kickoff; one planned call failed its test and is out.",
+ "note": "Bills win 53% of the time in our model. Seven calls go on the Ledger before kickoff; one planned call failed its test and is out.",
  "explainer": {
   "kicker": "How we checked it",
   "title": "Tested on games it never saw.",
@@ -18,7 +18,7 @@
   "bars": [
    [
     "Our model",
-    0.632
+    0.626
    ],
    [
     "Home team",
