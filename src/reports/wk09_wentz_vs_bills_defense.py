@@ -129,6 +129,18 @@ def main():
                          "[Ledger](../ledger.html) before kickoff, and every logged call is graded after the game.")
 
     pts = lambda v: "0.00" if abs(v) < 0.005 else f"{v:+.2f}"
+    h = lambda v: "0" if abs(v) < 0.005 else f"{v * 100:+.0f}"  # points per 100 plays, for the story body
+    n_games = d[d.defteam == "BUF"].game_id.nunique()
+    extra_short = (bd.short_epa - lgd.short_epa) * bd.n_short
+    # Opponent adjustment (6+ weeks played): what each offense did on short passes in its other games
+    sh = d[d.short]
+    bsh = sh[sh.defteam == "BUF"]
+    exp_adj = 0.0
+    for (gid, off_tm), grp in bsh.groupby(["game_id", "posteam"]):
+        other = sh[(sh.posteam == off_tm) & (sh.game_id != gid)]
+        exp_adj += len(grp) * other.epa.mean()
+    extra_adj = bsh.epa.sum() - exp_adj
+    gain = ep.loc[25, 'ep'] - ep.loc[75, 'ep']
     close25 = p[(p.season == 2025) & p.close & p.short]
     sc = close25.groupby("pid").epa.mean()
     sc = sc[sc.index.isin(pool[2025].index)]
@@ -141,22 +153,22 @@ def main():
               ("Close games only (win chance 10-90%)", "short_epa_close", "deep_epa_close", b_rk["short_close"], b_rk["deep_close"])]
     for ax, (title, s_col, dc, rs, rd) in zip(axes, panels):
         x = np.arange(2); w = 0.36
-        buf = [bd[s_col], bd[dc]]; lg = [lgd[s_col], lgd[dc]]
+        buf = [bd[s_col] * 100, bd[dc] * 100]; lg = [lgd[s_col] * 100, lgd[dc] * 100]
         ax.bar(x - w / 2, buf, w, color=BLUE, label="Bills defense", zorder=2)
         ax.bar(x + w / 2, lg, w, color=GRAY, label="League average", zorder=2)
         for i, (v, r_) in enumerate(zip(buf, (rs, rd))):
-            ax.text(i - w / 2, max(v, 0) + 0.01, f"{pts(v)}\n{ordn(r_)} of 32", ha="center", va="bottom", fontsize=9, color=INK)
+            ax.text(i - w / 2, max(v, 0) + 1, f"{h(v / 100)}\n{ordn(r_)} of 32", ha="center", va="bottom", fontsize=9, color=INK)
         for i, v in enumerate(lg):
-            ax.text(i + w / 2, v + 0.01, f"{pts(v)}", ha="center", va="bottom", fontsize=9, color=MUTED)
+            ax.text(i + w / 2, v + 1, f"{h(v / 100)}", ha="center", va="bottom", fontsize=9, color=MUTED)
         ax.set_xticks(x, ["Short throws\n(under 20 yards in the air)", "Deep throws\n(20+ yards)"], fontsize=9.5)
         ax.axhline(0, color=INK, lw=1); ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", color=INK)
         ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    axes[0].set_ylabel("Points added per throw (lower = better defense)")
+    axes[0].set_ylabel("Points per 100 throws (lower = better defense)")
     axes[0].legend(frameon=False, fontsize=9, loc="upper left")
     hi = max(D[["short_epa", "deep_epa", "short_epa_close", "deep_epa_close"]].loc["BUF"].max(), lgd.deep_epa, lgd.deep_epa_close)
-    axes[0].set_ylim(min(0, bd.deep_epa_close) - 0.08, hi + 0.18)
+    axes[0].set_ylim((min(0, bd.deep_epa_close) - 0.08) * 100, (hi + 0.18) * 100)
     finish(fig, "The Bills bend most on short throws",
-           f"Points added per pass attempt against the Bills vs. the league average, 2026 through week {THRU}. 1st = best defense.",
+           f"What every 100 throws were worth to the offense, against the Bills vs. an average defense. 2026 through week {THRU}. 1st = best defense.",
            f"Bills: {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts faced. Both deep samples are small ({int(bd.n_deep)} all plays, {n_deep_close} in close games).")
     fig.savefig(OUT / "wk09a-bills-short-deep.png"); plt.close(fig)
 
@@ -184,7 +196,8 @@ def main():
     md = f"""# Carson Wentz vs. the Bills defense: short passes, sacks and risky throws
 
 **Finding: Compared with the rest of the league, the Bills' defense is weakest on short passes, the ones thrown less than 20 yards downfield. They rank
-{ordn(b_rk['short'])} of 32 there, and {ordn(b_rk['short_close'])} with garbage time removed. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
+{ordn(b_rk['short'])} of 32 there, and {ordn(b_rk['short_close'])} with garbage time removed. Even accounting for the offenses they've faced, short passes have been worth about
+{extra_adj:.0f} more points to opponents than you'd expect against an average defense, roughly {extra_adj / n_games:.0f} a game. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
 on {1 - w25.deep_share:.0%} of his attempts last season. But Wentz brings two weak spots of his own. He was sacked on {w25.sk:.1%} of his dropbacks, the
 {ordn(sk_most)}-highest rate among {n_pool[2025]} quarterbacks, and his share of throws that should have been intercepted was the {ordn(intw_most)}-highest.**
 
@@ -194,11 +207,14 @@ since he has dropped back only {int(w26.db)} times this year.*
 
 ![Bills short vs deep](wk09a-bills-short-deep.png)
 
-## How we measure it: points per play
+## How we measure it: what a play is worth
 
-Every play changes how many points a drive is worth. 1st-and-10 at your own 25 is worth about **{ep.loc[75, 'ep']:.1f} points**
-on average; at the opponent's 25, about **{ep.loc[25, 'ep']:.1f}**. On 3rd-and-8, a quarterback who converts adds about
-**{third.loc['conv', 'epa']:+.1f} points**, and one who gets sacked costs his team about **{abs(third.loc['sack', 'epa']):.1f}**.
+Nobody scores on every play, so how can a short pass be "worth" points? Because every play moves a drive closer to
+points or further away. Since 2018, 1st-and-10 at your own 25 has been worth about **{ep.loc[75, 'ep']:.1f} points**: that's the
+average of the next score in the half, with the other team's scores counted as minus points (so a punt that hands them good
+field position counts against you). 1st-and-10 at the opponent's 25 has been worth about **{ep.loc[25, 'ep']:.1f}**. So a pass that moves
+the ball from one spot to the other is worth about **{gain:.0f} points**, even though nobody has scored yet. On 3rd-and-8, a
+conversion is worth about **{third.loc['conv', 'epa']:+.1f} points**, and a sack costs about **{abs(third.loc['sack', 'epa']):.1f}**.
 
 ![Points per play](wk09-points-per-play.png)
 
@@ -207,22 +223,27 @@ blitzes and risky throws we add charting from FTN Data, whose analysts watch eve
 feed doesn't, like how many defenders rushed and whether a throw should have been picked off.
 
 **The math:** take what the drive was worth after the play, subtract what it was worth before, and that's the play's
-value. Average it over many plays and you get **points added per play**. A good defense keeps that number low.
+value. Add up 100 plays and you get **points per 100 plays**, a fair way to compare teams that run different numbers
+of plays. A good defense keeps that number low. It adds up fast: the Bills give up about {(bd.short_epa - lgd.short_epa) * 100:.0f} more points per 100 short
+passes than average and face about {bd.n_short / n_games:.0f} a game, which works out to about {extra_short / n_games:.0f} points a game. Part of that is the schedule:
+the offenses Buffalo has played have also been good on short passes in their other games. Measured against what those same
+offenses did elsewhere, the gap is about {extra_adj:.0f} points, or {extra_adj / n_games:.0f} a game. That's the number we lead with.
 
 **How we checked it:** we ran the efficiency numbers two ways, on all plays and on close-game plays only (when either team
 had between a 10% and 90% chance to win), so a few blowout drives can't drive the story. Where the two disagree, we say so.
 
 ## Where the Bills bend: short throws
 
-Against short throws, the Bills allow **{pts(bd.short_epa)} points per attempt** ({ordn(b_rk['short'])} of 32; league average {pts(lgd.short_epa)}). The
-second check agrees: in close games it's {pts(bd.short_epa_close)} ({ordn(b_rk['short_close'])}), and they give up {bd.short_ypa:.1f} yards per short attempt
+Every 100 short passes against an average defense are worth about **{h(lgd.short_epa)} points** to the offense. Against the Bills,
+**{h(bd.short_epa)}**, {ordn(b_rk['short'])} of 32. Over the {int(bd.n_short)} short passes they've faced in {n_games} games, that's about {extra_short:.0f} points of value more than an
+average defense would have given up ({extra_adj:.0f} after adjusting for the offenses they've faced). The second check agrees: in close games it's {h(bd.short_epa_close)} per 100 ({ordn(b_rk['short_close'])}), and they give up {bd.short_ypa:.1f} yards per short attempt
 ({ordn(b_rk['short_ypa'])}; league {lgd.short_ypa:.1f}).
 
 Deep throws are a different story. Opponents have tried them on only {bd.deep_share:.1%} of attempts against Buffalo
-({ordn(b_rk['deep_share'])}-fewest), and in close games the Bills have allowed {pts(bd.deep_epa_close)} points per deep throw, {ordn(b_rk['deep_close'])} in the league
-(league average {pts(lgd.deep_epa_close)}; only {n_deep_close} attempts, a small sample). Counting blowouts they're {ordn(b_rk['deep'])}, but that's only {int(bd.n_deep)} deep attempts.
+({ordn(b_rk['deep_share'])}-fewest), and in close games those deep throws have been worth {h(bd.deep_epa_close)} points per 100 against the Bills, {ordn(b_rk['deep_close'])} in the league
+(league average {h(lgd.deep_epa_close)}; only {n_deep_close} attempts, a small sample). Counting blowouts they're {ordn(b_rk['deep'])}, but that's only {int(bd.n_deep)} deep attempts.
 
-Overall the Bills rank {ordn(bdt.dropback_epa_rk)} against the pass ({pts(bdt.dropback_epa)} points per dropback; league {pts(bdt.dropback_epa_lg)}), give up 20-yard plays on {bd.expl:.1%} of dropbacks ({ordn(b_rk['expl'])}; league {lgd.expl:.1%}),
+Overall the Bills rank {ordn(bdt.dropback_epa_rk)} against the pass ({h(bdt.dropback_epa)} points per 100 dropbacks; league {h(bdt.dropback_epa_lg)}), give up 20-yard plays on {bd.expl:.1%} of dropbacks ({ordn(b_rk['expl'])}; league {lgd.expl:.1%}),
 and allow third-down conversions {t3.loc['BUF', 'r']:.0%} of the time ({ordn(t3_rk)}; league {t3.c.sum() / t3.n.sum():.0%}).
 
 ## What Wentz brings
@@ -230,19 +251,20 @@ and allow third-down conversions {t3.loc['BUF', 'r']:.0%} of the time ({ordn(t3_
 | | Wentz 2025 | Wentz 2026 | Murray 2026 | League 2026 |
 |---|---|---|---|---|
 | Dropbacks | {int(w25.db)} | {int(w26.db)} (small sample) | {int(m26.db)} | |
-| Points added per dropback, all plays | {pts(w25.epa)} | {pts(w26.epa)} | {pts(m26.epa)} ({ordn(m_rk)} of {n_pool[SEASON]}) | {pts(lgq[SEASON].epa)} |
-| Points added per dropback, close games | {pts(w25.epa_close)} | {pts(w26.epa_close)} | {pts(m26.epa_close)} ({ordn(m_rk_close)}) | {pts(lgq[SEASON].epa_close)} |
+| Points per 100 dropbacks, all plays | {h(w25.epa)} | {h(w26.epa)} | {h(m26.epa)} ({ordn(m_rk)} of {n_pool[SEASON]}) | {h(lgq[SEASON].epa)} |
+| Points per 100 dropbacks, close games | {h(w25.epa_close)} | {h(w26.epa_close)} | {h(m26.epa_close)} ({ordn(m_rk_close)}) | {h(lgq[SEASON].epa_close)} |
 | Sacked | {w25.sk:.1%} | {w26.sk:.1%} | {m26.sk:.1%} | {lgq[SEASON].sk:.1%} |
 | Share of throws 20+ yards downfield | {w25.deep_share:.1%} | {w26.deep_share:.1%} | {m26.deep_share:.1%} | {lgq[SEASON].deep_share:.1%} |
 | Throws that should have been intercepted | {w25.intw:.1%} | {w26.intw:.1%} | {m26.intw:.1%} | {lgq[SEASON].intw:.1%} |
 
-League averages for 2025: {pts(lgq[2025].epa)} per dropback, {pts(lgq[2025].epa_close)} in close games, sacked {lgq[2025].sk:.1%}, deep share {lgq[2025].deep_share:.1%},
+League averages for 2025: {h(lgq[2025].epa)} points per 100 dropbacks, {h(lgq[2025].epa_close)} in close games, sacked {lgq[2025].sk:.1%}, deep share {lgq[2025].deep_share:.1%},
 should-have-been-intercepted {lgq[2025].intw:.1%}.
 
 Two things stand out.
 
 **Wentz looks better overall than in close games.** Counting every play, he was about league average last season
-({pts(w25.epa)} per dropback; league {pts(lgq[2025].epa)}). With garbage time removed he drops to {pts(w25.epa_close)}, {ordn(w_rk['epa_close'])} of {n_pool[2025]}.
+({h(w25.epa)} points per 100 dropbacks; league {h(lgq[2025].epa)}). With garbage time removed he drops to {h(w25.epa_close)}, {ordn(w_rk['epa_close'])} of {n_pool[2025]}, meaning that when games were close his
+dropbacks moved his team further from points, not closer.
 Some of his best numbers came when games were already decided ({int(w25.db - w25.n_close)} dropbacks outside close games, a small sample). Murray this year was {ordn(m_rk)} of {n_pool[SEASON]} overall and {ordn(m_rk_close)} in close
 games. By these numbers, neither has been an above-average passer when the game is still in doubt.
 
@@ -259,10 +281,11 @@ them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025
   That's where we'd expect the Vikings to attack.
 - **The Bills blitz a lot without getting home.** Buffalo sends extra rushers on {bd.blitz:.0%} of dropbacks ({ordn(b_rk['blitz'])}-most), but
   gets sacks on only {bd.sk_blitz:.1%} of those plays (league {lgd.sk_blitz:.1%}) and {bd.sk_noblitz:.1%} without a blitz (league {lgd.sk_noblitz:.1%}).
-  Wentz's sack habit is the best chance for that to change. Against the blitz last season, his points per dropback ranked
-  {ordn(rank(pool[2025]['epa_blitz'], WENTZ, False))} of {n_pool[2025]}, on only {int(w25.n_blitz)} plays.
-- **The ground game shouldn't scare anyone.** Minnesota's designed runs rank {ordn(mo.rush_epa_rk)} ({pts(mo.rush_epa)} per run); the Bills' run defense
-  ranks {ordn(bdt.rush_epa_rk)} ({pts(bdt.rush_epa)} allowed, right around the league average of {pts(mo.rush_epa_lg)}).
+  Wentz's sack habit is the best chance for that to change. Against the blitz last season, his dropbacks ranked
+  {ordn(rank(pool[2025]['epa_blitz'], WENTZ, False))} of {n_pool[2025]} for value, on only {int(w25.n_blitz)} plays.
+- **The ground game shouldn't scare anyone.** The average run costs a team a little, because short gains on early downs don't move a drive
+  much closer to points. Minnesota's designed runs rank {ordn(mo.rush_epa_rk)}: every 100 have cost the Vikings about {abs(mo.rush_epa) * 100:.0f} points (league average: about {abs(mo.rush_epa_lg) * 100:.0f}).
+  The Bills' run defense ranks {ordn(bdt.rush_epa_rk)}, right around average (runs against Buffalo have lost the offense about {abs(bdt.rush_epa) * 100:.0f} points per 100, the league norm).
 - **Turnovers.** Buffalo forces turnovers on {bd.to:.1%} of dropbacks ({ordn(b_rk['to'])}; league {lgd.to:.1%}). That's about average. If Wentz keeps
   putting the ball in harm's way, Monday is a chance for that number to go up.
 
@@ -272,8 +295,8 @@ them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025
 
 | # | What we expect | Chance |
 |---|---|---|
-| 1 | Minnesota's pass plays add points overall (more than zero points per dropback; the league average is {pts(mo.dropback_epa_lg)}) | **{c1['p']:.0%}** |
-| 2 | Minnesota's designed runs lose points overall (less than zero per run; the league average is {pts(mo.rush_epa_lg)}) | **{1 - c2['p']:.0%}** |
+| 1 | On balance, Minnesota's pass plays move the Vikings closer to points, not further away (above zero per 100 dropbacks; the per-team league average is {h(mo.dropback_epa_lg)}) | **{c1['p']:.0%}** |
+| 2 | On balance, Minnesota's designed runs move the Vikings further from points (below zero per 100 runs; the league average is {h(mo.rush_epa_lg)}) | **{1 - c2['p']:.0%}** |
 | 3 | The Bills sack the quarterback on more than 6% of his dropbacks | **{c3['p']:.0%}** |
 
 How we get these: start from each side's season average, pull it halfway back toward the league average (seven games is a
@@ -282,7 +305,9 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
 
 ## For the stat-heads
 
-- Points added = EPA (nflverse expected points). Dropbacks: `qb_dropback == 1`, EPA not null, no two-point tries, QB by
+- Points per 100 plays = mean EPA (nflverse expected points added) x 100. Opponent-adjusted short-pass gap: Buffalo's short-pass EPA
+  allowed minus, game by game, the opponent's short-pass EPA per attempt in its other 2026 games times its short attempts vs. Buffalo
+  (raw gap vs. league average: {extra_short:.1f}; adjusted: {extra_adj:.1f}). Dropbacks: `qb_dropback == 1`, EPA not null, no two-point tries, QB by
   gsis id via `COALESCE(passer_player_id, rusher_player_id)` (scrambles included). Short/deep: pass attempts excluding
   sacks, `air_yards` < 20 vs >= 20. Close games: `wp` between 0.10 and 0.90. Regular season; 2026 through week {THRU}.
 - QB ranks among quarterbacks with {MIN_DB}+ dropbacks ({n_pool[2025]} in 2025, {n_pool[SEASON]} in 2026). League values in the QB table are
@@ -304,10 +329,10 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
         "note": (f"With garbage time removed the Bills are still {ordn(b_rk['short_close'])}. Wentz was sacked on {w25.sk:.1%} of dropbacks last "
                  f"season, the {ordn(sk_most)}-highest rate among {n_pool[2025]} QBs."),
         "explainer": {
-            "kicker": "How we know", "title": "Every play is worth points.",
-            "text": (f"We judge every snap by how many points it adds to or takes away from the drive. On 3rd-and-8, a "
-                     f"conversion adds about {third.loc['conv', 'epa']:+.1f} points; a sack costs about {abs(third.loc['sack', 'epa']):.1f}. "
-                     f"Here's what 1st-and-10 is worth depending on where you start."),
+            "kicker": "How we know", "title": "Nobody scores every play. Every play still counts.",
+            "text": (f"Each snap moves a drive closer to points or further away. 1st-and-10 at your own 25 is worth about "
+                     f"{ep.loc[75, 'ep']:.1f} points on average; at the opponent's 25, about {ep.loc[25, 'ep']:.1f}. A pass that gets "
+                     f"you from one to the other is worth the difference. Here's what 1st-and-10 is worth by field position."),
             "fmt": "pts",
             "bars": [["Own 25", round(float(ep.loc[75, 'ep']), 2)], ["Midfield", round(float(ep.loc[50, 'ep']), 2)],
                      ["Opp. 25", round(float(ep.loc[25, 'ep']), 2)], ["Opp. 10", round(float(ep.loc[10, 'ep']), 2)]]},
