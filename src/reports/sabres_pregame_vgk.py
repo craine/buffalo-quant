@@ -4,6 +4,7 @@ Writes reports/2026-11-08-sabres-vgk-pregame.md, two PNGs and a hero JSON. Expec
 Win chance from nhl_game_model v0.1, tested on 2025-26 and 2026-27 games it never saw.
 """
 import json
+import re
 
 import matplotlib
 matplotlib.use("Agg")
@@ -177,7 +178,7 @@ def main(as_of=AS_OF):
            f"2026-27 through {pd.to_datetime(last_date):%b. %-d}. Unblocked shots, empty net excluded.")
     fig.savefig(OUT / "sabres-vgk-rebounds.png"); plt.close(fig)
 
-    gk_rows = "\n".join(f"| {'Sabres' if r.opp == US else 'Golden Knights'} | {r['name']} | {int(r.gp)} | {r.sv:.3f} | {r.gsax:+.1f} ({ordn(r.rk)} of {n_gk}) |"
+    gk_rows = "\n".join(f"| {'Sabres' if r.opp == US else 'Golden Knights'} | [{r['name']}](../cards/{re.sub(r'[^a-z0-9]+', '-', r['name'].lower()).strip('-')}.html) | {int(r.gp)} | {r.sv:.3f} | {r.gsax:+.1f} ({ordn(r.rk)} of {n_gk}) |"
                         for _, r in pd.concat([bg, vg]).iterrows())
     rb_rk_f, rb_rk_a = rk("reb_f_pg", US), rk("reb_a_pg", THEM, high_good=False)
     tie5 = "tied for " if (t.close_a_pg.round(4) == round(v.close_a_pg, 4)).sum() > 1 else ""
@@ -234,8 +235,8 @@ matchup to watch.
 
 ## In goal
 
-Goals saved compared with an average goalie facing the same shots. Positive is good. Each goalie also has a
-[card](../cards/) with his season-by-season record.
+Goals saved compared with an average goalie facing the same shots. Positive is good. Tap a name for
+that goalie's card, with his season-by-season record.
 
 | Team | Goalie | Games | Save rate | Goals saved vs. average |
 |---|---|---|---|---|

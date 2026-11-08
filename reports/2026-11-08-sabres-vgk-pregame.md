@@ -51,15 +51,15 @@ matchup to watch.
 
 ## In goal
 
-Goals saved compared with an average goalie facing the same shots. Positive is good. Each goalie also has a
-[card](../cards/) with his season-by-season record.
+Goals saved compared with an average goalie facing the same shots. Positive is good. Tap a name for
+that goalie's card, with his season-by-season record.
 
 | Team | Goalie | Games | Save rate | Goals saved vs. average |
 |---|---|---|---|---|
-| Sabres | Ukko-Pekka Luukkonen | 11 | 0.878 | -0.5 (38th of 75) |
-| Sabres | Colten Ellis | 6 | 0.891 | +2.2 (20th of 75) |
-| Golden Knights | Carter Hart | 10 | 0.900 | +1.8 (21st of 75) |
-| Golden Knights | Adin Hill | 8 | 0.895 | -1.8 (55th of 75) |
+| Sabres | [Ukko-Pekka Luukkonen](../cards/ukko-pekka-luukkonen.html) | 11 | 0.878 | -0.5 (38th of 75) |
+| Sabres | [Colten Ellis](../cards/colten-ellis.html) | 6 | 0.891 | +2.2 (20th of 75) |
+| Golden Knights | [Carter Hart](../cards/carter-hart.html) | 10 | 0.900 | +1.8 (21st of 75) |
+| Golden Knights | [Adin Hill](../cards/adin-hill.html) | 8 | 0.895 | -1.8 (55th of 75) |
 
 Ranks are among all 75 goalies who have played this season. Buffalo has switched goalies every game for its last four, which points
 to Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we

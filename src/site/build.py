@@ -126,6 +126,11 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .gb th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 2px;border-bottom:2px solid var(--tc)}
 .gb th:first-child,.gb td:first-child{text-align:left}.gb td{text-align:right;padding:5px 2px;border-bottom:1px solid var(--line)}
 .gb p{margin:10px 0 0;line-height:1.45;color:#3B4150}
+
+.cards.one{grid-template-columns:minmax(260px,330px)}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0 26px}
+.pcard{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-left:10px solid var(--tc);border-radius:10px;padding:12px 16px;text-decoration:none;color:var(--ink)}
+.pcard:hover{border-color:var(--tc)}.pn{font-size:30px;font-weight:900;color:var(--ta);min-width:44px;text-align:center}.pm{font-size:14px;color:#4A5160}.pm b{color:var(--ink);font-size:16px}
 """
 
 import hashlib
@@ -331,6 +336,44 @@ def spark_svg(vals, color):
             f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.5" fill="{color}"/></svg>')
 
 
+def card_slug(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def card_tile(c, m):
+    tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+    sign = lambda v: f"{v:+.1f}"
+    rows = "".join(f"<tr><td>{r['season']}</td><td>{r['team']}</td><td>{r['gp']}</td><td>{r['sog']}</td>"
+                   f"<td>{r['sv']:.3f}</td><td>{sign(r['gsax'])}</td></tr>" for r in c["seasons"])
+    close = (f"{c['close_sv']:.3f}" if c["close_sv"] is not None else "&ndash;")
+    return f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
+<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
+<div class="gname">{html.escape(c['name'])}</div><div class="gpos">GOALIE</div>
+<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> goalies this season</div></div>
+<div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['sv']:.3f}</b><span>Save rate</span></div><div><b>{close}</b><span>Close-in save</span></div></div>
+<div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game (dashed line = average)</small></div>
+{'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
+<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>Games</th><th>Shots</th><th>Save</th><th>vs. Avg</th></tr>{rows}</table>
+<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
+pulls toward average, so a hot or cold dozen games doesn't take over.</p>
+<p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
+League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>"""
+
+
+def card_howto(m):
+    return f"""<h2>How to read a card</h2>
+<p><b>Goals saved vs. an average goalie</b> is the big number. Every shot that reaches the net or misses it has a chance of going in, based on
+where it came from and what kind of shot it was. Add up those chances on every shot a goalie faced and you get how many goals an average goalie
+would have allowed. Subtract the goals he actually allowed. Positive means he stopped more than an average goalie would have.</p>
+<p><b>Save rate</b> is the share of shots on goal he stopped; the league's is {m['lg_sv']:.3f} this season. <b>Close-in save</b> is the same for
+shots from within 20 feet, the hardest ones; the league's is {m['lg_close_sv']:.3f}.</p>
+<p><b>The blended rating</b> on the back answers "how good is he, really?" It adds this season's shots to half the weight of his shots from past
+seasons (back to 2023-24), plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots
+pile up, they take over.</p>
+<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
+<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
+
+
 def build_cards():
     import json
     src = ROOT / "reports" / "cards" / "goalies.json"
@@ -340,40 +383,36 @@ def build_cards():
         return
     d = json.loads(src.read_text())
     m = d["meta"]
-    tiles = []
+    asof = datetime.strptime(m["as_of"], "%Y-%m-%d").strftime("%B %-d, %Y")
+    groups = {}
     for c in d["cards"]:
+        slug = card_slug(c["name"])
         tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
-        sign = lambda v: f"{v:+.1f}"
-        rows = "".join(f"<tr><td>{r['season']}</td><td>{r['team']}</td><td>{r['gp']}</td><td>{r['sog']}</td>"
-                       f"<td>{r['sv']:.3f}</td><td>{sign(r['gsax'])}</td></tr>" for r in c["seasons"])
-        close = (f"{c['close_sv']:.3f}" if c["close_sv"] is not None else "&ndash;")
-        tiles.append(f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
-<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
-<div class="gname">{html.escape(c['name'])}</div><div class="gpos">GOALIE</div>
-<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> goalies this season</div></div>
-<div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['sv']:.3f}</b><span>Save rate</span></div><div><b>{close}</b><span>Close-in save</span></div></div>
-<div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game</small></div>
-{'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
-<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>Games</th><th>Shots</th><th>Save</th><th>vs. Avg</th></tr>{rows}</table>
-<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
-pulls toward average, so a hot or cold dozen games doesn't take over.</p>
-<p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
-League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>""")
-    body = f"""<div class="kicker">Player cards</div><h1>Goalie cards</h1>
-<p class="dek">Every goalie who has played this season for the {' and the '.join(TEAM_COLORS[t][2].title() for t in m['teams'])}. Tap a card to flip it.
-Numbers through {datetime.strptime(m['as_of'], '%Y-%m-%d').strftime('%B %-d, %Y')}; they update as the season goes.</p>
-<div class="cards">{''.join(tiles)}</div>
-<h2>How to read a card</h2>
-<p><b>Goals saved vs. an average goalie</b> is the big number. Every shot has odds of going in, based on where it came from and what kind
-of shot it was. Add up the odds on every shot a goalie faced and you get how many goals an average goalie would have allowed.
-Subtract the goals he actually allowed. Positive means he stopped more than an average goalie would have.</p>
-<p><b>Save rate</b> is the share of shots on goal he stopped; the league's is {m['lg_sv']:.3f} this season. <b>Close-in save</b> is the same for
-shots from within 20 feet, the hardest ones; the league's is {m['lg_close_sv']:.3f}.</p>
-<p><b>The blended rating</b> on the back answers "how good is he, really?" It adds this season's shots to half the weight of his
-shots from past seasons (back to 2023-24), plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots pile up, they take over.</p>
-<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
-<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
-    (out / "index.html").write_text(page("Goalie cards | Buffalo Quant Desk", body, "Cards", 1, "Goalie cards: goals saved vs. an average goalie, with receipts."))
+        close_n = f" on {c['close_sog']} close-in shots" if c["close_sog"] else ""
+        body = f"""<div class="kicker"><a href="index.html">Player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
+<p class="dek">Goalie, {tname.title()}. {sign_txt(c['gsax'])} goals saved compared with an average goalie this season, {c['rk']} of {c['of']}
+goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {asof}.</p>
+<div class="cards one">{card_tile(c, m)}</div>
+<h2>This season</h2><ul class="rules">
+<li><b>Save rate {c['sv']:.3f}</b>; an average goalie facing his shots would be at {c['xsv']:.3f}. League: {m['lg_sv']:.3f}.</li>
+<li><b>Close-in save rate {c['close_sv']:.3f}</b>{close_n}. League: {m['lg_close_sv']:.3f}.</li>
+<li><b>Blended rating {c['blend']:+.2f}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
+{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}</ul>
+{card_howto(m)}"""
+        (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
+                                               f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))
+        groups.setdefault(tname.title(), []).append(
+            f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
+            f'<span class="pm"><b>{html.escape(c["name"])}</b><br>Goalie &middot; {sign_txt(c["gsax"])} goals saved vs. average</span></a>')
+    lists = "".join(f'<h2>{team}</h2><div class="plist">{"".join(items)}</div>' for team, items in groups.items())
+    body = f"""<div class="kicker">Player cards</div><h1>Player cards</h1>
+<p class="dek">One card per player, built from every shot and updated as the season goes. Goalies first; skaters and the Bills are next.
+Numbers through {asof}.</p>{lists}"""
+    (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
+
+
+def sign_txt(v):
+    return f"{v:+.1f}"
 
 
 def main():
