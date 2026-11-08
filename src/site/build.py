@@ -153,7 +153,9 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
-Buffalo Sabres, the NFL or the NHL.</div></footer></body></html>"""
+Buffalo Sabres, the NFL or the NHL.</div></footer>
+<!-- Cloudflare Web Analytics: cookie-free page counts --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{{"token": "a26a7c50a2a7415992abfa6838b4ebd6"}}'></script>
+</body></html>"""
 
 
 def md_to_html(text):
