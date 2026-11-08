@@ -13,8 +13,8 @@
  "note": "Close to a coin flip: our model expects 3.3 goals for Vegas, 3.0 for Buffalo. Rebounds go in 11.5% of the time, about 1.8 times the rate of other shots.",
  "explainer": {
   "kicker": "How we know",
-  "title": "Every shot has odds.",
-  "text": "A shot from within 10 feet went in 13.8% of the time over the last three seasons; from 60 feet or more, 0.8%. Add up the odds on every shot and you get what a team's chances were worth in goals.",
+  "title": "Every shot has a chance of going in.",
+  "text": "A shot from within 10 feet went in 13.8% of the time over the last three seasons; from 60 feet or more, 0.8%. Add up those chances on every shot and you get what a team's chances were worth in goals.",
   "fmt": "pct",
   "bars": [
    [

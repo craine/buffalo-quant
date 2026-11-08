@@ -132,7 +132,7 @@ def main(as_of=AS_OF):
     ax.set_xticks(xs, [f"Favorite given {c[0]}\n({c[3]} games)" for c in calb], fontsize=9.5)
     ax.set_ylim(0, 0.9); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.legend(frameon=False, fontsize=9, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Tested on a season it never saw, the model's chances mostly held up",
+    finish(fig, "Tested on 2025-26 games, the model's chances mostly held up",
            f"Every 2025-26 game ({bt[20252026]['n']:,}), predicted using only what was known before each game.",
            f"NHL game model {gmod.VERSION}, fit on 2023-24 and 2024-25.")
     fig.savefig(OUT / "sabres-vgk-model-test.png"); plt.close(fig)
@@ -195,12 +195,12 @@ Our model gives Vegas a {1 - p_b:.0%} chance to win and Buffalo {p_b:.0%}.**
 
 ## How we measure "chances"
 
-Every shot has odds of going in, based on where it was taken and what kind of shot it was. Over the last three seasons
+Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Over the last three seasons
 ({n_pri:,} unblocked shots), a shot from within 10 feet went in {close10:.1%} of the time; one from 60 feet or more, {far60:.1%}. Add
-up the odds on every shot and you get what a team's chances were worth in goals.
+up those chances on every shot and you get what a team's chances were worth in goals.
 
-**The source:** the NHL's own play-by-play feed, which records where every shot came from. **The math:** each shot's odds
-come from our model, built on past seasons and checked on a season it never saw; we nudge each season's totals so the
+**The source:** the NHL's own play-by-play feed, which records where every shot came from. **The math:** each shot's chance
+comes from our model, built on past seasons and tested on a season it hadn't seen before we added that season in; we nudge each season's totals so the
 league's chances add up to the league's real goals. **How we checked it:** the full explanation, with the chart, is in our
 story on [last year's 50-win season](sabres-50-win-mirage.html).
 
@@ -263,15 +263,18 @@ are split the way they went for home teams in past overtimes and shootouts ({p_o
 ![Model test](sabres-vgk-model-test.png)
 
 **How we checked it.** We built the model on the 2023-24 and 2024-25 seasons, then had it call every 2025-26 game using only
-what was known before each game. It picked the winner {bt[20252026]['right']:.0%} of the time; picking the home team every time would have been right
-{bt[20252026]['home_obs']:.0%}. Its percentages were also closer to what actually happened than two simple guesses, giving every home team
+what was known before each game. It called the winner {bt[20252026]['right']:.0%} of the time; choosing the home team every time would have been right
+{bt[20252026]['home_obs']:.0%}. (The shot model behind the chances was later refit with 2025-26 included; re-running this test with a
+version that never saw 2025-26 gave the same results.) Its percentages were also closer to what actually happened than two simple guesses, giving every home team
 its usual edge or going by the teams' records, though not by much: a hockey game is close to a coin flip, and no model changes that.
-This season so far ({bt[SEASON]['n']} games) it has picked {bt[SEASON]['right']:.0%}. When it made a team a 60-65% favorite in 2025-26, that team won
-{calb[2][2]:.0%} of the time. But its slight favorites, given 50-55%, won only {calb[0][2]:.0%}: a coin flip. Sunday's call is in that range,
+This season so far ({bt[SEASON]['n']} games) it has called {bt[SEASON]['right']:.0%} right; home teams have won {bt[SEASON]['home_obs']:.0%}. When it made a team a 60-65% favorite in 2025-26, that team won
+{calb[2][2]:.0%} of the time. But the teams it favored slightly, at 50-55%, won {calb[0][2]:.0%}, no better than a coin flip, and at 55-60% they won {calb[1][2]:.0%}. Sunday's call is in that range,
 so read it as "slight lean Vegas," not "Vegas should win."
 
 **What it doesn't know: goalies.** The model rates teams by the chances they create and allow, not by who's in net. Buffalo's
-expected starter, Colten Ellis, has been better than average this season; Vegas's starter wasn't named when we published.
+expected starter, Colten Ellis, has saved {bg[bg.name == 'Colten Ellis'].gsax.sum():.1f} more goals than an average goalie would have this season; if Vegas starts Adin Hill
+({vg[vg.name == 'Adin Hill'].gsax.sum():+.1f}), the goalie matchup leans Buffalo in a way the model doesn't count. Small samples on both sides, and
+Vegas's starter wasn't named when we published.
 
 ## What to watch
 
@@ -293,8 +296,9 @@ expected starter, Colten Ellis, has been better than average this season; Vegas'
   league + {gmod.PRIOR_KEEP} x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
   {coef[0]:.3f} + {coef[1]:.3f} x that + {coef[2]:.3f} x home (fit 2023-25); independent Poisson; regulation ties to home at {p_ot:.3f}.
   Brier: 2025-26 {bt[20252026]['brier']:.4f} (home-team rate {bt[20252026]['b_home']:.4f}, record log5 {bt[20252026]['b_rec']:.4f}, coin 0.25);
-  2026-27 to date {bt[SEASON]['brier']:.4f} ({bt[SEASON]['b_home']:.4f}, {bt[SEASON]['b_rec']:.4f}). Settings picked on 2024-25 only
-  (`scripts/tune_nhl_game_model.py`). Goalies not in the model.
+  2026-27 to date {bt[SEASON]['brier']:.4f} ({bt[SEASON]['b_home']:.4f}, {bt[SEASON]['b_rec']:.4f}). Settings chosen on 2024-25 only
+  (`scripts/tune_nhl_game_model.py`). Goalies not in the model. The xG model's final fit includes 2025-26; with xG fit on 2023-25 only,
+  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's call unchanged (46.1%).
 """
     (OUT / "2026-11-08-sabres-vgk-pregame.md").write_text(md)
     (OUT / "2026-11-08-sabres-vgk-pregame.hero.json").write_text(json.dumps({
@@ -303,9 +307,9 @@ expected starter, Colten Ellis, has been better than average this season; Vegas'
                 [f"{b.reb_f_pg:.1f}", f"Sabres rebound shots a game ({ordn(rb_rk_f)} of 32)"]],
         "note": (f"Close to a coin flip: our model expects {mu_v:.1f} goals for Vegas, {mu_b:.1f} for Buffalo. Rebounds go in {reb_rate:.1%} "
                  f"of the time, about {reb_rate / non_rate:.1f} times the rate of other shots."),
-        "explainer": {"kicker": "How we know", "title": "Every shot has odds.",
+        "explainer": {"kicker": "How we know", "title": "Every shot has a chance of going in.",
                       "text": (f"A shot from within 10 feet went in {close10:.1%} of the time over the last three seasons; from 60 feet or more, "
-                               f"{far60:.1%}. Add up the odds on every shot and you get what a team's chances were worth in goals."),
+                               f"{far60:.1%}. Add up those chances on every shot and you get what a team's chances were worth in goals."),
                       "fmt": "pct", "bars": [["Rebounds", round(float(reb_rate), 3)], ["Other shots", round(float(non_rate), 3)]]},
     }, indent=1))
     print(md)

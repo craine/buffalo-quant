@@ -12,12 +12,12 @@ Our model gives Vegas a 54% chance to win and Buffalo 46%.**
 
 ## How we measure "chances"
 
-Every shot has odds of going in, based on where it was taken and what kind of shot it was. Over the last three seasons
+Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Over the last three seasons
 (336,462 unblocked shots), a shot from within 10 feet went in 13.8% of the time; one from 60 feet or more, 0.8%. Add
-up the odds on every shot and you get what a team's chances were worth in goals.
+up those chances on every shot and you get what a team's chances were worth in goals.
 
-**The source:** the NHL's own play-by-play feed, which records where every shot came from. **The math:** each shot's odds
-come from our model, built on past seasons and checked on a season it never saw; we nudge each season's totals so the
+**The source:** the NHL's own play-by-play feed, which records where every shot came from. **The math:** each shot's chance
+comes from our model, built on past seasons and tested on a season it hadn't seen before we added that season in; we nudge each season's totals so the
 league's chances add up to the league's real goals. **How we checked it:** the full explanation, with the chart, is in our
 story on [last year's 50-win season](sabres-50-win-mirage.html).
 
@@ -83,15 +83,18 @@ are split the way they went for home teams in past overtimes and shootouts (55% 
 ![Model test](sabres-vgk-model-test.png)
 
 **How we checked it.** We built the model on the 2023-24 and 2024-25 seasons, then had it call every 2025-26 game using only
-what was known before each game. It picked the winner 55% of the time; picking the home team every time would have been right
-52%. Its percentages were also closer to what actually happened than two simple guesses, giving every home team
+what was known before each game. It called the winner 55% of the time; choosing the home team every time would have been right
+52%. (The shot model behind the chances was later refit with 2025-26 included; re-running this test with a
+version that never saw 2025-26 gave the same results.) Its percentages were also closer to what actually happened than two simple guesses, giving every home team
 its usual edge or going by the teams' records, though not by much: a hockey game is close to a coin flip, and no model changes that.
-This season so far (276 games) it has picked 61%. When it made a team a 60-65% favorite in 2025-26, that team won
-62% of the time. But its slight favorites, given 50-55%, won only 49%: a coin flip. Sunday's call is in that range,
+This season so far (276 games) it has called 61% right; home teams have won 57%. When it made a team a 60-65% favorite in 2025-26, that team won
+62% of the time. But the teams it favored slightly, at 50-55%, won 49%, no better than a coin flip, and at 55-60% they won 54%. Sunday's call is in that range,
 so read it as "slight lean Vegas," not "Vegas should win."
 
 **What it doesn't know: goalies.** The model rates teams by the chances they create and allow, not by who's in net. Buffalo's
-expected starter, Colten Ellis, has been better than average this season; Vegas's starter wasn't named when we published.
+expected starter, Colten Ellis, has saved 2.2 more goals than an average goalie would have this season; if Vegas starts Adin Hill
+(-1.8), the goalie matchup leans Buffalo in a way the model doesn't count. Small samples on both sides, and
+Vegas's starter wasn't named when we published.
 
 ## What to watch
 
@@ -113,5 +116,6 @@ expected starter, Colten Ellis, has been better than average this season; Vegas'
   league + 0.5 x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
   -0.254 + 1.032 x that + 0.272 x home (fit 2023-25); independent Poisson; regulation ties to home at 0.545.
   Brier: 2025-26 0.2446 (home-team rate 0.2504, record log5 0.2514, coin 0.25);
-  2026-27 to date 0.2283 (0.2459, 0.2502). Settings picked on 2024-25 only
-  (`scripts/tune_nhl_game_model.py`). Goalies not in the model.
+  2026-27 to date 0.2283 (0.2459, 0.2502). Settings chosen on 2024-25 only
+  (`scripts/tune_nhl_game_model.py`). Goalies not in the model. The xG model's final fit includes 2025-26; with xG fit on 2023-25 only,
+  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's call unchanged (46.1%).
