@@ -152,7 +152,7 @@ def main(as_of=AS_OF):
     ax.legend(frameon=False, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Buffalo built a big lead on chances, then held on",
            "Running total of what each team's shots were worth. Dots are goals.",
-           f"Unblocked shots, empty net excluded. Sabres {len(f)} shots, Blue Jackets {len(a)}.")
+           f"Unblocked shots, empty net excluded. Sabres {len(f)} unblocked shots, Blue Jackets {len(a)}.")
     fig.savefig(OUT / "sabres-cbj-flow.png"); plt.close(fig)
 
     # ---- chart 2: rebounds by game
@@ -160,9 +160,10 @@ def main(as_of=AS_OF):
     vals = pg.reb_f.values
     ax.bar(range(1, n_g + 1), vals, color=[RED if gid == G else BLUE for gid in pg.index], width=0.7, zorder=2)
     ax.axhline(prev.reb_f.mean(), color=INK, lw=1.2, ls="--")
-    ax.text(n_g + 0.45, prev.reb_f.mean(), f"First {n_g - 1} games\naverage: {prev.reb_f.mean():.1f}", fontsize=8.5, color=INK, va="center")
+    ax.text(0.7, vals.max() * 0.92, f"Dashed line: first {n_g - 1} games' average, {prev.reb_f.mean():.1f}",
+            fontsize=9, color=INK, ha="left", va="center")
     ax.text(n_g, vals[-1] + 0.2, f"{int(vals[-1])}", ha="center", fontsize=10, fontweight="bold", color=INK)
-    ax.set_xlim(0.3, n_g + 2.6); ax.set_xticks(range(1, n_g + 1)); ax.set_xlabel("Sabres game number, 2026-27"); ax.set_ylabel("Rebound shots")
+    ax.set_xticks(range(1, n_g + 1)); ax.set_xlabel("Sabres game number, 2026-27"); ax.set_ylabel("Rebound shots")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Ten rebound shots: Buffalo's most this season",
            "Sabres shots taken within 3 seconds of another Sabres shot on net or wide, by game.",
