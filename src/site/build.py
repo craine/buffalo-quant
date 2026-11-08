@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-blue-jackets-nov-6", "2026-11-06-sabres-cbj.md", "2026-11-07", "Sabres &middot; Post-game",
+     "Buffalo's most dangerous night of the season came from living around Columbus's crease: 10 rebound shots, their most this year.",
+     "sabres-cbj-flow.png"),
     ("sabres-50-win-mirage", "sabres-50-win-mirage.md", "2026-11-06", "Sabres &middot; Why they fell off",
      "Based on the chances they created, last year's Sabres should have had about 91 points. They got 109. Here's what that means now.",
      "sabres-mirage.png"),

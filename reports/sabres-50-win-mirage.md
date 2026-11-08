@@ -21,7 +21,7 @@ and counted how often each kind actually went in.
 
 - A shot from within 10 feet of the net went in 13.8% of the time (about 1 in 7).
 - From 30 to 40 feet: 5.6% (about 1 in 18).
-- From 60 feet or more, around the blue line: 0.8% (about 1 in 125).
+- From 60 feet or more: 0.8% (about 1 in 125).
 - A rebound (a shot within three seconds of a teammate's shot) went in 11.5% of the time, against 6.3% for
   other shots.
 - On the power play, shots went in 9.9% of the time, against 6.2% otherwise.
