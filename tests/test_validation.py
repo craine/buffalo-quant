@@ -75,3 +75,11 @@ def test_drive_points_track_final_scores():
     q["sc"] = q.home_score.where(q.posteam == q.home_team, q.away_score)
     bad = q[q.p > q.sc + q.td]  # TD counted as 7 allows one missed extra point per TD
     assert len(bad) / len(q) < 0.005, bad.head()
+
+
+def test_kickoff_rows_do_not_create_fake_drives():
+    """Kickoff/extra-point rows tagged to another team's possession must not become drives (MIN defense, 2026 wk 1-8)."""
+    from src.db import query
+    v = query("""SELECT COUNT(*) n, SUM(points) p FROM clean_drives
+                 WHERE defteam='MIN' AND season=2026 AND season_type='REG' AND week <= 8""").iloc[0]
+    assert (int(v.n), int(v.p)) == (74, 89)

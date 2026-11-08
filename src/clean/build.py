@@ -41,15 +41,27 @@ def build_plays(con):
 
 
 def build_drives(con):
-    """One row per possession (nflverse fixed_drive). Offensive points count a touchdown only when the offense scored
-    it (td_team == posteam); defensive and return touchdowns are not credited to the offense."""
-    d = query("""
-        SELECT season, season_type, week, game_id, posteam, defteam, fixed_drive AS drive,
-               MAX(fixed_drive_result) AS result, MIN(yardline_100) AS best_yardline,
-               MAX(CASE WHEN touchdown = 1 AND td_team = posteam THEN 1 ELSE 0 END) AS off_td
+    """One row per possession (nflverse fixed_drive within a game). The possessing team is the team with the most
+    scrimmage plays in the drive, so a kickoff or extra-point row tagged to the drive can't create a fake one-play
+    drive for the other team. Offensive points count a touchdown only when that team scored it (td_team == posteam)."""
+    p = query("""
+        SELECT season, season_type, week, game_id, fixed_drive, posteam, defteam, play_type, yardline_100,
+               fixed_drive_result, touchdown, td_team
         FROM raw_pbp
-        WHERE fixed_drive IS NOT NULL AND posteam IS NOT NULL AND defteam IS NOT NULL
-        GROUP BY season, season_type, week, game_id, posteam, defteam, fixed_drive""", con=con)
+        WHERE fixed_drive IS NOT NULL AND posteam IS NOT NULL AND defteam IS NOT NULL""", con=con)
+    key = ["game_id", "fixed_drive"]
+    scrim = p[p.play_type.isin(["pass", "run", "punt", "field_goal", "qb_kneel", "qb_spike", "no_play"])]
+    pick = lambda x: (x.groupby(key + ["posteam", "defteam"]).size().rename("n").reset_index()
+                      .sort_values("n", ascending=False).drop_duplicates(key)[key + ["posteam", "defteam"]])
+    owner = pick(scrim)
+    # possessions with no scrimmage snap (e.g. a kickoff returned as the half ends) still count as a drive
+    rest = p.merge(owner[key], on=key, how="left", indicator=True)
+    owner = pd.concat([owner, pick(rest[rest._merge == "left_only"].drop(columns="_merge"))], ignore_index=True)
+    mine = p.merge(owner, on=key + ["posteam", "defteam"])
+    d = mine.groupby(["season", "season_type", "week"] + key + ["posteam", "defteam"]).agg(
+        result=("fixed_drive_result", "max"), best_yardline=("yardline_100", "min"),
+        off_td=("touchdown", lambda s: int(((s == 1) & (mine.loc[s.index, "td_team"] == mine.loc[s.index, "posteam"])).any()))
+    ).reset_index().rename(columns={"fixed_drive": "drive"})
     for c in ("posteam", "defteam"):
         d[c] = d[c].replace(TEAM_NORMALIZE)
     d["points"] = np.where(d.off_td == 1, 7, np.where(d.result == "Field goal", 3, 0)).astype(int)
