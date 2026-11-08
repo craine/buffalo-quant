@@ -147,3 +147,81 @@ def baselines(t, games, home_rate):
 
 def brier(p, y):
     return float(np.mean((np.asarray(p) - np.asarray(y)) ** 2))
+
+
+# ---------------------------------------------------------------- v0.2: starting goalie
+VERSION_G = "nhl-game-v0.2"
+G_SHRINK = 1000       # unblocked shots of league-average goaltending in each goalie's rating (chosen on 2024-25)
+G_PAST = 0.5          # weight on shots from earlier seasons
+
+
+def goalie_games(con=None):
+    """One row per goalie-game: unblocked non-empty-net shots faced, xG faced, goals allowed, and whether he started
+    (faced his team's first shot of the game). xG rescaled per season so league xG = goals."""
+    s = query("""SELECT game_id, season, period, t, eventId, opp AS team, goalie_id, xg, goal FROM clean_nhl_shots_xg
+                 WHERE unblocked = 1 AND empty_net_against = 0 AND goalie_id IS NOT NULL""", con=con)
+    cal = s.groupby("season").goal.sum() / s.groupby("season").xg.sum()
+    s["xg"] = s.xg * s.season.map(cal)
+    first = s.sort_values(["game_id", "period", "t", "eventId"]).drop_duplicates(["game_id", "team"])[["game_id", "team", "goalie_id"]]
+    first["started"] = 1
+    g = s.groupby(["game_id", "season", "team", "goalie_id"]).agg(shots=("xg", "size"), xga=("xg", "sum"), ga=("goal", "sum")).reset_index()
+    g = g.merge(first, on=["game_id", "team", "goalie_id"], how="left").fillna({"started": 0})
+    dates = query("SELECT game_id, game_date FROM raw_nhl_games", con=con)
+    return g.merge(dates, on="game_id")
+
+
+def goalie_rating(gg, goalie_id, season, date, shrink=G_SHRINK, past=G_PAST):
+    """Goals saved vs. average per unblocked shot, from games before `date` only."""
+    x = gg[(gg.goalie_id == goalie_id) & (gg.game_date < date)]
+    c, p = x[x.season == season], x[x.season < season]
+    num = (c.xga.sum() - c.ga.sum()) + past * (p.xga.sum() - p.ga.sum())
+    den = c.shots.sum() + past * p.shots.sum() + shrink
+    return num / den
+
+
+def starters(gg):
+    return gg[gg.started == 1].set_index(["game_id", "team"]).goalie_id
+
+
+def build_frame_g(t, gg, seasons, max_date=None, shrink=G_SHRINK, past=G_PAST, override=None, **kw):
+    """v0.1 frame plus the opposing starter's rating x the league's unblocked shots per team-game to date.
+    override: {(game_id, team): goalie_id} to set a starter (e.g. today's expected starter)."""
+    f = build_frame(t, seasons, max_date=max_date, **kw)
+    st = starters(gg)
+    shots_pg = gg.groupby(["game_id", "team"]).shots.sum().reset_index().merge(gg[["game_id", "game_date", "season"]].drop_duplicates(), on="game_id")
+    adj = []
+    for r in f.itertuples():
+        key = (r.game_id, r.opp)
+        gid = (override or {}).get(key, st.get(key))
+        if gid is None or (isinstance(gid, float) and np.isnan(gid)):
+            adj.append(0.0); continue
+        prior = shots_pg[(shots_pg.season == r.season) & (shots_pg.game_date < r.game_date)]
+        spg = prior.shots.mean() if len(prior) >= 100 else shots_pg[shots_pg.season == r.season - 10001].shots.mean()
+        spg = 37.0 if np.isnan(spg) else spg
+        adj.append(goalie_rating(gg, gid, r.season, r.game_date, shrink, past) * spg)
+    f["opp_g"] = adj   # goals the opposing starter is expected to save vs. average
+    return f
+
+
+def fit_g(f):
+    f = f.dropna(subset=["raw"])
+    X = np.column_stack([np.ones(len(f)), f.raw, f.home, f.opp_g])
+    coef, *_ = np.linalg.lstsq(X, f.gf.to_numpy(float), rcond=None)
+    return coef
+
+
+def mu_g(coef, rawv, home, opp_g):
+    return max(0.3, coef[0] + coef[1] * rawv + coef[2] * home + coef[3] * opp_g)
+
+
+def game_rows_g(f, coef, p_ot):
+    h = f[f.home == 1].set_index("game_id"); a = f[f.home == 0].set_index("game_id")
+    out = []
+    for gid in h.index.intersection(a.index):
+        if np.isnan(h.loc[gid, "raw"]) or np.isnan(a.loc[gid, "raw"]):
+            continue
+        mh = mu_g(coef, h.loc[gid, "raw"], 1, h.loc[gid, "opp_g"]); ma = mu_g(coef, a.loc[gid, "raw"], 0, a.loc[gid, "opp_g"])
+        p, pt = win_prob(mh, ma, p_ot)
+        out.append(dict(game_id=gid, season=h.loc[gid, "season"], game_date=h.loc[gid, "game_date"], home=h.loc[gid, "team"],
+                        away=a.loc[gid, "team"], mu_h=mh, mu_a=ma, p_home=p, p_tie=pt, home_won=h.loc[gid, "won"]))
+    return pd.DataFrame(out)

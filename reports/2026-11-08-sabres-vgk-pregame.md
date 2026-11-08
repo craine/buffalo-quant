@@ -118,4 +118,4 @@ Vegas's starter wasn't named when we published.
   Brier: 2025-26 0.2446 (home-team rate 0.2504, record log5 0.2514, coin 0.25);
   2026-27 to date 0.2283 (0.2459, 0.2502). Settings chosen on 2024-25 only
   (`scripts/tune_nhl_game_model.py`). Goalies not in the model. The xG model's final fit includes 2025-26; with xG fit on 2023-25 only,
-  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's call unchanged (46.1%).
+  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's Sabres chance 46.1% vs. 45.5% published.

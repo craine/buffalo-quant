@@ -5,6 +5,7 @@ Rules enforced here: created_at_utc must precede kickoff; no UPDATE or DELETE, e
 corrections are new rows whose notes reference the old id.
 """
 import csv
+import re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -49,6 +50,11 @@ def add_prediction(*, game_id, subject, claim_text, metric, threshold, probabili
     """NFL: kickoff comes from raw_schedules. Other sports: pass kickoff (aware datetime), season and week explicitly,
     and record where the start time came from in notes."""
     now = now or datetime.now(timezone.utc)
+    sport = str(sport).upper()
+    if sport not in {"NFL", "NHL"}:
+        raise ValueError(f"unknown sport {sport!r}")
+    if re.fullmatch(r"\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}", game_id) and sport != "NFL":
+        raise ValueError("nflverse game ids must be logged as NFL so the schedule kickoff is used")
     if sport == "NFL":
         ko = kickoff_utc(game_id, con)
     else:

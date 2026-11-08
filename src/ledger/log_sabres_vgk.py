@@ -20,7 +20,7 @@ def main():
     pid = add_prediction(game_id=GAME, subject="Sabres vs. Vegas", claim_text="Sabres beat the Golden Knights (any result: regulation, OT or shootout)",
                          metric="BUF_win", threshold="win", probability=round(p_b, 2), model_version=m.VERSION, sport="NHL",
                          kickoff=PUCK_DROP, season="20262027", week="",
-                         notes=f"expected goals BUF {mb:.2f}, VGK {mv:.2f}; tie after 60 {p_tie:.3f}; data through 2026-11-07")
+                         notes=f"expected goals BUF {mb:.2f}, VGK {mv:.2f}; tie after 60 {p_tie:.3f}; data through 2026-11-07; puck drop 3:30 PM ET per NHL.com game preview")
     print(pid, f"{p_b:.0%}")
     load_to_db()
 

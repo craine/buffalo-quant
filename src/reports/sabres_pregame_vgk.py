@@ -299,7 +299,7 @@ Vegas's starter wasn't named when we published.
   Brier: 2025-26 {bt[20252026]['brier']:.4f} (home-team rate {bt[20252026]['b_home']:.4f}, record log5 {bt[20252026]['b_rec']:.4f}, coin 0.25);
   2026-27 to date {bt[SEASON]['brier']:.4f} ({bt[SEASON]['b_home']:.4f}, {bt[SEASON]['b_rec']:.4f}). Settings chosen on 2024-25 only
   (`scripts/tune_nhl_game_model.py`). Goalies not in the model. The xG model's final fit includes 2025-26; with xG fit on 2023-25 only,
-  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's call unchanged (46.1%).
+  QA re-ran the 2025-26 test: Brier 0.2444, buckets 52/48, 57/55, 62/61, 68/70, today's Sabres chance 46.1% vs. {p_b:.1%} published.
 """
     (OUT / "2026-11-08-sabres-vgk-pregame.md").write_text(md)
     (OUT / "2026-11-08-sabres-vgk-pregame.hero.json").write_text(json.dumps({
