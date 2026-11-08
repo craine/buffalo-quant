@@ -253,9 +253,9 @@ def main():
     for i, v in enumerate(vals):
         ax.text(i, v + (2 if v >= 0 else -2), h(v / 100), ha="center", va="bottom" if v >= 0 else "top", fontsize=11, color=INK, fontweight="bold")
     ax.axhline(0, color=INK, lw=1); ax.set_ylim(min(vals) - 15, max(vals) + 15)
-    ax.set_ylabel("Points per 100 plays (below zero = the offense lost points)"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+    ax.set_ylabel("Points per 100 plays"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Allen's best weapon meets the defense that stops it best",
-           f"Dropbacks where the quarterback leaves the pocket, 2026 through week {AS_OF_WEEK}.",
+           f"Dropbacks where the quarterback leaves the pocket, 2026 through week {AS_OF_WEEK}. Below zero = the offense lost points.",
            f"Out-of-pocket per FTN charting. Small samples: {allen_oop_n} Allen plays, {int(min_oop.n)} against the Vikings.")
     fig.savefig(OUT / "wk09-offscript.png"); plt.close(fig)
 
