@@ -1,12 +1,13 @@
 # Sabres vs. Golden Knights: Buffalo's attack meets one of the NHL's toughest defenses
 
 **Finding: Vegas allows chances worth 2.61 goals a game, the 4th-fewest in the NHL, and few shots from close to its net
-(5th-fewest). Buffalo's attack is middle of the pack (11th in chances created) but 5th at creating rebound
+(tied for 5th-fewest). Buffalo's attack is middle of the pack (11th in chances created) but 5th at creating rebound
 shots. The bigger worry is at the other end: the Sabres allow chances worth 3.29 goals a game, 26th of 32.**
 
 *Vegas at Buffalo, Sunday, Nov. 8, 3:30 p.m. ET, KeyBank Center. Numbers are 2026-27 through November 7: Sabres
 8-5-3 in 16 games, Golden Knights 11-5-2 in 18. This is a preview, not a prediction: we don't put a win chance on
-a hockey game until our game model has been tested on past seasons, and it hasn't been yet.*
+a hockey game until our game model has been tested on past seasons, and it hasn't been yet. Sixteen to 18 games is early;
+ranks can move a lot.*
 
 ![Chances created vs allowed](sabres-vgk-chances.png)
 
@@ -60,16 +61,17 @@ Goals saved compared with an average goalie facing the same shots. Positive is g
 | Golden Knights | Carter Hart | 10 | 0.900 | +1.8 (21st of 76) |
 | Golden Knights | Adin Hill | 8 | 0.895 | -1.8 (55th of 76) |
 
-Ranks are among all 76 goalies who have played this season. Buffalo has been alternating goalies, which points to
-Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we
+Ranks are among all 76 goalies who have played this season. Buffalo has switched goalies every game for its last four, which points
+to Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we
 published; NHL.com projects Adin Hill. These are small samples: a goalie's numbers over a dozen games can swing a lot.
 
 ## What to watch
 
 - **Second chances.** Count Buffalo's shots that come right after another shot. The Sabres' season average is 3.9.
 - **The goalies.** Whichever goalies start, the table above says how they've done against the chances they've faced.
-- **Results vs. chances.** Buffalo is 4-1-0 in its last 5 games but has had only 47% of the chances in them. Winning
-  while getting out-chanced usually doesn't last; Sunday is a test of whether the Sabres can win the chances, too.
+- **Results vs. chances.** Buffalo is 4-1-0 in its last 5 games but has had only 47% of the chances in them. Five games
+  is a small sample, but over a full season, results that run ahead of the chances tend to fade (see our
+  [50-win story](sabres-50-win-mirage.html)). Sunday is a test of whether the Sabres can win the chances, too.
 - **Whether the chances turn into goals.** Over a full season, chances carry over from year to year much better than lucky
   or unlucky finishing, which is why we lead with them.
 

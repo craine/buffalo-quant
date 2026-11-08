@@ -122,7 +122,7 @@ def main(as_of=AS_OF):
         ax.bar(range(32), srt.values, color=cols, width=0.8, zorder=2)
         i = list(srt.index).index(tm)
         r_ = rk(col, tm, high_good=(tm == US))
-        ax.text(i, srt.loc[tm] + 0.08, f"{lab}\n{srt.loc[tm]:.1f} ({ordn(r_)}{'' if tm == US else ' fewest'})", ha="center", va="bottom", fontsize=9.5, color=INK)
+        ax.text(i, srt.loc[tm] + (0.08 if tm == US else 0.75), f"{lab}\n{srt.loc[tm]:.1f} ({ordn(r_)}{'' if tm == US else ' fewest'})", ha="center", va="bottom", fontsize=9.5, color=INK)
         ax.axhline(srt.mean(), color=INK, lw=1, ls="--")
         ax.set_xticks([]); ax.set_xlabel("32 teams, most to fewest")
         ax.set_title(title, loc="left", fontsize=10.5, fontweight="bold", color=INK)
@@ -135,15 +135,17 @@ def main(as_of=AS_OF):
     gk_rows = "\n".join(f"| {'Sabres' if r.opp == US else 'Golden Knights'} | {r['name']} | {int(r.gp)} | {r.sv:.3f} | {r.gsax:+.1f} ({ordn(r.rk)} of {n_gk}) |"
                         for _, r in pd.concat([bg, vg]).iterrows())
     rb_rk_f, rb_rk_a = rk("reb_f_pg", US), rk("reb_a_pg", THEM, high_good=False)
+    tie5 = "tied for " if (t.close_a_pg.round(4) == round(v.close_a_pg, 4)).sum() > 1 else ""
     md = f"""# Sabres vs. Golden Knights: Buffalo's attack meets one of the NHL's toughest defenses
 
 **Finding: Vegas allows chances worth {v.xga_pg:.2f} goals a game, the {ordn(rk('xga_pg', THEM, False))}-fewest in the NHL, and few shots from close to its net
-({ordn(rk('close_a_pg', THEM, False))}-fewest). Buffalo's attack is middle of the pack ({ordn(rk('xgf_pg', US))} in chances created) but {ordn(rb_rk_f)} at creating rebound
+({tie5}{ordn(rk('close_a_pg', THEM, False))}-fewest). Buffalo's attack is middle of the pack ({ordn(rk('xgf_pg', US))} in chances created) but {ordn(rb_rk_f)} at creating rebound
 shots. The bigger worry is at the other end: the Sabres allow chances worth {b.xga_pg:.2f} goals a game, {ordn(rk('xga_pg', US, False))} of 32.**
 
 *Vegas at Buffalo, Sunday, Nov. 8, 3:30 p.m. ET, KeyBank Center. Numbers are 2026-27 through {pd.to_datetime(last_date):%B %-d}: Sabres
 {recd(US)} in {int(b.gp)} games, Golden Knights {recd(THEM)} in {int(v.gp)}. This is a preview, not a prediction: we don't put a win chance on
-a hockey game until our game model has been tested on past seasons, and it hasn't been yet.*
+a hockey game until our game model has been tested on past seasons, and it hasn't been yet. Sixteen to 18 games is early;
+ranks can move a lot.*
 
 ![Chances created vs allowed](sabres-vgk-chances.png)
 
@@ -194,16 +196,17 @@ Goals saved compared with an average goalie facing the same shots. Positive is g
 |---|---|---|---|---|
 {gk_rows}
 
-Ranks are among all {n_gk} goalies who have played this season. Buffalo has been alternating goalies, which points to
-Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we
+Ranks are among all {n_gk} goalies who have played this season. Buffalo has switched goalies every game for its last four, which points
+to Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we
 published; NHL.com projects Adin Hill. These are small samples: a goalie's numbers over a dozen games can swing a lot.
 
 ## What to watch
 
 - **Second chances.** Count Buffalo's shots that come right after another shot. The Sabres' season average is {b.reb_f_pg:.1f}.
 - **The goalies.** Whichever goalies start, the table above says how they've done against the chances they've faced.
-- **Results vs. chances.** Buffalo is {l5_rec} in its last {nb5} games but has had only {b5:.0%} of the chances in them. Winning
-  while getting out-chanced usually doesn't last; Sunday is a test of whether the Sabres can win the chances, too.
+- **Results vs. chances.** Buffalo is {l5_rec} in its last {nb5} games but has had only {b5:.0%} of the chances in them. Five games
+  is a small sample, but over a full season, results that run ahead of the chances tend to fade (see our
+  [50-win story](sabres-50-win-mirage.html)). Sunday is a test of whether the Sabres can win the chances, too.
 - **Whether the chances turn into goals.** Over a full season, chances carry over from year to year much better than lucky
   or unlucky finishing, which is why we lead with them.
 
@@ -219,7 +222,7 @@ published; NHL.com projects Adin Hill. These are small samples: a goalie's numbe
     (OUT / "2026-11-08-sabres-vgk-pregame.hero.json").write_text(json.dumps({
         "label": "Sabres vs. Vegas, 3:30 p.m.: the matchup",
         "big": [[f"{b.reb_f_pg:.1f}", f"Sabres rebound shots a game ({ordn(rb_rk_f)} of 32)"],
-                [f"{v.reb_a_pg:.1f}", f"Rebound shots Vegas allows a game ({ordn(rb_rk_a)} fewest)"]],
+                [f"{v.reb_a_pg:.1f}", f"Rebound shots Vegas allows a game ({ordn(rb_rk_a)} of 32, about average)"]],
         "note": f"Rebounds go in {reb_rate:.1%} of the time, about {reb_rate / non_rate:.1f} times the rate of other shots.",
         "explainer": {"kicker": "How we know", "title": "Every shot has odds.",
                       "text": (f"A shot from within 10 feet went in {close10:.1%} of the time over the last three seasons; from 60 feet or more, "
