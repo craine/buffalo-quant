@@ -1,8 +1,8 @@
 # Sabres 5, Blue Jackets 2: Buffalo won the scramble in front of the net
 
 **Finding: The Sabres created their most dangerous night of the season Friday, with shots worth 4.5 goals, by living
-around Columbus's crease. They had 10 rebound shots, about three times their usual, something fewer than 2% of NHL teams
-manage in a game. Two of their five goals came off rebounds.**
+around Columbus's crease. They had 10 rebound shots, about three times their usual, something that happens in about 1 of every
+90 NHL team-games. Two of their five goals came off rebounds.**
 
 *One game, 2026-11-06, in Buffalo. The Sabres are 16 games into the season.*
 
@@ -16,7 +16,7 @@ team's chances were worth in goals. (The full explanation, with the chart, is in
 [last year's 50-win season](sabres-50-win-mirage.html).)
 
 Friday, the Sabres' shots were worth **4.5 goals** and Columbus's **3.3**. Buffalo scored 5. If you replayed
-those exact shots thousands of times, Buffalo would win about 60% of the time and tie about 15%. They earned this one.
+those exact shots thousands of times, Buffalo would win about 60% of the time and tie about 15%. Their chances were good enough to win most replays.
 
 ## What changed from their first 15 games
 
@@ -31,7 +31,8 @@ those exact shots thousands of times, Buffalo would win about 60% of the time an
 
 ## The rebound game
 
-A rebound here means a shot taken within three seconds of a teammate's shot. Across the NHL over the last three seasons,
+A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that the goalie
+had to deal with. Across the NHL over the last three seasons,
 rebounds went in 11.5% of the time, against 6.3% for other shots, because the goalie is usually out of
 position. NHL teams average about 3.3 rebound shots a game this season. Buffalo had 10, worth 1.5 goals on
 their own.
@@ -57,10 +58,10 @@ rebounds. Doan's shots were worth a full goal (1.0), the most of any Sabre.
 ## Two periods of control
 
 Through 40 minutes, Buffalo's chances were worth 3.8 goals to Columbus's 1.8, and they led 5-1.
-Columbus won the third period on chances (1.5 to 0.7), 69% of the chance value.
-Some of that is expected: across the league over the last three seasons, teams trailing by three or more in the third
-period got 57% of the chance value, because the team ahead sits back and protects the lead. Columbus pushed
-harder than that, so the Sabres' third period was looser than a typical protect-the-lead period. It's one period, though.
+Columbus won the third period on chances (1.5 to 0.7), 69% of the chance value. That's a normal
+protect-the-lead period. Across the league over the last three seasons, teams down three or more in the third usually
+got a bit over half the chances (55% overall), because the team ahead sits back, and about 37% of them got
+69% or more.
 
 ## The goalie and the finishers
 
@@ -69,7 +70,8 @@ harder than that, so the Sabres' third period was looser than a typical protect-
 - **Josh Norris** scored twice on shots worth 0.4 goals combined.
 - **The power play** created its most dangerous chances of the season, worth 1.0 goals, but didn't score.
 - **The penalty kill** allowed another goal, a Zach Werenski shot from 46 feet that goes in about 1 time in 20. Buffalo has now
-  allowed 17 power-play goals in 16 games, 30th of 32 (1st is fewest).
+  allowed 17 power-play goals in 16 games, 30th of 32 (1st is fewest). The league average is
+  11 over that many games.
 
 | Period | Time | Team | Scorer | Shot | Odds it went in |
 |---|---|---|---|---|---|
@@ -93,8 +95,10 @@ Luukkonen stays at or above average, and whether the penalty kill stops leaking.
   equals league goals. Friday: BUF 4.47 xG on 50 unblocked shots (37 on goal), CBJ 3.35 on
   43 (26 on goal). Win probability: 20,000 simulated replays of each shot as an independent coin flip with
   p = xG.
-- Rebound = same team, within 3 seconds of the previous shot attempt, same period. A raw recount from the play feed that
+- Rebound = shot taken within 3 seconds of the same team's previous unblocked shot (on goal or missed), with no other
+  event in between. Blocked attempts never start a rebound. A raw recount from the play feed that
   also counts shots after blocked attempts gives 12 for Buffalo. Teams with 10+ rebound shots: 1.1% of team-games in
   2026-27, 1.6% in 2025-26.
-- Score effects: third-period xG share for teams down 3+ goals, all team-games 2023-24 to 2025-26.
+- Score effects: third-period xG share for teams down 3+ goals by the game score at the time of each shot, 2023-24 to
+  2025-26 (55.0% pooled; per game, median 59%).
 - GSAx = xG on unblocked shots faced minus goals allowed. Power play = 5v4, 5v3, 4v3.
