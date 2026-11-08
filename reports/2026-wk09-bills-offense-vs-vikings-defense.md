@@ -8,7 +8,7 @@ better against those plays than Minnesota's, where every 100 have cost offenses 
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Both teams have played
 7 games. Numbers count every play unless noted. Part 1 covered the Vikings' offense with
-Carson Wentz; our predictions for the game come in part 3, logged before kickoff.*
+Carson Wentz; our other predictions for the game come in part 3, logged before kickoff.*
 
 ![The blitz](wk09-blitz.png)
 
@@ -29,7 +29,7 @@ about **4.2**. On 3rd-and-8, a quarterback who converts adds about **+2.4**; one
 
 **The math:** what the drive was worth after the play, minus what it was worth before, is that play's value. Add up 100 plays and you get **points per 100 plays**, a fair way to compare teams that run different numbers of plays.
 A positive number is good for the offense; below zero means the plays, on balance, moved drives away from points. The
-average run costs a team a little, because short gains on early downs don't move a drive much closer to points.
+average run costs a team a little (league average -8 per 100 designed runs), because short gains on early downs don't move a drive much closer to points.
 
 **How we checked it:** it tracks scoring. Every 100 Bills plays have been worth +18 points (league average 0), and Buffalo
 scores 3.08 points per drive, both 1st. Against Minnesota, every 100 plays have cost offenses about 17 points, and
@@ -100,12 +100,12 @@ He starts from such a high level that even when blitzed he's 5th of 33.
 ## The off-script collision
 
 The biggest change in Allen's 2026, from our [Josh Allen story](josh-allen-2018-to-now.html): he's leaving the pocket on
-30% of dropbacks (league 20%), and those plays are working: every 100 have been worth +49 points (71 plays; league
+30% of dropbacks (league 20%), and those plays are working: every 100 have been worth +49 points (71 plays, a small sample; league
 average +2).
 
 Minnesota is the toughest test for that so far this season. When quarterbacks leave the pocket against the Vikings, every 100 of
 those plays have cost their offense about 51 points, the best mark in the league (44 plays, a small sample). With garbage time removed it's
-about 46 per 100, 2nd (40 plays).
+about 46 per 100, 2nd (40 plays, a small sample).
 
 ![Off script](wk09-offscript.png)
 
@@ -117,15 +117,15 @@ It tells the same story: Allen's off-script plays succeed 55% of the time, the l
 
 The Bills throw deep (20+ yards in the air) on 16% of their passes (4th; league 11%), and those throws have been
 worth +79 points per 100 (9th; 32 throws, a small sample; league +42). Minnesota's short-pass defense is the
-league's 2nd-best, but deep throws against it have still been worth +18 per 100 (10th-best; 22 throws, a small sample). A defense that sends extra rushers
-leaves fewer defenders back, which is where Buffalo's big-play offense lives.
+league's 2nd-best, and it's better than average on deep throws too: +18 per 100 against it (10th-best; 22 throws, a small sample; league +42).
+Still, a defense that sends extra rushers leaves fewer defenders back, and deep throws are where Buffalo's big-play offense lives.
 
 ## What usually happens when the best meet the best
 
 Since 2018, a top-3 offense has met a top-3 defense 37 times in the regular season. Coming in, those offenses
-averaged +19 points per 100 plays, and those defenses held offenses to about 16 below zero. In the game itself, the offense averaged
+averaged +19 points per 100 plays, and those defenses had cost offenses about 16 points per 100 plays. In the game itself, the offense averaged
 **+3**, close to what you get by simply adding the two strengths together (+2). The offense fell short of
-its own average 73% of the time. Against everyone else, those same top-3 offenses averaged +13.
+its own average in 27 of 37 games. Against everyone else, those same top-3 offenses averaged +13.
 
 ![Best vs best](wk09-best-vs-best.png)
 
@@ -143,11 +143,11 @@ The Bills have been the top-3 offense in 6 of those games:
 ## What we're watching
 
 - **The blitz vs. Allen.** If Minnesota's pressure gets home, Buffalo's offense is in for a long night. If Allen beats it the way he
-  has all season, the Bills' deep game is open behind it.
+  has all season, the deep game is the test behind it.
 - **Allen on the move.** It's his best weapon this year and Minnesota's best counter. Those plays could decide the night.
 - **Turnovers.** The one area where the Bills' offense is below average meets a defense that takes the ball away.
-- Our predictions for the game, including how many points each team scores, come in part 3, logged on the
-  [Ledger](../ledger.html) before kickoff.
+- Part 1 projected about 23 points for Minnesota. Our projection for Buffalo's points and our other predictions come
+  in part 3, logged on the [Ledger](../ledger.html) before kickoff.
 
 ## For the stat-heads
 
