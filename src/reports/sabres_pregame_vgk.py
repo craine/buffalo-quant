@@ -118,7 +118,7 @@ def main(as_of=AS_OF):
     lp = _read(PRED_CSV, PRED_COLS)
     lp = lp[lp.model_version == gmod.VERSION] if not lp.empty else lp
     lp = lp[lp.claim_text.str.contains("Sabres", na=False)] if len(lp) else lp
-    ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before puck drop.** It gets graded after the game, hit or miss."
+    ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min().replace("T", " ").rstrip("Z")} UTC, before puck drop.** It gets graded after the game, hit or miss."
                      if len(lp) else "**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; "
                      "every logged call is graded after the game, hit or miss.")
 

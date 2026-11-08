@@ -1,1 +1,2 @@
 id,created_at_utc,sport,season,week,game_id,subject,claim_text,metric,threshold,probability,resolves_at_utc,model_version,notes
+P0001,2026-11-08T16:59:55Z,NHL,20262027,,NHL_20262027_2026-11-08_VGK_at_BUF,Sabres vs. Vegas,"Sabres beat the Golden Knights (any result: regulation, OT or shootout)",BUF_win,win,0.46,2026-11-08T20:30:00Z,nhl-game-v0.1,"expected goals BUF 3.00, VGK 3.34; tie after 60 0.161; data through 2026-11-07; puck drop 3:30 PM ET per NHL.com game preview"

@@ -67,7 +67,7 @@ published; NHL.com projects Adin Hill. These are small samples: a goalie's numbe
 
 ## Our prediction: Vegas 54%, Sabres 46%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-08 16:59:55 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **3.3 goals for Vegas and 3.0 for Buffalo**, and gives about a 16% chance the game is tied
 after 60 minutes. Close to a coin flip, leaning Vegas.
