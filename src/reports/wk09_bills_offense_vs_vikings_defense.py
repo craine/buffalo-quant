@@ -37,6 +37,12 @@ def pts(v):
     return "0.00" if s in ("+0.00", "-0.00") else s
 
 
+def h(v):
+    """Points per 100 plays, for the story body."""
+    v = round(v * 100)
+    return "0" if v == 0 else f"{v:+d}"
+
+
 def finish(fig, title, sub, foot):
     fig.suptitle(title, x=0.02, ha="left", fontsize=15, fontweight="bold", color=INK)
     fig.text(0.02, 0.905, sub, fontsize=9.5, color=MUTED)
@@ -226,12 +232,12 @@ def main():
     a1.set_title("Share of dropbacks with 5+ pass rushers", loc="left", fontsize=10.5, fontweight="bold", color=INK)
     a1.legend(frameon=False, fontsize=9, loc="upper left"); a1.grid(axis="y", color="#EEF0F3"); a1.set_axisbelow(True)
     labs = ["Allen\n2026", "Allen\n2023-25", "League\n2023-25"]
-    vals = [allen["bl26"], allen["blp"], allen["lg_blp"]]
+    vals = [allen["bl26"] * 100, allen["blp"] * 100, allen["lg_blp"] * 100]
     a2.bar(labs, vals, color=[RED, BLUE, GRAY], width=0.58, zorder=2)
     for i, v in enumerate(vals):
-        a2.text(i, v + (0.01 if v >= 0 else -0.01), pts(v), ha="center", va="bottom" if v >= 0 else "top", fontsize=10, color=INK)
-    a2.axhline(0, color=INK, lw=1); a2.set_ylim(min(vals + [0]) - 0.08, max(vals) + 0.08)
-    a2.set_ylabel("Points added per dropback when blitzed")
+        a2.text(i, v + (1 if v >= 0 else -1), h(v / 100), ha="center", va="bottom" if v >= 0 else "top", fontsize=10, color=INK)
+    a2.axhline(0, color=INK, lw=1); a2.set_ylim(min(vals + [0]) - 8, max(vals) + 8)
+    a2.set_ylabel("Points per 100 dropbacks when blitzed")
     a2.set_title("Allen when blitzed", loc="left", fontsize=10.5, fontweight="bold", color=INK)
     a2.grid(axis="y", color="#EEF0F3"); a2.set_axisbelow(True)
     finish(fig, "Minnesota blitzes more than anyone. Allen handles it.",
@@ -242,12 +248,12 @@ def main():
     # ---- chart 2: off-script collision
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     labs = [f"Allen off script\n({allen_oop_n} plays)", f"League average\noff script", f"Vikings defense vs.\noff-script plays ({int(min_oop.n)})"]
-    vals = [allen_oop_epa, oop_lg_epa, min_oop.epa]
+    vals = [allen_oop_epa * 100, oop_lg_epa * 100, min_oop.epa * 100]
     ax.bar(labs, vals, color=[BLUE, GRAY, RED], width=0.55, zorder=2)
     for i, v in enumerate(vals):
-        ax.text(i, v + (0.02 if v >= 0 else -0.02), pts(v), ha="center", va="bottom" if v >= 0 else "top", fontsize=11, color=INK, fontweight="bold")
-    ax.axhline(0, color=INK, lw=1); ax.set_ylim(min(vals) - 0.15, max(vals) + 0.15)
-    ax.set_ylabel("Points added per play"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+        ax.text(i, v + (2 if v >= 0 else -2), h(v / 100), ha="center", va="bottom" if v >= 0 else "top", fontsize=11, color=INK, fontweight="bold")
+    ax.axhline(0, color=INK, lw=1); ax.set_ylim(min(vals) - 15, max(vals) + 15)
+    ax.set_ylabel("Points per 100 plays (below zero = the offense lost points)"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Allen's best weapon meets the defense that stops it best",
            f"Dropbacks where the quarterback leaves the pocket, 2026 through week {AS_OF_WEEK}.",
            f"Out-of-pocket per FTN charting. Small samples: {allen_oop_n} Allen plays, {int(min_oop.n)} against the Vikings.")
@@ -256,62 +262,65 @@ def main():
     # ---- chart 3: when the best meet the best
     fig, ax = plt.subplots(figsize=(9, 5), dpi=200)
     labs = ["Top-3 offense's\naverage coming in", "Top-3 defense's\naverage allowed", "Adding the two\npredicts", "What actually\nhappened"]
-    vals = [t3.off_v.mean(), t3.def_v.mean(), t3.pred.mean(), t3.game.mean()]
+    vals = [t3.off_v.mean() * 100, t3.def_v.mean() * 100, t3.pred.mean() * 100, t3.game.mean() * 100]
     ax.bar(labs, vals, color=[BLUE, RED, GRAY, INK], width=0.58, zorder=2)
     for i, v in enumerate(vals):
-        ax.text(i, v + (0.01 if v >= 0 else -0.01), pts(v), ha="center", va="bottom" if v >= 0 else "top", fontsize=11, color=INK, fontweight="bold")
-    ax.axhline(0, color=INK, lw=1); ax.set_ylim(min(vals) - 0.08, max(vals) + 0.08)
-    ax.set_ylabel("Offense's points added per play"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+        ax.text(i, v + (1 if v >= 0 else -1), h(v / 100), ha="center", va="bottom" if v >= 0 else "top", fontsize=11, color=INK, fontweight="bold")
+    ax.axhline(0, color=INK, lw=1); ax.set_ylim(min(vals) - 8, max(vals) + 8)
+    ax.set_ylabel("Offense's points per 100 plays"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "When a top-3 offense meets a top-3 defense, they meet in the middle",
            f"Every such regular-season game, 2018-2025 ({len(t3)} games). Ranks as of kickoff.",
-           "Ranks by points added per play over each team's prior games that season (4+ games).")
+           "Ranks by points per play over each team's prior games that season (4+ games).")
     fig.savefig(OUT / "wk09-best-vs-best.png"); plt.close(fig)
 
     opp_rows = "\n".join(f"| {int(r.week)} | {r.team} | {ordn(r.rk26)} | {ordn(r.rk25)} |" for r in opp.itertuples())
-    buf_rows = "\n".join(f"| {int(r.season)} | Week {int(r.week)} vs. {r.de} | {pts(r.off_v)} | {pts(r.game)} |"
+    buf_rows = "\n".join(f"| {int(r.season)} | Week {int(r.week)} vs. {r.de} | {h(r.off_v)} | {h(r.game)} |"
                          for r in buf_t3.sort_values(["season", "week"]).itertuples())
 
     md = f"""# Josh Allen and the Bills offense vs. the NFL's best defense
 
-**Finding: Monday night is the best offense in football against the best defense, and the Vikings play defense
+**Finding: Monday night is the best offense in football ({bo.pts_per_drive:.2f} points per drive) against the best defense ({md.pts_per_drive:.2f} allowed), and the Vikings play defense
 like no one else: they send five or more pass rushers on {bl[2026]['min']:.0%} of dropbacks, the most in the NFL by a mile (league average {bl[2026]['lg']:.0%}).
 Josh Allen has been one of the league's best quarterbacks against the blitz ({ordn(allen_bl_rk)} of {n_qb_bl}). The collision to watch is
-Allen's improvising: his plays outside the pocket have been worth {pts(allen_oop_epa)} points each, and no defense has been better
-against those plays than Minnesota's ({pts(min_oop.epa)}). Both of those are small samples.**
+Allen's improvising: every 100 of his plays outside the pocket have been worth about {abs(allen_oop_epa) * 100:.0f} points to Buffalo, and no defense has been
+better against those plays than Minnesota's, where every 100 have cost offenses about {abs(min_oop.epa) * 100:.0f}. Both are small samples.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Both teams have played
-{int(bo.games)} games. Numbers count every play unless noted. The companion story covers the Vikings' offense with
-Carson Wentz and our predictions for the game.*
+{int(bo.games)} games. Numbers count every play unless noted. Part 1 covered the Vikings' offense with
+Carson Wentz; our predictions for the game come in part 3, logged before kickoff.*
 
 ![The blitz](wk09-blitz.png)
 
-## How we measure it: points added per play
+## How we measure it: what a play is worth
 
-Yards alone don't say much: 6 yards on 3rd-and-5 keeps a drive alive, 6 yards on 3rd-and-10 usually means a punt. So
-we measure every play by **how many points it adds to or takes away from the drive**.
+Nobody scores on every play, but every play moves a drive closer to points or further away. Yards alone don't capture
+that: 6 yards on 3rd-and-5 keeps a drive alive, 6 yards on 3rd-and-10 usually means a punt. So we measure every play by
+**how much it moved the drive toward points or away from them**. (Same method as [part 1](wentz-vs-bills-defense.html).)
 
 **The source:** the NFL's official play-by-play, cleaned and published free by the nflverse project, plus FTN's
 play-by-play charting, which records things the official feed doesn't, like how many defenders rushed and whether
 the quarterback left the pocket.
 
-**The reasoning:** a drive is worth a certain number of points depending on where it stands. Across every NFL play from
-{EP_SEASONS[0]} to {EP_SEASONS[1]}, 1st-and-10 at your own 25 is worth about **{ep.loc[75, 'ep']:.1f} points**; at the opponent's 25, about
-**{ep.loc[25, 'ep']:.1f}**. On 3rd-and-8, a quarterback who converts adds about **{third.loc['conv', 'epa']:+.1f}**; one who gets sacked loses about
+**The reasoning:** since {EP_SEASONS[0]}, 1st-and-10 at your own 25 has been worth about **{ep.loc[75, 'ep']:.1f} points**: that's the average of the
+next score in the half, with the other team's scores counted as minus points. 1st-and-10 at the opponent's 25 has been worth
+about **{ep.loc[25, 'ep']:.1f}**. On 3rd-and-8, a quarterback who converts adds about **{third.loc['conv', 'epa']:+.1f}**; one who gets sacked loses about
 **{abs(third.loc['sack', 'epa']):.1f}**.
 
-**The math:** what the drive was worth after the play, minus what it was worth before, is that play's value. Average it
-over every play and you get **points added per play**. A positive number is good for the offense.
+**The math:** what the drive was worth after the play, minus what it was worth before, is that play's value. Add up 100 plays and you get **points per 100 plays**, a fair way to compare teams that run different numbers of plays.
+A positive number is good for the offense; below zero means the plays, on balance, moved drives away from points. The
+average run costs a team a little, because short gains on early downs don't move a drive much closer to points.
 
-**How we checked it:** it tracks scoring. The Bills add {pts(bo.epa_play)} points per play (league average {pts(bo.epa_play_lg)}) and score
-{bo.pts_per_drive:.2f} points per drive, both 1st. The Vikings allow {pts(md.epa_play)} per play and {md.pts_per_drive:.2f} points per drive, both 1st.
+**How we checked it:** it tracks scoring. Every 100 Bills plays have been worth {h(bo.epa_play)} points (league average {h(bo.epa_play_lg)}), and Buffalo
+scores {bo.pts_per_drive:.2f} points per drive, both 1st. Against Minnesota, every 100 plays have cost offenses about {abs(md.epa_play) * 100:.0f} points, and
+the Vikings allow {md.pts_per_drive:.2f} points per drive, both 1st.
 
 ## Strength on strength
 
 | | Bills offense | Vikings defense | League average |
 |---|---|---|---|
-| Points added per play | {pts(bo.epa_play)} ({ordn(bo.epa_play_rk)}) | {pts(md.epa_play)} allowed ({ordn(md.epa_play_rk)}) | {pts(bo.epa_play_lg)} |
-| Per pass play | {pts(bo.dropback_epa)} ({ordn(bo.dropback_epa_rk)}) | {pts(md.dropback_epa)} allowed ({ordn(md.dropback_epa_rk)}) | {pts(bo.dropback_epa_lg)} |
-| Per designed run | {pts(bo.rush_epa)} ({ordn(bo.rush_epa_rk)}) | {pts(md.rush_epa)} allowed ({ordn(md.rush_epa_rk)}) | {pts(bo.rush_epa_lg)} |
+| Points per 100 plays | {h(bo.epa_play)} ({ordn(bo.epa_play_rk)}) | {h(md.epa_play)} allowed ({ordn(md.epa_play_rk)}) | {h(bo.epa_play_lg)} |
+| Per 100 pass plays | {h(bo.dropback_epa)} ({ordn(bo.dropback_epa_rk)}) | {h(md.dropback_epa)} allowed ({ordn(md.dropback_epa_rk)}) | {h(bo.dropback_epa_lg)} |
+| Per 100 designed runs | {h(bo.rush_epa)} ({ordn(bo.rush_epa_rk)}) | {h(md.rush_epa)} allowed ({ordn(md.rush_epa_rk)}) | {h(bo.rush_epa_lg)} |
 | Points per drive | {bo.pts_per_drive:.2f} ({ordn(bo.pts_per_drive_rk)}) | {md.pts_per_drive:.2f} allowed ({ordn(md.pts_per_drive_rk)}) | {bo.pts_per_drive_lg:.2f} |
 | Big plays (20+ yard passes, 10+ yard runs) | {bo.explosive_rate:.1%} of plays ({ordn(bo.explosive_rate_rk)}) | {md.explosive_rate:.1%} allowed ({ordn(md.explosive_rate_rk)}) | {bo.explosive_rate_lg:.1%} |
 | Sacks | {bo.sack_rate:.1%} of pass plays ({ordn(bo.sack_rate_rk)}) | {md.sack_rate:.1%} made ({ordn(md.sack_rate_rk)}) | {bo.sack_rate_lg:.1%} |
@@ -319,7 +328,7 @@ over every play and you get **points added per play**. A positive number is good
 | Third downs converted | {bo.third_down_rate:.0%} ({ordn(bo.third_down_rate_rk)}) | {md.third_down_rate:.0%} allowed ({ordn(md.third_down_rate_rk)}) | {bo.third_down_rate_lg:.0%} |
 | Red-zone trips ending in a touchdown | {bo.rz_td_rate:.0%} ({ordn(bo.rz_td_rate_rk)}) | {md.rz_td_rate:.0%} allowed ({ordn(md.rz_td_rate_rk)}) | {bo.rz_td_rate_lg:.0%} |
 
-Ranks: 1st is best for that unit. Take out blowout garbage time and the Bills' offense ranks {ordn(bo.epa_play_neutral_rk)} and the Vikings'
+Ranks: 1st is best for that unit. For the Vikings, a negative number means offenses lost points against them. Take out blowout garbage time and the Bills' offense ranks {ordn(bo.epa_play_neutral_rk)} and the Vikings'
 defense {ordn(md.epa_play_neutral_rk)}.
 
 Two places Buffalo has an edge on paper: **big plays**, where the Bills lead the league and Minnesota is merely
@@ -330,8 +339,8 @@ The Bills give the ball away on {bo.turnover_rate:.1%} of plays ({ordn(bo.turnov
 
 Mostly real. The Vikings have faced a below-average set of offenses (their opponents' average rank is {opp_avg_rk:.1f};
 {n_17plus} of {len(opp)} rank 17th or worse). But when we compare each game to what that opponent does against everyone else,
-Minnesota is still narrowly 1st (just ahead of {team_names.get(adj_2nd_team, adj_2nd_team)}): it has held offenses {abs(adj.loc['MIN', 'adj_epa']):.2f} points per play below
-their own averages, vs. {abs(adj_2nd.adj_epa):.2f} for {team_names.get(adj_2nd_team, adj_2nd_team)}.
+Minnesota is still narrowly 1st (just ahead of {team_names.get(adj_2nd_team, adj_2nd_team)}): it has held offenses about {abs(adj.loc['MIN', 'adj_epa']) * 100:.0f} points per 100 plays below
+their own averages, vs. about {abs(adj_2nd.adj_epa) * 100:.0f} for {team_names.get(adj_2nd_team, adj_2nd_team)}.
 
 | Week | Opponent | Opponent's offense this season | Last season |
 |---|---|---|---|
@@ -346,29 +355,30 @@ almost three of every four ({bl[2026]['min']:.0%}), and has led the league three
 {bl[2024]['lg']:.0%} and {bl[2025]['lg']:.0%}). The next-most aggressive defense this season blitzes {bl[2026]['second']:.0%} of the time. A Vikings blitz isn't bigger
 than anyone else's ({min_rushers:.2f} rushers on average; league {lg_rushers:.2f}). It just comes far more often.
 
-Both versions work. Against the blitz, Minnesota allows {pts(min_bl_epa)} points per dropback ({n_min_bl} plays); when it doesn't blitz,
-{pts(min_nb_epa)} ({n_min_nb} plays, a small sample), so far they've been about as good, maybe slightly better, when they sit back. Around the league, blitzes this season have produced {pts(lg_bl_epa)} per dropback and sacks on {lg_bl_sack:.1%} of
+Both versions work. When Minnesota blitzes, every 100 dropbacks have cost offenses about {abs(min_bl_epa) * 100:.0f} points ({n_min_bl} plays); when it
+doesn't, about {abs(min_nb_epa) * 100:.0f} ({n_min_nb} plays, a small sample), so they've been about as good, maybe slightly better, when they sit back.
+Around the league, blitzes this season have come out about even ({h(lg_bl_epa)} points per 100 dropbacks) and produced sacks on {lg_bl_sack:.1%} of
 them; Minnesota's blitzes get sacks {min_bl_sack:.1%} of the time.
 
 Allen is the kind of quarterback that approach is built to test, and so far he has passed:
 
-| Allen when blitzed | Dropbacks | Points added per dropback | League average |
+| Allen when blitzed | Dropbacks | Points per 100 dropbacks | League average |
 |---|---|---|---|
-| 2026 | {allen['n_bl26']} (small sample) | {pts(allen['bl26'])} ({ordn(allen_bl_rk)} of {n_qb_bl} QBs with 40+) | {pts(lg_bl_epa)} |
-| 2023-25 | {allen['n_blp']} | {pts(allen['blp'])} | {pts(allen['lg_blp'])} |
+| 2026 | {allen['n_bl26']} (small sample) | {h(allen['bl26'])} ({ordn(allen_bl_rk)} of {n_qb_bl} QBs with 40+) | {h(lg_bl_epa)} |
+| 2023-25 | {allen['n_blp']} | {h(allen['blp'])} | {h(allen['lg_blp'])} |
 
-Like most quarterbacks, he's better when he isn't blitzed ({pts(allen['nb26'])} this season; {n_better_bl} of {n_qb_bl} did better when blitzed).
+Like most quarterbacks, he's better when he isn't blitzed ({h(allen['nb26'])} per 100 this season; {n_better_bl} of {n_qb_bl} did better when blitzed).
 He starts from such a high level that even when blitzed he's {ordn(allen_bl_rk)} of {n_qb_bl}.
 
 ## The off-script collision
 
 The biggest change in Allen's 2026, from our [Josh Allen story](josh-allen-2018-to-now.html): he's leaving the pocket on
-{allen_oop_rate:.0%} of dropbacks (league {oop_lg_rate:.0%}), and those plays are working, at {pts(allen_oop_epa)} points each ({allen_oop_n} plays; league
-{pts(oop_lg_epa)}).
+{allen_oop_rate:.0%} of dropbacks (league {oop_lg_rate:.0%}), and those plays are working: every 100 have been worth {h(allen_oop_epa)} points ({allen_oop_n} plays; league
+average {h(oop_lg_epa)}).
 
-Minnesota is the toughest test for that so far this season. Quarterbacks who have left the pocket against the Vikings have lost
-{abs(min_oop.epa):.2f} points per play, the best mark in the league ({int(min_oop.n)} plays, a small sample). With garbage time removed it's
-{pts(min_oop_neu)}, {ordn(min_oop_neu_rk)} ({min_oop_neu_n} plays).
+Minnesota is the toughest test for that so far this season. When quarterbacks leave the pocket against the Vikings, every 100 of
+those plays have cost their offense about {abs(min_oop.epa) * 100:.0f} points, the best mark in the league ({int(min_oop.n)} plays, a small sample). With garbage time removed it's
+about {abs(min_oop_neu) * 100:.0f} per 100, {ordn(min_oop_neu_rk)} ({min_oop_neu_n} plays).
 
 ![Off script](wk09-offscript.png)
 
@@ -379,22 +389,22 @@ It tells the same story: Allen's off-script plays succeed {allen_oop_succ:.0%} o
 ## Deep shots
 
 The Bills throw deep (20+ yards in the air) on {deep['buf_rate']:.0%} of their passes ({ordn(deep['buf_rate_rk'])}; league {deep['lg_rate']:.0%}), and those throws have been
-worth {pts(deep['buf_epa'])} points each ({ordn(deep['buf_rk'])}; {deep['buf_n']} throws, a small sample; league {pts(deep['lg_epa'])}). Minnesota's short-pass defense is the
-league's {ordn(deep['min_short_rk'])}-best, but deep throws against it have still been worth {pts(deep['min_epa'])} each ({ordn(deep['min_rk'])}-best; {deep['min_n']} throws, a small sample). A defense that sends extra rushers
+worth {h(deep['buf_epa'])} points per 100 ({ordn(deep['buf_rk'])}; {deep['buf_n']} throws, a small sample; league {h(deep['lg_epa'])}). Minnesota's short-pass defense is the
+league's {ordn(deep['min_short_rk'])}-best, but deep throws against it have still been worth {h(deep['min_epa'])} per 100 ({ordn(deep['min_rk'])}-best; {deep['min_n']} throws, a small sample). A defense that sends extra rushers
 leaves fewer defenders back, which is where Buffalo's big-play offense lives.
 
 ## What usually happens when the best meet the best
 
 Since 2018, a top-3 offense has met a top-3 defense {len(t3)} times in the regular season. Coming in, those offenses
-averaged {pts(t3.off_v.mean())} points per play and those defenses allowed {pts(t3.def_v.mean())}. In the game itself, the offense averaged
-**{pts(t3.game.mean())}**, close to what you get by simply adding the two strengths together ({pts(t3.pred.mean())}). The offense fell short of
-its own average {(t3.game < t3.off_v).mean():.0%} of the time. Against everyone else, those same top-3 offenses averaged {pts(o_others.game.mean())}.
+averaged {h(t3.off_v.mean())} points per 100 plays, and those defenses held offenses to about {abs(t3.def_v.mean()) * 100:.0f} below zero. In the game itself, the offense averaged
+**{h(t3.game.mean())}**, close to what you get by simply adding the two strengths together ({h(t3.pred.mean())}). The offense fell short of
+its own average {(t3.game < t3.off_v).mean():.0%} of the time. Against everyone else, those same top-3 offenses averaged {h(o_others.game.mean())}.
 
 ![Best vs best](wk09-best-vs-best.png)
 
 The Bills have been the top-3 offense in {len(buf_t3)} of those games:
 
-| Season | Game | Bills' average coming in | Bills in the game |
+| Season | Game | Bills coming in (points per 100 plays) | Bills in the game |
 |---|---|---|---|
 {buf_rows}
 
@@ -404,7 +414,8 @@ The Bills have been the top-3 offense in {len(buf_t3)} of those games:
   has all season, the Bills' deep game is open behind it.
 - **Allen on the move.** It's his best weapon this year and Minnesota's best counter. Those plays could decide the night.
 - **Turnovers.** The one area where the Bills' offense is below average meets a defense that takes the ball away.
-- Our three predictions for this game are in the companion story on the Vikings' offense with Carson Wentz.
+- Our predictions for the game, including how many points each team scores, come in part 3, logged on the
+  [Ledger](../ledger.html) before kickoff.
 
 ## For the stat-heads
 
@@ -440,12 +451,12 @@ The Bills have been the top-3 offense in {len(buf_t3)} of those games:
         "note": (f"Most in the NFL by a mile; next-highest is {bl[2026]['second']:.0%}. Allen is {ordn(allen_bl_rk)} of {n_qb_bl} QBs "
                  f"against the blitz this season."),
         "explainer": {
-            "kicker": "How we know", "title": "Every play is worth points.",
-            "text": (f"We judge every snap by how many points it adds to the drive. Deep throws (20+ yards in the air) are "
-                     f"among the league's most valuable plays, and the Bills throw them more than most. What each deep throw has been worth this season:"),
-            "fmt": "pts",
-            "bars": [["Bills", round(float(deep["buf_epa"]), 2)], ["League", round(float(deep["lg_epa"]), 2)],
-                     ["vs. Vikings", round(float(deep["min_epa"]), 2)]]},
+            "kicker": "How we know", "title": "Nobody scores every play. Every play still counts.",
+            "text": (f"Each snap moves a drive closer to points or further away, and we add that up. Deep throws (20+ yards in the air) "
+                     f"are among the most valuable plays, and the Bills throw them more than most. Points per 100 deep throws this season:"),
+            "fmt": "per100",
+            "bars": [["Bills", round(float(deep["buf_epa"]) * 100)], ["League", round(float(deep["lg_epa"]) * 100)],
+                     ["vs. Vikings", round(float(deep["min_epa"]) * 100)]]},
     }, indent=1))
     print(md)
 
