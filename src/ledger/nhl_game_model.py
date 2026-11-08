@@ -151,7 +151,7 @@ def brier(p, y):
 
 # ---------------------------------------------------------------- v0.2: starting goalie
 VERSION_G = "nhl-game-v0.2"
-G_SHRINK = 1000       # unblocked shots of league-average goaltending in each goalie's rating (chosen on 2024-25)
+G_SHRINK = 1000       # unblocked shots of league-average goaltending; experiment only (2024-25 Brier flat across 300-10000; not adopted)
 G_PAST = 0.5          # weight on shots from earlier seasons
 
 

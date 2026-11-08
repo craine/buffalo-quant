@@ -288,10 +288,10 @@ so read it as "slight lean Vegas," not "Vegas should win."
 
 **What it doesn't count: goalies, and why.** The model rates teams by the chances they create and allow, not by who's in net.
 We tested adding each game's starting goalie, rated on his record before that game, and it made the predictions no better. The
-reason shows up in the data: a goalie's goals saved in the first half of a season barely tells you about his second half. On a
-0-to-1 scale of how well one half predicts the next, goalies came in between {g_lo:.2f} and {g_hi:.2f} over the last three seasons; a
+reason shows up in the data: a goalie's goals saved in the first half of a season tells you little about his second half. On a
+scale where 1 means one half perfectly predicts the next and 0 means it tells you nothing, goalies came in between {g_lo:.2f} and {g_hi:.2f} over the last three seasons; a
 team's chances allowed came in between {t_lo:.2f} and {t_hi:.2f}. Over a few dozen games, goalie numbers are mostly noise. So
-while Buffalo's expected starter, Colten Ellis, is at {bg[bg.name == 'Colten Ellis'].gsax.sum():+.1f} this season and Vegas's Adin Hill at {vg[vg.name == 'Adin Hill'].gsax.sum():+.1f}, that gap
+while Buffalo's expected starter, Colten Ellis, is at {bg[bg.name == 'Colten Ellis'].gsax.sum():+.1f} this season and Adin Hill, NHL.com's projected Vegas starter, at {vg[vg.name == 'Adin Hill'].gsax.sum():+.1f}, that gap
 tells us less than it looks like. Vegas's starter wasn't named when we published. We'll keep testing goalies as more seasons
 of data come in; the cards track them in the meantime.
 
@@ -312,7 +312,8 @@ of data come in; the cards track them in the meantime.
   unblocked attempt. Close = within 20 ft. GSAx = xG against minus goals against on unblocked shots, empty net excluded.
 - Data through {last_date} ({len(g26)} games). Last-{nb5} shares use each team's five most recent games.
 - Goalie test (v0.2, `nhl_game_model.build_frame_g`, `scripts/tune_nhl_game_model_g.py`): starter's blended GSAx/shot x league unblocked
-  shots/game as a feature; 2024-25 Brier 0.2375-0.2377 vs. 0.2375 without it, so not adopted. Split-half correlation, goalies with 400+
+  shots/game as a feature; 2024-25 Brier 0.2375-0.2377 vs. 0.2375 without it; goalie coefficient
+  +0.031 at shrink 1000 (wrong sign), matching v0.1 only as the shrink grows very large. Not adopted. Split-half correlation, goalies with 400+
   unblocked shots per half: {', '.join(f'{v:.2f}' for v in rep_g)}; team xGA/game: {', '.join(f'{v:.2f}' for v in rep_t)} (2023-24 to 2025-26).
 - Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`). Team xGF/xGA per game shrunk with K={gmod.K} games toward
   league + {gmod.PRIOR_KEEP} x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
