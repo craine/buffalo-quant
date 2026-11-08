@@ -133,14 +133,15 @@ def main():
     sc = close25.groupby("pid").epa.mean()
     sc = sc[sc.index.isin(pool[2025].index)]
     w_short_close_rk = rank(sc, WENTZ, False)
+    n_short_close_pool = len(sc)
     n_deep_close = int(d[(d.defteam == "BUF") & d.close & d.deep].shape[0])
     # ---- chart 1: Bills pass defense, short vs deep, all plays and close games
     fig, axes = plt.subplots(1, 2, figsize=(10, 5), dpi=200, sharey=True)
     panels = [("All plays", "short_epa", "deep_epa", b_rk["short"], b_rk["deep"]),
               ("Close games only (win chance 10-90%)", "short_epa_close", "deep_epa_close", b_rk["short_close"], b_rk["deep_close"])]
-    for ax, (title, sc, dc, rs, rd) in zip(axes, panels):
+    for ax, (title, s_col, dc, rs, rd) in zip(axes, panels):
         x = np.arange(2); w = 0.36
-        buf = [bd[sc], bd[dc]]; lg = [lgd[sc], lgd[dc]]
+        buf = [bd[s_col], bd[dc]]; lg = [lgd[s_col], lgd[dc]]
         ax.bar(x - w / 2, buf, w, color=BLUE, label="Bills defense", zorder=2)
         ax.bar(x + w / 2, lg, w, color=GRAY, label="League average", zorder=2)
         for i, (v, r_) in enumerate(zip(buf, (rs, rd))):
@@ -154,14 +155,14 @@ def main():
     axes[0].legend(frameon=False, fontsize=9, loc="upper left")
     hi = max(D[["short_epa", "deep_epa", "short_epa_close", "deep_epa_close"]].loc["BUF"].max(), lgd.deep_epa, lgd.deep_epa_close)
     axes[0].set_ylim(min(0, bd.deep_epa_close) - 0.08, hi + 0.18)
-    finish(fig, "The Bills bend on short throws, not deep ones",
+    finish(fig, "The Bills bend most on short throws",
            f"Points added per pass attempt against the Bills vs. the league average, 2026 through week {THRU}. 1st = best defense.",
-           f"Bills: {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts faced ({n_deep_close} deep in close games: a small sample).")
+           f"Bills: {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts faced. Both deep samples are small ({int(bd.n_deep)} all plays, {n_deep_close} in close games).")
     fig.savefig(OUT / "wk09a-bills-short-deep.png"); plt.close(fig)
 
     # ---- chart 2: Wentz's risk profile, 2025
-    items = [("Sacked, share of dropbacks", w25.sk, lgq[2025].sk, f"{ordn(sk_most)}-most of {n_pool[2025]}"),
-             ("Throws that should have been intercepted", w25.intw, lgq[2025].intw, f"{ordn(intw_most)}-most of {n_pool[2025]}"),
+    items = [("Sacked, share of dropbacks", w25.sk, lgq[2025].sk, f"{ordn(sk_most)}-highest rate of {n_pool[2025]}"),
+             ("Throws that should have been intercepted", w25.intw, lgq[2025].intw, f"{ordn(intw_most)}-highest rate of {n_pool[2025]}"),
              ("Turnovers, share of dropbacks", w25.to, lgq[2025].to, f"{ordn(w_rk['to'])} of {n_pool[2025]}, 1st = fewest")]
     fig, ax = plt.subplots(figsize=(9.5, 4.9), dpi=200)
     ys = np.arange(len(items))[::-1]
@@ -182,14 +183,14 @@ def main():
 
     md = f"""# Carson Wentz vs. the Bills defense: short passes, sacks and risky throws
 
-**Finding: The Bills' defense gives up the most on short passes, the ones thrown less than 20 yards downfield. They rank
+**Finding: Compared with the rest of the league, the Bills' defense is weakest on short passes, the ones thrown less than 20 yards downfield. They rank
 {ordn(b_rk['short'])} of 32 there, and {ordn(b_rk['short_close'])} with garbage time removed. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
 on {1 - w25.deep_share:.0%} of his attempts last season. But Wentz brings two weak spots of his own. He was sacked on {w25.sk:.1%} of his dropbacks, the
-{ordn(sk_most)}-highest rate among {n_pool[2025]} quarterbacks, and he threw the {ordn(intw_most)}-most passes that should have been intercepted.**
+{ordn(sk_most)}-highest rate among {n_pool[2025]} quarterbacks, and his share of throws that should have been intercepted was the {ordn(intw_most)}-highest.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Kyler Murray is out with a
 strained hamstring, so Wentz starts. Numbers are 2026 through week {THRU} unless noted, and Wentz's are mostly from 2025,
-since he has thrown only {int(w26.db)} times this year.*
+since he has dropped back only {int(w26.db)} times this year.*
 
 ![Bills short vs deep](wk09a-bills-short-deep.png)
 
@@ -208,7 +209,7 @@ feed doesn't, like how many defenders rushed and whether a throw should have bee
 **The math:** take what the drive was worth after the play, subtract what it was worth before, and that's the play's
 value. Average it over many plays and you get **points added per play**. A good defense keeps that number low.
 
-**How we checked it:** we ran every key number two ways, on all plays and on close-game plays only (when either team
+**How we checked it:** we ran the efficiency numbers two ways, on all plays and on close-game plays only (when either team
 had between a 10% and 90% chance to win), so a few blowout drives can't drive the story. Where the two disagree, we say so.
 
 ## Where the Bills bend: short throws
@@ -221,7 +222,7 @@ Deep throws are a different story. Opponents have tried them on only {bd.deep_sh
 ({ordn(b_rk['deep_share'])}-fewest), and in close games the Bills have allowed {pts(bd.deep_epa_close)} points per deep throw, {ordn(b_rk['deep_close'])} in the league
 (league average {pts(lgd.deep_epa_close)}; only {n_deep_close} attempts, a small sample). Counting blowouts they're {ordn(b_rk['deep'])}, but that's only {int(bd.n_deep)} deep attempts.
 
-Overall the Bills rank {ordn(bdt.dropback_epa_rk)} against the pass, give up 20-yard plays on {bd.expl:.1%} of dropbacks ({ordn(b_rk['expl'])}; league {lgd.expl:.1%}),
+Overall the Bills rank {ordn(bdt.dropback_epa_rk)} against the pass ({pts(bdt.dropback_epa)} points per dropback; league {pts(bdt.dropback_epa_lg)}), give up 20-yard plays on {bd.expl:.1%} of dropbacks ({ordn(b_rk['expl'])}; league {lgd.expl:.1%}),
 and allow third-down conversions {t3.loc['BUF', 'r']:.0%} of the time ({ordn(t3_rk)}; league {t3.c.sum() / t3.n.sum():.0%}).
 
 ## What Wentz brings
@@ -242,11 +243,11 @@ Two things stand out.
 
 **Wentz looks better overall than in close games.** Counting every play, he was about league average last season
 ({pts(w25.epa)} per dropback; league {pts(lgq[2025].epa)}). With garbage time removed he drops to {pts(w25.epa_close)}, {ordn(w_rk['epa_close'])} of {n_pool[2025]}.
-Some of his best numbers came when games were already decided. Murray this year was {ordn(m_rk)} of {n_pool[SEASON]} overall and {ordn(m_rk_close)} in close
+Some of his best numbers came when games were already decided ({int(w25.db - w25.n_close)} dropbacks outside close games, a small sample). Murray this year was {ordn(m_rk)} of {n_pool[SEASON]} overall and {ordn(m_rk_close)} in close
 games. By these numbers, neither has been an above-average passer when the game is still in doubt.
 
-**Risk.** Wentz was sacked on {w25.sk:.1%} of dropbacks ({ordn(sk_most)}-most of {n_pool[2025]}) and threw {int(w25.n_intw)} passes that FTN's charters
-marked as should-have-been-intercepted, {w25.intw:.1%} of his attempts ({ordn(intw_most)}-most; league {lgq[2025].intw:.1%}). He got away with most of
+**Risk.** Wentz was sacked on {w25.sk:.1%} of dropbacks ({ordn(sk_most)}-highest rate of {n_pool[2025]}) and threw {int(w25.n_intw)} passes that FTN's charters
+marked as should-have-been-intercepted, {w25.intw:.1%} of his attempts ({ordn(intw_most)}-highest rate; league {lgq[2025].intw:.1%}). He got away with most of
 them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025].to:.1%}).
 
 ![Wentz risk profile](wk09a-wentz-risk.png)
@@ -285,7 +286,8 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
   gsis id via `COALESCE(passer_player_id, rusher_player_id)` (scrambles included). Short/deep: pass attempts excluding
   sacks, `air_yards` < 20 vs >= 20. Close games: `wp` between 0.10 and 0.90. Regular season; 2026 through week {THRU}.
 - QB ranks among quarterbacks with {MIN_DB}+ dropbacks ({n_pool[2025]} in 2025, {n_pool[SEASON]} in 2026). League values in the QB table are
-  play-weighted over all dropbacks. Wentz 2025 close-game sample: {int(w25.n_close)} dropbacks; 2026: {int(w26.n_close)}. Wentz 2025 short throws, close games: {ordn(w_short_close_rk)} of {len(sc)}.
+  play-weighted over all dropbacks; the Ledger calls use the average of team-game values, which is why call 1 shows a
+  slightly different league average than the QB table. Wentz 2025 close-game sample: {int(w25.n_close)} dropbacks; 2026: {int(w26.n_close)}. Wentz 2025 short throws, close games: {ordn(w_short_close_rk)} of {n_short_close_pool}.
 - FTN charting (`raw_ftn`, joined on game and play id): blitz = `n_blitzers` > 0; should-have-been-intercepted =
   `is_interception_worthy` on pass attempts. Wentz 2025: {int(w25.n_intw)} of {int(w25.n_att)} attempts; {int(w25.n_blitz)} dropbacks vs. the blitz.
 - Bills defense: {int(bd.db)} dropbacks faced, {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts, {int(bd.n_blitz)} blitzes. Team ranks are among 32
@@ -300,7 +302,7 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
         "big": [[ordn(b_rk["short"]), "Bills defense vs. short throws (of 32)"],
                 [f"{1 - w25.deep_share:.0%}", "Wentz throws that were short, 2025"]],
         "note": (f"With garbage time removed the Bills are still {ordn(b_rk['short_close'])}. Wentz was sacked on {w25.sk:.1%} of dropbacks last "
-                 f"season, {ordn(sk_most)}-most among {n_pool[2025]} QBs."),
+                 f"season, the {ordn(sk_most)}-highest rate among {n_pool[2025]} QBs."),
         "explainer": {
             "kicker": "How we know", "title": "Every play is worth points.",
             "text": (f"We judge every snap by how many points it adds to or takes away from the drive. On 3rd-and-8, a "

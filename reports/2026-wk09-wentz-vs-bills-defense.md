@@ -1,13 +1,13 @@
 # Carson Wentz vs. the Bills defense: short passes, sacks and risky throws
 
-**Finding: The Bills' defense gives up the most on short passes, the ones thrown less than 20 yards downfield. They rank
+**Finding: Compared with the rest of the league, the Bills' defense is weakest on short passes, the ones thrown less than 20 yards downfield. They rank
 25th of 32 there, and 25th with garbage time removed. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
 on 88% of his attempts last season. But Wentz brings two weak spots of his own. He was sacked on 9.7% of his dropbacks, the
-5th-highest rate among 43 quarterbacks, and he threw the 2nd-most passes that should have been intercepted.**
+5th-highest rate among 43 quarterbacks, and his share of throws that should have been intercepted was the 2nd-highest.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Kyler Murray is out with a
 strained hamstring, so Wentz starts. Numbers are 2026 through week 8 unless noted, and Wentz's are mostly from 2025,
-since he has thrown only 47 times this year.*
+since he has dropped back only 47 times this year.*
 
 ![Bills short vs deep](wk09a-bills-short-deep.png)
 
@@ -26,7 +26,7 @@ feed doesn't, like how many defenders rushed and whether a throw should have bee
 **The math:** take what the drive was worth after the play, subtract what it was worth before, and that's the play's
 value. Average it over many plays and you get **points added per play**. A good defense keeps that number low.
 
-**How we checked it:** we ran every key number two ways, on all plays and on close-game plays only (when either team
+**How we checked it:** we ran the efficiency numbers two ways, on all plays and on close-game plays only (when either team
 had between a 10% and 90% chance to win), so a few blowout drives can't drive the story. Where the two disagree, we say so.
 
 ## Where the Bills bend: short throws
@@ -39,7 +39,7 @@ Deep throws are a different story. Opponents have tried them on only 9.7% of att
 (9th-fewest), and in close games the Bills have allowed 0.00 points per deep throw, 6th in the league
 (league average +0.41; only 20 attempts, a small sample). Counting blowouts they're 18th, but that's only 26 deep attempts.
 
-Overall the Bills rank 24th against the pass, give up 20-yard plays on 9.6% of dropbacks (25th; league 8.1%),
+Overall the Bills rank 24th against the pass (+0.14 points per dropback; league +0.05), give up 20-yard plays on 9.6% of dropbacks (25th; league 8.1%),
 and allow third-down conversions 42% of the time (22nd; league 40%).
 
 ## What Wentz brings
@@ -60,11 +60,11 @@ Two things stand out.
 
 **Wentz looks better overall than in close games.** Counting every play, he was about league average last season
 (+0.04 per dropback; league +0.04). With garbage time removed he drops to -0.04, 32nd of 43.
-Some of his best numbers came when games were already decided. Murray this year was 23rd of 30 overall and 23rd in close
+Some of his best numbers came when games were already decided (53 dropbacks outside close games, a small sample). Murray this year was 23rd of 30 overall and 23rd in close
 games. By these numbers, neither has been an above-average passer when the game is still in doubt.
 
-**Risk.** Wentz was sacked on 9.7% of dropbacks (5th-most of 43) and threw 10 passes that FTN's charters
-marked as should-have-been-intercepted, 6.0% of his attempts (2nd-most; league 3.2%). He got away with most of
+**Risk.** Wentz was sacked on 9.7% of dropbacks (5th-highest rate of 43) and threw 10 passes that FTN's charters
+marked as should-have-been-intercepted, 6.0% of his attempts (2nd-highest rate; league 3.2%). He got away with most of
 them: his actual turnover rate was 2.6%, about league average (2.6%).
 
 ![Wentz risk profile](wk09a-wentz-risk.png)
@@ -103,7 +103,8 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
   gsis id via `COALESCE(passer_player_id, rusher_player_id)` (scrambles included). Short/deep: pass attempts excluding
   sacks, `air_yards` < 20 vs >= 20. Close games: `wp` between 0.10 and 0.90. Regular season; 2026 through week 8.
 - QB ranks among quarterbacks with 150+ dropbacks (43 in 2025, 30 in 2026). League values in the QB table are
-  play-weighted over all dropbacks. Wentz 2025 close-game sample: 143 dropbacks; 2026: 45. Wentz 2025 short throws, close games: 27th of 15.
+  play-weighted over all dropbacks; the Ledger calls use the average of team-game values, which is why call 1 shows a
+  slightly different league average than the QB table. Wentz 2025 close-game sample: 143 dropbacks; 2026: 45. Wentz 2025 short throws, close games: 27th of 43.
 - FTN charting (`raw_ftn`, joined on game and play id): blitz = `n_blitzers` > 0; should-have-been-intercepted =
   `is_interception_worthy` on pass attempts. Wentz 2025: 10 of 168 attempts; 57 dropbacks vs. the blitz.
 - Bills defense: 293 dropbacks faced, 242 short and 26 deep attempts, 113 blitzes. Team ranks are among 32

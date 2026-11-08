@@ -16,9 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
-    ("bills-at-vikings-week-9", "2026-wk09-bills-at-vikings.md", "2026-11-08", "Bills &middot; Week 9 preview",
-     "Both rank 1st through week 8. Kyler Murray is out, Carson Wentz starts, and the Bills' pass defense is their weak spot.",
-     "wk09-matchup.png"),
+    ("wentz-vs-bills-defense", "2026-wk09-wentz-vs-bills-defense.md", "2026-11-08", "Bills &middot; Week 9 preview, part 1",
+     "Carson Wentz starts for Minnesota. Here's where his tendencies meet the Bills defense's weak spots, and what we expect Monday.",
+     "wk09a-bills-short-deep.png"),
     ("sabres-blue-jackets-nov-6", "2026-11-06-sabres-cbj.md", "2026-11-07", "Sabres &middot; Post-game",
      "Buffalo's most dangerous night of the season came from living around Columbus's crease: 10 rebound shots, their most this year.",
      "sabres-cbj-flow.png"),
