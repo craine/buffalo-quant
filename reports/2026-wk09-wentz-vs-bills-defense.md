@@ -96,7 +96,7 @@ them: his actual turnover rate was 2.6%, about league average (2.6%).
 
 ## How many points will Minnesota score?
 
-**Our projection: about 23 points**, most likely somewhere between 11 and 35. We give Minnesota a **61% chance of
+**Our projection: about 23 points**, most likely somewhere between 11 and 35 (8 times in 10). We give Minnesota a **61% chance of
 scoring 20 or more.**
 
 ![Minnesota points](wk09a-min-points.png)
@@ -107,20 +107,21 @@ scored 1.72 points per drive (76 drives), below the league's 2.07. The Bills' de
 last season and the league average: Minnesota's offense counts as 1.78 and Buffalo's defense as 2.23.
 
 **The math:** start from the league's 2.07 points per drive. Minnesota's offense is 0.30 worse than average, so take that off;
-Buffalo's defense is 0.15 worse than average, so add that back. That leaves 1.93 points per drive. Multiply by the 10.9 drives a team usually gets in games like this, and you get 21. A final step,
-fit on past games, turns that into a real score. It adds back what drives don't count (defensive touchdowns, safeties,
-missed extra points), pulls very high and very low projections toward the middle because past games show they overshoot,
+Buffalo's defense is 0.15 worse than average, so add that back. That leaves about 1.93 points per drive (numbers are rounded). Multiply by the 10.9 drives a team gets in a typical Vikings or Bills game this season, and you get 21. A final step,
+fit on past games, turns that into a real score. It accounts for scoring that drives don't capture cleanly (defensive and
+punt-return touchdowns, safeties, missed extra points and two-point tries), pulls very high and very low projections toward the middle because past games show they overshoot,
 and adds about 1.5 points for playing at home. That's how we get to 23.
 
-**How we checked it.** We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game it had never
-seen, using only what was known before kickoff. Its average miss was 7.5 points. That beat simply guessing the league
+**How we checked it.** We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game from week 2 on
+(2026 through week 8), games it had never seen, using only what was known before kickoff. Its average miss was 7.5 points. That beat simply guessing the league
 average (7.9) and guessing each team's own scoring average (8.1), but not by a lot: football scores bounce around.
 It lands within 7 points 55% of the time. When it gave something a 60-80% chance, that thing happened 74% of the
-time (it said 70% on average), so its percentages can be taken at face value.
+time (it said 70% on average), so its percentages are close to accurate, if anything a little cautious.
 
 **What it doesn't know: Wentz.** Minnesota's numbers come mostly from Kyler Murray's games, and the model doesn't know the
-quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. By the numbers above, Wentz hasn't
-been worse than Murray this year, so the switch shouldn't push the projection down.
+quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. The table above doesn't settle it either
+way: on value per dropback Wentz has been about even with Murray, but on only 47 dropbacks this year, and he gets sacked
+more often. Treat the 23 as a projection for Minnesota's offense in general, not for Wentz specifically.
 
 **This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
 

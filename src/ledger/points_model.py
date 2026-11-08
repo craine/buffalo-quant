@@ -6,7 +6,8 @@ Pregame inputs only (games before the one being predicted):
   - how many drives each team usually gets per game
   - home field
 Expected points = (league + offense edge + defense edge) points per drive x expected drives, then a linear
-calibration to real final scores (drive points ignore defensive/return TDs, missed PATs, 2-pt tries and safeties).
+calibration to real final scores (drive points count every offensive TD as 7 and miss defensive and punt-return TDs,
+safeties, missed PATs and 2-pt tries; kickoff-return TDs are credited to the receiving team's drive).
 Chances come from the empirical spread of past misses around the prediction.
 
 Never uses betting lines (brand rule).
@@ -17,7 +18,7 @@ import pandas as pd
 from src.db import query
 
 VERSION = "points-v0.1"
-K, PRIOR_KEEP = 60, 0.7          # chosen on 2019-2022 (scripts/backtest_points_model.py)
+K, PRIOR_KEEP = 60, 0.7          # chosen on 2019-22 fits (scripts/tune_points_model.py); test misses barely move across K 30-120, keep 0.5-0.9
 TRAIN = range(2019, 2024)
 TEST = {2024: 99, 2025: 99, 2026: 8}  # season -> last week used (2026 pinned to week 8)
 
@@ -127,12 +128,13 @@ def add_baselines(f):
     return f
 
 
-def backtest(con=None):
-    """Fit on TRAIN, score each TEST season blind. Returns coef, training misses, and a summary table."""
+def backtest(con=None, test=None):
+    """Fit on TRAIN, score each test season blind (season -> last week). Returns coef, training misses, test rows, summary."""
+    test = test or TEST
     tr = build_frame(TRAIN, con=con)
     coef, res = fit(tr)
-    te = add_baselines(build_frame(list(TEST) + [min(TEST) - 1], con=con, max_week=TEST))
-    te = te[te.season.isin(list(TEST))]
+    te = add_baselines(build_frame(list(test) + [min(test) - 1], con=con, max_week=test))
+    te = te[te.season.isin(list(test))]
     te["model"] = predict(coef, te.raw, te.home)
     summ = te.groupby("season").apply(lambda x: pd.Series(dict(
         n=len(x), model=(x.score - x.model).abs().mean(), league=(x.score - x.b_league).abs().mean(),

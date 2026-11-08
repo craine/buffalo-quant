@@ -121,7 +121,7 @@ def main():
     c3 = prob_over("MIN", "BUF", "sack_rate", 0.06, off_override=w_sk, max_week=THRU)
     from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
     lp = _read(PRED_CSV, PRED_COLS)
-    lp = lp[lp.game_id == GAME] if not lp.empty else lp
+    lp = lp[(lp.game_id == GAME) & (lp.model_version == pm.VERSION)] if not lp.empty else lp
     if len(lp):
         ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before kickoff.** "
                          "These are graded after the game, hit or miss, and stay up either way.")
@@ -149,7 +149,7 @@ def main():
     n_short_close_pool = len(sc)
     n_deep_close = int(d[(d.defteam == "BUF") & d.close & d.deep].shape[0])
     # ---- Minnesota points projection (points model, tested on 2024-26 games it never saw)
-    coef, res, te, summ = pm.backtest()
+    coef, res, te, summ = pm.backtest(test={2024: 99, 2025: 99, SEASON: THRU})
     g_dr = pm._drives()
     o_r, d_r, lg_ppd, pace, lg_pace = pm.ratings(g_dr, SEASON, THRU + 1)
     raw_pts, ppd_min, drv_min = pm.raw_prediction(o_r, d_r, lg_ppd, pace, lg_pace, "MIN", "BUF")
@@ -183,7 +183,7 @@ def main():
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"Our projection: Minnesota scores about {proj:.0f}",
            f"Chance the Vikings score at least this many points Monday. Most likely range: {lo:.0f} to {hi80:.0f} (8 times in 10).",
-           f"Points model {pm.VERSION}: 2026 drives through week {THRU}, home field, tested on {int(tot)} team-games from 2024-26 it never saw.")
+           f"Points model {pm.VERSION}: 2026 drives through week {THRU}, home field, tested on {int(tot):,} team-games from 2024-26 it never saw.")
     fig.savefig(OUT / "wk09a-min-points.png"); plt.close(fig)
 
     # ---- chart 1: Bills pass defense, short vs deep, all plays and close games
@@ -330,7 +330,7 @@ them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025
 
 ## How many points will Minnesota score?
 
-**Our projection: about {proj:.0f} points**, most likely somewhere between {lo:.0f} and {hi80:.0f}. We give Minnesota a **{chance[PTS_THR]:.0%} chance of
+**Our projection: about {proj:.0f} points**, most likely somewhere between {lo:.0f} and {hi80:.0f} (8 times in 10). We give Minnesota a **{chance[PTS_THR]:.0%} chance of
 scoring {PTS_THR} or more.**
 
 ![Minnesota points](wk09a-min-points.png)
@@ -341,20 +341,21 @@ scored {min_off_raw:.2f} points per drive ({min_off_n} drives), below the league
 last season and the league average: Minnesota's offense counts as {o_r["MIN"]:.2f} and Buffalo's defense as {d_r["BUF"]:.2f}.
 
 **The math:** start from the league's {lg_ppd:.2f} points per drive. Minnesota's offense is {lg_ppd - o_r["MIN"]:.2f} worse than average, so take that off;
-Buffalo's defense is {d_r["BUF"] - lg_ppd:.2f} worse than average, so add that back. That leaves {ppd_min:.2f} points per drive. Multiply by the {drv_min:.1f} drives a team usually gets in games like this, and you get {raw_pts:.0f}. A final step,
-fit on past games, turns that into a real score. It adds back what drives don't count (defensive touchdowns, safeties,
-missed extra points), pulls very high and very low projections toward the middle because past games show they overshoot,
+Buffalo's defense is {d_r["BUF"] - lg_ppd:.2f} worse than average, so add that back. That leaves about {ppd_min:.2f} points per drive (numbers are rounded). Multiply by the {drv_min:.1f} drives a team gets in a typical Vikings or Bills game this season, and you get {raw_pts:.0f}. A final step,
+fit on past games, turns that into a real score. It accounts for scoring that drives don't capture cleanly (defensive and
+punt-return touchdowns, safeties, missed extra points and two-point tries), pulls very high and very low projections toward the middle because past games show they overshoot,
 and adds about {coef[2]:.1f} points for playing at home. That's how we get to {proj:.0f}.
 
-**How we checked it.** We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game it had never
-seen, using only what was known before kickoff. Its average miss was {mae_m:.1f} points. That beat simply guessing the league
+**How we checked it.** We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game from week 2 on
+(2026 through week {THRU}), games it had never seen, using only what was known before kickoff. Its average miss was {mae_m:.1f} points. That beat simply guessing the league
 average ({mae_l:.1f}) and guessing each team's own scoring average ({mae_t:.1f}), but not by a lot: football scores bounce around.
 It lands within 7 points {w7:.0%} of the time. When it gave something a 60-80% chance, that thing happened {c68.y.mean():.0%} of the
-time (it said {c68.p.mean():.0%} on average), so its percentages can be taken at face value.
+time (it said {c68.p.mean():.0%} on average), so its percentages are close to accurate, if anything a little cautious.
 
 **What it doesn't know: Wentz.** Minnesota's numbers come mostly from Kyler Murray's games, and the model doesn't know the
-quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. By the numbers above, Wentz hasn't
-been worse than Murray this year, so the switch shouldn't push the projection down.
+quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. The table above doesn't settle it either
+way: on value per dropback Wentz has been about even with Murray, but on only {int(w26.db)} dropbacks this year, and he gets sacked
+more often. Treat the {proj:.0f} as a projection for Minnesota's offense in general, not for Wentz specifically.
 
 {ledger_status}
 
