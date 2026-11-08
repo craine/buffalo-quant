@@ -102,7 +102,7 @@ and counted how often each kind actually went in.
 
 - A shot from within 10 feet of the net went in {near:.1%} of the time ({one_in(near)}).
 - From 30 to 40 feet: {mid:.1%} ({one_in(mid)}).
-- From 60 feet or more, around the blue line: {far:.1%} ({one_in(far)}).
+- From 60 feet or more: {far:.1%} ({one_in(far)}).
 - A rebound (a shot within three seconds of a teammate's shot) went in {reb.loc[1]:.1%} of the time, against {reb.loc[0]:.1%} for
   other shots.
 - On the power play, shots went in {pp.loc[True]:.1%} of the time, against {pp.loc[False]:.1%} otherwise.

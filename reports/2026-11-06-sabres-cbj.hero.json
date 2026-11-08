@@ -1,0 +1,29 @@
+{
+ "label": "Friday's chances, in goals",
+ "big": [
+  [
+   4.5,
+   "Sabres"
+  ],
+  [
+   3.3,
+   "Blue Jackets"
+  ]
+ ],
+ "note": "Final: Sabres 5, Blue Jackets 2. 10 Buffalo rebound shots, their most this season.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Rebounds are gold.",
+  "text": "A shot right after another one catches the goalie out of position. Over the last three NHL seasons, rebounds went in 11.5% of the time, nearly double the 6.3% for other shots. Buffalo had 10 of them Friday.",
+  "bars": [
+   [
+    "Rebounds",
+    0.1148
+   ],
+   [
+    "Other shots",
+    0.0632
+   ]
+  ]
+ }
+}
