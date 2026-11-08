@@ -1,0 +1,244 @@
+{
+ "meta": {
+  "as_of": "2026-11-07",
+  "season": "2026-27",
+  "lg_sv": 0.89,
+  "lg_close_sv": 0.812,
+  "n_goalies": 75,
+  "shrink": 600,
+  "past_weight": 0.5,
+  "teams": [
+   "BUF",
+   "VGK"
+  ]
+ },
+ "cards": [
+  {
+   "id": 8480045,
+   "name": "Ukko-Pekka Luukkonen",
+   "team": "BUF",
+   "number": 1,
+   "gp": 11,
+   "sog": 287,
+   "sv": 0.878,
+   "xsv": 0.88,
+   "gsax": -0.5,
+   "rk": 38,
+   "of": 75,
+   "close_sv": 0.794,
+   "close_sog": 102,
+   "blend": 0.11,
+   "blend_rk": 31,
+   "spark": [
+    -2.84,
+    -3.54,
+    -5.41,
+    -4.48,
+    -3.9,
+    -4.96,
+    -4.54,
+    -3.85,
+    -3.76,
+    -1.9,
+    -0.54
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "BUF",
+     "gp": 54,
+     "sog": 1470,
+     "sv": 0.91,
+     "gsax": 10.9
+    },
+    {
+     "season": "2024-25",
+     "team": "BUF",
+     "gp": 55,
+     "sog": 1490,
+     "sv": 0.887,
+     "gsax": -12.7
+    },
+    {
+     "season": "2025-26",
+     "team": "BUF",
+     "gp": 35,
+     "sog": 931,
+     "sv": 0.909,
+     "gsax": 9.1
+    },
+    {
+     "season": "2026-27",
+     "team": "BUF",
+     "gp": 11,
+     "sog": 287,
+     "sv": 0.878,
+     "gsax": -0.5
+    }
+   ],
+   "small": true
+  },
+  {
+   "id": 8481551,
+   "name": "Colten Ellis",
+   "team": "BUF",
+   "number": 92,
+   "gp": 6,
+   "sog": 147,
+   "sv": 0.891,
+   "xsv": 0.876,
+   "gsax": 2.2,
+   "rk": 20,
+   "of": 75,
+   "close_sv": 0.738,
+   "close_sog": 42,
+   "blend": 0.2,
+   "blend_rk": 25,
+   "spark": [
+    0.08,
+    0.49,
+    0.12,
+    3.09,
+    1.13,
+    2.24
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "BUF",
+     "gp": 16,
+     "sog": 455,
+     "sv": 0.903,
+     "gsax": -0.6
+    },
+    {
+     "season": "2026-27",
+     "team": "BUF",
+     "gp": 6,
+     "sog": 147,
+     "sv": 0.891,
+     "gsax": 2.2
+    }
+   ],
+   "small": true
+  },
+  {
+   "id": 8479394,
+   "name": "Carter Hart",
+   "team": "VGK",
+   "number": 79,
+   "gp": 10,
+   "sog": 251,
+   "sv": 0.9,
+   "xsv": 0.893,
+   "gsax": 1.8,
+   "rk": 21,
+   "of": 75,
+   "close_sv": 0.803,
+   "close_sog": 71,
+   "blend": -0.01,
+   "blend_rk": 40,
+   "spark": [
+    0.08,
+    -1.33,
+    -0.65,
+    0.49,
+    1.08,
+    2.14,
+    -1.21,
+    -1.05,
+    -0.14,
+    1.81
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "PHI",
+     "gp": 26,
+     "sog": 727,
+     "sv": 0.906,
+     "gsax": -1.5
+    },
+    {
+     "season": "2025-26",
+     "team": "VGK",
+     "gp": 18,
+     "sog": 422,
+     "sv": 0.891,
+     "gsax": -2.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VGK",
+     "gp": 10,
+     "sog": 251,
+     "sv": 0.9,
+     "gsax": 1.8
+    }
+   ],
+   "small": true
+  },
+  {
+   "id": 8478499,
+   "name": "Adin Hill",
+   "team": "VGK",
+   "number": 33,
+   "gp": 8,
+   "sog": 209,
+   "sv": 0.895,
+   "xsv": 0.903,
+   "gsax": -1.8,
+   "rk": 55,
+   "of": 75,
+   "close_sv": 0.786,
+   "close_sog": 70,
+   "blend": -0.25,
+   "blend_rk": 56,
+   "spark": [
+    -0.46,
+    -0.86,
+    -0.51,
+    0.7,
+    -2.62,
+    -1.08,
+    -2.79,
+    -1.79
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "VGK",
+     "gp": 35,
+     "sog": 979,
+     "sv": 0.909,
+     "gsax": -0.7
+    },
+    {
+     "season": "2024-25",
+     "team": "VGK",
+     "gp": 50,
+     "sog": 1293,
+     "sv": 0.906,
+     "gsax": 7.8
+    },
+    {
+     "season": "2025-26",
+     "team": "VGK",
+     "gp": 27,
+     "sog": 587,
+     "sv": 0.871,
+     "gsax": -14.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VGK",
+     "gp": 8,
+     "sog": 209,
+     "sv": 0.895,
+     "gsax": -1.8
+    }
+   ],
+   "small": true
+  }
+ ]
+}

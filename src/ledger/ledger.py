@@ -5,6 +5,7 @@ Rules enforced here: created_at_utc must precede kickoff; no UPDATE or DELETE, e
 corrections are new rows whose notes reference the old id.
 """
 import csv
+import re
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
@@ -45,16 +46,30 @@ def kickoff_utc(game_id, con=None):
 
 
 def add_prediction(*, game_id, subject, claim_text, metric, threshold, probability,
-                   model_version, notes="", sport="NFL", now=None, con=None):
+                   model_version, notes="", sport="NFL", now=None, con=None, kickoff=None, season=None, week=None):
+    """NFL: kickoff comes from raw_schedules. Other sports: pass kickoff (aware datetime), season and week explicitly,
+    and record where the start time came from in notes."""
     now = now or datetime.now(timezone.utc)
-    ko = kickoff_utc(game_id, con)
+    sport = str(sport).upper()
+    if sport not in {"NFL", "NHL"}:
+        raise ValueError(f"unknown sport {sport!r}")
+    if re.fullmatch(r"\d{4}_\d{2}_[A-Z]{2,3}_[A-Z]{2,3}", game_id) and sport != "NFL":
+        raise ValueError("nflverse game ids must be logged as NFL so the schedule kickoff is used")
+    if sport == "NFL":
+        ko = kickoff_utc(game_id, con)
+    else:
+        if kickoff is None or kickoff.tzinfo is None or season is None:
+            raise ValueError("non-NFL predictions need an aware kickoff datetime and a season")
+        ko = kickoff.astimezone(timezone.utc)
     if now >= ko:
         raise ValueError(f"Rejected: {now.isoformat()} is not before kickoff {ko.isoformat()}")
     if not 0 < float(probability) < 1:
         raise ValueError("probability must be strictly between 0 and 1")
     existing = _read(PRED_CSV, PRED_COLS)
     pid = f"P{len(existing) + 1:04d}"
-    season, week = game_id.split("_")[0], int(game_id.split("_")[1])
+    if sport == "NFL":
+        season, week = game_id.split("_")[0], int(game_id.split("_")[1])
+    week = "" if week is None else week
     row = dict(id=pid, created_at_utc=now.strftime("%Y-%m-%dT%H:%M:%SZ"), sport=sport, season=season,
                week=week, game_id=game_id, subject=subject, claim_text=claim_text, metric=metric,
                threshold=threshold, probability=f"{float(probability):.2f}",

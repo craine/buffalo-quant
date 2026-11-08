@@ -19,6 +19,9 @@ ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("wentz-vs-bills-defense", "2026-wk09-wentz-vs-bills-defense.md", "2026-11-08", "Bills &middot; Week 9 preview, part 1",
      "Carson Wentz starts for Minnesota. Here's where his tendencies meet the Bills defense's weak spots, and what we expect Monday.",
      "wk09a-bills-short-deep.png"),
+    ("sabres-vegas-pregame-nov-8", "2026-11-08-sabres-vgk-pregame.md", "2026-11-08", "Sabres &middot; Pregame",
+     "Vegas allows fewer chances than almost anyone. Buffalo allows more than most. Where the Sabres' rebound game fits in.",
+     "sabres-vgk-chances.png"),
     ("sabres-blue-jackets-nov-6", "2026-11-06-sabres-cbj.md", "2026-11-07", "Sabres &middot; Post-game",
      "Buffalo's most dangerous night of the season came from living around Columbus's crease: 10 rebound shots, their most this year.",
      "sabres-cbj-flow.png"),
@@ -100,12 +103,40 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
 .bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:26px;margin:28px 0}
+.gc{perspective:1200px;height:440px;cursor:pointer}
+.gc input{display:none}
+.gci{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.gc input:checked+.gci{transform:rotateY(180deg)}
+.gf,.gb{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;border:8px solid var(--tc);background:#FFFDF6;box-shadow:0 6px 18px rgba(20,23,31,.14);overflow:hidden}
+.gb{transform:rotateY(180deg);padding:16px 16px 12px;font-size:13px}
+.gtop{background:var(--tc);color:#fff;padding:12px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.gtop .tm{font-size:11px;font-weight:800;letter-spacing:.16em}.gtop .no{font-size:44px;font-weight:900;line-height:.9;color:var(--ta)}
+.gname{font-family:Georgia,serif;font-size:24px;font-weight:700;line-height:1.1;margin:12px 16px 2px}
+.gpos{margin:0 16px;font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.gbig{margin:14px 16px 4px;display:flex;align-items:baseline;gap:10px}.gbig .v{font-size:46px;font-weight:900;color:var(--ink);line-height:1}
+.gbig .l{font-size:12px;color:#4A5160;line-height:1.25}
+.grow{display:grid;grid-template-columns:1fr 1fr 1fr;margin:10px 16px 0;border-top:2px solid var(--tc)}
+.grow div{padding:8px 0 4px}.grow b{display:block;font-size:18px}.grow span{font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.gspark{margin:8px 16px 0}.gspark small{display:block;font-size:10.5px;color:var(--muted)}
+.gflip{position:absolute;bottom:8px;right:12px;font-size:10.5px;color:var(--muted);letter-spacing:.08em}
+.gsmall{position:absolute;bottom:8px;left:14px;font-size:10.5px;color:var(--red);font-weight:700;letter-spacing:.06em}
+.gb h4{margin:0 0 8px;font-family:Georgia,serif;font-size:18px}.gb table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.gb th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 2px;border-bottom:2px solid var(--tc)}
+.gb th:first-child,.gb td:first-child{text-align:left}.gb td{text-align:right;padding:5px 2px;border-bottom:1px solid var(--line)}
+.gb p{margin:10px 0 0;line-height:1.45;color:#3B4150}
+
+.cards.one{grid-template-columns:minmax(260px,330px)}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:12px 0 26px}
+.pcard{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-left:10px solid var(--tc);border-radius:10px;padding:12px 16px;text-decoration:none;color:var(--ink)}
+.pcard:hover{border-color:var(--tc)}.pn{font-size:30px;font-weight:900;color:var(--ta);min-width:44px;text-align:center}.pm{font-size:14px;color:#4A5160}.pm b{color:var(--ink);font-size:16px}
 """
 
 import hashlib
 CSS_V = hashlib.sha1(CSS.encode()).hexdigest()[:8]  # changes whenever the CSS changes, so browsers refetch it
 
-NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("ledger.html", "Ledger"), ("about.html", "About")]
+NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("cards/", "Cards"), ("ledger.html", "Ledger"), ("about.html", "About")]
 
 
 def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png", full=False):
@@ -122,7 +153,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
-Buffalo Sabres, or the NFL.</div></footer></body></html>"""
+Buffalo Sabres, the NFL or the NHL.</div></footer></body></html>"""
 
 
 def md_to_html(text):
@@ -286,6 +317,105 @@ keep score in public.</p>
     (SITE / "about.html").write_text(page("About | Buffalo Quant Desk", body, "About"))
 
 
+TEAM_COLORS = {"BUF": ("#003087", "#FFB81C", "SABRES"), "VGK": ("#333F42", "#B4975A", "GOLDEN KNIGHTS")}
+
+
+def spark_svg(vals, color):
+    if not vals:
+        return ""
+    w, h = 238, 54
+    lo, hi = min(min(vals), 0), max(max(vals), 0)
+    rng = (hi - lo) or 1
+    xs = [i * w / max(len(vals) - 1, 1) for i in range(len(vals))]
+    ys = [h - (v - lo) / rng * h for v in vals]
+    zero = h - (0 - lo) / rng * h
+    pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
+    return (f'<svg viewBox="0 -4 {w} {h + 8}" width="100%" height="{h + 8}" role="img" aria-label="Goals saved vs average, running total">'
+            f'<line x1="0" x2="{w}" y1="{zero:.1f}" y2="{zero:.1f}" stroke="#C9CDD4" stroke-dasharray="3 3"/>'
+            f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
+            f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.5" fill="{color}"/></svg>')
+
+
+def card_slug(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def card_tile(c, m):
+    tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+    sign = lambda v: f"{v:+.1f}"
+    rows = "".join(f"<tr><td>{r['season']}</td><td>{r['team']}</td><td>{r['gp']}</td><td>{r['sog']}</td>"
+                   f"<td>{r['sv']:.3f}</td><td>{sign(r['gsax'])}</td></tr>" for r in c["seasons"])
+    close = (f"{c['close_sv']:.3f}" if c["close_sv"] is not None else "&ndash;")
+    return f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
+<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
+<div class="gname">{html.escape(c['name'])}</div><div class="gpos">GOALIE</div>
+<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> goalies this season</div></div>
+<div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['sv']:.3f}</b><span>Save rate</span></div><div><b>{close}</b><span>Close-in save</span></div></div>
+<div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game (dashed line = average)</small></div>
+{'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
+<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>Games</th><th>Shots</th><th>Save</th><th>vs. Avg</th></tr>{rows}</table>
+<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
+pulls toward average, so a hot or cold dozen games doesn't take over.</p>
+<p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
+League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>"""
+
+
+def card_howto(m):
+    return f"""<h2>How to read a card</h2>
+<p><b>Goals saved vs. an average goalie</b> is the big number. Every shot that reaches the net or misses it has a chance of going in, based on
+where it came from and what kind of shot it was. Add up those chances on every shot a goalie faced and you get how many goals an average goalie
+would have allowed. Subtract the goals he actually allowed. Positive means he stopped more than an average goalie would have.</p>
+<p><b>Save rate</b> is the share of shots on goal he stopped; the league's is {m['lg_sv']:.3f} this season. <b>Close-in save</b> is the same for
+shots from within 20 feet, the hardest ones; the league's is {m['lg_close_sv']:.3f}.</p>
+<p><b>The blended rating</b> on the back is our best estimate of how good he is, though goalie numbers bounce around a lot
+even over half a season. It adds this season's shots to half the weight of his shots from past
+seasons (back to 2023-24), plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots
+pile up, they take over.</p>
+<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
+<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
+
+
+def build_cards():
+    import json
+    src = ROOT / "reports" / "cards" / "goalies.json"
+    out = SITE / "cards"
+    out.mkdir(exist_ok=True)
+    if not src.exists():
+        return
+    d = json.loads(src.read_text())
+    m = d["meta"]
+    asof = datetime.strptime(m["as_of"], "%Y-%m-%d").strftime("%B %-d, %Y")
+    groups = {}
+    for c in d["cards"]:
+        slug = card_slug(c["name"])
+        tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+        close_n = f" on {c['close_sog']} close-in shots" if c["close_sog"] else ""
+        body = f"""<div class="kicker"><a href="index.html">Player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
+<p class="dek">Goalie, {tname.title()}. {sign_txt(c['gsax'])} goals saved compared with an average goalie this season, {c['rk']} of {c['of']}
+goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {asof}.</p>
+<div class="cards one">{card_tile(c, m)}</div>
+<h2>This season</h2><ul class="rules">
+<li><b>Save rate {c['sv']:.3f}</b>; an average goalie facing his shots would be at {c['xsv']:.3f}. League: {m['lg_sv']:.3f}.</li>
+<li><b>Close-in save rate {c['close_sv']:.3f}</b>{close_n}. League: {m['lg_close_sv']:.3f}.</li>
+<li><b>Blended rating {c['blend']:+.2f}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
+{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}</ul>
+{card_howto(m)}"""
+        (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
+                                               f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))
+        groups.setdefault(tname.title(), []).append(
+            f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
+            f'<span class="pm"><b>{html.escape(c["name"])}</b><br>Goalie &middot; {sign_txt(c["gsax"])} goals saved vs. average</span></a>')
+    lists = "".join(f'<h2>{team}</h2><div class="plist">{"".join(items)}</div>' for team, items in groups.items())
+    body = f"""<div class="kicker">Player cards</div><h1>Player cards</h1>
+<p class="dek">One card per player, built from every shot and updated as the season goes. Goalies first; skaters and the Bills are next.
+Numbers through {asof}.</p>{lists}"""
+    (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
+
+
+def sign_txt(v):
+    return f"{v:+.1f}"
+
+
 def main():
     if SITE.exists():
         shutil.rmtree(SITE)
@@ -297,6 +427,7 @@ def main():
     build_home(articles, texts)
     build_ledger()
     build_about()
+    build_cards()
     shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):
@@ -306,7 +437,8 @@ def main():
             (SITE / "ledger" / f.name).write_text(",".join(PRED_COLS if f == PRED_CSV else GRADE_COLS) + "\n")
     (SITE / "404.html").write_text(page("Not found | Buffalo Quant Desk", '<h1 style="margin-top:50px">Not found.</h1><p><a href="/">Home</a></p>', ""))
     (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
-    urls = ["", "analysis/", "ledger.html", "about.html"] + [f"analysis/{a[0]}.html" for a in ARTICLES]
+    urls = (["", "analysis/", "cards/", "ledger.html", "about.html"] + [f"analysis/{a[0]}.html" for a in ARTICLES]
+            + [f"cards/{p.name}" for p in sorted((SITE / "cards").glob("*.html")) if p.name != "index.html"])
     (SITE / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                       + "".join(f"<url><loc>{DOMAIN}/{u}</loc></url>" for u in urls) + "</urlset>")
     print("site built:", sorted(str(p.relative_to(SITE)) for p in SITE.rglob("*") if p.is_file()))
