@@ -30,7 +30,7 @@ the quarterback left the pocket.
 over every play and you get **points added per play**. A positive number is good for the offense.
 
 **How we checked it:** it tracks scoring. The Bills add +0.18 points per play (league average 0.00) and score
-3.08 points per drive, both 1st. The Vikings allow -0.17 per play and 1.17 points per drive, both 1st.
+3.08 points per drive, both 1st. The Vikings allow -0.17 per play and 1.20 points per drive, both 1st.
 
 ## Strength on strength
 
@@ -39,12 +39,12 @@ over every play and you get **points added per play**. A positive number is good
 | Points added per play | +0.18 (1st) | -0.17 allowed (1st) | 0.00 |
 | Per pass play | +0.30 (1st) | -0.21 allowed (1st) | +0.06 |
 | Per designed run | +0.02 (6th) | -0.11 allowed (9th) | -0.08 |
-| Points per drive | 3.08 (1st) | 1.17 allowed (1st) | 2.08 |
+| Points per drive | 3.08 (1st) | 1.20 allowed (1st) | 2.09 |
 | Big plays (20+ yard passes, 10+ yard runs) | 13.4% of plays (1st) | 8.6% allowed (14th) | 8.7% |
 | Sacks | 5.5% of pass plays (11th) | 10.6% made (1st) | 6.3% |
 | Turnovers | 2.6% of plays (26th) | 2.7% forced (4th) | 1.9% |
 | Third downs converted | 45% (5th) | 30% allowed (2nd) | 40% |
-| Red-zone trips ending in a touchdown | 71% (4th) | 36% allowed (1st) | 63% |
+| Red-zone trips ending in a touchdown | 71% (4th) | 38% allowed (1st) | 64% |
 
 Ranks: 1st is best for that unit. Take out blowout garbage time and the Bills' offense ranks 3rd and the Vikings'
 defense 2nd.
