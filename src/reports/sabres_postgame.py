@@ -79,11 +79,20 @@ def main():
     # through two periods vs third, with score effects check league-wide
     p12 = g[g.period <= 2].groupby("team").xg.sum()
     p3 = g[g.period == 3].groupby("team").xg.sum()
-    sc = with_score(s[unb & (s.season < SEASON) & (s.period == 3)])
-    trail = sc[sc.margin <= -3].xg.sum()
-    lead = with_score(s[unb & (s.season < SEASON) & (s.period == 3)])
-    lead = lead[lead.margin >= 3].xg.sum()
-    trail_share = trail / (trail + lead)
+    p3_cbj = p3.get(THEM, 0) / (p3.get(THEM, 0) + p3.get(US, 0))
+    # game score at the moment of each shot, from every shot in the game (empty-net goals count toward the score)
+    sc = with_score(s[s.season < SEASON])
+    sc = sc[(sc.unblocked == 1) & (sc.empty_net_against == 0) & (sc.period == 3)]
+    trail, lead = sc[sc.margin <= -3], sc[sc.margin >= 3]
+    trail_share = trail.xg.sum() / (trail.xg.sum() + lead.xg.sum())
+    # per game: the trailing team's share of third-period chances while down 3+
+    tg3 = trail.groupby(["game_id", "team"]).xg.sum().rename("t").reset_index()
+    lg3 = lead.groupby(["game_id", "opp"]).xg.sum().rename("l").reset_index().rename(columns={"opp": "team"})
+    pp3 = tg3.merge(lg3, on=["game_id", "team"], how="outer").fillna(0)
+    pp3 = pp3[(pp3.t + pp3.l) > 0]
+    pp3["share"] = pp3.t / (pp3.t + pp3.l)
+    med3 = pp3.share.median()
+    at_least = (pp3.share >= p3_cbj).mean()
 
     # rebounds
     tg = u[u.season == SEASON].groupby(["game_id", "team"]).rebound.sum()
@@ -151,7 +160,7 @@ def main():
     ax.set_xlim(0.3, n_g + 2.6); ax.set_xticks(range(1, n_g + 1)); ax.set_xlabel("Sabres game number, 2026-27"); ax.set_ylabel("Rebound shots")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Ten rebound shots: Buffalo's most this season",
-           "Sabres shots taken within 3 seconds of a teammate's shot, by game.",
+           "Sabres shots taken within 3 seconds of another Sabres shot on net or wide, by game.",
            f"Unblocked shots, empty net excluded. {n_g} games.")
     fig.savefig(OUT / "sabres-cbj-rebounds.png"); plt.close(fig)
 
@@ -163,8 +172,8 @@ def main():
     md = f"""# Sabres 5, Blue Jackets 2: Buffalo won the scramble in front of the net
 
 **Finding: The Sabres created their most dangerous night of the season Friday, with shots worth {f.xg.sum():.1f} goals, by living
-around Columbus's crease. They had {int(rb.shape[0])} rebound shots, about three times their usual, something fewer than 2% of NHL teams
-manage in a game. Two of their five goals came off rebounds.**
+around Columbus's crease. They had {int(rb.shape[0])} rebound shots, about three times their usual, something that happens in about 1 of every
+{100 * round(1 / share10 / 100) if 1 / share10 >= 100 else 10 * round(1 / share10 / 10):.0f} NHL team-games. Two of their five goals came off rebounds.**
 
 *One game, {gm.game_date}, in Buffalo. The Sabres are {n_g} games into the season.*
 
@@ -178,7 +187,7 @@ team's chances were worth in goals. (The full explanation, with the chart, is in
 [last year's 50-win season](sabres-50-win-mirage.html).)
 
 Friday, the Sabres' shots were worth **{f.xg.sum():.1f} goals** and Columbus's **{a.xg.sum():.1f}**. Buffalo scored 5. If you replayed
-those exact shots thousands of times, Buffalo would win about {p_win:.0%} of the time and tie about {p_tie:.0%}. They earned this one.
+those exact shots thousands of times, Buffalo would win about {p_win:.0%} of the time and tie about {p_tie:.0%}. Their chances were good enough to win most replays.
 
 ## What changed from their first {n_g - 1} games
 
@@ -193,7 +202,8 @@ those exact shots thousands of times, Buffalo would win about {p_win:.0%} of the
 
 ## The rebound game
 
-A rebound here means a shot taken within three seconds of a teammate's shot. Across the NHL over the last three seasons,
+A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that the goalie
+had to deal with. Across the NHL over the last three seasons,
 rebounds went in {reb_rate:.1%} of the time, against {non_rate:.1%} for other shots, because the goalie is usually out of
 position. NHL teams average about {tg.mean():.1f} rebound shots a game this season. Buffalo had {int(rb.shape[0])}, worth {rb.xg.sum():.1f} goals on
 their own.
@@ -210,10 +220,10 @@ rebounds. Doan's shots were worth a full goal ({doan.xg:.1f}), the most of any S
 ## Two periods of control
 
 Through 40 minutes, Buffalo's chances were worth {p12.get(US, 0):.1f} goals to Columbus's {p12.get(THEM, 0):.1f}, and they led 5-1.
-Columbus won the third period on chances ({p3.get(THEM, 0):.1f} to {p3.get(US, 0):.1f}), {p3.get(THEM, 0) / (p3.get(THEM, 0) + p3.get(US, 0)):.0%} of the chance value.
-Some of that is expected: across the league over the last three seasons, teams trailing by three or more in the third
-period got {trail_share:.0%} of the chance value, because the team ahead sits back and protects the lead. Columbus pushed
-harder than that, so the Sabres' third period was looser than a typical protect-the-lead period. It's one period, though.
+Columbus won the third period on chances ({p3.get(THEM, 0):.1f} to {p3.get(US, 0):.1f}), {p3_cbj:.0%} of the chance value. That's a normal
+protect-the-lead period. Across the league over the last three seasons, teams down three or more in the third usually
+got a bit over half the chances ({trail_share:.0%} overall), because the team ahead sits back, and about {at_least:.0%} of them got
+{p3_cbj:.0%} or more.
 
 ## The goalie and the finishers
 
@@ -222,7 +232,8 @@ harder than that, so the Sabres' third period was looser than a typical protect-
 - **Josh Norris** scored twice on shots worth {norris.xg:.1f} goals combined.
 - **The power play** created its most dangerous chances of the season, worth {pg.loc[G, 'pp_xgf']:.1f} goals, but didn't score.
 - **The penalty kill** allowed another goal, a Zach Werenski shot from 46 feet that goes in about 1 time in 20. Buffalo has now
-  allowed {int(pk_all.loc[US, 'GA'])} power-play goals in {n_g} games, {ordn(pk_all.loc[US, 'rk'])} of 32 (1st is fewest).
+  allowed {int(pk_all.loc[US, 'GA'])} power-play goals in {n_g} games, {ordn(pk_all.loc[US, 'rk'])} of 32 (1st is fewest). The league average is
+  {pk_all.pg.mean() * n_g:.0f} over that many games.
 
 | Period | Time | Team | Scorer | Shot | Odds it went in |
 |---|---|---|---|---|---|
@@ -240,10 +251,12 @@ Luukkonen stays at or above average, and whether the penalty kill stops leaking.
   equals league goals. Friday: BUF {f.xg.sum():.2f} xG on {len(f)} unblocked shots ({int(f.on_goal.sum())} on goal), CBJ {a.xg.sum():.2f} on
   {len(a)} ({int(a.on_goal.sum())} on goal). Win probability: {N:,} simulated replays of each shot as an independent coin flip with
   p = xG.
-- Rebound = same team, within 3 seconds of the previous shot attempt, same period. A raw recount from the play feed that
+- Rebound = shot taken within 3 seconds of the same team's previous unblocked shot (on goal or missed), with no other
+  event in between. Blocked attempts never start a rebound. A raw recount from the play feed that
   also counts shots after blocked attempts gives 12 for Buffalo. Teams with 10+ rebound shots: {share10:.1%} of team-games in
   2026-27, {share10_prev:.1%} in 2025-26.
-- Score effects: third-period xG share for teams down 3+ goals, all team-games 2023-24 to 2025-26.
+- Score effects: third-period xG share for teams down 3+ goals by the game score at the time of each shot, 2023-24 to
+  2025-26 ({trail_share:.1%} pooled; per game, median {med3:.0%}).
 - GSAx = xG on unblocked shots faced minus goals allowed. Power play = 5v4, 5v3, 4v3.
 """
     (OUT / "2026-11-06-sabres-cbj.md").write_text(md)
