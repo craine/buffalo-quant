@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("wentz-vs-bills-defense", "2026-wk09-wentz-vs-bills-defense.md", "2026-11-08", "Bills &middot; Week 9 preview, part 1",
+     "Carson Wentz starts for Minnesota. Here's where his tendencies meet the Bills defense's weak spots, and what we expect Monday.",
+     "wk09a-bills-short-deep.png"),
     ("sabres-blue-jackets-nov-6", "2026-11-06-sabres-cbj.md", "2026-11-07", "Sabres &middot; Post-game",
      "Buffalo's most dangerous night of the season came from living around Columbus's crease: 10 rebound shots, their most this year.",
      "sabres-cbj-flow.png"),
@@ -118,7 +121,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
-(nflverse). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
+(NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
 Buffalo Sabres, or the NFL.</div></footer></body></html>"""
 
 
@@ -204,11 +207,12 @@ def build_home(articles, texts):
     hj = ROOT / "reports" / src.replace(".md", ".hero.json")
     hd = json.loads(hj.read_text()) if hj.exists() else None
     if hd:
-        top = max(n for n, _ in hd["big"])
+        numeric = all(isinstance(n, (int, float)) for n, _ in hd["big"])
+        top = max(n for n, _ in hd["big"]) if numeric else 1
         nums = "".join(f'<div><div class="bign{" dim" if i else ""}">{n}</div><div class="bigl">{html.escape(l)}</div></div>'
                        for i, (n, l) in enumerate(hd["big"]))
         bars = "".join(f'<div class="hbar"><span style="width:{n / top:.0%}"{" class=dim" if i else ""}></span><b>{n}</b></div>'
-                       for i, (n, l) in enumerate(hd["big"]))
+                       for i, (n, l) in enumerate(hd["big"])) if numeric else ""
         panel = (f'<div class="hpanel"><div class="hlabel">{html.escape(hd["label"])}</div><div class="bigs">{nums}</div>'
                  f'{bars}<p class="hnote">{html.escape(hd["note"])}</p></div>')
     else:
@@ -236,7 +240,7 @@ def build_home(articles, texts):
     if hd and "explainer" in hd:
         e = hd["explainer"]; mx = max(v for _, v in e["bars"])
         rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
-                       f'<span class="xv">{v:.1%}</span></div>' for l, v in e["bars"])
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">

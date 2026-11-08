@@ -20,23 +20,58 @@ GAME_METRICS = {  # metric -> (numerator, denominator) in clean_team_week
 }
 
 
-def game_values(season, metric, con=None):
+def game_values(season, metric, con=None, max_week=None):
+    """Team-game values of `metric`. max_week pins the data (weeks <= max_week) so published numbers reproduce."""
     n, d = GAME_METRICS[metric]
     tw = query(f"""SELECT game_id, week, team, side, {n} AS num, {d} AS den FROM clean_team_week
                    WHERE season = ? AND season_type='REG'""", params=(season,), con=con)
+    if max_week is not None:
+        tw = tw[tw.week <= max_week]
     tw["v"] = tw.num / tw.den
     return tw
 
 
-def prob_over(offense, defense, metric, threshold, season=2026, con=None):
-    """Probability the OFFENSE's game value of `metric` vs this DEFENSE exceeds threshold."""
-    gv = game_values(season, metric, con)
+def prob_over(offense, defense, metric, threshold, season=2026, con=None, off_override=None, max_week=None):
+    """Probability the OFFENSE's game value of `metric` vs this DEFENSE exceeds threshold.
+
+    off_override: optional league-relative offense level (e.g. a backup QB's own number minus the league
+    average, from qb_relative). Replaces the team's season mean minus league; the defense side is unchanged.
+    """
+    gv = game_values(season, metric, con, max_week=max_week)
     off = gv[gv.side == "off"]
     lg = off.v.mean()
-    o = off[off.team == offense].v.mean()
+    o = off[off.team == offense].v.mean() if off_override is None else lg + off_override
     d = gv[(gv.side == "def") & (gv.team == defense)].v.mean()
     expected = lg + SHRINK * ((o - lg) + (d - lg))
     dist = off.v - off.groupby("team").v.transform("mean")  # within-team game-to-game spread
     p = float(np.mean(dist + expected > threshold))
     return {"expected": expected, "p": p, "league": lg, "off_mean": o, "def_mean": d,
             "n_games_dist": len(dist)}
+
+
+QB_METRICS = {"dropback_epa": "epa", "sack_rate": "sack"}
+
+
+def qb_relative(player_id, metric, seasons, con=None, max_week=None):
+    """A QB's dropback-weighted value of `metric` relative to each season's league average (mean of team-game values).
+
+    Dropbacks = qb_dropback plays with EPA, regular season, no two-point tries; the QB is
+    COALESCE(passer_player_id, rusher_player_id) so scrambles count. Returns (relative value, dropbacks).
+    """
+    col = QB_METRICS[metric]
+    seasons = tuple(int(s) for s in seasons)
+    ph = ",".join("?" * len(seasons))
+    base = (f"FROM raw_pbp WHERE season IN ({ph}) AND season_type='REG' AND qb_dropback=1 AND epa IS NOT NULL "
+            "AND COALESCE(two_point_attempt,0)=0")
+    last = max(seasons)
+    if max_week is not None:  # pin the latest season to weeks <= max_week
+        base += f" AND NOT (season = {last} AND week > {int(max_week)})"
+    # baseline = mean of team-game values, the same league baseline prob_over uses
+    lg = pd.Series({s: game_values(s, metric, con, max_week=max_week if s == last else None).query("side == 'off'").v.mean()
+                    for s in seasons})
+    q = query(f"SELECT season, COUNT(*) n, AVG({col}) v {base} AND COALESCE(passer_player_id, rusher_player_id)=? GROUP BY season",
+              params=seasons + (player_id,), con=con)
+    if q.empty:
+        raise ValueError(f"no dropbacks for {player_id} in {seasons}")
+    rel = ((q.v - q.season.map(lg)) * q.n).sum() / q.n.sum()
+    return float(rel), int(q.n.sum())

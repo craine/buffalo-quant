@@ -57,3 +57,29 @@ def test_league_mean_epa_near_zero():
 def test_clean_team_week_two_sides_per_game():
     r = query("SELECT game_id, COUNT(*) n FROM clean_team_week GROUP BY game_id HAVING COUNT(*) != 4")
     assert r.empty  # 2 teams x (off, def)
+
+
+def test_drive_points_credit_only_offensive_touchdowns():
+    """A Vikings punt-return TD on a Tampa Bay possession must not count as Tampa Bay points (2026 week 3)."""
+    from src.db import query
+    d = query("SELECT posteam, SUM(points) p FROM clean_drives WHERE game_id='2026_03_MIN_TB' GROUP BY 1").set_index("posteam").p
+    assert d["TB"] == 16 and d["MIN"] == 16  # TB scored 16; MIN's 23 includes a 7-point return TD
+
+
+def test_drive_points_track_final_scores():
+    from src.db import query
+    q = query("""SELECT d.game_id, d.posteam, SUM(d.points) p, SUM(d.points = 7) td, s.home_team, s.away_team,
+                        s.home_score, s.away_score
+                 FROM clean_drives d JOIN raw_schedules s ON s.game_id = d.game_id
+                 WHERE d.season_type = 'REG' AND d.posteam IN (s.home_team, s.away_team) GROUP BY 1, 2""")
+    q["sc"] = q.home_score.where(q.posteam == q.home_team, q.away_score)
+    bad = q[q.p > q.sc + q.td]  # TD counted as 7 allows one missed extra point per TD
+    assert len(bad) / len(q) < 0.005, bad.head()
+
+
+def test_kickoff_rows_do_not_create_fake_drives():
+    """Kickoff/extra-point rows tagged to another team's possession must not become drives (MIN defense, 2026 wk 1-8)."""
+    from src.db import query
+    v = query("""SELECT COUNT(*) n, SUM(points) p FROM clean_drives
+                 WHERE defteam='MIN' AND season=2026 AND season_type='REG' AND week <= 8""").iloc[0]
+    assert (int(v.n), int(v.p)) == (74, 89)

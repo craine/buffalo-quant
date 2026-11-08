@@ -157,6 +157,12 @@ Same story both ways.
 - Neutral = win probability 10-90%. Explosive = pass 20+ or rush 10+ yards. Points per drive uses TD = 7, FG = 3.
 - Opponent adjustment uses in-season numbers (6+ weeks exist), excluding the Bills game itself.
 - Seven games. Rankings this early move a lot week to week; the direction is the claim, not the decimal.
+
+## Correction, Nov. 8, 2026
+
+An error in how we counted drives credited some defensive and kick-return touchdowns, and a few field goals, to the
+wrong team. Fixing it changed one row of the first table: points per drive allowed in 2026 is 2.35 (we had 2.38; still
+25th), and the league average is 2.08 (we had 2.10). Nothing else in the story changed.
 """
     (OUT / "2026-defense-baseline.md").write_text(md)
     print(md[:600])
