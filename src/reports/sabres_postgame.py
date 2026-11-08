@@ -182,7 +182,7 @@ around Columbus's crease. They had {int(rb.shape[0])} rebound shots, about three
 ## How we measure "chances"
 
 Every shot has odds of going in, based on where it was taken and what kind of shot it was. A shot from within 10 feet
-goes in about 1 time in 7; one from the blue line, about 1 in 125. Add up the odds on every shot and you get what a
+goes in about 1 time in 7; one from 60 feet or more, about 1 in 125. Add up the odds on every shot and you get what a
 team's chances were worth in goals. (The full explanation, with the chart, is in our story on
 [last year's 50-win season](sabres-50-win-mirage.html).)
 
@@ -202,8 +202,8 @@ those exact shots thousands of times, Buffalo would win about {p_win:.0%} of the
 
 ## The rebound game
 
-A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that the goalie
-had to deal with. Across the NHL over the last three seasons,
+A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that was saved or
+missed the net. Across the NHL over the last three seasons,
 rebounds went in {reb_rate:.1%} of the time, against {non_rate:.1%} for other shots, because the goalie is usually out of
 position. NHL teams average about {tg.mean():.1f} rebound shots a game this season. Buffalo had {int(rb.shape[0])}, worth {rb.xg.sum():.1f} goals on
 their own.
@@ -260,6 +260,18 @@ Luukkonen stays at or above average, and whether the penalty kill stops leaking.
 - GSAx = xG on unblocked shots faced minus goals allowed. Power play = 5v4, 5v3, 4v3.
 """
     (OUT / "2026-11-06-sabres-cbj.md").write_text(md)
+    import json
+    (OUT / "2026-11-06-sabres-cbj.hero.json").write_text(json.dumps({
+        "label": "Friday's chances, in goals",
+        "big": [[round(float(f.xg.sum()), 1), "Sabres"], [round(float(a.xg.sum()), 1), "Blue Jackets"]],
+        "note": f"Final: Sabres {int(gm.home_score)}, Blue Jackets {int(gm.away_score)}. {int(rb.shape[0])} Buffalo rebound shots, their most this season.",
+        "explainer": {
+            "kicker": "How we know", "title": "Rebounds are gold.",
+            "text": (f"A shot right after another one catches the goalie out of position. Over the last three NHL seasons, "
+                     f"rebounds went in {reb_rate:.1%} of the time, nearly double the {non_rate:.1%} for other shots. "
+                     f"Buffalo had {int(rb.shape[0])} of them Friday."),
+            "bars": [["Rebounds", round(float(reb_rate), 4)], ["Other shots", round(float(non_rate), 4)]]},
+    }, indent=1))
     print(md)
 
 

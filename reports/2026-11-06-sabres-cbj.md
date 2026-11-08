@@ -11,7 +11,7 @@ around Columbus's crease. They had 10 rebound shots, about three times their usu
 ## How we measure "chances"
 
 Every shot has odds of going in, based on where it was taken and what kind of shot it was. A shot from within 10 feet
-goes in about 1 time in 7; one from the blue line, about 1 in 125. Add up the odds on every shot and you get what a
+goes in about 1 time in 7; one from 60 feet or more, about 1 in 125. Add up the odds on every shot and you get what a
 team's chances were worth in goals. (The full explanation, with the chart, is in our story on
 [last year's 50-win season](sabres-50-win-mirage.html).)
 
@@ -31,8 +31,8 @@ those exact shots thousands of times, Buffalo would win about 60% of the time an
 
 ## The rebound game
 
-A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that the goalie
-had to deal with. Across the NHL over the last three seasons,
+A rebound here means a shot taken within three seconds of another Sabres shot (his own or a teammate's) that was saved or
+missed the net. Across the NHL over the last three seasons,
 rebounds went in 11.5% of the time, against 6.3% for other shots, because the goalie is usually out of
 position. NHL teams average about 3.3 rebound shots a game this season. Buffalo had 10, worth 1.5 goals on
 their own.

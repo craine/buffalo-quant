@@ -4,7 +4,7 @@
 team. They finished with 109. Only one team in the NHL outran its chances by more. The difference came from hot
 goaltending and hot shooting, and those usually fade.**
 
-*This season: 15 games (7-5-3). That's still a small sample.*
+*This season: 16 games (8-5-3). That's still a small sample.*
 
 ![Mirage](sabres-mirage.png)
 
@@ -21,7 +21,7 @@ and counted how often each kind actually went in.
 
 - A shot from within 10 feet of the net went in 13.8% of the time (about 1 in 7).
 - From 30 to 40 feet: 5.6% (about 1 in 18).
-- From 60 feet or more, around the blue line: 0.8% (about 1 in 125).
+- From 60 feet or more: 0.8% (about 1 in 125).
 - A rebound (a shot within three seconds of a teammate's shot) went in 11.5% of the time, against 6.3% for
   other shots.
 - On the power play, shots went in 9.9% of the time, against 6.2% otherwise.
@@ -62,12 +62,12 @@ Other things bounce around.
 | Save percentage (goaltending) | **Weak** |
 
 Last season the Sabres' shooting and goaltending luck combined ranked 2nd in the league. This season it ranks
-26th.
+24th.
 
 ## What it means for this season
 
-Through 15 games the Sabres are earning 17 points, about 1.13 a game. Last season's chances
-pointed to about 1.11 a game, and this season's chances point to about 1.01. **This isn't a collapse. Without last year's luck, they're about where their chances say they should be.**
+Through 16 games the Sabres are earning 19 points, about 1.19 a game. Last season's chances
+pointed to about 1.11 a game, and this season's chances point to about 1.04. **This isn't a collapse. Without last year's luck, they're about where their chances say they should be.**
 
 ## For the stat-heads
 
@@ -77,9 +77,9 @@ pointed to about 1.11 a game, and this season's chances point to about 1.01. **T
   season is rescaled so league xG equals league goals (the raw model ran +3.0% hot in 2025-26). Empty nets
   excluded.
 - Last season: goals 256 vs xG 237.2; goals against 221 vs xGA 238.4.
-  xGF% 49.9% (17th). This season xGF% 47.8% (22nd), -1.8 vs xG.
+  xGF% 49.9% (17th). This season xGF% 48.5% (20th), +0.1 vs xG.
 - Year-to-year correlations, 32 teams, 63 team pairs: xGF% 0.72, shooting % 0.32,
   save % 0.21, PDO 0.31. "Strong" means 0.6 or higher, "Weak" means under 0.4. PDO (shooting % +
-  save %, all situations) was 1.019 last season and is 0.983 now.
+  save %, all situations) was 1.019 last season and is 0.988 now.
 - Expected points: a straight-line fit of points on xG differential per game, all 96 team-seasons 2023-24 to 2025-26
   (r = 0.77; typical miss 9.7 points). Doesn't model overtime, shootouts or empty-net goals.
