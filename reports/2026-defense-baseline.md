@@ -28,8 +28,8 @@ Unfiltered unless labeled. League rank in parentheses (1 = best defense).
 | Explosive play rate | 10.0% (22) | 9.4% (21) | 8.6% |
 | Turnover rate | 2.1% (9) | 2.0% (15) | 1.9% |
 | 3rd-down conversion rate | 41.4% (23) | 42.4% (22) | 39.8% |
-| Red-zone TD rate | 68.3% (28) | 68.8% (23) | 62.6% |
-| Points per drive | 2.09 (14) | 2.35 (26) | 2.06 |
+| Red-zone TD rate | 68.3% (25) | 68.8% (23) | 63.4% |
+| Points per drive | 2.09 (13) | 2.35 (25) | 2.08 |
 
 ## Opponent-adjusted, week by week
 
@@ -74,7 +74,6 @@ Same story both ways.
 
 ## Correction, Nov. 8, 2026
 
-An error in how we counted drives credited some defensive and kick-return touchdowns to the offense on the field. Fixing it
-changed three cells in the first table and the matching points in the rank chart: Buffalo's 2025 red-zone touchdown rate allowed is unchanged at 68.3% but ranks 28th
-(we had 25th); points per drive allowed is 2.09 (14th; we had 13th) for 2025 and 2.35 (26th; we had 2.38, 25th) for 2026;
-the league averages are 62.6% and 2.06 (we had 63.4% and 2.10). Nothing else in the story changed.
+An error in how we counted drives credited some defensive and kick-return touchdowns, and a few field goals, to the
+wrong team. Fixing it changed one row of the first table: points per drive allowed in 2026 is 2.35 (we had 2.38; still
+25th), and the league average is 2.08 (we had 2.10). Nothing else in the story changed.
