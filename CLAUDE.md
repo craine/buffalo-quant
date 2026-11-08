@@ -126,6 +126,8 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   the source data, the reasoning (with real computed examples, e.g. "shots from within 10 feet go in 13.8% of
   the time"), the math in one plain paragraph, and how we checked it. Include the chart that shows it.
 - Tie the explanation back to the headline number ("their chances were worth 237 goals; they scored 256").
+- **Published stories never change silently.** Every generator pins its data with an `AS_OF` date (games through that
+  date). Re-running it reproduces the published numbers. Updated numbers mean a new, clearly dated story or note.
 
 ## Analysis conventions
 

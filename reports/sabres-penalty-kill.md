@@ -1,10 +1,10 @@
 # The Sabres' penalty kill is where this season is leaking
 
-**Finding: When the Sabres are a man down, they've given up 17 goals in 16 games, 30th of 32 teams.
+**Finding: When the Sabres are a man down, they've given up 16 goals in 15 games, 30th of 32 teams.
 Last season they were 4th. Some of that is bad luck, but they're also giving up more dangerous chances than
-most teams (24th of 32). Of everything that's changed since last season, this is the biggest.**
+most teams (25th of 32). Of everything that's changed since last season, this is the biggest.**
 
-*2026-27 is 16 games (8-5-3), a small sample.*
+*2026-27 is 15 games (7-5-3), a small sample.*
 
 ![Penalty kill](sabres-pk.png)
 
@@ -17,18 +17,18 @@ most teams (24th of 32). Of everything that's changed since last season, this is
 | 2023-24 | 49 | 16th | 0.61 (22nd) | 0.61 |
 | 2024-25 | 57 | 30th | 0.57 (24th) | 0.54 |
 | 2025-26 | 39 | 4th | 0.57 (11th) | 0.60 |
-| 2026-27 | 17 | 30th | 0.80 (24th) | 0.68 |
+| 2026-27 | 16 | 30th | 0.80 (25th) | 0.68 |
 
 Two things are happening:
 
-1. **Bad luck.** Opponents have scored 17 power-play goals on chances an average team would turn into about
-   13. That part tends to even out.
+1. **Bad luck.** Opponents have scored 16 power-play goals on chances an average team would turn into about
+   12. That part tends to even out.
 2. **More dangerous chances.** The Sabres are allowing chances worth 0.80 goals a game while shorthanded, up from
    0.57 last year and above this season's league average of 0.68. Most teams are allowing a bit more this
    year, but Buffalo is allowing more than most.
 
 **What to watch:** the luck should fade. The chances allowed are the part that has to get fixed. It's early, too:
-110 shots against while shorthanded. A bad penalty kill isn't new, either. In 2024-25 it ranked 30th in goals allowed.
+103 shots against while shorthanded. A bad penalty kill isn't new, either. In 2024-25 it ranked 30th in goals allowed.
 
 ## For the stat-heads
 
@@ -41,4 +41,4 @@ Two things are happening:
 | 2023-24 | 49 | 50.4 | 0.60 (16th) | 0.61 (22nd) | 0.61 |
 | 2024-25 | 57 | 47.1 | 0.70 (30th) | 0.57 (24th) | 0.54 |
 | 2025-26 | 39 | 46.7 | 0.48 (4th) | 0.57 (11th) | 0.60 |
-| 2026-27 | 17 | 12.7 | 1.06 (30th) | 0.80 (24th) | 0.68 |
+| 2026-27 | 16 | 12.1 | 1.07 (30th) | 0.80 (25th) | 0.68 |

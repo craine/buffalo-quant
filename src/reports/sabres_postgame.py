@@ -40,8 +40,13 @@ def with_score(s):
     return s
 
 
-def main():
+AS_OF = "2026-11-06"  # games through the night of this game; pinned so the published story doesn't change
+
+
+def main(as_of=AS_OF):
     s = shots()
+    keep = set(query(f"SELECT game_id FROM raw_nhl_games WHERE game_date <= '{as_of}'").game_id)
+    s = s[s.game_id.isin(keep)].copy()
     unb = (s.unblocked == 1) & (s.empty_net_against == 0)
     cal = s[unb].groupby("season").goal.sum() / s[unb].groupby("season").xg.sum()
     s["xg"] = s.xg * s.season.map(cal)
@@ -63,7 +68,7 @@ def main():
                               close_a=(ag.dist < 20).sum(), pp_xgf=fo[fo.strength.isin(pp_codes)].xg.sum(),
                               pp_gf=fo[fo.strength.isin(pp_codes)].goal.sum(), gsax=ag.xg.sum() - ag.goal.sum()))
     pg = bs.groupby("game_id").apply(prof)
-    order = query(f"SELECT game_id, game_date FROM raw_nhl_games WHERE season={SEASON} AND (home='{US}' OR away='{US}') ORDER BY game_date").game_id.tolist()
+    order = query(f"SELECT game_id, game_date FROM raw_nhl_games WHERE season={SEASON} AND (home='{US}' OR away='{US}') AND game_date <= '{as_of}' ORDER BY game_date").game_id.tolist()
     pg = pg.loc[[x for x in order if x in pg.index]]
     prev = pg.drop(G)
     rk = lambda col, asc=False: int(pg[col].rank(ascending=asc, method="min").loc[G])
@@ -116,8 +121,8 @@ def main():
 
     # penalty kill: season to date
     pk_all = u[(u.season == SEASON) & u.strength.isin(pp_codes)].groupby("opp").agg(GA=("goal", "sum"))
-    pk_gp = query(f"""SELECT team, COUNT(*) gp FROM (SELECT home team FROM raw_nhl_games WHERE season={SEASON}
-                      UNION ALL SELECT away FROM raw_nhl_games WHERE season={SEASON}) GROUP BY team""").set_index("team").gp
+    pk_gp = query(f"""SELECT team, COUNT(*) gp FROM (SELECT home team FROM raw_nhl_games WHERE season={SEASON} AND game_date <= '{as_of}'
+                      UNION ALL SELECT away FROM raw_nhl_games WHERE season={SEASON} AND game_date <= '{as_of}') GROUP BY team""").set_index("team").gp
     pk_all["pg"] = pk_all.GA / pk_gp.reindex(pk_all.index)
     pk_all["rk"] = pk_all.pg.rank(method="min").astype(int)
 
