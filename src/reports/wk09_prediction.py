@@ -149,15 +149,21 @@ def main():
     lad = {t: (pm.prob_at_least(pb, t, res), pm.prob_at_least(pmn, t, res)) for t in LADDER}
     n_ahead = sum(round(b * 100) > round(m * 100) for b, m in lad.values())
     n_level = sum(round(b * 100) == round(m * 100) for b, m in lad.values())
-    q25, q75 = np.quantile(np.abs(res), [0.5, 0.8])
+    miss50, miss80 = np.quantile(np.abs(res), [0.5, 0.8])
     (fw, fl), common, n_finals = named_final(pb, pmn)
     top3 = ", ".join(f"{a}-{b}" for a, b in common.index[:3])
     fav_n = int(common[(fw, fl)])
     lt = pm.build_frame([2024, 2025, SEASON], max_week={2024: 99, 2025: 99, SEASON: THRU})
     lt["model"] = pm.predict(P["coef"], lt.raw, lt.home)
     lc = pd.DataFrame([(pm.prob_at_least(m, t, res), y >= t) for m, y in zip(lt.model, lt.score) for t in LADDER], columns=["p", "y"])
+    lc["t"] = [t for _ in range(len(lt)) for t in LADDER]
+    l20 = lc[lc.t == 20]
     lc["b"] = pd.cut(lc.p, [0, .2, .4, .6, .8, 1], include_lowest=True)
     lc = lc.groupby("b", observed=True).agg(n=("y", "size"), said=("p", "mean"), happened=("y", "mean"))
+    g26 = pm._drives(); c26 = g26[(g26.season == SEASON) & (g26.week <= THRU)]
+    oo26 = c26.groupby("posteam").pts.sum() / c26.groupby("posteam").n.sum()
+    k = int((oo26 > P["ppd_b"]).sum()) + 1
+    ppd_rank = f"about {k}{'th' if 10 <= k % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(k % 10, 'th')} of {len(oo26)}"
     fig, ax = plt.subplots(figsize=(10, 5), dpi=200)
     x = np.arange(len(LADDER)); w = 0.38
     ax.bar(x - w / 2, [lad[t][0] for t in LADDER], w, color=BLUE, label="Bills", zorder=2)
@@ -235,18 +241,18 @@ Picture a ladder of scorelines: 10 points, 14, 17, 20 and up. For each rung, her
 {ladder_rows}
 
 Read it like this: there's a {lad[17][0]:.0%} chance the Bills score 17 or more, and a {lad[17][1]:.0%} chance the Vikings do. The gaps are small,
-a couple of points of probability, but Buffalo is ahead on {n_ahead} of the {len(LADDER)} rungs{level_txt}. Small edges, all pointing the same way, add up to a {P['p_buf']:.0%}-{1 - P['p_buf']:.0%} game.
+a couple of points of probability, and they all come from the same thing: our Bills projection is {pb - pmn:.1f} points higher. That small gap is also why, when we replay past games with both teams at once (more on that below), the Bills finish ahead {P['p_buf']:.0%} of the time.
 
 ## Where the 23 comes from
 
 Points come from drives, so that's where we start. Four steps:
 
-1. **How good is each side?** This season the Bills score {P['raw']['buf_off']:.2f} points every time they get the ball, the most in the NFL
-   ({P['rk']['off']}). Minnesota's defense gives up just {P['raw']['min_def']:.2f}, the fewest. An average team scores {P['lg']:.2f}.
+1. **How good is each side?** This season the Bills average {P['raw']['buf_off']:.2f} points per drive, the most in the NFL
+   ({P['rk']['off']}). Minnesota's defense gives up just {P['raw']['min_def']:.2f} per drive, the fewest. An average offense scores {P['lg']:.2f} per drive.
 2. **Don't overreact to seven games.** A hot start isn't a guarantee, so we blend this season with last season and the league average.
    That makes the Bills' offense {P['off_b']:.2f} and the Vikings' defense {P['def_m']:.2f}: still far better than average, just less extreme.
 3. **Let them meet.** The Bills' offense is {P['off_b'] - P['lg']:.2f} points per drive better than average. Minnesota's defense is
-   {P['lg'] - P['def_m']:.2f} better than average. Those almost cancel out, leaving about {P['ppd_b']:.2f} points per drive, close to an ordinary offense.
+   {P['lg'] - P['def_m']:.2f} better than average. Those almost cancel out, leaving about {P['ppd_b']:.2f} points per drive: a bit better than an average offense, which would rank {ppd_rank} this season.
 4. **Count the drives and check against history.** About {P['drv']:.0f} drives a game gets you to about {P['ppd_b'] * P['drv']:.0f}. A last adjustment,
    learned from past games, trims projections that history says run too high or too low and gives the home team about {P['coef'][2]:.1f} points.
    Buffalo is on the road, so it lands at **{pb:.1f}**.
@@ -259,8 +265,8 @@ usually what happens: when a top-3 offense meets a top-3 defense, the result lan
 
 ## From 23 points to those percentages
 
-Nobody scores exactly what we project. So we looked at {len(res):,} past team-scores and asked how far off we were. Half the time, a team
-landed within about {q25:.0f} points of our number. Eight times in ten, within about {q75:.0f}.
+Nobody scores exactly what we project. So we looked at {len(res):,} past team-scores from 2019-2023 and asked how far off we were. Half the time, a team
+landed within about {miss50:.0f} points of our number. Eight times in ten, within about {miss80:.0f}. (Those are the games the model was built on; on games it had never seen, its average miss was {mae['model']:.1f} points.)
 
 Then we play Monday's game over and over, once for every one of those past misses, on top of today's projections. In some replays the Bills
 score a lot; in others they're held down. Eight times in ten they land between {P['rng']['BUF'][0]:.0f} and {P['rng']['BUF'][1]:.0f}. Count how often the Bills reach 20 or more in all those replays and you get {lad[20][0]:.0%}. Count
@@ -273,7 +279,7 @@ Buffalo finishes ahead in {P['p_buf']:.0%} of them. (A game tied after 60 minute
 
 Our projections aren't real football scores; nobody finishes with {pb:.1f}. Real scores bunch up around field goals and touchdowns. Since 2019
 the most common NFL finals have been {top3}. We take the common final closest to our two projections, with the Bills winning, since they're
-our model's favorite. That's {fw}-{fl}, a final that's happened {fav_n} times in {n_finals:,} games since 2019. It's a way of saying "close, slight Bills edge,"
+our model's favorite. That's {fw}-{fl}, a final that's happened {fav_n} times in {n_finals:,} games from 2019 to 2025 (ties not counted). We look at the {len(common)} most common finals; a longer list can land on a different score. It's a way of saying "close, slight Bills edge,"
 not a separate prediction, so it doesn't go on the Ledger. Exact scores almost never hit.
 
 ## The calls going on the Ledger
@@ -294,8 +300,11 @@ rate, a shade better; the Vikings' {1 - C['min_ru']['p']:.0%} is well above it.
 ## Did we check it? Yes, before trusting it
 
 **The scoreline chances.** We ran the model on {mae['n']:,} team-games from week 2 on in 2024, 2025 and 2026 that it had never seen. When it said
-something had a 60-80% chance, it happened {lc.happened.iloc[3]:.0%} of the time (it said {lc.said.iloc[3]:.0%}). When it said 20% or less, it
-happened {lc.happened.iloc[0]:.0%} (it said {lc.said.iloc[0]:.0%}). If anything, it runs a little cautious.
+something had a 20% chance or less, it happened {lc.happened.iloc[0]:.0%} of the time (it said {lc.said.iloc[0]:.0%}), and at 80% or more it
+happened {lc.happened.iloc[4]:.0%} (it said {lc.said.iloc[4]:.0%}). In the middle it ran a few points low: when it said {lc.said.iloc[2]:.0%}, it happened
+{lc.happened.iloc[2]:.0%}. At the 20-point line itself it averaged {l20.p.mean():.0%} and teams got there {l20.y.mean():.0%} of the time. So our 20-or-more chances
+for both teams are probably a few points low. Real scores bunch up on 17, 20, 24 and 27, and our model smooths that bunching out, so "at least X"
+comes out a little low right at those lines. We're logging the model's numbers as they are and will fix this before using these lines again.
 
 **The win chance.** On {wt['n']} unseen games (week 2 on, 2024-2026), the team our model favored won {wt['right']:.0%} of the time. Taking the
 home team every time would have been right {wt['home_won']:.0%} of the time.
