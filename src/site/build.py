@@ -148,7 +148,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
-Buffalo Sabres, or the NFL.</div></footer></body></html>"""
+Buffalo Sabres, the NFL or the NHL.</div></footer></body></html>"""
 
 
 def md_to_html(text):
@@ -350,12 +350,12 @@ def build_cards():
         tiles.append(f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
 <div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
 <div class="gname">{html.escape(c['name'])}</div><div class="gpos">GOALIE</div>
-<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> this season</div></div>
+<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> goalies this season</div></div>
 <div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['sv']:.3f}</b><span>Save rate</span></div><div><b>{close}</b><span>Close-in save</span></div></div>
 <div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game</small></div>
 {'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
-<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>Shots</th><th>Save</th><th>Saved</th></tr>{rows}</table>
-<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with past seasons and
+<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>Games</th><th>Shots</th><th>Save</th><th>vs. Avg</th></tr>{rows}</table>
+<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
 pulls toward average, so a hot or cold dozen games doesn't take over.</p>
 <p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
 League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>""")
@@ -369,8 +369,8 @@ of shot it was. Add up the odds on every shot a goalie faced and you get how man
 Subtract the goals he actually allowed. Positive means he stopped more than an average goalie would have.</p>
 <p><b>Save rate</b> is the share of shots on goal he stopped; the league's is {m['lg_sv']:.3f} this season. <b>Close-in save</b> is the same for
 shots from within 20 feet, the hardest ones; the league's is {m['lg_close_sv']:.3f}.</p>
-<p><b>The blended rating</b> on the back answers "how good is he, really?" It adds this season's shots to half the weight of his past seasons'
-shots, plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots pile up, they take over.</p>
+<p><b>The blended rating</b> on the back answers "how good is he, really?" It adds this season's shots to half the weight of his
+shots from past seasons (back to 2023-24), plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots pile up, they take over.</p>
 <p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
 <b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
     (out / "index.html").write_text(page("Goalie cards | Buffalo Quant Desk", body, "Cards", 1, "Goalie cards: goals saved vs. an average goalie, with receipts."))
