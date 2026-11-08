@@ -289,19 +289,10 @@ them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025
 - **Turnovers.** Buffalo forces turnovers on {bd.to:.1%} of dropbacks ({ordn(b_rk['to'])}; league {lgd.to:.1%}). That's about average. If Wentz keeps
   putting the ball in harm's way, Monday is a chance for that number to go up.
 
-## What we're watching
+## What we're predicting
 
-{ledger_status}
-
-| # | What we expect | Chance |
-|---|---|---|
-| 1 | On balance, Minnesota's pass plays move the Vikings closer to points, not further away (above zero per 100 dropbacks; the per-team league average is {h(mo.dropback_epa_lg)}) | **{c1['p']:.0%}** |
-| 2 | On balance, Minnesota's designed runs move the Vikings further from points (below zero per 100 runs; the league average is {h(mo.rush_epa_lg)}) | **{1 - c2['p']:.0%}** |
-| 3 | The Bills sack the quarterback on more than 6% of his dropbacks | **{c3['p']:.0%}** |
-
-How we get these: start from each side's season average, pull it halfway back toward the league average (seven games is a
-small sample), combine offense and defense, and look at how much a single game usually bounces around. For calls 1 and 3
-we used Wentz's own passing and sack numbers in place of the Vikings' team numbers, which were mostly Murray's games.
+Our predictions for Monday, including how many points each team scores, come in part 3, after part 2 looks at the Bills
+offense against Minnesota's defense. Every one is logged on the [Ledger](../ledger.html) before kickoff and graded after the game.
 
 ## For the stat-heads
 
@@ -311,14 +302,11 @@ we used Wentz's own passing and sack numbers in place of the Vikings' team numbe
   gsis id via `COALESCE(passer_player_id, rusher_player_id)` (scrambles included). Short/deep: pass attempts excluding
   sacks, `air_yards` < 20 vs >= 20. Close games: `wp` between 0.10 and 0.90. Regular season; 2026 through week {THRU}.
 - QB ranks among quarterbacks with {MIN_DB}+ dropbacks ({n_pool[2025]} in 2025, {n_pool[SEASON]} in 2026). League values in the QB table are
-  play-weighted over all dropbacks; the Ledger calls use the average of team-game values, which is why call 1 shows a
-  slightly different league average than the QB table. Wentz 2025 close-game sample: {int(w25.n_close)} dropbacks; 2026: {int(w26.n_close)}. Wentz 2025 short throws, close games: {ordn(w_short_close_rk)} of {n_short_close_pool}.
+  play-weighted over all dropbacks. Wentz 2025 close-game sample: {int(w25.n_close)} dropbacks; 2026: {int(w26.n_close)}. Wentz 2025 short throws, close games: {ordn(w_short_close_rk)} of {n_short_close_pool}.
 - FTN charting (`raw_ftn`, joined on game and play id): blitz = `n_blitzers` > 0; should-have-been-intercepted =
   `is_interception_worthy` on pass attempts. Wentz 2025: {int(w25.n_intw)} of {int(w25.n_att)} attempts; {int(w25.n_blitz)} dropbacks vs. the blitz.
 - Bills defense: {int(bd.db)} dropbacks faced, {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts, {int(bd.n_blitz)} blitzes. Team ranks are among 32
   defenses (1st = best, except blitz rate where 1st = most). Team tables from `src/metrics/team.py` (`max_week={THRU}`).
-- Calls: Ledger model {VERSION}, shrink {SHRINK}, pinned to week {THRU}. Wentz substitution {n_db} dropbacks (2025-26):
-  EPA/dropback {w_db:+.4f}, sack rate {w_sk:+.4f} vs. league. Expected: call 1 {c1['expected']:+.3f}, call 2 {c2['expected']:+.3f}, call 3 {c3['expected']:.3f}.
 - Injury news: Kevin O'Connell announced Nov. 5, 2026 that Wentz starts with Murray out (strained hamstring). Source: ESPN.
 """
     (OUT / "2026-wk09-wentz-vs-bills-defense.md").write_text(md)
