@@ -44,12 +44,18 @@ def bars(ax, labels, vals, fmt, hi_last=True, lg=None):
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
 
 
-def main():
+AS_OF = "2026-11-05"  # published Nov 6 with games through Nov 4; pinned so published stories don't change silently
+
+
+def main(as_of=AS_OF):
     s = shots()
+    keep = set(query(f"SELECT game_id FROM raw_nhl_games WHERE game_date <= '{as_of}'").game_id)
+    s = s[s.game_id.isin(keep)].copy()
     m_ = (s.unblocked == 1) & (s.empty_net_against == 0)
     cal = s[m_].groupby("season").goal.sum() / s[m_].groupby("season").xg.sum()
     s["xg"] = s.xg * s.season.map(cal)
     r = records()
+    r = r[r.game_date <= as_of]
     gp = r.groupby(["season", "team"]).agg(gp=("w", "size"), w=("w", "sum"), l=("l", "sum"), otl=("otl", "sum"),
                                            gf_all=("gf", "sum"), ga_all=("ga", "sum")).reset_index()
     gp["pts"] = 2 * gp.w + gp.otl
@@ -102,7 +108,7 @@ and counted how often each kind actually went in.
 
 - A shot from within 10 feet of the net went in {near:.1%} of the time ({one_in(near)}).
 - From 30 to 40 feet: {mid:.1%} ({one_in(mid)}).
-- From 60 feet or more, around the blue line: {far:.1%} ({one_in(far)}).
+- From 60 feet or more: {far:.1%} ({one_in(far)}).
 - A rebound (a shot within three seconds of a teammate's shot) went in {reb.loc[1]:.1%} of the time, against {reb.loc[0]:.1%} for
   other shots.
 - On the power play, shots went in {pp.loc[True]:.1%} of the time, against {pp.loc[False]:.1%} otherwise.
@@ -316,8 +322,8 @@ Luukkonen has gotten worse.
     ind = u[u.season == PREV].groupby("shooter_id").agg(G=("goal", "sum"), ixG=("xg", "sum"))
     ind["fin"] = ind.G - ind.ixG; ind["name"] = ind.index.map(names)
     tuch = ind[ind.name == "Alex Tuch"].iloc[0]
-    ro = query("""SELECT r.game_id, r.player_id, g.season AS season, CASE WHEN r.team_id=g.home_id THEN g.home ELSE g.away END AS team
-                  FROM raw_nhl_rosters r JOIN raw_nhl_games g ON g.game_id=r.game_id WHERE g.season IN (20252026,20262027)""")
+    ro = query(f"""SELECT r.game_id, r.player_id, g.season AS season, CASE WHEN r.team_id=g.home_id THEN g.home ELSE g.away END AS team
+                  FROM raw_nhl_rosters r JOIN raw_nhl_games g ON g.game_id=r.game_id WHERE g.season IN (20252026,20262027) AND g.game_date <= '{as_of}'""")
     gone = set(ro[(ro.season == PREV) & (ro.team == "BUF")].player_id) - set(ro[(ro.season == CUR) & (ro.team == "BUF")].player_id)
     stay = set(ro[(ro.season == PREV) & (ro.team == "BUF")].player_id) & set(ro[(ro.season == CUR) & (ro.team == "BUF")].player_id)
     gone_fin = ind[ind.index.isin(gone)]
