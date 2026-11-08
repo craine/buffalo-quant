@@ -33,7 +33,8 @@ def ordn(n):
 
 
 def pts(v):
-    return f"{v:+.2f}"
+    s = f"{v:+.2f}"
+    return "0.00" if s in ("+0.00", "-0.00") else s
 
 
 def finish(fig, title, sub, foot):
@@ -86,15 +87,14 @@ def top3_meetings():
             d = prior[prior.side == "def"].groupby("team").agg(p=("plays", "sum"), e=("epa_sum", "sum"), n=("game_id", "nunique"))
             if len(o) < 32 or o.n.min() < 4:
                 continue
+            lgp = o.e.sum() / o.p.sum()  # league EPA/play over the same prior weeks
             o["v"], d["v"] = o.e / o.p, d.e / d.p
             o["rk"], d["rk"] = o.v.rank(ascending=False, method="min"), d.v.rank(method="min")
             for r in g[(g.week == wk) & (g.side == "off")].itertuples():
                 opp = g[(g.game_id == r.game_id) & (g.side == "def") & (g.team != r.team)].team.iloc[0]
                 rows.append(dict(season=se, week=wk, off=r.team, de=opp, off_rk=o.rk[r.team], def_rk=d.rk[opp],
-                                 off_v=o.v[r.team], def_v=d.v[opp], game=r.epa_sum / r.plays))
-    df = pd.DataFrame(rows)
-    df["lg"] = df.groupby("season").game.transform("mean")
-    return df
+                                 off_v=o.v[r.team], def_v=d.v[opp], lg=lgp, game=r.epa_sum / r.plays))
+    return pd.DataFrame(rows)
 
 
 def main():
@@ -102,6 +102,10 @@ def main():
     de = season_table("def", [SEASON], max_week=AS_OF_WEEK).set_index("team")
     bo, md = off.loc["BUF"], de.loc["MIN"]
     adj = opp_adjusted(SEASON, AS_OF_WEEK)
+    adj_2nd = adj.sort_values("adj_epa").iloc[1]
+    adj_2nd_team = adj.sort_values("adj_epa").index[1]
+    team_names = {"TB": "Tampa Bay", "DET": "Detroit", "HOU": "Houston", "DEN": "Denver", "BAL": "Baltimore",
+                  "PHI": "Philadelphia", "SF": "San Francisco", "KC": "Kansas City", "LAC": "the Chargers", "SEA": "Seattle"}
 
     # schedule: who the Vikings defense has faced
     tw = query(f"SELECT week, game_id, team, side FROM clean_team_week WHERE season={SEASON} AND season_type='REG' AND week<={AS_OF_WEEK}")
@@ -111,12 +115,14 @@ def main():
     opp["rk26"] = opp.team.map(off.epa_play_rk)
     opp["rk25"] = opp.team.map(prev.epa_play_rk)
     n_top10 = int((opp.rk26 <= 10).sum())
+    opp_avg_rk, n_17plus = opp.rk26.mean(), int((opp.rk26 >= 17).sum())
 
     # dropbacks with FTN charting
     d = dropbacks((2022, SEASON))
     d = d[(d.season < SEASON) | (d.week <= AS_OF_WEEK)].copy()
-    d["blitz"] = np.where(d.n_blitzers.notna(), (d.n_blitzers > 0).astype(float), np.nan)
-    d["rush5"] = np.where(d.ftn_rushers.notna(), (d.ftn_rushers >= 5).astype(float), np.nan)
+    # FTN changed n_blitzers in 2026 (it now equals n_pass_rushers - 4), so "blitz" = 5+ pass rushers in every season
+    d["blitz"] = np.where(d.ftn_rushers.notna(), (d.ftn_rushers >= 5).astype(float), np.nan)
+    d["old_blitz"] = np.where(d.n_blitzers.notna(), (d.n_blitzers > 0).astype(float), np.nan)
     d26 = d[d.season == SEASON]
     ch = d[d.blitz.notna()]
 
@@ -124,10 +130,13 @@ def main():
     bl = {}
     for se in (2024, 2025, 2026):
         x = ch[ch.season == se]
-        t = x.groupby("defteam").agg(blitz=("blitz", "mean"), rush5=("rush5", "mean"), n=("epa", "size"))
+        t = x.groupby("defteam").agg(blitz=("blitz", "mean"), old=("old_blitz", "mean"), n=("epa", "size"))
         bl[se] = dict(min=t.loc["MIN", "blitz"], rk=int(t.blitz.rank(ascending=False, method="min")["MIN"]),
-                      lg=x.blitz.mean(), second=t.blitz.drop("MIN").max(), rush5=t.loc["MIN", "rush5"], lg5=x.rush5.mean(),
+                      lg=x.blitz.mean(), second=t.blitz.drop("MIN").max(), old=t.loc["MIN", "old"], lg_old=x.old_blitz.mean(),
                       n=int(t.loc["MIN", "n"]))
+    assert all(bl[y]["rk"] == 1 for y in bl)
+    eq26 = ch[(ch.season == SEASON) & ch.n_blitzers.notna()]
+    share_eq26 = (eq26.n_blitzers == eq26.ftn_rushers - 4).mean()
     c26 = ch[ch.season == SEASON]
     mn = c26[c26.defteam == "MIN"]
     min_bl_epa, min_nb_epa = mn[mn.blitz == 1].epa.mean(), mn[mn.blitz == 0].epa.mean()
@@ -137,6 +146,8 @@ def main():
     n_min_bl, n_min_nb = int((mn.blitz == 1).sum()), int((mn.blitz == 0).sum())
     # how many rushers on a Vikings blitz
     min_rushers = mn[mn.blitz == 1].ftn_rushers.mean()
+    lg_rushers = c26[c26.blitz == 1].ftn_rushers.mean()
+    n_better_bl = None
 
     # Allen vs the blitz
     a = ch[ch.qb_id == ALLEN_ID]
@@ -149,6 +160,11 @@ def main():
         lg_blp=lg_prev[lg_prev.blitz == 1].epa.mean(), lg_nbp=lg_prev[lg_prev.blitz == 0].epa.mean())
     qb_bl = c26[c26.blitz == 1].groupby("qb_id").epa.agg(["size", "mean"])
     qb_bl = qb_bl[qb_bl["size"] >= 40]
+    qb_nb = c26[c26.blitz == 0].groupby("qb_id").epa.mean()
+    drop = (qb_nb.reindex(qb_bl.index) - qb_bl["mean"])
+    n_better_bl = int((drop < 0).sum())
+    allen_drop, lg_drop = drop[ALLEN_ID], lg_nb_epa - lg_bl_epa
+    allen_drop_rk = int(drop.rank(method="min")[ALLEN_ID])
     allen_bl_rk, n_qb_bl = int(qb_bl["mean"].rank(ascending=False, method="min")[ALLEN_ID]), len(qb_bl)
 
     # off script: Allen out of the pocket vs. Vikings defense against out-of-pocket plays
@@ -160,6 +176,11 @@ def main():
                                                           "epa": x[x.is_qb_out_of_pocket == 1].epa.mean(),
                                                           "n": (x.is_qb_out_of_pocket == 1).sum()}), include_groups=False)
     min_oop = od.loc["MIN"]
+    on = o26[(o26.neutral == 1) & (o26.is_qb_out_of_pocket == 1)].groupby("defteam").epa.agg(["size", "mean"])
+    min_oop_neu, min_oop_neu_n = on.loc["MIN", "mean"], int(on.loc["MIN", "size"])
+    min_oop_neu_rk = int(on["mean"].rank(method="min")["MIN"])
+    mo_ = o26[(o26.defteam == "MIN") & o26.blitz.notna()]
+    min_oop_bl, min_oop_nb = mo_[mo_.blitz == 1].is_qb_out_of_pocket.mean(), mo_[mo_.blitz == 0].is_qb_out_of_pocket.mean()
     min_oop_rk = int(od.epa.rank(method="min")["MIN"])
     min_oop_rate_rk = int(od.rate.rank(ascending=False, method="min")["MIN"])
     # second view of the off-script collision: success rate (no expected points involved)
@@ -202,7 +223,7 @@ def main():
         a1.text(i + w / 2, bl[y]["lg"] + 0.01, f"{bl[y]['lg']:.0%}", ha="center", va="bottom", fontsize=9, color=INK)
     a1.set_xticks(xs, ["2024", "2025", f"2026\n(thru wk {AS_OF_WEEK})"]); a1.set_ylim(0, 0.9)
     a1.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
-    a1.set_title("Share of dropbacks the Vikings blitz", loc="left", fontsize=10.5, fontweight="bold", color=INK)
+    a1.set_title("Share of dropbacks with 5+ pass rushers", loc="left", fontsize=10.5, fontweight="bold", color=INK)
     a1.legend(frameon=False, fontsize=9, loc="upper left"); a1.grid(axis="y", color="#EEF0F3"); a1.set_axisbelow(True)
     labs = ["Allen\n2026", "Allen\n2023-25", "League\n2023-25"]
     vals = [allen["bl26"], allen["blp"], allen["lg_blp"]]
@@ -214,8 +235,8 @@ def main():
     a2.set_title("Allen when blitzed", loc="left", fontsize=10.5, fontweight="bold", color=INK)
     a2.grid(axis="y", color="#EEF0F3"); a2.set_axisbelow(True)
     finish(fig, "Minnesota blitzes more than anyone. Allen handles it.",
-           "Blitz = at least one extra pass rusher beyond the defensive line (FTN charting).",
-           f"Vikings 2026: {bl[2026]['n']} charted dropbacks. Allen blitzed: {allen['n_bl26']} dropbacks in 2026, {allen['n_blp']} in 2023-25.")
+           "Blitz = five or more pass rushers (FTN charting).",
+           f"Vikings 2026: {bl[2026]['n']} charted dropbacks. Allen blitzed: {allen['n_bl26']} dropbacks in 2026 (small sample), {allen['n_blp']} in 2023-25.")
     fig.savefig(OUT / "wk09-blitz.png"); plt.close(fig)
 
     # ---- chart 2: off-script collision
@@ -253,7 +274,7 @@ def main():
     md = f"""# Josh Allen and the Bills offense vs. the NFL's best defense
 
 **Finding: Monday night is the best offense in football against the best defense, and the Vikings play defense
-like no one else: they blitz on {bl[2026]['min']:.0%} of dropbacks, the most in the NFL by a mile (league average {bl[2026]['lg']:.0%}).
+like no one else: they send five or more pass rushers on {bl[2026]['min']:.0%} of dropbacks, the most in the NFL by a mile (league average {bl[2026]['lg']:.0%}).
 Josh Allen has been one of the league's best quarterbacks against the blitz ({ordn(allen_bl_rk)} of {n_qb_bl}). The collision to watch is
 Allen's improvising: his plays outside the pocket have been worth {pts(allen_oop_epa)} points each, and no defense has been better
 against those plays than Minnesota's ({pts(min_oop.epa)}). Both of those are small samples.**
@@ -307,9 +328,10 @@ The Bills give the ball away on {bo.turnover_rate:.1%} of plays ({ordn(bo.turnov
 
 ## Is Minnesota's defense really this good, or is it the schedule?
 
-It's real. The Vikings' opponents have had a middle-of-the-pack set of offenses, and when we compare each game to what
-that opponent does against everyone else, Minnesota is still 1st: it has held offenses {abs(adj.loc['MIN', 'adj_epa']):.2f} points per play below
-their own averages.
+Mostly real. The Vikings have faced a below-average set of offenses (their opponents' average rank is {opp_avg_rk:.1f};
+{n_17plus} of {len(opp)} rank 17th or worse). But when we compare each game to what that opponent does against everyone else,
+Minnesota is still narrowly 1st (just ahead of {team_names.get(adj_2nd_team, adj_2nd_team)}): it has held offenses {abs(adj.loc['MIN', 'adj_epa']):.2f} points per play below
+their own averages, vs. {abs(adj_2nd.adj_epa):.2f} for {team_names.get(adj_2nd_team, adj_2nd_team)}.
 
 | Week | Opponent | Opponent's offense this season | Last season |
 |---|---|---|---|
@@ -319,23 +341,24 @@ their own averages.
 
 ## The blitz
 
-Most defenses send an extra rusher on about a third of dropbacks. Minnesota does it on almost three of every four
-({bl[2026]['min']:.0%}), and has led the league three years running ({bl[2024]['min']:.0%} in 2024, {bl[2025]['min']:.0%} in 2025). The next-most aggressive defense this
-season blitzes {bl[2026]['second']:.0%} of the time. A typical Vikings blitz sends {min_rushers:.1f} rushers.
+We count a blitz as five or more pass rushers. Most defenses do it on about a third of dropbacks. Minnesota does it on
+almost three of every four ({bl[2026]['min']:.0%}), and has led the league three years running ({bl[2024]['min']:.0%} in 2024, {bl[2025]['min']:.0%} in 2025; league
+{bl[2024]['lg']:.0%} and {bl[2025]['lg']:.0%}). The next-most aggressive defense this season blitzes {bl[2026]['second']:.0%} of the time. A Vikings blitz isn't bigger
+than anyone else's ({min_rushers:.2f} rushers on average; league {lg_rushers:.2f}). It just comes far more often.
 
 Both versions work. Against the blitz, Minnesota allows {pts(min_bl_epa)} points per dropback ({n_min_bl} plays); when it doesn't blitz,
-{pts(min_nb_epa)} ({n_min_nb} plays), so they're actually a touch better when they sit back. Around the league, blitzes this season have produced {pts(lg_bl_epa)} per dropback and sacks on {lg_bl_sack:.1%} of
+{pts(min_nb_epa)} ({n_min_nb} plays, a small sample), so far they've been about as good, maybe slightly better, when they sit back. Around the league, blitzes this season have produced {pts(lg_bl_epa)} per dropback and sacks on {lg_bl_sack:.1%} of
 them; Minnesota's blitzes get sacks {min_bl_sack:.1%} of the time.
 
 Allen is the kind of quarterback that approach is built to test, and so far he has passed:
 
 | Allen when blitzed | Dropbacks | Points added per dropback | League average |
 |---|---|---|---|
-| 2026 | {allen['n_bl26']} | {pts(allen['bl26'])} ({ordn(allen_bl_rk)} of {n_qb_bl} QBs with 40+) | {pts(lg_bl_epa)} |
+| 2026 | {allen['n_bl26']} (small sample) | {pts(allen['bl26'])} ({ordn(allen_bl_rk)} of {n_qb_bl} QBs with 40+) | {pts(lg_bl_epa)} |
 | 2023-25 | {allen['n_blp']} | {pts(allen['blp'])} | {pts(allen['lg_blp'])} |
 
-Like every quarterback, he's better when he isn't blitzed ({pts(allen['nb26'])} this season). The blitz costs him less than it costs
-almost everyone else.
+Like most quarterbacks, he's better when he isn't blitzed ({pts(allen['nb26'])} this season; {n_better_bl} of {n_qb_bl} did better when blitzed).
+He starts from such a high level that even when blitzed he's {ordn(allen_bl_rk)} of {n_qb_bl}.
 
 ## The off-script collision
 
@@ -344,8 +367,8 @@ The biggest change in Allen's 2026, from our [Josh Allen story](josh-allen-2018-
 {pts(oop_lg_epa)}).
 
 Minnesota is the toughest test for that so far this season. Quarterbacks who have left the pocket against the Vikings have lost
-{abs(min_oop.epa):.2f} points per play, the best mark in the league ({int(min_oop.n)} plays). A blitz-heavy defense flushes quarterbacks into
-exactly those plays and has rushers already coming.
+{abs(min_oop.epa):.2f} points per play, the best mark in the league ({int(min_oop.n)} plays, a small sample). With garbage time removed it's
+{pts(min_oop_neu)}, {ordn(min_oop_neu_rk)} ({min_oop_neu_n} plays).
 
 ![Off script](wk09-offscript.png)
 
@@ -356,15 +379,15 @@ It tells the same story: Allen's off-script plays succeed {allen_oop_succ:.0%} o
 ## Deep shots
 
 The Bills throw deep (20+ yards in the air) on {deep['buf_rate']:.0%} of their passes ({ordn(deep['buf_rate_rk'])}; league {deep['lg_rate']:.0%}), and those throws have been
-worth {pts(deep['buf_epa'])} points each ({deep['buf_n']} throws; league {pts(deep['lg_epa'])}). Minnesota's short-pass defense is the league's {ordn(deep['min_short_rk'])}-best,
-but deep throws against it have still been worth {pts(deep['min_epa'])} each ({ordn(deep['min_rk'])}-best; {deep['min_n']} throws). A defense that sends extra rushers
+worth {pts(deep['buf_epa'])} points each ({ordn(deep['buf_rk'])}; {deep['buf_n']} throws, a small sample; league {pts(deep['lg_epa'])}). Minnesota's short-pass defense is the
+league's {ordn(deep['min_short_rk'])}-best, but deep throws against it have still been worth {pts(deep['min_epa'])} each ({ordn(deep['min_rk'])}-best; {deep['min_n']} throws, a small sample). A defense that sends extra rushers
 leaves fewer defenders back, which is where Buffalo's big-play offense lives.
 
 ## What usually happens when the best meet the best
 
 Since 2018, a top-3 offense has met a top-3 defense {len(t3)} times in the regular season. Coming in, those offenses
 averaged {pts(t3.off_v.mean())} points per play and those defenses allowed {pts(t3.def_v.mean())}. In the game itself, the offense averaged
-**{pts(t3.game.mean())}**, almost exactly what you get by simply adding the two strengths together ({pts(t3.pred.mean())}). The offense fell short of
+**{pts(t3.game.mean())}**, close to what you get by simply adding the two strengths together ({pts(t3.pred.mean())}). The offense fell short of
 its own average {(t3.game < t3.off_v).mean():.0%} of the time. Against everyone else, those same top-3 offenses averaged {pts(o_others.game.mean())}.
 
 ![Best vs best](wk09-best-vs-best.png)
@@ -389,16 +412,23 @@ The Bills have been the top-3 offense in {len(buf_t3)} of those games:
   week {AS_OF_WEEK}, `pass == 1 or rush == 1`, EPA not null, no kneels/spikes/two-point tries/no-plays. Pass play = dropback
   (sacks and scrambles included). Designed run excludes scrambles. Explosive = pass 20+ or rush 10+ yards. League averages are means of team values.
 - Garbage-time filter (WP 10-90%): Bills offense {pts(bo.epa_play_neutral)} ({ordn(bo.epa_play_neutral_rk)}), Vikings defense {pts(md.epa_play_neutral)} ({ordn(md.epa_play_neutral_rk)}).
+- Opponent quality: average 2026 offensive rank of Minnesota's seven opponents {opp_avg_rk:.1f}.
 - Opponent adjustment: same method as `src/metrics/adjust.py` `league_adjusted_rank`, pinned to week {AS_OF_WEEK} (each game's EPA/play allowed minus the opponent's
   EPA/play in its other games, play-weighted). Vikings {adj.loc['MIN', 'adj_epa']:+.3f} ({ordn(adj.loc['MIN', 'adj_epa_rk'])}); pass defense {adj.loc['MIN', 'adj_db_epa']:+.3f} ({ordn(adj.loc['MIN', 'adj_db_epa_rk'])}).
-- Blitz = FTN `n_blitzers > 0` on charted dropbacks; second check, share with 5+ pass rushers: Vikings {bl[2026]['rush5']:.0%} (league {bl[2026]['lg5']:.0%}) in 2026,
-  {bl[2025]['rush5']:.0%} ({bl[2025]['lg5']:.0%}) in 2025, {bl[2024]['rush5']:.0%} ({bl[2024]['lg5']:.0%}) in 2024. Vikings 2026 sack rate: {min_bl_sack:.1%} blitzing, {min_nb_sack:.1%} not.
-  Allen 2026 blitz rate faced {allen['rate26']:.0%}; sacked on {allen['sack_bl26']:.1%} of blitzed dropbacks.
+- Blitz = FTN `n_pass_rushers >= 5` on charted dropbacks, every season. FTN changed `n_blitzers` in 2026: it now equals
+  `n_pass_rushers - 4` on {share_eq26:.0%} of 2026 charted dropbacks, so `n_blitzers > 0` means different things before and after
+  (Vikings under the old flag: {bl[2024]['old']:.0%}, {bl[2025]['old']:.0%}, {bl[2026]['old']:.0%} for 2024-26). The 2025-to-2026 jump ({bl[2025]['min']:.0%} to {bl[2026]['min']:.0%}) rests
+  on one source; no second check is possible until 2026 NFL participation data is published.
+  Vikings 2026 sack rate: {min_bl_sack:.1%} blitzing, {min_nb_sack:.1%} not.
+  Allen 2026 blitz rate faced {allen['rate26']:.0%}; sacked on {allen['sack_bl26']:.1%} of blitzed dropbacks. Drop from not-blitzed to blitzed:
+  Allen {allen_drop:.2f}, league {lg_drop:.2f}; {ordn(allen_drop_rk)}-smallest of {n_qb_bl}.
 - Off script = FTN `is_qb_out_of_pocket`; Allen by gsis id ({ALLEN_ID}), dropbacks = `COALESCE(passer_player_id, rusher_player_id)`.
-  Vikings face out-of-pocket plays on {min_oop.rate:.0%} of dropbacks ({ordn(min_oop_rate_rk)}-highest rate).
+  Vikings face out-of-pocket plays on {min_oop.rate:.0%} of dropbacks ({ordn(min_oop_rate_rk)}-highest rate; league {oop_lg_rate:.0%}): {min_oop_bl:.0%} when
+  blitzing, {min_oop_nb:.0%} when not. Garbage-time filtered (WP 10-90%): {pts(min_oop_neu)} ({ordn(min_oop_neu_rk)}, {min_oop_neu_n} plays).
 - Deep = air yards 20+ on true pass attempts (no sacks). Minnesota's short-pass (under 20 air yards) EPA allowed {pts(deep['min_short'])}; league {pts(deep['lg_short'])}.
-- Best vs best: ranks by EPA/play over prior games only (both teams 4+ games), 2018-2025 regular season, {len(hist):,} team-games
-  eligible; additive prediction = offense avg + defense avg - season league average. #1 offense vs. #1 defense: {len(n1)} games,
+- Best vs best: ranks by EPA/play over prior games only; a week counts once every team has played 4+ games. 2018-2025
+  regular season, {len(hist):,} team-games eligible; additive prediction = offense avg + defense avg - league average over the
+  same prior weeks. #1 offense vs. #1 defense: {len(n1)} games,
   offense averaged {pts(n1.game.mean())}.
 - 2026 NFL participation data (pressure, coverage) has not been published, so this story doesn't use pressure for 2026.
 - Data pinned through 2026 week {AS_OF_WEEK}.
@@ -411,8 +441,8 @@ The Bills have been the top-3 offense in {len(buf_t3)} of those games:
                  f"against the blitz this season."),
         "explainer": {
             "kicker": "How we know", "title": "Every play is worth points.",
-            "text": (f"We judge every snap by how many points it adds to the drive. Deep throws (20+ yards in the air) are the "
-                     f"league's most valuable plays, and the Bills throw them more than most. What each deep throw has been worth this season:"),
+            "text": (f"We judge every snap by how many points it adds to the drive. Deep throws (20+ yards in the air) are "
+                     f"among the league's most valuable plays, and the Bills throw them more than most. What each deep throw has been worth this season:"),
             "fmt": "pts",
             "bars": [["Bills", round(float(deep["buf_epa"]), 2)], ["League", round(float(deep["lg_epa"]), 2)],
                      ["vs. Vikings", round(float(deep["min_epa"]), 2)]]},

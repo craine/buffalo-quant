@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-offense-vs-vikings-defense", "2026-wk09-bills-offense-vs-vikings-defense.md", "2026-11-09", "Bills &middot; Week 9 preview, part 2",
+     "The Vikings send five or more rushers on 73% of dropbacks, more than any defense by a mile. Josh Allen has been one of the best in the league against it.",
+     "wk09-blitz.png"),
     ("bills-at-vikings-week-9", "2026-wk09-bills-at-vikings.md", "2026-11-08", "Bills &middot; Week 9 preview",
      "Both rank 1st through week 8. Kyler Murray is out, Carson Wentz starts, and the Bills' pass defense is their weak spot.",
      "wk09-matchup.png"),
