@@ -65,3 +65,19 @@ def test_qb_relative_wentz():
     from src.ledger.model_v01 import qb_relative
     rel, n = qb_relative("00-0032950", "dropback_epa", [2025, 2026])
     assert n > 200 and -0.3 < rel < 0.3
+
+
+def test_max_week_pins_model_inputs():
+    """Pinning to week 8 must reproduce the unpinned week-9 card while the data only runs through week 8,
+    and must never include later weeks."""
+    from src.ledger.model_v01 import game_values, prob_over, qb_relative
+    gv = game_values(2026, "dropback_epa", max_week=8)
+    assert gv.week.max() <= 8
+    a = prob_over("MIN", "BUF", "sack_rate", 0.06, max_week=8)
+    full = game_values(2026, "sack_rate")
+    if full.week.max() <= 8:
+        b = prob_over("MIN", "BUF", "sack_rate", 0.06)
+        assert a["p"] == b["p"] and abs(a["expected"] - b["expected"]) < 1e-12
+    rel8, n8 = qb_relative("00-0032950", "dropback_epa", [2025, 2026], max_week=8)
+    rel1, n1 = qb_relative("00-0032950", "dropback_epa", [2025, 2026], max_week=1)
+    assert n1 <= n8

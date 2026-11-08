@@ -1,0 +1,38 @@
+{
+ "label": "Monday night: where the matchup is",
+ "big": [
+  [
+   "25th",
+   "Bills defense vs. short throws (of 32)"
+  ],
+  [
+   "88%",
+   "Wentz throws that were short, 2025"
+  ]
+ ],
+ "note": "With garbage time removed the Bills are still 25th. Wentz was sacked on 9.7% of dropbacks last season, 5th-most among 43 QBs.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Every play is worth points.",
+  "text": "We judge every snap by how many points it adds to or takes away from the drive. On 3rd-and-8, a conversion adds about +2.4 points; a sack costs about 1.9. Here's what 1st-and-10 is worth depending on where you start.",
+  "fmt": "pts",
+  "bars": [
+   [
+    "Own 25",
+    1.12
+   ],
+   [
+    "Midfield",
+    2.59
+   ],
+   [
+    "Opp. 25",
+    4.19
+   ],
+   [
+    "Opp. 10",
+    4.98
+   ]
+  ]
+ }
+}
