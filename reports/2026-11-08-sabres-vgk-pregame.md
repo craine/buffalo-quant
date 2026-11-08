@@ -91,10 +91,14 @@ This season so far (276 games) it has called 61% right; home teams have won 57%.
 62% of the time. But the teams it favored slightly, at 50-55%, won 49%, no better than a coin flip, and at 55-60% they won 54%. Sunday's call is in that range,
 so read it as "slight lean Vegas," not "Vegas should win."
 
-**What it doesn't know: goalies.** The model rates teams by the chances they create and allow, not by who's in net. Buffalo's
-expected starter, Colten Ellis, has saved 2.2 more goals than an average goalie would have this season; if Vegas starts Adin Hill
-(-1.8), the goalie matchup leans Buffalo in a way the model doesn't count. Small samples on both sides, and
-Vegas's starter wasn't named when we published.
+**What it doesn't count: goalies, and why.** The model rates teams by the chances they create and allow, not by who's in net.
+We tested adding each game's starting goalie, rated on his record before that game, and it made the predictions no better. The
+reason shows up in the data: a goalie's goals saved in the first half of a season barely tells you about his second half. On a
+0-to-1 scale of how well one half predicts the next, goalies came in between 0.07 and 0.45 over the last three seasons; a
+team's chances allowed came in between 0.63 and 0.75. Over a few dozen games, goalie numbers are mostly noise. So
+while Buffalo's expected starter, Colten Ellis, is at +2.2 this season and Vegas's Adin Hill at -1.8, that gap
+tells us less than it looks like. Vegas's starter wasn't named when we published. We'll keep testing goalies as more seasons
+of data come in; the cards track them in the meantime.
 
 ## What to watch
 
@@ -112,6 +116,9 @@ Vegas's starter wasn't named when we published.
   league xG = league goals (2026-27 factor 1.001). Share = xGF / (xGF + xGA). Rebound = shot within 3 s of a same-team
   unblocked attempt. Close = within 20 ft. GSAx = xG against minus goals against on unblocked shots, empty net excluded.
 - Data through 2026-11-07 (276 games). Last-5 shares use each team's five most recent games.
+- Goalie test (v0.2, `nhl_game_model.build_frame_g`, `scripts/tune_nhl_game_model_g.py`): starter's blended GSAx/shot x league unblocked
+  shots/game as a feature; 2024-25 Brier 0.2375-0.2377 vs. 0.2375 without it, so not adopted. Split-half correlation, goalies with 400+
+  unblocked shots per half: 0.07, 0.45, 0.17; team xGA/game: 0.75, 0.63, 0.69 (2023-24 to 2025-26).
 - Win chance: NHL game model nhl-game-v0.1 (`src/ledger/nhl_game_model.py`). Team xGF/xGA per game shrunk with K=10 games toward
   league + 0.5 x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
   -0.254 + 1.032 x that + 0.272 x home (fit 2023-25); independent Poisson; regulation ties to home at 0.545.

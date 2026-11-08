@@ -122,6 +122,20 @@ def main(as_of=AS_OF):
                      if len(lp) else "**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; "
                      "every logged call is graded after the game, hit or miss.")
 
+    # ---- why goalies aren't in the model: half-season repeatability, goalies vs team chances allowed (complete seasons only)
+    gg = gmod.goalie_games()
+    rep_g, rep_t = [], []
+    for ss in (20232024, 20242025, 20252026):
+        x = gg[gg.season == ss]; mid = x.game_date.sort_values().iloc[len(x) // 2]
+        h1 = x[x.game_date < mid].groupby("goalie_id").agg(sh=("shots", "sum"), xga=("xga", "sum"), ga=("ga", "sum"))
+        h2 = x[x.game_date >= mid].groupby("goalie_id").agg(sh=("shots", "sum"), xga=("xga", "sum"), ga=("ga", "sum"))
+        jj = h1.join(h2, lsuffix="1", rsuffix="2"); jj = jj[(jj.sh1 >= 400) & (jj.sh2 >= 400)]
+        rep_g.append(np.corrcoef((jj.xga1 - jj.ga1) / jj.sh1, (jj.xga2 - jj.ga2) / jj.sh2)[0, 1])
+        y = tg[tg.season == ss]; mid = y.game_date.sort_values().iloc[len(y) // 2]
+        a1 = y[y.game_date < mid].groupby("team").xga.mean(); a2 = y[y.game_date >= mid].groupby("team").xga.mean()
+        rep_t.append(np.corrcoef(a1, a2.reindex(a1.index))[0, 1])
+    g_lo, g_hi, t_lo, t_hi = min(rep_g), max(rep_g), min(rep_t), max(rep_t)
+
     # ---- chart 3: how the model's chances held up on 2025-26
     fig, ax = plt.subplots(figsize=(9.5, 4.8), dpi=200)
     xs = np.arange(len(calb)); w = 0.36
@@ -272,10 +286,14 @@ This season so far ({bt[SEASON]['n']} games) it has called {bt[SEASON]['right']:
 {calb[2][2]:.0%} of the time. But the teams it favored slightly, at 50-55%, won {calb[0][2]:.0%}, no better than a coin flip, and at 55-60% they won {calb[1][2]:.0%}. Sunday's call is in that range,
 so read it as "slight lean Vegas," not "Vegas should win."
 
-**What it doesn't know: goalies.** The model rates teams by the chances they create and allow, not by who's in net. Buffalo's
-expected starter, Colten Ellis, has saved {bg[bg.name == 'Colten Ellis'].gsax.sum():.1f} more goals than an average goalie would have this season; if Vegas starts Adin Hill
-({vg[vg.name == 'Adin Hill'].gsax.sum():+.1f}), the goalie matchup leans Buffalo in a way the model doesn't count. Small samples on both sides, and
-Vegas's starter wasn't named when we published.
+**What it doesn't count: goalies, and why.** The model rates teams by the chances they create and allow, not by who's in net.
+We tested adding each game's starting goalie, rated on his record before that game, and it made the predictions no better. The
+reason shows up in the data: a goalie's goals saved in the first half of a season barely tells you about his second half. On a
+0-to-1 scale of how well one half predicts the next, goalies came in between {g_lo:.2f} and {g_hi:.2f} over the last three seasons; a
+team's chances allowed came in between {t_lo:.2f} and {t_hi:.2f}. Over a few dozen games, goalie numbers are mostly noise. So
+while Buffalo's expected starter, Colten Ellis, is at {bg[bg.name == 'Colten Ellis'].gsax.sum():+.1f} this season and Vegas's Adin Hill at {vg[vg.name == 'Adin Hill'].gsax.sum():+.1f}, that gap
+tells us less than it looks like. Vegas's starter wasn't named when we published. We'll keep testing goalies as more seasons
+of data come in; the cards track them in the meantime.
 
 ## What to watch
 
@@ -293,6 +311,9 @@ Vegas's starter wasn't named when we published.
   league xG = league goals (2026-27 factor {cal.loc[SEASON]:.3f}). Share = xGF / (xGF + xGA). Rebound = shot within 3 s of a same-team
   unblocked attempt. Close = within 20 ft. GSAx = xG against minus goals against on unblocked shots, empty net excluded.
 - Data through {last_date} ({len(g26)} games). Last-{nb5} shares use each team's five most recent games.
+- Goalie test (v0.2, `nhl_game_model.build_frame_g`, `scripts/tune_nhl_game_model_g.py`): starter's blended GSAx/shot x league unblocked
+  shots/game as a feature; 2024-25 Brier 0.2375-0.2377 vs. 0.2375 without it, so not adopted. Split-half correlation, goalies with 400+
+  unblocked shots per half: {', '.join(f'{v:.2f}' for v in rep_g)}; team xGA/game: {', '.join(f'{v:.2f}' for v in rep_t)} (2023-24 to 2025-26).
 - Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`). Team xGF/xGA per game shrunk with K={gmod.K} games toward
   league + {gmod.PRIOR_KEEP} x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
   {coef[0]:.3f} + {coef[1]:.3f} x that + {coef[2]:.3f} x home (fit 2023-25); independent Poisson; regulation ties to home at {p_ot:.3f}.
