@@ -10,7 +10,7 @@
    "Vikings, projected points"
   ]
  ],
- "note": "Bills win 53% of the time in our model. Seven calls go on the Ledger before kickoff; one planned call failed its test and is out.",
+ "note": "At nearly every scoreline Buffalo is a step ahead: 63% vs 61% to reach 20. Bills win 53% of the time. If we have to name it: 23-20 Bills.",
  "explainer": {
   "kicker": "How we checked it",
   "title": "Tested on games it never saw.",
