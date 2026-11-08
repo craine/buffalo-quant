@@ -88,8 +88,9 @@ def main(as_of=AS_OF):
     gk["gsax"] = gk.xga - gk.ga
     gk["name"] = gk.goalie_id.map(names)
     gk["sv"] = 1 - gk.ga / gk.sog
-    gk["rk"] = gk.gsax.rank(ascending=False, method="min").astype(int)
-    n_gk = len(gk)
+    tot = gk.groupby("goalie_id").gsax.sum()          # rank each goalie once, even if he played for two teams
+    gk["rk"] = gk.goalie_id.map(tot.rank(ascending=False, method="min").astype(int))
+    n_gk = len(tot)
     bg = gk[gk.opp == US].sort_values("gp", ascending=False)
     vg = gk[gk.opp == THEM].sort_values("gp", ascending=False)
 
@@ -233,7 +234,8 @@ matchup to watch.
 
 ## In goal
 
-Goals saved compared with an average goalie facing the same shots. Positive is good.
+Goals saved compared with an average goalie facing the same shots. Positive is good. Each goalie also has a
+[card](../cards/) with his season-by-season record.
 
 | Team | Goalie | Games | Save rate | Goals saved vs. average |
 |---|---|---|---|---|

@@ -103,12 +103,35 @@ header.site .wrap,footer .wrap{max-width:1160px}
 .bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
 .bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
 @media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:26px;margin:28px 0}
+.gc{perspective:1200px;height:440px;cursor:pointer}
+.gc input{display:none}
+.gci{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.gc input:checked+.gci{transform:rotateY(180deg)}
+.gf,.gb{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;border:8px solid var(--tc);background:#FFFDF6;box-shadow:0 6px 18px rgba(20,23,31,.14);overflow:hidden}
+.gb{transform:rotateY(180deg);padding:16px 16px 12px;font-size:13px}
+.gtop{background:var(--tc);color:#fff;padding:12px 16px 10px;display:flex;justify-content:space-between;align-items:flex-start}
+.gtop .tm{font-size:11px;font-weight:800;letter-spacing:.16em}.gtop .no{font-size:44px;font-weight:900;line-height:.9;color:var(--ta)}
+.gname{font-family:Georgia,serif;font-size:24px;font-weight:700;line-height:1.1;margin:12px 16px 2px}
+.gpos{margin:0 16px;font-size:11px;letter-spacing:.14em;color:var(--muted);font-weight:700}
+.gbig{margin:14px 16px 4px;display:flex;align-items:baseline;gap:10px}.gbig .v{font-size:46px;font-weight:900;color:var(--ink);line-height:1}
+.gbig .l{font-size:12px;color:#4A5160;line-height:1.25}
+.grow{display:grid;grid-template-columns:1fr 1fr 1fr;margin:10px 16px 0;border-top:2px solid var(--tc)}
+.grow div{padding:8px 0 4px}.grow b{display:block;font-size:18px}.grow span{font-size:10.5px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.gspark{margin:8px 16px 0}.gspark small{display:block;font-size:10.5px;color:var(--muted)}
+.gflip{position:absolute;bottom:8px;right:12px;font-size:10.5px;color:var(--muted);letter-spacing:.08em}
+.gsmall{position:absolute;bottom:8px;left:14px;font-size:10.5px;color:var(--red);font-weight:700;letter-spacing:.06em}
+.gb h4{margin:0 0 8px;font-family:Georgia,serif;font-size:18px}.gb table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
+.gb th{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right;padding:4px 2px;border-bottom:2px solid var(--tc)}
+.gb th:first-child,.gb td:first-child{text-align:left}.gb td{text-align:right;padding:5px 2px;border-bottom:1px solid var(--line)}
+.gb p{margin:10px 0 0;line-height:1.45;color:#3B4150}
 """
 
 import hashlib
 CSS_V = hashlib.sha1(CSS.encode()).hexdigest()[:8]  # changes whenever the CSS changes, so browsers refetch it
 
-NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("ledger.html", "Ledger"), ("about.html", "About")]
+NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("cards/", "Cards"), ("ledger.html", "Ledger"), ("about.html", "About")]
 
 
 def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png", full=False):
@@ -289,6 +312,70 @@ keep score in public.</p>
     (SITE / "about.html").write_text(page("About | Buffalo Quant Desk", body, "About"))
 
 
+TEAM_COLORS = {"BUF": ("#003087", "#FFB81C", "SABRES"), "VGK": ("#333F42", "#B4975A", "GOLDEN KNIGHTS")}
+
+
+def spark_svg(vals, color):
+    if not vals:
+        return ""
+    w, h = 238, 54
+    lo, hi = min(min(vals), 0), max(max(vals), 0)
+    rng = (hi - lo) or 1
+    xs = [i * w / max(len(vals) - 1, 1) for i in range(len(vals))]
+    ys = [h - (v - lo) / rng * h for v in vals]
+    zero = h - (0 - lo) / rng * h
+    pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
+    return (f'<svg viewBox="0 -4 {w} {h + 8}" width="100%" height="{h + 8}" role="img" aria-label="Goals saved vs average, running total">'
+            f'<line x1="0" x2="{w}" y1="{zero:.1f}" y2="{zero:.1f}" stroke="#C9CDD4" stroke-dasharray="3 3"/>'
+            f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
+            f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.5" fill="{color}"/></svg>')
+
+
+def build_cards():
+    import json
+    src = ROOT / "reports" / "cards" / "goalies.json"
+    out = SITE / "cards"
+    out.mkdir(exist_ok=True)
+    if not src.exists():
+        return
+    d = json.loads(src.read_text())
+    m = d["meta"]
+    tiles = []
+    for c in d["cards"]:
+        tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+        sign = lambda v: f"{v:+.1f}"
+        rows = "".join(f"<tr><td>{r['season']}</td><td>{r['team']}</td><td>{r['gp']}</td><td>{r['sog']}</td>"
+                       f"<td>{r['sv']:.3f}</td><td>{sign(r['gsax'])}</td></tr>" for r in c["seasons"])
+        close = (f"{c['close_sv']:.3f}" if c["close_sv"] is not None else "&ndash;")
+        tiles.append(f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
+<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
+<div class="gname">{html.escape(c['name'])}</div><div class="gpos">GOALIE</div>
+<div class="gbig"><div class="v">{sign(c['gsax'])}</div><div class="l">goals saved vs. an<br>average goalie<br><b>{c['rk']} of {c['of']}</b> this season</div></div>
+<div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['sv']:.3f}</b><span>Save rate</span></div><div><b>{close}</b><span>Close-in save</span></div></div>
+<div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game</small></div>
+{'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
+<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>Shots</th><th>Save</th><th>Saved</th></tr>{rows}</table>
+<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with past seasons and
+pulls toward average, so a hot or cold dozen games doesn't take over.</p>
+<p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
+League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>""")
+    body = f"""<div class="kicker">Player cards</div><h1>Goalie cards</h1>
+<p class="dek">Every goalie who has played this season for the {' and the '.join(TEAM_COLORS[t][2].title() for t in m['teams'])}. Tap a card to flip it.
+Numbers through {datetime.strptime(m['as_of'], '%Y-%m-%d').strftime('%B %-d, %Y')}; they update as the season goes.</p>
+<div class="cards">{''.join(tiles)}</div>
+<h2>How to read a card</h2>
+<p><b>Goals saved vs. an average goalie</b> is the big number. Every shot has odds of going in, based on where it came from and what kind
+of shot it was. Add up the odds on every shot a goalie faced and you get how many goals an average goalie would have allowed.
+Subtract the goals he actually allowed. Positive means he stopped more than an average goalie would have.</p>
+<p><b>Save rate</b> is the share of shots on goal he stopped; the league's is {m['lg_sv']:.3f} this season. <b>Close-in save</b> is the same for
+shots from within 20 feet, the hardest ones; the league's is {m['lg_close_sv']:.3f}.</p>
+<p><b>The blended rating</b> on the back answers "how good is he, really?" It adds this season's shots to half the weight of his past seasons'
+shots, plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots pile up, they take over.</p>
+<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
+<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
+    (out / "index.html").write_text(page("Goalie cards | Buffalo Quant Desk", body, "Cards", 1, "Goalie cards: goals saved vs. an average goalie, with receipts."))
+
+
 def main():
     if SITE.exists():
         shutil.rmtree(SITE)
@@ -300,6 +387,7 @@ def main():
     build_home(articles, texts)
     build_ledger()
     build_about()
+    build_cards()
     shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):
