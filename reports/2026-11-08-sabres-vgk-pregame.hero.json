@@ -2,15 +2,15 @@
  "label": "Sabres vs. Vegas, 3:30 p.m.: the matchup",
  "big": [
   [
-   "3.9",
-   "Sabres rebound shots a game (5th of 32)"
+   "54%",
+   "Vegas's chance to win, our model (Sabres 46%)"
   ],
   [
-   "3.2",
-   "Rebound shots Vegas allows a game (16th of 32, about average)"
+   "3.9",
+   "Sabres rebound shots a game (5th of 32)"
   ]
  ],
- "note": "Rebounds go in 11.5% of the time, about 1.8 times the rate of other shots.",
+ "note": "Close to a coin flip: our model expects 3.3 goals for Vegas, 3.0 for Buffalo. Rebounds go in 11.5% of the time, about 1.8 times the rate of other shots.",
  "explainer": {
   "kicker": "How we know",
   "title": "Every shot has odds.",

@@ -1,7 +1,7 @@
 """Sabres pregame: Vegas at Buffalo, Sun Nov 8, 2026, 3:30 PM ET. Every number computed here from clean_nhl_shots_xg / raw_nhl_*.
 
 Writes reports/2026-11-08-sabres-vgk-pregame.md, two PNGs and a hero JSON. Expected goals rescaled per season (league xG = goals).
-No win probability: we don't have a tested hockey game model yet.
+Win chance from nhl_game_model v0.1, tested on 2025-26 and 2026-27 games it never saw.
 """
 import json
 
@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.db import ROOT, query
 from src.metrics.nhl_team import shots
+from src.ledger import nhl_game_model as gmod
 from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
 from src.reports.sabres_postgame import finish, ordn
 
@@ -92,6 +93,49 @@ def main(as_of=AS_OF):
     bg = gk[gk.opp == US].sort_values("gp", ascending=False)
     vg = gk[gk.opp == THEM].sort_values("gp", ascending=False)
 
+    # ---- game prediction (NHL game model v0.1), pinned to games before Nov 8
+    tg, coef, p_ot, home_rate = gmod.train()
+    off_r, def_r, lg_r, ratio = gmod.ratings(tg, SEASON, "2026-11-08")
+    mu_b = gmod.mu(coef, gmod.raw(off_r, def_r, lg_r, ratio, US, THEM), 1)
+    mu_v = gmod.mu(coef, gmod.raw(off_r, def_r, lg_r, ratio, THEM, US), 0)
+    p_b, p_tie = gmod.win_prob(mu_b, mu_v, p_ot)
+    bt = {}
+    for ss, mxd in ((20252026, None), (SEASON, as_of)):
+        fr = gmod.build_frame(tg, [ss], max_date=mxd)
+        gr = gmod.baselines(tg, gmod.game_rows(fr, coef, p_ot), home_rate)
+        bt[ss] = dict(n=len(gr), brier=gmod.brier(gr.p_home, gr.home_won), b_home=gmod.brier(gr.b_home, gr.home_won),
+                      b_rec=gmod.brier(gr.b_record, gr.home_won), right=((gr.p_home > .5) == gr.home_won).mean(),
+                      home_obs=gr.home_won.mean(), g=gr)
+    g25 = bt[20252026]["g"]
+    fav = g25.p_home.where(g25.p_home >= .5, 1 - g25.p_home)
+    fav_won = ((g25.p_home >= .5) == g25.home_won)
+    cal_bins = [(0.5, 0.55), (0.55, 0.6), (0.6, 0.65), (0.65, 1.0)]
+    calb = [(f"{int(lo*100)}-{int(min(hi,0.99)*100)}%" if hi < 1 else f"{int(lo*100)}%+", fav[(fav >= lo) & (fav < hi)].mean(),
+            fav_won[(fav >= lo) & (fav < hi)].mean(), int(((fav >= lo) & (fav < hi)).sum())) for lo, hi in cal_bins]
+    from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
+    lp = _read(PRED_CSV, PRED_COLS)
+    lp = lp[lp.model_version == gmod.VERSION] if not lp.empty else lp
+    lp = lp[lp.claim_text.str.contains("Sabres", na=False)] if len(lp) else lp
+    ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before puck drop.** It gets graded after the game, hit or miss."
+                     if len(lp) else "**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; "
+                     "every logged call is graded after the game, hit or miss.")
+
+    # ---- chart 3: how the model's chances held up on 2025-26
+    fig, ax = plt.subplots(figsize=(9.5, 4.8), dpi=200)
+    xs = np.arange(len(calb)); w = 0.36
+    ax.bar(xs - w / 2, [c[1] for c in calb], w, color=GRAY, label="What the model said (favorite's chance)", zorder=2)
+    ax.bar(xs + w / 2, [c[2] for c in calb], w, color=BLUE, label="How often the favorite actually won", zorder=2)
+    for x_, c in zip(xs, calb):
+        ax.text(x_ - w / 2, c[1] + 0.01, f"{c[1]:.0%}", ha="center", va="bottom", fontsize=9, color=MUTED)
+        ax.text(x_ + w / 2, c[2] + 0.01, f"{c[2]:.0%}", ha="center", va="bottom", fontsize=9.5, color=INK)
+    ax.set_xticks(xs, [f"Favorite given {c[0]}\n({c[3]} games)" for c in calb], fontsize=9.5)
+    ax.set_ylim(0, 0.9); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
+    ax.legend(frameon=False, fontsize=9, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+    finish(fig, "Tested on a season it never saw, the model's chances mostly held up",
+           f"Every 2025-26 game ({bt[20252026]['n']:,}), predicted using only what was known before each game.",
+           f"NHL game model {gmod.VERSION}, fit on 2023-24 and 2024-25.")
+    fig.savefig(OUT / "sabres-vgk-model-test.png"); plt.close(fig)
+
     # ---- chart 1: every team's chances created vs allowed
     fig, ax = plt.subplots(figsize=(9.5, 6.2), dpi=200)
     others = t.drop([US, THEM])
@@ -140,12 +184,11 @@ def main(as_of=AS_OF):
 
 **Finding: Vegas allows chances worth {v.xga_pg:.2f} goals a game, the {ordn(rk('xga_pg', THEM, False))}-fewest in the NHL, and few shots from close to its net
 ({tie5}{ordn(rk('close_a_pg', THEM, False))}-fewest). Buffalo's attack is middle of the pack ({ordn(rk('xgf_pg', US))} in chances created) but {ordn(rb_rk_f)} at creating rebound
-shots. The bigger worry is at the other end: the Sabres allow chances worth {b.xga_pg:.2f} goals a game, {ordn(rk('xga_pg', US, False))} of 32.**
+shots. The bigger worry is at the other end: the Sabres allow chances worth {b.xga_pg:.2f} goals a game, {ordn(rk('xga_pg', US, False))} of 32.
+Our model gives Vegas a {1 - p_b:.0%} chance to win and Buffalo {p_b:.0%}.**
 
 *Vegas at Buffalo, Sunday, Nov. 8, 3:30 p.m. ET, KeyBank Center. Numbers are 2026-27 through {pd.to_datetime(last_date):%B %-d}: Sabres
-{recd(US)} in {int(b.gp)} games, Golden Knights {recd(THEM)} in {int(v.gp)}. This is a preview, not a prediction: we don't put a win chance on
-a hockey game until our game model has been tested on past seasons, and it hasn't been yet. Sixteen to 18 games is early;
-ranks can move a lot.*
+{recd(US)} in {int(b.gp)} games, Golden Knights {recd(THEM)} in {int(v.gp)}. Sixteen to 18 games is early; ranks can move a lot.*
 
 ![Chances created vs allowed](sabres-vgk-chances.png)
 
@@ -200,6 +243,34 @@ Ranks are among all {n_gk} goalies who have played this season. Buffalo has swit
 to Colten Ellis on Sunday (WGR and Buffalo Hockey Beat both expect him). Vegas hadn't named a starter when we
 published; NHL.com projects Adin Hill. These are small samples: a goalie's numbers over a dozen games can swing a lot.
 
+## Our prediction: Vegas {1 - p_b:.0%}, Sabres {p_b:.0%}
+
+{ledger_status}
+
+Our model expects about **{mu_v:.1f} goals for Vegas and {mu_b:.1f} for Buffalo**, and gives about a {p_tie:.0%} chance the game is tied
+after 60 minutes. Close to a coin flip, leaning Vegas.
+
+**Where the number comes from.** The same chances numbers above. Buffalo creates chances worth {b.xgf_pg:.2f} goals a game; Vegas
+allows {v.xga_pg:.2f}. Sixteen or 18 games is a small sample, so we blend each team's numbers with last season's, pulled halfway
+toward the league average; Buffalo's attack counts as {off_r[US]:.2f} and Vegas's defense as {def_r[THEM]:.2f}. Start from the league's
+{lg_r:.2f} per game, adjust for Buffalo's attack and Vegas's defense, and you get Buffalo's expected chances; do the same the
+other way for Vegas. A final step, fit on past seasons, turns chances into goals and adds about {coef[2]:.2f} of a goal for playing at
+home. Then we play the game out on paper: with those scoring rates, how often does each team end up ahead? Ties after 60 minutes
+are split the way they went for home teams in past overtimes and shootouts ({p_ot:.0%} home wins).
+
+![Model test](sabres-vgk-model-test.png)
+
+**How we checked it.** We built the model on the 2023-24 and 2024-25 seasons, then had it call every 2025-26 game using only
+what was known before each game. It picked the winner {bt[20252026]['right']:.0%} of the time; picking the home team every time would have been right
+{bt[20252026]['home_obs']:.0%}. Its percentages were also closer to what actually happened than two simple guesses, giving every home team
+its usual edge or going by the teams' records, though not by much: a hockey game is close to a coin flip, and no model changes that.
+This season so far ({bt[SEASON]['n']} games) it has picked {bt[SEASON]['right']:.0%}. When it made a team a 60-65% favorite in 2025-26, that team won
+{calb[2][2]:.0%} of the time. But its slight favorites, given 50-55%, won only {calb[0][2]:.0%}: a coin flip. Sunday's call is in that range,
+so read it as "slight lean Vegas," not "Vegas should win."
+
+**What it doesn't know: goalies.** The model rates teams by the chances they create and allow, not by who's in net. Buffalo's
+expected starter, Colten Ellis, has been better than average this season; Vegas's starter wasn't named when we published.
+
 ## What to watch
 
 - **Second chances.** Count Buffalo's shots that come right after another shot. The Sabres' season average is {b.reb_f_pg:.1f}.
@@ -216,14 +287,20 @@ published; NHL.com projects Adin Hill. These are small samples: a goalie's numbe
   league xG = league goals (2026-27 factor {cal.loc[SEASON]:.3f}). Share = xGF / (xGF + xGA). Rebound = shot within 3 s of a same-team
   unblocked attempt. Close = within 20 ft. GSAx = xG against minus goals against on unblocked shots, empty net excluded.
 - Data through {last_date} ({len(g26)} games). Last-{nb5} shares use each team's five most recent games.
-- No game probability is published: there is no backtested NHL game model in this repo yet.
+- Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`). Team xGF/xGA per game shrunk with K={gmod.K} games toward
+  league + {gmod.PRIOR_KEEP} x last season's edge; expected goals = (off + opp def - league) x league goals/xG ratio to date; goals =
+  {coef[0]:.3f} + {coef[1]:.3f} x that + {coef[2]:.3f} x home (fit 2023-25); independent Poisson; regulation ties to home at {p_ot:.3f}.
+  Brier: 2025-26 {bt[20252026]['brier']:.4f} (home-team rate {bt[20252026]['b_home']:.4f}, record log5 {bt[20252026]['b_rec']:.4f}, coin 0.25);
+  2026-27 to date {bt[SEASON]['brier']:.4f} ({bt[SEASON]['b_home']:.4f}, {bt[SEASON]['b_rec']:.4f}). Settings picked on 2024-25 only
+  (`scripts/tune_nhl_game_model.py`). Goalies not in the model.
 """
     (OUT / "2026-11-08-sabres-vgk-pregame.md").write_text(md)
     (OUT / "2026-11-08-sabres-vgk-pregame.hero.json").write_text(json.dumps({
         "label": "Sabres vs. Vegas, 3:30 p.m.: the matchup",
-        "big": [[f"{b.reb_f_pg:.1f}", f"Sabres rebound shots a game ({ordn(rb_rk_f)} of 32)"],
-                [f"{v.reb_a_pg:.1f}", f"Rebound shots Vegas allows a game ({ordn(rb_rk_a)} of 32, about average)"]],
-        "note": f"Rebounds go in {reb_rate:.1%} of the time, about {reb_rate / non_rate:.1f} times the rate of other shots.",
+        "big": [[f"{1 - p_b:.0%}", "Vegas's chance to win, our model (Sabres " + f"{p_b:.0%})"],
+                [f"{b.reb_f_pg:.1f}", f"Sabres rebound shots a game ({ordn(rb_rk_f)} of 32)"]],
+        "note": (f"Close to a coin flip: our model expects {mu_v:.1f} goals for Vegas, {mu_b:.1f} for Buffalo. Rebounds go in {reb_rate:.1%} "
+                 f"of the time, about {reb_rate / non_rate:.1f} times the rate of other shots."),
         "explainer": {"kicker": "How we know", "title": "Every shot has odds.",
                       "text": (f"A shot from within 10 feet went in {close10:.1%} of the time over the last three seasons; from 60 feet or more, "
                                f"{far60:.1%}. Add up the odds on every shot and you get what a team's chances were worth in goals."),
