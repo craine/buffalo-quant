@@ -1,0 +1,34 @@
+{
+ "label": "How often the Vikings blitz",
+ "big": [
+  [
+   73,
+   "Vikings, % of dropbacks"
+  ],
+  [
+   32,
+   "League average"
+  ]
+ ],
+ "note": "Most in the NFL by a mile; next-highest is 44%. Allen is 5th of 33 QBs against the blitz this season.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Nobody scores every play. Every play still counts.",
+  "text": "Each snap moves a drive closer to points or further away, and we add that up. Deep throws (20+ yards in the air) are among the most valuable plays, and the Bills throw them more than most. Points per 100 deep throws this season:",
+  "fmt": "per100",
+  "bars": [
+   [
+    "Bills",
+    79
+   ],
+   [
+    "League",
+    42
+   ],
+   [
+    "vs. Vikings",
+    18
+   ]
+  ]
+ }
+}

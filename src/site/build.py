@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-offense-vs-vikings-defense", "2026-wk09-bills-offense-vs-vikings-defense.md", "2026-11-09", "Bills &middot; Week 9 preview, part 2",
+     "The Vikings send five or more rushers on 73% of dropbacks, more than any defense by a mile. Josh Allen has been one of the best in the league against it.",
+     "wk09-blitz.png"),
     ("wentz-vs-bills-defense", "2026-wk09-wentz-vs-bills-defense.md", "2026-11-08", "Bills &middot; Week 9 preview, part 1",
      "Carson Wentz starts for Minnesota. Here's where his tendencies meet the Bills defense's weak spots, and what we expect Monday.",
      "wk09a-bills-short-deep.png"),
@@ -273,7 +276,7 @@ def build_home(articles, texts):
     if hd and "explainer" in hd:
         e = hd["explainer"]; mx = max(v for _, v in e["bars"])
         rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
-                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
