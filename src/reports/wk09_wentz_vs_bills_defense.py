@@ -13,6 +13,7 @@ import pandas as pd
 
 from src.db import ROOT, query
 from src.ledger.model_v01 import SHRINK, VERSION, prob_over, qb_relative
+from src.ledger import points_model as pm
 from src.metrics.team import season_table
 from src.reports.bills_vikings_preview import ordn, finish
 from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
@@ -125,8 +126,8 @@ def main():
         ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before kickoff.** "
                          "These are graded after the game, hit or miss, and stay up either way.")
     else:
-        ledger_status = ("**Our model's numbers for this game.** A call only counts once it's logged on the "
-                         "[Ledger](../ledger.html) before kickoff, and every logged call is graded after the game.")
+        ledger_status = ("**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before "
+                         "kickoff; every logged call is graded after the game, hit or miss.")
 
     pts = lambda v: "0.00" if abs(v) < 0.005 else f"{v:+.2f}"
     h = lambda v: "0" if abs(v) < 0.005 else f"{v * 100:+.0f}"  # points per 100 plays, for the story body
@@ -147,6 +148,44 @@ def main():
     w_short_close_rk = rank(sc, WENTZ, False)
     n_short_close_pool = len(sc)
     n_deep_close = int(d[(d.defteam == "BUF") & d.close & d.deep].shape[0])
+    # ---- Minnesota points projection (points model, tested on 2024-26 games it never saw)
+    coef, res, te, summ = pm.backtest()
+    g_dr = pm._drives()
+    o_r, d_r, lg_ppd, pace, lg_pace = pm.ratings(g_dr, SEASON, THRU + 1)
+    raw_pts, ppd_min, drv_min = pm.raw_prediction(o_r, d_r, lg_ppd, pace, lg_pace, "MIN", "BUF")
+    proj = pm.predict(coef, raw_pts, 1)
+    lo, hi80 = proj + np.quantile(res, [0.1, 0.9])
+    ths = [10, 14, 17, 20, 24, 27, 30]
+    chance = {t: pm.prob_at_least(proj, t, res) for t in ths}
+    cur = g_dr[(g_dr.season == SEASON) & (g_dr.week <= THRU)]
+    min_off_raw = cur[cur.posteam == "MIN"].pts.sum() / cur[cur.posteam == "MIN"].n.sum()
+    min_off_n = int(cur[cur.posteam == "MIN"].n.sum())
+    buf_def_raw = cur[cur.defteam == "BUF"].pts.sum() / cur[cur.defteam == "BUF"].n.sum()
+    buf_def_n = int(cur[cur.defteam == "BUF"].n.sum())
+    # calibration on the test games: chances between 60% and 80%
+    cal = [(pm.prob_at_least(p_, t, res), y >= t) for p_, y in zip(te.model, te.score) for t in ths]
+    cal = pd.DataFrame(cal, columns=["p", "y"]); c68 = cal[(cal.p >= 0.6) & (cal.p < 0.8)]
+    tot = summ.n.sum()
+    mae_m = (summ.model * summ.n).sum() / tot; mae_l = (summ.league * summ.n).sum() / tot
+    mae_t = (summ.team_ppg * summ.n).sum() / tot; w7 = (summ.within7 * summ.n).sum() / tot
+    PTS_THR = 20
+
+    # ---- chart 3: chance Minnesota scores at least X
+    fig, ax = plt.subplots(figsize=(9.5, 4.6), dpi=200)
+    xs = np.arange(len(ths))
+    cols = [RED if t == PTS_THR else GRAY for t in ths]
+    ax.bar(xs, [chance[t] for t in ths], 0.62, color=cols, zorder=2)
+    for x_, t in zip(xs, ths):
+        ax.text(x_, chance[t] + 0.02, f"{chance[t]:.0%}", ha="center", va="bottom", fontsize=10, color=INK)
+    ax.set_xticks(xs, [f"{t}+" for t in ths], fontsize=10)
+    ax.set_xlabel("Minnesota points", fontsize=10, color=MUTED)
+    ax.set_ylim(0, 1.08); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
+    ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+    finish(fig, f"Our projection: Minnesota scores about {proj:.0f}",
+           f"Chance the Vikings score at least this many points Monday. Most likely range: {lo:.0f} to {hi80:.0f} (8 times in 10).",
+           f"Points model {pm.VERSION}: 2026 drives through week {THRU}, home field, tested on {int(tot)} team-games from 2024-26 it never saw.")
+    fig.savefig(OUT / "wk09a-min-points.png"); plt.close(fig)
+
     # ---- chart 1: Bills pass defense, short vs deep, all plays and close games
     fig, axes = plt.subplots(1, 2, figsize=(10, 5), dpi=200, sharey=True)
     panels = [("All plays", "short_epa", "deep_epa", b_rk["short"], b_rk["deep"]),
@@ -199,7 +238,7 @@ def main():
 {ordn(b_rk['short'])} of 32 there, and {ordn(b_rk['short_close'])} with garbage time removed. Even accounting for the offenses they've faced, short passes have been worth about
 {extra_adj:.0f} more points to opponents than you'd expect against an average defense, roughly {extra_adj / n_games:.0f} a game. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
 on {1 - w25.deep_share:.0%} of his attempts last season. But Wentz brings two weak spots of his own. He was sacked on {w25.sk:.1%} of his dropbacks, the
-{ordn(sk_most)}-highest rate among {n_pool[2025]} quarterbacks, and his share of throws that should have been intercepted was the {ordn(intw_most)}-highest.**
+{ordn(sk_most)}-highest rate among {n_pool[2025]} quarterbacks, and his share of throws that should have been intercepted was the {ordn(intw_most)}-highest. Our model projects about {proj:.0f} points for Minnesota.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Kyler Murray is out with a
 strained hamstring, so Wentz starts. Numbers are 2026 through week {THRU} unless noted, and Wentz's are mostly from 2025,
@@ -289,10 +328,37 @@ them: his actual turnover rate was {w25.to:.1%}, about league average ({lgq[2025
 - **Turnovers.** Buffalo forces turnovers on {bd.to:.1%} of dropbacks ({ordn(b_rk['to'])}; league {lgd.to:.1%}). That's about average. If Wentz keeps
   putting the ball in harm's way, Monday is a chance for that number to go up.
 
-## What we're predicting
+## How many points will Minnesota score?
 
-Our predictions for Monday, including how many points each team scores, come in part 3, after part 2 looks at the Bills
-offense against Minnesota's defense. Every one is logged on the [Ledger](../ledger.html) before kickoff and graded after the game.
+**Our projection: about {proj:.0f} points**, most likely somewhere between {lo:.0f} and {hi80:.0f}. We give Minnesota a **{chance[PTS_THR]:.0%} chance of
+scoring {PTS_THR} or more.**
+
+![Minnesota points](wk09a-min-points.png)
+
+**Where the number comes from.** We start with drives, because points come from drives. This season Minnesota's offense has
+scored {min_off_raw:.2f} points per drive ({min_off_n} drives), below the league's {lg_ppd:.2f}. The Bills' defense has allowed {buf_def_raw:.2f} per drive
+({buf_def_n} drives), worse than average. Seven games is a small sample, so we pull both numbers part of the way back toward
+last season and the league average: Minnesota's offense counts as {o_r["MIN"]:.2f} and Buffalo's defense as {d_r["BUF"]:.2f}.
+
+**The math:** start from the league's {lg_ppd:.2f} points per drive. Minnesota's offense is {lg_ppd - o_r["MIN"]:.2f} worse than average, so take that off;
+Buffalo's defense is {d_r["BUF"] - lg_ppd:.2f} worse than average, so add that back. That leaves {ppd_min:.2f} points per drive. Multiply by the {drv_min:.1f} drives a team usually gets in games like this, and you get {raw_pts:.0f}. A final step,
+fit on past games, turns that into a real score. It adds back what drives don't count (defensive touchdowns, safeties,
+missed extra points), pulls very high and very low projections toward the middle because past games show they overshoot,
+and adds about {coef[2]:.1f} points for playing at home. That's how we get to {proj:.0f}.
+
+**How we checked it.** We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game it had never
+seen, using only what was known before kickoff. Its average miss was {mae_m:.1f} points. That beat simply guessing the league
+average ({mae_l:.1f}) and guessing each team's own scoring average ({mae_t:.1f}), but not by a lot: football scores bounce around.
+It lands within 7 points {w7:.0%} of the time. When it gave something a 60-80% chance, that thing happened {c68.y.mean():.0%} of the
+time (it said {c68.p.mean():.0%} on average), so its percentages can be taken at face value.
+
+**What it doesn't know: Wentz.** Minnesota's numbers come mostly from Kyler Murray's games, and the model doesn't know the
+quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. By the numbers above, Wentz hasn't
+been worse than Murray this year, so the switch shouldn't push the projection down.
+
+{ledger_status}
+
+Our other predictions for Monday come in part 3, after part 2 looks at the Bills offense against Minnesota's defense.
 
 ## For the stat-heads
 
@@ -307,13 +373,17 @@ offense against Minnesota's defense. Every one is logged on the [Ledger](../ledg
   `is_interception_worthy` on pass attempts. Wentz 2025: {int(w25.n_intw)} of {int(w25.n_att)} attempts; {int(w25.n_blitz)} dropbacks vs. the blitz.
 - Bills defense: {int(bd.db)} dropbacks faced, {int(bd.n_short)} short and {int(bd.n_deep)} deep attempts, {int(bd.n_blitz)} blitzes. Team ranks are among 32
   defenses (1st = best, except blitz rate where 1st = most). Team tables from `src/metrics/team.py` (`max_week={THRU}`).
+- Points model {pm.VERSION} (`src/ledger/points_model.py`): ratings = (points + {pm.K} x prior) / (drives + {pm.K}), prior = league + {pm.PRIOR_KEEP} x last
+  season's edge; expected drives = average of both teams' drives per game (shrunk 3 games toward league); score = {coef[0]:.2f} + {coef[1]:.3f} x
+  drive points + {coef[2]:.2f} x home, fit on 2019-23. Chances from the empirical distribution of training misses (SD {res.std():.1f}).
+  Test MAE by season: {', '.join(f'{int(k)} {v.model:.2f} (league {v.league:.2f}, team ppg {v.team_ppg:.2f})' for k, v in summ.iterrows())}.
 - Injury news: Kevin O'Connell announced Nov. 5, 2026 that Wentz starts with Murray out (strained hamstring). Source: ESPN.
 """
     (OUT / "2026-wk09-wentz-vs-bills-defense.md").write_text(md)
     (OUT / "2026-wk09-wentz-vs-bills-defense.hero.json").write_text(json.dumps({
         "label": "Monday night: where the matchup is",
         "big": [[ordn(b_rk["short"]), "Bills defense vs. short throws (of 32)"],
-                [f"{1 - w25.deep_share:.0%}", "Wentz throws that were short, 2025"]],
+                [f"{proj:.0f}", "Vikings points, our projection"]],
         "note": (f"With garbage time removed the Bills are still {ordn(b_rk['short_close'])}. Wentz was sacked on {w25.sk:.1%} of dropbacks last "
                  f"season, the {ordn(sk_most)}-highest rate among {n_pool[2025]} QBs."),
         "explainer": {

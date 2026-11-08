@@ -17,6 +17,9 @@ import pandas as pd
 from src.db import query
 
 VERSION = "points-v0.1"
+K, PRIOR_KEEP = 60, 0.7          # chosen on 2019-2022 (scripts/backtest_points_model.py)
+TRAIN = range(2019, 2024)
+TEST = {2024: 99, 2025: 99, 2026: 8}  # season -> last week used (2026 pinned to week 8)
 
 
 def _drives(con=None):
@@ -41,7 +44,7 @@ def _to_date(g, side, season, week):
     return t
 
 
-def ratings(g, season, week, k=60, prior_keep=0.5):
+def ratings(g, season, week, k=K, prior_keep=PRIOR_KEEP):
     """Pregame points-per-drive ratings for every team, season `season` before `week`."""
     cur = g[(g.season == season) & (g.week < week)]
     prev = g[g.season == season - 1]
@@ -77,13 +80,14 @@ def raw_prediction(off_r, def_r, lg, pace_r, lg_pace, team, opp):
     return ppd * drives, ppd, drives
 
 
-def build_frame(seasons, min_week=2, con=None, k=60, prior_keep=0.5):
+def build_frame(seasons, min_week=2, con=None, k=K, prior_keep=PRIOR_KEEP, max_week=None):
     """One row per team-game with the pregame raw prediction and the real score."""
     g = _drives(con)
     sc = _scores(con)
     rows = []
     for s in seasons:
-        for w in sorted(sc[(sc.season == s) & (sc.week >= min_week)].week.unique()):
+        last = (max_week or {}).get(s, 99)
+        for w in sorted(sc[(sc.season == s) & (sc.week >= min_week) & (sc.week <= last)].week.unique()):
             o, d, lg, pace, lgp = ratings(g, s, w, k, prior_keep)
             for r in sc[(sc.season == s) & (sc.week == w)].itertuples():
                 raw, ppd, drv = raw_prediction(o, d, lg, pace, lgp, r.team, r.opp)
@@ -107,3 +111,30 @@ def predict(coef, raw, home):
 def prob_at_least(pred, threshold, resid):
     """Chance of scoring >= threshold, from the empirical distribution of past misses."""
     return float(np.mean(pred + resid >= threshold - 1e-9))
+
+
+def add_baselines(f):
+    """Naive pregame guesses: league average points, and the team's own points per game, both season to date."""
+    b1, b2 = [], []
+    for (s, w), grp in f.groupby(["season", "week"]):
+        x = f[(f.season == s) & (f.week < w)]
+        lg = x.score.mean() if len(x) else f[f.season == s - 1].score.mean()
+        ppg = x.groupby("team").score.mean()
+        for r in grp.itertuples():
+            b1.append((r.Index, lg)); b2.append((r.Index, ppg.get(r.team, lg)))
+    f = f.copy()
+    f["b_league"] = pd.Series(dict(b1)); f["b_team_ppg"] = pd.Series(dict(b2))
+    return f
+
+
+def backtest(con=None):
+    """Fit on TRAIN, score each TEST season blind. Returns coef, training misses, and a summary table."""
+    tr = build_frame(TRAIN, con=con)
+    coef, res = fit(tr)
+    te = add_baselines(build_frame(list(TEST) + [min(TEST) - 1], con=con, max_week=TEST))
+    te = te[te.season.isin(list(TEST))]
+    te["model"] = predict(coef, te.raw, te.home)
+    summ = te.groupby("season").apply(lambda x: pd.Series(dict(
+        n=len(x), model=(x.score - x.model).abs().mean(), league=(x.score - x.b_league).abs().mean(),
+        team_ppg=(x.score - x.b_team_ppg).abs().mean(), within7=((x.score - x.model).abs() <= 7).mean())))
+    return coef, res, te, summ

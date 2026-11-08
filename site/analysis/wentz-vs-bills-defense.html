@@ -9,7 +9,7 @@
 25th of 32 there, and 25th with garbage time removed. Even accounting for the offenses they've faced, short passes have been worth about
 21 more points to opponents than you'd expect against an average defense, roughly 3 a game. That's where most of Minnesota's passing will go: like most quarterbacks, Carson Wentz threw short
 on 88% of his attempts last season. But Wentz brings two weak spots of his own. He was sacked on 9.7% of his dropbacks, the
-5th-highest rate among 43 quarterbacks, and his share of throws that should have been intercepted was the 2nd-highest.</strong></p>
+5th-highest rate among 43 quarterbacks, and his share of throws that should have been intercepted was the 2nd-highest. Our model projects about 23 points for Minnesota.</strong></p>
 <p><em>Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Kyler Murray is out with a
 strained hamstring, so Wentz starts. Numbers are 2026 through week 8 unless noted, and Wentz's are mostly from 2025,
 since he has dropped back only 47 times this year.</em></p>
@@ -126,9 +126,29 @@ them: his actual turnover rate was 2.6%, about league average (2.6%).</p>
 <li><strong>Turnovers.</strong> Buffalo forces turnovers on 2.7% of dropbacks (18th; league 2.8%). That's about average. If Wentz keeps
   putting the ball in harm's way, Monday is a chance for that number to go up.</li>
 </ul>
-<h2>What we're predicting</h2>
-<p>Our predictions for Monday, including how many points each team scores, come in part 3, after part 2 looks at the Bills
-offense against Minnesota's defense. Every one is logged on the <a href="../ledger.html">Ledger</a> before kickoff and graded after the game.</p>
+<h2>How many points will Minnesota score?</h2>
+<p><strong>Our projection: about 23 points</strong>, most likely somewhere between 11 and 35. We give Minnesota a <strong>61% chance of
+scoring 20 or more.</strong></p>
+<p><img alt="Minnesota points" src="wk09a-min-points.png" /></p>
+<p><strong>Where the number comes from.</strong> We start with drives, because points come from drives. This season Minnesota's offense has
+scored 1.72 points per drive (76 drives), below the league's 2.07. The Bills' defense has allowed 2.35 per drive
+(77 drives), worse than average. Seven games is a small sample, so we pull both numbers part of the way back toward
+last season and the league average: Minnesota's offense counts as 1.78 and Buffalo's defense as 2.23.</p>
+<p><strong>The math:</strong> start from the league's 2.07 points per drive. Minnesota's offense is 0.30 worse than average, so take that off;
+Buffalo's defense is 0.15 worse than average, so add that back. That leaves 1.93 points per drive. Multiply by the 10.9 drives a team usually gets in games like this, and you get 21. A final step,
+fit on past games, turns that into a real score. It adds back what drives don't count (defensive touchdowns, safeties,
+missed extra points), pulls very high and very low projections toward the middle because past games show they overshoot,
+and adds about 1.5 points for playing at home. That's how we get to 23.</p>
+<p><strong>How we checked it.</strong> We built the model on 2019-2023 games, then had it predict every 2024, 2025 and 2026 game it had never
+seen, using only what was known before kickoff. Its average miss was 7.5 points. That beat simply guessing the league
+average (7.9) and guessing each team's own scoring average (8.1), but not by a lot: football scores bounce around.
+It lands within 7 points 55% of the time. When it gave something a 60-80% chance, that thing happened 74% of the
+time (it said 70% on average), so its percentages can be taken at face value.</p>
+<p><strong>What it doesn't know: Wentz.</strong> Minnesota's numbers come mostly from Kyler Murray's games, and the model doesn't know the
+quarterback changed. We didn't adjust for it, because we haven't tested an adjustment. By the numbers above, Wentz hasn't
+been worse than Murray this year, so the switch shouldn't push the projection down.</p>
+<p><strong>This is our model's number.</strong> It counts once it's logged on the <a href="../ledger.html">Ledger</a> before kickoff; every logged call is graded after the game, hit or miss.</p>
+<p>Our other predictions for Monday come in part 3, after part 2 looks at the Bills offense against Minnesota's defense.</p>
 <h2>For the stat-heads</h2>
 <ul>
 <li>Points per 100 plays = mean EPA (nflverse expected points added) x 100. Opponent-adjusted short-pass gap: Buffalo's short-pass EPA
@@ -142,6 +162,10 @@ offense against Minnesota's defense. Every one is logged on the <a href="../ledg
   <code>is_interception_worthy</code> on pass attempts. Wentz 2025: 10 of 168 attempts; 57 dropbacks vs. the blitz.</li>
 <li>Bills defense: 293 dropbacks faced, 242 short and 26 deep attempts, 113 blitzes. Team ranks are among 32
   defenses (1st = best, except blitz rate where 1st = most). Team tables from <code>src/metrics/team.py</code> (<code>max_week=8</code>).</li>
+<li>Points model points-v0.1 (<code>src/ledger/points_model.py</code>): ratings = (points + 60 x prior) / (drives + 60), prior = league + 0.7 x last
+  season's edge; expected drives = average of both teams' drives per game (shrunk 3 games toward league); score = 7.07 + 0.679 x
+  drive points + 1.45 x home, fit on 2019-23. Chances from the empirical distribution of training misses (SD 9.5).
+  Test MAE by season: 2024 7.44 (league 7.89, team ppg 7.77), 2025 7.52 (league 7.98, team ppg 8.23), 2026 7.43 (league 7.77, team ppg 8.74).</li>
 <li>Injury news: Kevin O'Connell announced Nov. 5, 2026 that Wentz starts with Murray out (strained hamstring). Source: ESPN.</li>
 </ul></main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
