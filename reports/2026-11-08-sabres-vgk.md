@@ -1,12 +1,11 @@
-# Golden Knights 4, Sabres 1: Buffalo earned more than one goal. Adin Hill didn't allow it
+# Golden Knights 4, Sabres 1: Buffalo had the better chances. Adin Hill had the better night
 
-**Finding: The Sabres lost 4-1 Sunday, but they had the better chances: their shots were worth 3.9 goals to Vegas's 3.6.
-Replay those same shots thousands of times and Buffalo wins about 46%, Vegas about 38%, and 16% end tied. The difference was
-in goal. Adin Hill stopped 28 of 29 shots, about 2.9 goals better than an average goalie, one of the best goalie
-nights in the league this season. Our pregame model gave Buffalo a 46% chance, a slight lean to Vegas, so it goes on the Ledger as a hit,
-but not for the reason it expected: Vegas didn't win on chances, it won in goal.**
+**Finding: The Sabres lost 4-1 Sunday, but they had the better chances: their shots were worth 3.9 goals to Vegas's 3.6,
+and 3.2 to 1.8 at full strength. The difference was in goal. Adin Hill stopped 28 of 29 shots, about 2.9 goals
+better than an average goalie, one of the best goalie nights in the league this season. On shots like Buffalo's, the Sabres score one goal or fewer
+only 8% of the time.**
 
-*One game, 2026-11-08, in Buffalo. Before the game, our model gave Vegas a 54% chance. [Our pregame story](sabres-vegas-pregame-nov-8.html).*
+*One game, 2026-11-08, in Buffalo. [Our pregame story](sabres-vegas-pregame-nov-8.html).*
 
 ![Game flow](sabres-vgk-post-flow.png)
 
@@ -14,29 +13,31 @@ but not for the reason it expected: Vegas didn't win on chances, it won in goal.
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Add those up and you get what a team's
 chances were worth in goals. Sunday's goals show the range: Marner's shot from 3 feet had a 47% chance of going in;
-Hertl's second goal, from 34 feet, about 9%.
-(The full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
+Hertl's second goal, from 34 feet, about 9%. The shot locations come from the NHL's own play-by-play
+for every game. (The full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
 
-Sunday, Buffalo's 50 unblocked shots were worth **3.9 goals**. Vegas's 41 were worth **3.6**. Buffalo scored once.
-In our replays, the Sabres score one goal or fewer only 8% of the time on shots like these. (The replay's 46% for Buffalo
-happens to match our pregame 46%; they're different numbers. One is before the game from season form, the other is after it from Sunday's shots.)
+Sunday, Buffalo's 50 shots that weren't blocked were worth **3.9 goals**. Vegas's 41 were worth **3.6**. Buffalo scored once.
 
-Two splits tell the rest of it. **At full strength, five on five, Buffalo won clearly: 3.2 to 1.8 in chances.** On special teams, Vegas won
-1.8 to 0.7. And 1.0 of Vegas's 3.6 came in the final two minutes (7 shots), after it led 4-1 and the game was decided.
-Leave those out and Vegas's chances were worth about 2.6.
+To see how unusual that is, we replayed Sunday's game 20,000 times, letting each shot go in or miss at its own chance. Buffalo won 46% of the
+replays, Vegas 38%, and 16% ended tied. The Sabres scored one goal or fewer in only 8% of them. (That 46% happens to match our
+pregame number. It's a coincidence: the pregame number came from each team's form before the game; this one comes only from Sunday's shots.)
 
-## Period by period
+The full-strength edge was clear: **3.2 to 1.8 in chances.** On special teams, Vegas won 1.8 to 0.7. And a full goal's worth of Vegas's
+3.6 (1.0, on 7 shots) came in the final two minutes, after it led 4-1 and the game was decided.
 
-| Period | Sabres chances, in goals | Golden Knights | What happened |
+## A big first period, then a shorthanded goal turned it
+
+| Period | Sabres chances, in goals | Golden Knights chances, in goals | What happened |
 |---|---|---|---|
 | 1st | 1.8 | 0.5 | Buffalo's best period. No goals. |
 | 2nd | 0.7 | 1.4 | Vegas scores twice, the first one shorthanded. |
 | 3rd | 1.4 | 1.7 | Beck Malenstyn makes it 2-1; Tomas Hertl answers twice. |
 
 The first period was the Sabres' game to take: their chances were worth 1.8 goals to 0.5, and it stayed 0-0. The turn came in the second,
-when Mitch Marner scored from 3 feet while Vegas was killing a penalty, a shot that goes in about 47% of the time from there.
-Buffalo's power-play shots on the night were worth 0.5 goals, and it didn't score with the extra man. Vegas's shorthanded shots were
-worth 0.8, more than that.
+when Mitch Marner scored from 3 feet while Vegas was killing a penalty.
+
+That sums up Buffalo's power play Sunday: **Vegas got more out of it than Buffalo did.** Vegas's shorthanded shots were worth 0.8 goals; Buffalo's
+power-play shots were worth 0.5, and it didn't score with the extra man.
 
 | Period | Time | Team | Scorer | Shot | Chance it went in |
 |---|---|---|---|---|---|
@@ -49,44 +50,48 @@ worth 0.8, more than that.
 ## The goalie duel went the other way
 
 Coming in, these two were at opposite ends. [Colten Ellis](../cards/colten-ellis.html) had saved 2.2 more goals than an average goalie
-would have on the same shots this season (6 games). [Adin Hill](../cards/adin-hill.html) was 1.9 worse than average (8 games). Small samples, both.
-(Our pregame story had Hill at -1.8; shot values are re-tuned slightly as each night's games come in.)
+would have on the same shots this season (6 games). [Adin Hill](../cards/adin-hill.html) had allowed 1.9 more than an average goalie would have
+(8 games). Both numbers come from fewer than 10 games, so they swing fast. (Our pregame story said 1.8; the number shifts a little
+as each night's games are added.)
 
-Sunday flipped it. Hill faced Buffalo shots worth 3.9 goals and allowed 1: **+2.9**. Only 12 of the 586 goalie games in the NHL this
-season have been better. Ellis faced Vegas shots worth 3.6 goals and allowed 4: **-0.4**, a little below average, not a bad night.
+Sunday flipped it. Hill faced Buffalo shots worth 3.9 goals and allowed 1: **2.9 goals better than an average goalie.** Only 12 of
+the 586 goalie games in the NHL this season have been better. Ellis faced Vegas shots worth 3.6 goals and allowed 4: **0.4 worse than
+average**, a little below, not a bad night. In one afternoon, Hill went from 1.9 below average for the season to 1.0 above (9 games now);
+Ellis went from 2.2 above to 1.8 (7 games).
 
 ![Goalie nights](sabres-vgk-post-goalies.png)
 
 **Why goalies aren't in our prediction model.** Before Sunday's game we tested it: we split past seasons in half and checked whether a goalie's
-first half told us about his second half. It barely did, much less than a team's chances allowed did. And adding the starting goalie didn't make our
-game predictions any better. Sunday is an example: the goalie with the worse numbers coming in had one of the best nights in the league. In one afternoon,
-Hill went from -1.9 for the season to +1.0 (9 games now); Ellis went from +2.2 to +1.8 (7 games).
+first half told us about his second half. It barely did, far less than how many chances a team gives up carries over. And adding the starting goalie
+didn't make our game predictions any better. Sunday is an example: the goalie with the worse numbers coming in had one of the best nights in the league.
 
 ## Vegas got in the way
 
-Buffalo tried 78 shots; Vegas blocked 28 of them. Only 7 of 556 team-games this season have had
-28 or more blocked (the average is 15). Buffalo's 78 tries were 20 more than its average coming in
-(58); 36% were blocked, against 27% league-wide. Blocked shots aren't in the 3.9. Vegas tried 51 shots and had 10 blocked.
+Buffalo tried 78 shots and Vegas blocked 28 of them. A team has about 15 shots blocked in a typical game, and only 7 times in
+556 team games this season has a team had 28 or more blocked. Blocked shots don't count toward Buffalo's 3.9.
 
 ## Receipts: our pregame call
 
-Before the game we logged one call on the [Ledger](../ledger.html): **the Sabres win, at 46%.** Giving Buffalo less than half means our model
-leaned Vegas, and Vegas won, so by our rule (the side we gave more than 50% wins) it's a hit. It was a near coin flip either way: our pregame story noted
-that the model's slight leans, 50-55%, had won about half the time in testing. It stays up regardless.
+Before the game we logged one call on the [Ledger](../ledger.html): **a 46% chance the Sabres win.** That meant our model leaned slightly toward Vegas, and
+Vegas won, so it counts as a hit. Don't read much into it: our pregame story noted that leans this slight (50-55%) had come in only about half the time in testing.
+Hit or miss, it stays up.
 
-We also grade every call with a simple score: the gap between the chance we gave and what happened, squared. Lower is better. Saying 46% on a
-game Buffalo lost scores 0.21. A pure 50/50 guess would have scored 0.25. So slightly better than a coin flip, on this one game.
-One game proves nothing either way; the point is the season-long record.
+We also score every call: take the gap between the chance we gave and what happened, and square it. Lower is better. Our 46% on a Buffalo loss
+scores 0.21; a straight 50/50 guess would have scored 0.25. So a bit better than a coin flip, on one game. The point is the season-long record.
 
-We're not taking a victory lap. The model expected a close game with Vegas slightly ahead. On chances it was close, but Buffalo was the one slightly ahead.
-Vegas won because the goals didn't follow the chances, and the model can't see a goalie's hot night coming.
+We're not taking a victory lap. The model expected a close game with Vegas slightly ahead. It was close, but Buffalo was the one slightly ahead, and
+our model doesn't try to predict a goalie's hot night; our tests say it can't be done reliably from a goalie's recent numbers.
 
-## What to take from it
+## What it means for Buffalo
 
-- **Buffalo won the even-strength game.** Against a Vegas team that had allowed the 4th-fewest chances per game in the league before Sunday (2.6),
-  the Sabres created 3.9 goals' worth (their average coming in was 3.1), 3.2 of it at five on five.
-- **Special teams lost it.** The power play came up empty Sunday: 0.5 goals' worth of chances, and more than that given up the other way, including Marner's goal.
-- **Ellis was a little below average, not bad.** He's still at +1.8 for the season (7 games).
+- **Buffalo won at full strength, 3.2 to 1.8 in chances.** And it did that against a defense that had given up the 4th-fewest chances
+  overall coming in. In all, the Sabres created 3.9 goals' worth, well above their 3.1 average.
+- **Special teams lost it.** The power play came up empty Sunday and gave up more than it created.
+- **What carries over is the chances, not the goalie's night.** Two of our tests point the same way. The chances a team gives up carry over from one
+  half of a season to the next far better than a goalie's numbers do, and a team's edge in chances carries over from one season to the next far better
+  than its finishing or goaltending. One night isn't a trend, but Buffalo's even-strength edge is the kind of thing that tends to last; Hill's afternoon
+  is the kind that doesn't.
+- **Ellis was a little below average, not bad.** He's still 1.8 above average for the season (7 games).
 
 ## For the stat-heads
 

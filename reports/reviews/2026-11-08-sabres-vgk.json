@@ -14,6 +14,30 @@
    "at_utc": "2026-11-09T01:48:13Z",
    "notes": "Publish with fixes; all 10 fixes applied in 62fccac.",
    "report": "2026-11-08-sabres-vgk-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "45b870941dc70f16bf0b1461848f8e4dd4d584961fcda47d3265205bac0061f6",
+   "at_utc": "2026-11-09T01:52:02Z",
+   "notes": "Needs edits; applied: lead cut to the story, new headline, replay explained plainly, repeated point removed, goalie numbers in words, receipts reworded, power-play line promoted, blocked section cut, forward-looking bullet added (carry-over from the existing split-half test), chart period labels + late-shots annotation. Not added: 'tested on a full season it hadn't seen' (xG model was later refit including that season).",
+   "report": "2026-11-08-sabres-vgk-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "22a7aa92a8cc695153d3583a2b83735d760d3acb6c891353cd5da48fdc3cae02",
+   "at_utc": "2026-11-09T01:54:40Z",
+   "notes": "Final check 1 failed: carry-over bullet overclaimed the half-season test; 'no model sees' overclaim; plus 4 small fixes. All applied; re-check requested.",
+   "report": "2026-11-08-sabres-vgk-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "d809cc39c83b48548147729ad62ac0785160f5ab42a5c9631eabc47b0f2832ed",
+   "at_utc": "2026-11-09T01:55:55Z",
+   "notes": "Round 2 PASS: all six final-check fixes verified; generator reproduces the story byte for byte.",
+   "report": "2026-11-08-sabres-vgk-final.md"
   }
  ],
  "self": {
@@ -28,5 +52,19 @@
   "at_utc": "2026-11-09T01:48:13Z",
   "notes": "Publish with fixes; all 10 fixes applied in 62fccac.",
   "report": "2026-11-08-sabres-vgk-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "45b870941dc70f16bf0b1461848f8e4dd4d584961fcda47d3265205bac0061f6",
+  "at_utc": "2026-11-09T01:52:02Z",
+  "notes": "Needs edits; applied: lead cut to the story, new headline, replay explained plainly, repeated point removed, goalie numbers in words, receipts reworded, power-play line promoted, blocked section cut, forward-looking bullet added (carry-over from the existing split-half test), chart period labels + late-shots annotation. Not added: 'tested on a full season it hadn't seen' (xG model was later refit including that season).",
+  "report": "2026-11-08-sabres-vgk-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "d809cc39c83b48548147729ad62ac0785160f5ab42a5c9631eabc47b0f2832ed",
+  "at_utc": "2026-11-09T01:55:55Z",
+  "notes": "Round 2 PASS: all six final-check fixes verified; generator reproduces the story byte for byte.",
+  "report": "2026-11-08-sabres-vgk-final.md"
  }
 }

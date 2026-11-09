@@ -17,7 +17,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("sabres-vegas-postgame-nov-8", "2026-11-08-sabres-vgk.md", "2026-11-08", "Sabres &middot; Post-game",
-     "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29 and had one of the league's best goalie nights. Our model leaned Vegas, a hit, but for the wrong reason.",
+     "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29 and had one of the league's best goalie nights. Our model leaned slightly to Vegas, a hit, but a near coin flip.",
      "sabres-vgk-post-flow.png"),
     ("bills-offense-vs-vikings-defense", "2026-wk09-bills-offense-vs-vikings-defense.md", "2026-11-09", "Bills &middot; Week 9 preview, part 2",
      "The Vikings send five or more rushers on 73% of dropbacks, more than any defense by a mile. Josh Allen has been one of the best in the league against it.",

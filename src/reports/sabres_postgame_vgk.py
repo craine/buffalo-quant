@@ -108,6 +108,11 @@ def main(as_of=AS_OF):
         ax.scatter(x.t[gx] / 60, cum[gx], s=70, color=RED if team == US else INK, zorder=4, edgecolor="white", lw=1.5)
     for v in (20, 40):
         ax.axvline(v, color="#D5D8DE", lw=1, ls="--")
+    for x0, lab in ((10, "1st"), (30, "2nd"), (50, "3rd")):
+        ax.text(x0, 0.02, lab, transform=ax.get_xaxis_transform(), ha="center", fontsize=9, color=MUTED)
+    lv = a[a.t >= 3480].xg.sum()
+    ax.annotate(f"Vegas up {int(gm.away_score)}-{int(gm.home_score)},\nlast 2 minutes", xy=(59.3, a.xg.sum() - lv / 2), xytext=(50.5, 1.2),
+                fontsize=8.5, color=INK, arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8))
     ax.set_xticks([0, 10, 20, 30, 40, 50, 60], ["0", "", "20", "", "40", "", "60"])
     ax.set_xlabel("Game minute"); ax.set_ylabel("Goals the chances were worth (running total)")
     ax.legend(frameon=False, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
@@ -123,7 +128,7 @@ def main(as_of=AS_OF):
     ax.axvline(hill_game, color=VGK_GOLD, lw=2.5, zorder=3)
     ax.text(hill_game, ax.get_ylim()[1] * 0.92, f"  Adin Hill, Sunday: {hill_game:+.1f}", color=INK, fontsize=10, fontweight="bold", ha="left")
     ax.axvline(ellis.saved, color=BLUE, lw=2.5, zorder=3)
-    ax.text(ellis.saved - 0.15, ax.get_ylim()[1] * 0.97, f"Colten Ellis: {ellis.saved:+.1f}", color=INK, fontsize=10, ha="right", va="top",
+    ax.text(ellis.saved - 0.15, ax.get_ylim()[1] * 0.97, f"Colten Ellis, Sunday: {ellis.saved:+.1f}", color=INK, fontsize=10, ha="right", va="top",
             bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
     ax.set_xlabel("Goals saved vs. an average goalie, one game"); ax.set_ylabel("Goalie games")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
@@ -137,15 +142,14 @@ def main(as_of=AS_OF):
         f"{', rebound' if r.rebound else ''}{', shorthanded' if r.strength in ('4v5', '3v5', '3v4') else ''}"
         f"{', power play' if r.strength in pp_codes else ''} | {r.xg:.0%} |" for r in gl.itertuples())
     brier = (PRED_P - 0) ** 2
-    md = f"""# Golden Knights {int(gm.away_score)}, Sabres {int(gm.home_score)}: Buffalo earned more than one goal. Adin Hill didn't allow it
+    md = f"""# Golden Knights {int(gm.away_score)}, Sabres {int(gm.home_score)}: Buffalo had the better chances. Adin Hill had the better night
 
-**Finding: The Sabres lost {int(gm.away_score)}-{int(gm.home_score)} Sunday, but they had the better chances: their shots were worth {f.xg.sum():.1f} goals to Vegas's {a.xg.sum():.1f}.
-Replay those same shots thousands of times and Buffalo wins about {p_win:.0%}, Vegas about {p_loss:.0%}, and {p_tie:.0%} end tied. The difference was
-in goal. Adin Hill stopped {int(hill.on - hill.ga)} of {int(hill.on)} shots, about {hill.saved:.1f} goals better than an average goalie, one of the best goalie
-nights in the league this season. Our pregame model gave Buffalo a {PRED_P:.0%} chance, a slight lean to Vegas, so it goes on the Ledger as a hit,
-but not for the reason it expected: Vegas didn't win on chances, it won in goal.**
+**Finding: The Sabres lost {int(gm.away_score)}-{int(gm.home_score)} Sunday, but they had the better chances: their shots were worth {f.xg.sum():.1f} goals to Vegas's {a.xg.sum():.1f},
+and {es_f:.1f} to {es_a:.1f} at full strength. The difference was in goal. Adin Hill stopped {int(hill.on - hill.ga)} of {int(hill.on)} shots, about {hill.saved:.1f} goals
+better than an average goalie, one of the best goalie nights in the league this season. On shots like Buffalo's, the Sabres score one goal or fewer
+only {p_held1:.0%} of the time.**
 
-*One game, {gm.game_date}, in Buffalo. Before the game, our model gave Vegas a {1 - PRED_P:.0%} chance. [Our pregame story](sabres-vegas-pregame-nov-8.html).*
+*One game, {gm.game_date}, in Buffalo. [Our pregame story](sabres-vegas-pregame-nov-8.html).*
 
 ![Game flow](sabres-vgk-post-flow.png)
 
@@ -153,29 +157,31 @@ but not for the reason it expected: Vegas didn't win on chances, it won in goal.
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Add those up and you get what a team's
 chances were worth in goals. Sunday's goals show the range: Marner's shot from {marner_goal.dist:.0f} feet had a {marner_goal.xg:.0%} chance of going in;
-Hertl's second goal, from {gl.dist.max():.0f} feet, about {gl.loc[gl.dist.idxmax(), 'xg']:.0%}.
-(The full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
+Hertl's second goal, from {gl.dist.max():.0f} feet, about {gl.loc[gl.dist.idxmax(), 'xg']:.0%}. The shot locations come from the NHL's own play-by-play
+for every game. (The full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
 
-Sunday, Buffalo's {len(f)} unblocked shots were worth **{f.xg.sum():.1f} goals**. Vegas's {len(a)} were worth **{a.xg.sum():.1f}**. Buffalo scored once.
-In our replays, the Sabres score one goal or fewer only {p_held1:.0%} of the time on shots like these. (The replay's {p_win:.0%} for Buffalo
-happens to match our pregame {PRED_P:.0%}; they're different numbers. One is before the game from season form, the other is after it from Sunday's shots.)
+Sunday, Buffalo's {len(f)} shots that weren't blocked were worth **{f.xg.sum():.1f} goals**. Vegas's {len(a)} were worth **{a.xg.sum():.1f}**. Buffalo scored once.
 
-Two splits tell the rest of it. **At full strength, five on five, Buffalo won clearly: {es_f:.1f} to {es_a:.1f} in chances.** On special teams, Vegas won
-{st_a:.1f} to {st_f:.1f}. And {late.xg.sum():.1f} of Vegas's {a.xg.sum():.1f} came in the final two minutes ({len(late)} shots), after it led 4-1 and the game was decided.
-Leave those out and Vegas's chances were worth about {a.xg.sum() - late.xg.sum():.1f}.
+To see how unusual that is, we replayed Sunday's game {N:,} times, letting each shot go in or miss at its own chance. Buffalo won {p_win:.0%} of the
+replays, Vegas {p_loss:.0%}, and {p_tie:.0%} ended tied. The Sabres scored one goal or fewer in only {p_held1:.0%} of them. (That {p_win:.0%} happens to match our
+pregame number. It's a coincidence: the pregame number came from each team's form before the game; this one comes only from Sunday's shots.)
 
-## Period by period
+The full-strength edge was clear: **{es_f:.1f} to {es_a:.1f} in chances.** On special teams, Vegas won {st_a:.1f} to {st_f:.1f}. And a full goal's worth of Vegas's
+{a.xg.sum():.1f} ({late.xg.sum():.1f}, on {len(late)} shots) came in the final two minutes, after it led {int(gm.away_score)}-{int(gm.home_score)} and the game was decided.
 
-| Period | Sabres chances, in goals | Golden Knights | What happened |
+## A big first period, then a shorthanded goal turned it
+
+| Period | Sabres chances, in goals | Golden Knights chances, in goals | What happened |
 |---|---|---|---|
 | 1st | {per.loc[1, US]:.1f} | {per.loc[1, THEM]:.1f} | Buffalo's best period. No goals. |
 | 2nd | {per.loc[2, US]:.1f} | {per.loc[2, THEM]:.1f} | Vegas scores twice, the first one shorthanded. |
 | 3rd | {per.loc[3, US]:.1f} | {per.loc[3, THEM]:.1f} | Beck Malenstyn makes it 2-1; Tomas Hertl answers twice. |
 
 The first period was the Sabres' game to take: their chances were worth {per.loc[1, US]:.1f} goals to {per.loc[1, THEM]:.1f}, and it stayed 0-0. The turn came in the second,
-when Mitch Marner scored from {marner_goal.dist:.0f} feet while Vegas was killing a penalty, a shot that goes in about {marner_goal.xg:.0%} of the time from there.
-Buffalo's power-play shots on the night were worth {pp_f.xg.sum():.1f} goals, and it didn't score with the extra man. Vegas's shorthanded shots were
-worth {sh_a:.1f}, more than that.
+when Mitch Marner scored from {marner_goal.dist:.0f} feet while Vegas was killing a penalty.
+
+That sums up Buffalo's power play Sunday: **Vegas got more out of it than Buffalo did.** Vegas's shorthanded shots were worth {sh_a:.1f} goals; Buffalo's
+power-play shots were worth {pp_f.xg.sum():.1f}, and it didn't score with the extra man.
 
 | Period | Time | Team | Scorer | Shot | Chance it went in |
 |---|---|---|---|---|---|
@@ -184,44 +190,48 @@ worth {sh_a:.1f}, more than that.
 ## The goalie duel went the other way
 
 Coming in, these two were at opposite ends. [Colten Ellis](../cards/colten-ellis.html) had saved {ellis_before:.1f} more goals than an average goalie
-would have on the same shots this season ({ellis_n - 1} games). [Adin Hill](../cards/adin-hill.html) was {-hill_before:.1f} worse than average ({hill_n - 1} games). Small samples, both.
-(Our pregame story had Hill at {card[int(hill.goalie_id)]:+.1f}; shot values are re-tuned slightly as each night's games come in.)
+would have on the same shots this season ({ellis_n - 1} games). [Adin Hill](../cards/adin-hill.html) had allowed {-hill_before:.1f} more than an average goalie would have
+({hill_n - 1} games). Both numbers come from fewer than 10 games, so they swing fast. (Our pregame story said {abs(card[int(hill.goalie_id)]):.1f}; the number shifts a little
+as each night's games are added.)
 
-Sunday flipped it. Hill faced Buffalo shots worth {hill.xga:.1f} goals and allowed {int(hill.ga)}: **{hill.saved:+.1f}**. Only {n_better} of the {len(gg)} goalie games in the NHL this
-season have been better. Ellis faced Vegas shots worth {ellis.xga:.1f} goals and allowed {int(ellis.ga)}: **{ellis.saved:+.1f}**, a little below average, not a bad night.
+Sunday flipped it. Hill faced Buffalo shots worth {hill.xga:.1f} goals and allowed {int(hill.ga)}: **{hill.saved:.1f} goals better than an average goalie.** Only {n_better} of
+the {len(gg)} goalie games in the NHL this season have been better. Ellis faced Vegas shots worth {ellis.xga:.1f} goals and allowed {int(ellis.ga)}: **{-ellis.saved:.1f} worse than
+average**, a little below, not a bad night. In one afternoon, Hill went from {-hill_before:.1f} below average for the season to {hill_after:.1f} above ({hill_n} games now);
+Ellis went from {ellis_before:.1f} above to {ellis_after:.1f} ({ellis_n} games).
 
 ![Goalie nights](sabres-vgk-post-goalies.png)
 
 **Why goalies aren't in our prediction model.** Before Sunday's game we tested it: we split past seasons in half and checked whether a goalie's
-first half told us about his second half. It barely did, much less than a team's chances allowed did. And adding the starting goalie didn't make our
-game predictions any better. Sunday is an example: the goalie with the worse numbers coming in had one of the best nights in the league. In one afternoon,
-Hill went from {hill_before:+.1f} for the season to {hill_after:+.1f} ({hill_n} games now); Ellis went from {ellis_before:+.1f} to {ellis_after:+.1f} ({ellis_n} games).
+first half told us about his second half. It barely did, far less than how many chances a team gives up carries over. And adding the starting goalie
+didn't make our game predictions any better. Sunday is an example: the goalie with the worse numbers coming in had one of the best nights in the league.
 
 ## Vegas got in the way
 
-Buffalo tried {int(blk_g.n)} shots; Vegas blocked {int(blk_g.blk)} of them. Only {n_blk_ge} of {len(att)} team-games this season have had
-{int(blk_g.blk)} or more blocked (the average is {blk_avg:.0f}). Buffalo's {int(blk_g.n)} tries were {int(blk_g.n - buf_att_avg)} more than its average coming in
-({buf_att_avg:.0f}); {blk_g.blk / blk_g.n:.0%} were blocked, against {lg_blk_share:.0%} league-wide. Blocked shots aren't in the {f.xg.sum():.1f}. Vegas tried {int(att.loc[(G, THEM)].n)} shots and had {int(att.loc[(G, THEM)].blk)} blocked.
+Buffalo tried {int(blk_g.n)} shots and Vegas blocked {int(blk_g.blk)} of them. A team has about {blk_avg:.0f} shots blocked in a typical game, and only {n_blk_ge} times in
+{len(att)} team games this season has a team had {int(blk_g.blk)} or more blocked. Blocked shots don't count toward Buffalo's {f.xg.sum():.1f}.
 
 ## Receipts: our pregame call
 
-Before the game we logged one call on the [Ledger](../ledger.html): **the Sabres win, at {PRED_P:.0%}.** Giving Buffalo less than half means our model
-leaned Vegas, and Vegas won, so by our rule (the side we gave more than 50% wins) it's a hit. It was a near coin flip either way: our pregame story noted
-that the model's slight leans, 50-55%, had won about half the time in testing. It stays up regardless.
+Before the game we logged one call on the [Ledger](../ledger.html): **a {PRED_P:.0%} chance the Sabres win.** That meant our model leaned slightly toward Vegas, and
+Vegas won, so it counts as a hit. Don't read much into it: our pregame story noted that leans this slight (50-55%) had come in only about half the time in testing.
+Hit or miss, it stays up.
 
-We also grade every call with a simple score: the gap between the chance we gave and what happened, squared. Lower is better. Saying {PRED_P:.0%} on a
-game Buffalo lost scores {brier:.2f}. A pure 50/50 guess would have scored 0.25. So slightly better than a coin flip, on this one game.
-One game proves nothing either way; the point is the season-long record.
+We also score every call: take the gap between the chance we gave and what happened, and square it. Lower is better. Our {PRED_P:.0%} on a Buffalo loss
+scores {brier:.2f}; a straight 50/50 guess would have scored 0.25. So a bit better than a coin flip, on one game. The point is the season-long record.
 
-We're not taking a victory lap. The model expected a close game with Vegas slightly ahead. On chances it was close, but Buffalo was the one slightly ahead.
-Vegas won because the goals didn't follow the chances, and the model can't see a goalie's hot night coming.
+We're not taking a victory lap. The model expected a close game with Vegas slightly ahead. It was close, but Buffalo was the one slightly ahead, and
+our model doesn't try to predict a goalie's hot night; our tests say it can't be done reliably from a goalie's recent numbers.
 
-## What to take from it
+## What it means for Buffalo
 
-- **Buffalo won the even-strength game.** Against a Vegas team that had allowed the {ordn(vgk_allow_rk)}-fewest chances per game in the league before Sunday ({tm.loc[THEM, 'xga']:.1f}),
-  the Sabres created {f.xg.sum():.1f} goals' worth (their average coming in was {buf_create:.1f}), {es_f:.1f} of it at five on five.
-- **Special teams lost it.** The power play came up empty Sunday: {pp_f.xg.sum():.1f} goals' worth of chances, and more than that given up the other way, including Marner's goal.
-- **Ellis was a little below average, not bad.** He's still at {ellis_after:+.1f} for the season ({ellis_n} games).
+- **Buffalo won at full strength, {es_f:.1f} to {es_a:.1f} in chances.** And it did that against a defense that had given up the {ordn(vgk_allow_rk)}-fewest chances
+  overall coming in. In all, the Sabres created {f.xg.sum():.1f} goals' worth, well above their {buf_create:.1f} average.
+- **Special teams lost it.** The power play came up empty Sunday and gave up more than it created.
+- **What carries over is the chances, not the goalie's night.** Two of our tests point the same way. The chances a team gives up carry over from one
+  half of a season to the next far better than a goalie's numbers do, and a team's edge in chances carries over from one season to the next far better
+  than its finishing or goaltending. One night isn't a trend, but Buffalo's even-strength edge is the kind of thing that tends to last; Hill's afternoon
+  is the kind that doesn't.
+- **Ellis was a little below average, not bad.** He's still {ellis_after:.1f} above average for the season ({ellis_n} games).
 
 ## For the stat-heads
 
