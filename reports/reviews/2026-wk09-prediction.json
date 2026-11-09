@@ -38,6 +38,14 @@
    "at_utc": "2026-11-09T02:01:54Z",
    "notes": "Round 2 PASS: all fixes verified, charts unclipped, generator reproduces story and hero byte for byte.",
    "report": "2026-wk09-prediction-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "e9b249dfa9f679a4cfe65141f7c3939accc342176e02fe4f3b2b2c7bd0021087",
+   "at_utc": "2026-11-09T12:52:37Z",
+   "notes": "Post-logging check PASS: only the Ledger status line changed; P0002-P0008 match the article and predate kickoff; 7:48 a.m. ET correct. Part 1 (legacy) line fixed per the same report.",
+   "report": "2026-wk09-prediction-final.md"
   }
  ],
  "self": {
@@ -62,9 +70,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "411cdc645e0b8ed15e646b5553cf366fc16176c497c0c5de3ae0c7cc22a6f705",
-  "at_utc": "2026-11-09T02:01:54Z",
-  "notes": "Round 2 PASS: all fixes verified, charts unclipped, generator reproduces story and hero byte for byte.",
+  "sha256": "e9b249dfa9f679a4cfe65141f7c3939accc342176e02fe4f3b2b2c7bd0021087",
+  "at_utc": "2026-11-09T12:52:37Z",
+  "notes": "Post-logging check PASS: only the Ledger status line changed; P0002-P0008 match the article and predate kickoff; 7:48 a.m. ET correct. Part 1 (legacy) line fixed per the same report.",
   "report": "2026-wk09-prediction-final.md"
  }
 }

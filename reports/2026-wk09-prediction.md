@@ -66,7 +66,7 @@ that up over the night. A team's runs "lose points" if, all told, its running pl
 team games we tested on (2023-2025), a team's runs lost points overall 64% of the time. So 63% for the Bills is about the usual
 rate, a shade better; the Vikings' 81% is well above it.
 
-**These are our model's numbers.** They count once they're logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) on Nov. 9 at 7:48 a.m. ET, before kickoff.** All 7 calls are graded after the game, hit or miss, and stay up either way.
 
 ## Where the 23 comes from: the NFL's best offense meets its best defense, and they cancel out
 

@@ -101,12 +101,17 @@ def matchup_calls():
     return c, tests, n_db
 
 
+def _et(ts):
+    t = pd.Timestamp(ts).tz_convert("America/New_York")
+    return t.strftime("%b. %-d at %-I:%M ") + ("a.m." if t.hour < 12 else "p.m.") + " ET"
+
+
 def ledger_status():
     from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
     lp = _read(PRED_CSV, PRED_COLS)
     lp = lp[(lp.game_id == GAME) & lp.model_version.isin([pm.VERSION, WIN_VERSION, V01, V01 + "+qb"])] if not lp.empty else lp
     if len(lp):
-        return (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.max()} UTC, before kickoff.** All {len(lp)} calls "
+        return (f"**Logged on the [Ledger](../ledger.html) on {_et(lp.created_at_utc.max())}, before kickoff.** All {len(lp)} calls "
                 "are graded after the game, hit or miss, and stay up either way.")
     return ("**These are our model's numbers.** They count once they're logged on the [Ledger](../ledger.html) before kickoff; "
             "every logged call is graded after the game, hit or miss.")
