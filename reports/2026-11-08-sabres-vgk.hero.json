@@ -1,0 +1,29 @@
+{
+ "label": "Sunday's chances, in goals",
+ "big": [
+  [
+   3.9,
+   "Sabres"
+  ],
+  [
+   3.6,
+   "Golden Knights"
+  ]
+ ],
+ "note": "Final: Golden Knights 4, Sabres 1. Adin Hill saved 2.9 goals more than an average goalie.",
+ "explainer": {
+  "kicker": "The difference",
+  "title": "It was in goal.",
+  "text": "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29; Colten Ellis stopped 22 of 26. Save rate on Sunday:",
+  "bars": [
+   [
+    "Hill, Vegas",
+    0.966
+   ],
+   [
+    "Ellis, Buffalo",
+    0.846
+   ]
+  ]
+ }
+}

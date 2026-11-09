@@ -1,1 +1,2 @@
 prediction_id,graded_at_utc,outcome,actual_value,brier,source_query
+P0001,2026-11-09T01:18:47Z,0,"VGK 4, BUF 1 (REG)",0.2116,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020278"
