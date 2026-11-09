@@ -79,6 +79,11 @@ def ep_examples():
     return ep, third
 
 
+def _et(ts):
+    t = pd.Timestamp(ts).tz_convert("America/New_York")
+    return t.strftime("%b. %-d at %-I:%M ") + ("a.m." if t.hour < 12 else "p.m.") + " ET"
+
+
 def main():
     p = dropbacks()
     q = p.groupby(["season", "pid"]).apply(qb_line)
@@ -121,10 +126,11 @@ def main():
     c3 = prob_over("MIN", "BUF", "sack_rate", 0.06, off_override=w_sk, max_week=THRU)
     from src.ledger.ledger import PRED_COLS, PRED_CSV, _read
     lp = _read(PRED_CSV, PRED_COLS)
-    lp = lp[(lp.game_id == GAME) & (lp.model_version == pm.VERSION)] if not lp.empty else lp
+    lp = lp[(lp.game_id == GAME) & (lp.model_version == pm.VERSION) & (lp.metric == "MIN_points_over")] if not lp.empty else lp
     if len(lp):
-        ledger_status = (f"**Logged on the [Ledger](../ledger.html) at {lp.created_at_utc.min()} UTC, before kickoff.** "
-                         "These are graded after the game, hit or miss, and stay up either way.")
+        ledger_status = (f"**Logged on the [Ledger](../ledger.html) on {_et(lp.created_at_utc.min())}, before kickoff.** "
+                         f"This call (Vikings 20 or more points, {float(lp.probability.iloc[0]):.0%}) is graded after the game, "
+                         "hit or miss, and stays up either way.")
     else:
         ledger_status = ("**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before "
                          "kickoff; every logged call is graded after the game, hit or miss.")
@@ -360,6 +366,8 @@ more often. Treat the {proj:.0f} as a projection for Minnesota's offense in gene
 {ledger_status}
 
 Our other predictions for Monday come in part 3, after part 2 looks at the Bills offense against Minnesota's defense.
+
+*Update, Nov. 9: [Part 2](bills-offense-vs-vikings-defense.html) and [part 3, our full prediction](bills-vikings-prediction.html) are now published.*
 
 ## For the stat-heads
 

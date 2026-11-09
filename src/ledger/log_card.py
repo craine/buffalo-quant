@@ -1,4 +1,4 @@
-"""Log the approved week 9 card. Edit CARD (remove rows Charlie kills), then run once before kickoff.
+"""SUPERSEDED by src/ledger/log_wk09_part3.py, do not run. Log the approved week 9 card. Edit CARD (remove rows Charlie kills), then run once before kickoff.
 
 Each call's probability is recomputed live from model v0.1 at logging time, so the logged
 number is always traceable to the code and data at that moment.

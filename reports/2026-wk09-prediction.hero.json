@@ -1,0 +1,29 @@
+{
+ "label": "Our projection for Monday night",
+ "big": [
+  [
+   23,
+   "Bills, projected points"
+  ],
+  [
+   23,
+   "Vikings, projected points"
+  ]
+ ],
+ "note": "At nearly every scoreline Buffalo is a step ahead: 63% vs 61% to reach 20. Bills win 53% of the time. Projection: Bills 23.4, Vikings 22.8.",
+ "explainer": {
+  "kicker": "How we checked it",
+  "title": "Tested on games it never saw.",
+  "text": "Before trusting the win chance, we ran it on 617 games from 2024-26 the model had never seen. How often the team it leaned to won, vs. always taking the home team:",
+  "bars": [
+   [
+    "Our model",
+    0.626
+   ],
+   [
+    "Home team",
+    0.524
+   ]
+  ]
+ }
+}

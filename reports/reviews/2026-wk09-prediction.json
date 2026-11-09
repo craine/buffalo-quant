@@ -1,0 +1,78 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+   "at_utc": "2026-11-09T01:56:47Z",
+   "notes": "Checklist run: numbers computed in the generator (no literal stats in body), generator pinned THRU=8 and reproducible, charts viewed, claims mapped to code, Ledger calls match log_wk09_part3.py, no betting language."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+   "at_utc": "2026-11-09T01:56:47Z",
+   "notes": "Two rounds; all fixes applied (win_chance bug, wording, disclosures, named final removed).",
+   "report": "2026-wk09-prediction-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+   "at_utc": "2026-11-09T01:56:47Z",
+   "notes": "Needs edits (structural); applied: ladder-first lead with no 'rounded/apiece', new section 'How a 23-point game becomes 53%' moved up with the nudge idea, tie section folded into one line, plain Who-wins steps, 'not scoreboard points', drives section moved after the calls with hook header, check section cut, grade table and run caution moved to stat-heads, chart titles retitled, projection marker on the ladder.",
+   "report": "2026-wk09-prediction-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "411cdc645e0b8ed15e646b5553cf366fc16176c497c0c5de3ae0c7cc22a6f705",
+   "at_utc": "2026-11-09T02:00:40Z",
+   "notes": "Final check 1 failed: win-test title clipped. Fixed, along with the calls title (also clipped), the 10-point rounding note, 'same edge gives' lead wording, the hero 'leaned to' wording and the stat-heads blank line.",
+   "report": "2026-wk09-prediction-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "411cdc645e0b8ed15e646b5553cf366fc16176c497c0c5de3ae0c7cc22a6f705",
+   "at_utc": "2026-11-09T02:01:54Z",
+   "notes": "Round 2 PASS: all fixes verified, charts unclipped, generator reproduces story and hero byte for byte.",
+   "report": "2026-wk09-prediction-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "e9b249dfa9f679a4cfe65141f7c3939accc342176e02fe4f3b2b2c7bd0021087",
+   "at_utc": "2026-11-09T12:52:37Z",
+   "notes": "Post-logging check PASS: only the Ledger status line changed; P0002-P0008 match the article and predate kickoff; 7:48 a.m. ET correct. Part 1 (legacy) line fixed per the same report.",
+   "report": "2026-wk09-prediction-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+  "at_utc": "2026-11-09T01:56:47Z",
+  "notes": "Checklist run: numbers computed in the generator (no literal stats in body), generator pinned THRU=8 and reproducible, charts viewed, claims mapped to code, Ledger calls match log_wk09_part3.py, no betting language."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+  "at_utc": "2026-11-09T01:56:47Z",
+  "notes": "Two rounds; all fixes applied (win_chance bug, wording, disclosures, named final removed).",
+  "report": "2026-wk09-prediction-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "d4f9919c02ebaf27f35f1685833a272bdeaabfb4596342ce6f9e73257f919228",
+  "at_utc": "2026-11-09T01:56:47Z",
+  "notes": "Needs edits (structural); applied: ladder-first lead with no 'rounded/apiece', new section 'How a 23-point game becomes 53%' moved up with the nudge idea, tie section folded into one line, plain Who-wins steps, 'not scoreboard points', drives section moved after the calls with hook header, check section cut, grade table and run caution moved to stat-heads, chart titles retitled, projection marker on the ladder.",
+  "report": "2026-wk09-prediction-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "e9b249dfa9f679a4cfe65141f7c3939accc342176e02fe4f3b2b2c7bd0021087",
+  "at_utc": "2026-11-09T12:52:37Z",
+  "notes": "Post-logging check PASS: only the Ledger status line changed; P0002-P0008 match the article and predate kickoff; 7:48 a.m. ET correct. Part 1 (legacy) line fixed per the same report.",
+  "report": "2026-wk09-prediction-final.md"
+ }
+}

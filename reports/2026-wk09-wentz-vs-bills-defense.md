@@ -123,9 +123,11 @@ quarterback changed. We didn't adjust for it, because we haven't tested an adjus
 way: on value per dropback Wentz has been about even with Murray, but on only 47 dropbacks this year, and he gets sacked
 more often. Treat the 23 as a projection for Minnesota's offense in general, not for Wentz specifically.
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) on Nov. 9 at 7:48 a.m. ET, before kickoff.** This call (Vikings 20 or more points, 61%) is graded after the game, hit or miss, and stays up either way.
 
 Our other predictions for Monday come in part 3, after part 2 looks at the Bills offense against Minnesota's defense.
+
+*Update, Nov. 9: [Part 2](bills-offense-vs-vikings-defense.html) and [part 3, our full prediction](bills-vikings-prediction.html) are now published.*
 
 ## For the stat-heads
 

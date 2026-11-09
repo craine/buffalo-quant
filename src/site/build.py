@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-vikings-prediction", "2026-wk09-prediction.md", "2026-11-09", "Bills &middot; Week 9 preview, part 3",
+     "As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.",
+     "wk09c-ladder.png"),
     ("sabres-vegas-postgame-nov-8", "2026-11-08-sabres-vgk.md", "2026-11-08", "Sabres &middot; Post-game",
      "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29 and had one of the league's best goalie nights. Our model leaned slightly to Vegas, a hit, but a near coin flip.",
      "sabres-vgk-post-flow.png"),

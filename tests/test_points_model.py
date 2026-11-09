@@ -23,3 +23,21 @@ def test_backtest_beats_league_average_every_test_season():
     assert (summ.model < summ.league).all()
     assert (summ.model < summ.team_ppg).all()
     assert te[te.season == 2026].week.max() <= 8
+
+
+def test_win_chance_symmetry_and_ties():
+    import numpy as np
+    from src.ledger.points_model import win_chance
+    pairs = np.array([[3.0, -3.0], [-3.0, 3.0], [0.0, 0.0], [1.0, 1.0]])
+    assert win_chance(20, 20, pairs) == 0.5          # equal projections, symmetric misses
+    assert win_chance(30, 10, pairs) == 1.0
+    assert abs(win_chance(21, 20, pairs) + win_chance(20, 21, pairs) - 1) < 1e-9
+
+
+def test_win_chance_sums_to_one_with_near_ties():
+    import numpy as np
+    from src.ledger.points_model import win_chance
+    rng = np.random.default_rng(0)
+    pairs = np.round(rng.normal(0, 10, (2000, 2)))  # integer-ish misses create many near-ties
+    for a, b in [(22.8, 23.4), (20.1, 20.4), (30, 17)]:
+        assert abs(win_chance(a, b, pairs) + win_chance(b, a, pairs[:, ::-1]) - 1) < 1e-9

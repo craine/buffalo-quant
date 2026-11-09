@@ -140,3 +140,37 @@ def backtest(con=None, test=None):
         n=len(x), model=(x.score - x.model).abs().mean(), league=(x.score - x.b_league).abs().mean(),
         team_ppg=(x.score - x.b_team_ppg).abs().mean(), within7=((x.score - x.model).abs() <= 7).mean())))
     return coef, res, te, summ
+
+
+def paired_misses(con=None):
+    """Training-season (home miss, away miss) pairs from the same game, so the two teams' misses keep their link."""
+    tr = build_frame(TRAIN, con=con)
+    coef, _ = fit(tr)
+    tr = tr.assign(miss=tr.score - predict(coef, tr.raw, tr.home))
+    h = tr[tr.home == 1].set_index("game_id").miss
+    a = tr[tr.home == 0].set_index("game_id").miss
+    j = pd.concat([h.rename("h"), a.rename("a")], axis=1).dropna()
+    return coef, j.to_numpy()
+
+
+def win_chance(pred_home, pred_away, pairs):
+    """Chance the home team wins: replay every training game's pair of misses on top of today's projections.
+    A tie after regulation is split 50/50 (overtime)."""
+    d = (pred_home + pairs[:, 0]) - (pred_away + pairs[:, 1])
+    return float(np.mean(d > 0.5) + 0.5 * np.mean(np.abs(d) <= 0.5))
+
+
+def backtest_win(con=None, test=None):
+    """Win-chance test on the same blind seasons as backtest(): Brier vs a 50/50 guess and vs the training home-win rate."""
+    test = test or TEST
+    coef, pairs = paired_misses(con)
+    te = build_frame(list(test), con=con, max_week=test)
+    te["pred"] = predict(coef, te.raw, te.home)
+    h = te[te.home == 1].set_index("game_id"); a = te[te.home == 0].set_index("game_id")
+    g = h.join(a[["pred", "score"]], rsuffix="_a").dropna(subset=["pred_a"])
+    g["p"] = [win_chance(x, y, pairs) for x, y in zip(g.pred, g.pred_a)]
+    g["won"] = (g.score > g.score_a).astype(float).where(g.score != g.score_a, 0.5)
+    tr = build_frame(TRAIN, con=con)
+    th = tr[tr.home == 1].set_index("game_id").score; ta = tr[tr.home == 0].set_index("game_id").score
+    home_rate = float(((th > ta.reindex(th.index)) + 0.5 * (th == ta.reindex(th.index))).mean())
+    return g, home_rate
