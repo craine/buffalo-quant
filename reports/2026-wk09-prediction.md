@@ -1,7 +1,8 @@
 # Bills at Vikings: our prediction for Monday night
 
-**Finding: This one is about as close as games get. Our model projects Bills 23.4, Vikings 22.8: rounded, 23 apiece,
-with the edge to Buffalo. That small edge shows up at nearly every scoreline, and it gives the Bills a 53% chance to win.**
+**Finding: Pick almost any score, and the Bills are a little more likely than the Vikings to get there: 75% to 72% to reach
+17 points, 47% to 44% to reach 24. It's never a big edge, but it's there nearly everywhere, and the same edge gives the Bills a 53% chance
+to win. It all traces to one small gap: we project Buffalo 23.4 points, Minnesota 22.8.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -24,46 +25,27 @@ Picture a ladder of scorelines: 10 points, 14, 17, 20 and up. For each rung, her
 | 30 or more | **24%** | 22% |
 | 35 or more | **12%** | 10% |
 
-Read it like this: there's a 75% chance the Bills score 17 or more, and a 72% chance the Vikings do. The gaps are small,
-a couple of points of probability, and they all come from the same thing: our Bills projection is 0.6 points higher. That small gap is also why, when we replay past games with both teams at once (more on that below), the Bills finish ahead 53% of the time.
+Read it like this: there's a 75% chance the Bills score 17 or more, and a 72% chance the Vikings do. The Bills are ahead by
+1 to 3 percentage points on every rung except 10 points, where the edge is under one point (92% each, rounded). That's this game in one table: no big edge anywhere, a small one almost everywhere.
 
-## Where the 23 comes from
+## How a 23-point game becomes 53%
 
-Points come from drives, so that's where we start. Four steps:
-
-1. **How good is each side?** This season the Bills average 3.08 points per drive, the most in the NFL
-   (1st of 32). Minnesota's defense gives up just 1.20 per drive, the fewest. An average offense scores 2.07 per drive.
-2. **Don't overreact to seven games.** A hot start isn't a guarantee, so we blend this season with last season and the league average.
-   That makes the Bills' offense 2.83 and the Vikings' defense 1.45: still far better than average, just less extreme.
-3. **Let them meet.** The Bills' offense is 0.75 points per drive better than average. Minnesota's defense is
-   0.62 better than average. Those almost cancel out, leaving about 2.21 points per drive: a bit better than an average offense, which would rank about 11th of 32 this season.
-4. **Count the drives and check against history.** About 11 drives a game gets you to about 24. A last adjustment,
-   learned from past games, trims projections that history says run too high or too low and gives the home team about 1.5 points.
-   Buffalo is on the road, so it lands at **23.4**.
-
-Minnesota goes through the same four steps from the other direction: a below-average offense (1.78 per drive) against a below-average
-Bills defense (2.23 allowed), plus the home bump. That's **22.8**.
-
-So the most interesting matchup of the night, the best offense against the best defense, mostly cancels itself out. Part 2 found that's
-usually what happens: when a top-3 offense meets a top-3 defense, the result lands close to adding the two together.
-
-## From 23 points to those percentages
-
-Nobody scores exactly what we project. So we looked at 2,494 past team-scores from 2019-2023 and asked how far off we were. Half the time, a team
-landed within about 6 points of our number. Eight times in ten, within about 12. (Those are the games the model was built on; on games it had never seen, its average miss was 7.5 points.)
+Nobody scores exactly what we project. So we looked at 2,494 past team scores from 2019-2023 and asked how far off we were. Half the time, a team
+landed within about 6 points of our number. Eight times in ten, within about 12. (Those are the games the model was built on; on games it
+had never seen, its average miss was 7.5 points.)
 
 Then we play Monday's game over and over, once for every one of those past misses, on top of today's projections. In some replays the Bills
-score a lot; in others they're held down. Eight times in ten they land between 12 and 36. Count how often the Bills reach 20 or more in all those replays and you get 63%. Count
-24 or more and it's 47%, just under half, because 23.4 is right in the middle. That's the whole ladder.
+score a lot; in others they're held down. Eight times in ten they land between 12 and 36. Count how often the Bills reach 20
+or more in all those replays and you get 63%. Count 24 or more and it's 47%, just under half, because 23.4 is right in the middle.
+That's what our 23.4 really is: the middle of a wide range, not a guess at the final score. And it's why a 0.6-point edge only gets the Bills
+to 53%. When a typical miss is 6 points either way, 0.6 is a nudge, not a shove.
 
-**Who wins?** Same idea, both teams at once. We replay 1,247 real past games, each team's miss side by side, on top of Monday's projections.
-Buffalo finishes ahead in 53% of them. (A game tied after 60 minutes counts as half for each side, since overtime is close to a coin flip.)
+**Who wins?** Same idea, both teams at once. We took 1,247 real past games and noted how far off we were for each team in that same game.
+Then we applied each pair of misses to Monday's projections and checked who came out ahead. Buffalo did in 53% of them. (A game tied after
+60 minutes counts as half for each side, since overtime is close to a coin flip.)
 
-## Why not just call it a tie?
-
-Because the model doesn't. Its projection is 23.4 to 22.8: rounding makes it look even, but Buffalo is ahead by 0.6 points,
-and that's enough to tip the win chance to 53%. We're not rounding it to a made-up final like 23-20 or 24-21: those numbers would be ours,
-not the model's. The model's call is the 23.4-22.8 projection and the 53% win chance, and both are written into our Ledger entries before kickoff.
+So why not call it a tie? Because the model doesn't: 23.4 beats 22.8, and that's what tips it to 53%. Both projections are written into
+our Ledger entries before kickoff.
 
 ## The calls going on the Ledger
 
@@ -79,43 +61,54 @@ not the model's. The model's call is the 23.4-22.8 projection and the 53% win ch
 
 ![The calls](wk09c-calls.png)
 
-What "gain points" and "lose points" mean: every play moves a drive closer to scoring or further away, and we add it up over the night.
-A team's runs "lose points" if, all told, its running plays left it worse off than before. That's normal: in the 990 past team-games we
-tested on (2023-2025), a team's runs lost points overall 64% of the time. So 63% for the Bills is about the usual
+What "gain points" and "lose points" mean: these aren't scoreboard points. Every play moves a drive closer to scoring or further away, and we add
+that up over the night. A team's runs "lose points" if, all told, its running plays left it worse off than before. That's normal: in the 990 past
+team games we tested on (2023-2025), a team's runs lost points overall 64% of the time. So 63% for the Bills is about the usual
 rate, a shade better; the Vikings' 81% is well above it.
 
 **These are our model's numbers.** They count once they're logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
 
+## Where the 23 comes from: the NFL's best offense meets its best defense, and they cancel out
+
+The most interesting matchup of the night, the best offense against the best defense, mostly cancels itself out. Part 2 found that's
+usually what happens: when a top-3 offense meets a top-3 defense, the result lands close to adding the two together.
+
+Points come from drives, so that's where we start. Four steps:
+
+1. **How good is each side?** This season the Bills average 3.08 points per drive, the most in the NFL
+   (1st of 32). Minnesota's defense gives up just 1.20 per drive, the fewest. An average offense scores 2.07 per drive.
+2. **Don't overreact to seven games.** A hot start isn't a guarantee, so we mix in last season and an average team.
+   That makes the Bills' offense 2.83 and the Vikings' defense 1.45: still far better than average, just less extreme.
+3. **Let them meet.** The Bills' offense is 0.75 points per drive better than average. Minnesota's defense is
+   0.62 better than average. Those almost cancel out, leaving about 2.21 points per drive: a bit better than an average
+   offense, which would rank about 11th of 32 this season.
+4. **Count the drives and check against history.** About 11 drives a game gets you to about 24. A final check against past games
+   pulls extreme projections back toward normal and gives the home team about 1.5 points. Buffalo is on the road, so it lands at **23.4**.
+
+Minnesota goes through the same four steps from the other direction: a below-average offense (1.78 per drive) against a below-average
+Bills defense (2.23 allowed), plus the home bump. That's **22.8**.
+
 ## Did we check it? Yes, before trusting it
 
-**The scoreline chances.** We ran the model on 1,234 team-games from week 2 on in 2024, 2025 and 2026 that it had never seen. When it said
-something had a 20% chance or less, it happened 12% of the time (it said 12%), and at 80% or more it
-happened 89% (it said 89%). In the middle it ran a few points low: when it said 50%, it happened
-55%. At the 20-point line itself it averaged 60% and teams got there 65% of the time. So our 20-or-more chances
-for both teams are probably a few points low. Real scores bunch up on 17, 20, 24 and 27, and our model smooths that bunching out, so "at least X"
-comes out a little low right at those lines. We're logging the model's numbers as they are and will fix this before using these lines again.
+**The scoreline chances.** We ran the model on 1,234 team games from 2024-2026 that it had never seen. At the extremes it was right on: when
+it gave a team a 20% chance or less, it said 12% on average and it happened 12%; at 80% or more, it said 89% and it
+happened 89%. In the middle it ran a few points low, including right at the 20-point line (it said 60%, teams got there
+65%). Real scores bunch up on 17, 20 and 24, and our model smooths that out. So both teams' 20-or-more chances are probably a few points
+low. We're logging them as they are and will fix this before using these lines again.
 
-**The win chance.** On 617 unseen games (week 2 on, 2024-2026), the team our model favored won 63% of the time. Taking the
+**The win chance.** On 617 unseen games (week 2 on, 2024-2026), the team our model leaned to won 63% of the time. Taking the
 home team every time would have been right 52% of the time.
 
 ![Win chance test](wk09c-win-test.png)
 
-**The pass and run calls.** These come from a simpler model, tested on 990 past team-games per kind of call (2023-2025, using only
-earlier games each time). We graded it against just guessing the league's usual rate. Lower grade is better:
+*The chart counts a tied game as half a win; the 63% above counts it as a miss.*
 
-| Kind of call | Our grade | Guessing the usual rate | Verdict |
-|---|---|---|---|
-| Pass plays gain points | 0.230 | 0.245 | Better; its percentages held up in the range where Monday's calls sit |
-| Runs gain or lose points | 0.226 | 0.231 | A little better |
-| Sacks on more than 6% of dropbacks | 0.254 | 0.252 | **Worse. Dropped.** |
+**The pass and run calls.** These come from a simpler model, tested on 990 past team games (2023-2025) against just guessing the league's usual
+rate. It beat the guess on pass calls and edged it on run calls. On one kind of call it lost, so we threw that call out.
 
 **The call we threw out.** We were going to say there was a 66% chance the Bills sack Wentz on more than 6% of his dropbacks.
-But this kind of call did worse than simply guessing the usual rate. When it was confident (above 55%), it said 64% and was right
-54% of the time. Sacks in one game swing too much to call, so we're not.
-
-**One caution on the run calls.** The run model gets too confident when it says runs will *gain* points (above 55% it said
-61%; it happened 46%, on only 52 games). Neither of Monday's run calls is in that range:
-in the ranges where they sit, it said 24% and 38%, and it happened 26% and 37%.
+But when this kind of call was confident, it said 64% and was right 54% of the time: worse than just guessing the usual rate.
+Sacks in one game swing too much to call, so we're not.
 
 ## What the model doesn't know
 
@@ -127,6 +120,11 @@ in the ranges where they sit, it said 24% and 38%, and it happened 26% and 37%.
 
 ## For the stat-heads
 
+- Matchup-call backtest grades (Brier score, lower is better), 990 team games per call type: pass plays gain points 0.230 vs 0.245
+  for the league rate (calibrated in the range of Monday's calls); runs 0.226 vs 0.231; sacks on 6%+ of dropbacks 0.254 vs
+  0.252 (dropped).
+- Run-model caution: above 55% that runs gain points it said 61% and it happened 46%
+  (n=52). Monday's run calls sit in buckets where it said 24% / 38% and it happened 26% / 37%.
 - Points model points-v0.1 (`src/ledger/points_model.py`): ratings = (points + 60 x prior) / (drives + 60), prior = league + 0.7 x last
   season's gap; raw = (league + off gap + def gap) x average pace; calibrated score = 7.07 + 0.679 x raw + 1.45 x home,
   fit on 2019-23 (week 2 on). Ladder chances = share of the 2,494 empirical training residuals that put the projection at or above each line.

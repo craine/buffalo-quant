@@ -14,7 +14,7 @@
  "explainer": {
   "kicker": "How we checked it",
   "title": "Tested on games it never saw.",
-  "text": "Before trusting the win chance, we ran it on 617 games from 2024-26 the model had never seen. How often the team it favored won, vs. always taking the home team:",
+  "text": "Before trusting the win chance, we ran it on 617 games from 2024-26 the model had never seen. How often the team it leaned to won, vs. always taking the home team:",
   "bars": [
    [
     "Our model",

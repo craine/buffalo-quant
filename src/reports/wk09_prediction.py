@@ -161,9 +161,12 @@ def main():
     ax.set_xlabel("Points scored Monday", fontsize=10, color=MUTED)
     ax.set_ylim(0, 1.05); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.legend(frameon=False, fontsize=10, loc="upper right")
+    xi = LADDER.index(20) + (pb - 20) / (24 - 20)  # projection placed between the 20+ and 24+ groups
+    ax.plot([xi, xi], [lad[24][0] + 0.06, 1.0], color=INK, lw=1, ls=(0, (4, 3)), zorder=1)
+    ax.text(xi + 0.06, 0.97, f"Our projection:\nBills {pb:.1f}, Vikings {pmn:.1f}", fontsize=8.5, color=INK, va="top")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "At nearly every scoreline, the Bills are a step ahead",
-           f"Our chance each team scores at least this many points. Projection: Bills {pb:.1f}, Vikings {pmn:.1f}. Bills win {P['p_buf']:.0%} of the time.",
+           f"Our chance each team scores at least this many points. Bills win {P['p_buf']:.0%} of the time.",
            f"Points model {pm.VERSION}: 2026 drives through week {THRU}, home field for Minnesota. Tested on {mae['n']:,} team-games from 2024-26 it never saw.")
     fig.savefig(OUT / "wk09c-ladder.png"); plt.close(fig)
 
@@ -179,7 +182,8 @@ def main():
     ax.set_yticks(ys, [c[0] for c in calls], fontsize=10)
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Seven calls for Monday night",
+    closest = min(calls, key=lambda c: abs(c[1] - 0.5)); surest = max(calls, key=lambda c: abs(c[1] - 0.5))
+    finish(fig, f"Closest: who wins ({closest[1]:.0%}). Surest: Vikings' runs lose points ({surest[1]:.0%})",
            "Our chance that each one happens. Every one comes from a kind of model we tested on past games before trusting it.",
            f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Logged on the Ledger before kickoff.")
     fig.savefig(OUT / "wk09c-calls.png"); plt.close(fig)
@@ -188,8 +192,8 @@ def main():
     cal = wt["cal"]
     fig, ax = plt.subplots(figsize=(9.5, 4.6), dpi=200)
     x = np.arange(len(cal)); w = 0.36
-    ax.bar(x - w / 2, cal.said, w, color=GRAY, label="Chance we gave the favorite", zorder=2)
-    ax.bar(x + w / 2, cal.happened, w, color=BLUE, label="How often the favorite won", zorder=2)
+    ax.bar(x - w / 2, cal.said, w, color=GRAY, label="Chance we gave the team we leaned to", zorder=2)
+    ax.bar(x + w / 2, cal.happened, w, color=BLUE, label="How often that team won", zorder=2)
     for i, r in enumerate(cal.itertuples()):
         ax.text(i - w / 2, r.said + 0.015, f"{r.said:.0%}", ha="center", fontsize=9.5, color=MUTED)
         ax.text(i + w / 2, r.happened + 0.015, f"{r.happened:.0%}", ha="center", fontsize=9.5, color=INK)
@@ -198,18 +202,22 @@ def main():
     ax.set_ylim(0, 1.05); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.legend(frameon=False, fontsize=9, loc="upper left")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"When our model says {cal.said.iloc[1]:.0%}, the favorite wins about {cal.happened.iloc[1]:.0%} of the time",
+    finish(fig, f"In close calls like Monday's, we said {cal.said.iloc[0]:.0%} and the team we leaned to won {cal.happened.iloc[0]:.0%}",
            f"Win chances on {wt['n']} games from 2024-26 the model never saw, grouped by how strongly it leaned.",
            f"Model built on 2019-23 games. 2026 games through week {THRU}. Ties count as half a win.")
     fig.savefig(OUT / "wk09c-win-test.png"); plt.close(fig)
 
     table = "\n".join(f"| {lab} | **{p:.0%}** | {m} |" for lab, p, m, _ in calls)
-    level_txt = (" and level on the other" if n_level == 1 else f" and level on {n_level}") if n_level else ""
+    gaps = [100 * (lad[t][0] - lad[t][1]) for t in LADDER if round(lad[t][0] * 100) > round(lad[t][1] * 100)]
+    level_rungs = [t for t in LADDER if round(lad[t][0] * 100) == round(lad[t][1] * 100)]
+    level_txt = (f"every rung except {level_rungs[0]} points, where the edge is under one point ({lad[level_rungs[0]][0]:.0%} each, rounded)" if len(level_rungs) == 1
+                 else "every rung" if not level_rungs else f"{n_ahead} of the {len(LADDER)} rungs")
     ladder_rows = "\n".join(f"| {t} or more | **{lad[t][0]:.0%}** | {lad[t][1]:.0%} |" for t in LADDER)
     md = f"""# Bills at Vikings: our prediction for Monday night
 
-**Finding: This one is about as close as games get. Our model projects Bills {pb:.1f}, Vikings {pmn:.1f}: rounded, {pb:.0f} apiece,
-with the edge to Buffalo. That small edge shows up at nearly every scoreline, and it gives the Bills a {P['p_buf']:.0%} chance to win.**
+**Finding: Pick almost any score, and the Bills are a little more likely than the Vikings to get there: {lad[17][0]:.0%} to {lad[17][1]:.0%} to reach
+17 points, {lad[24][0]:.0%} to {lad[24][1]:.0%} to reach 24. It's never a big edge, but it's there nearly everywhere, and the same edge gives the Bills a {P['p_buf']:.0%} chance
+to win. It all traces to one small gap: we project Buffalo {pb:.1f} points, Minnesota {pmn:.1f}.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -225,46 +233,27 @@ Picture a ladder of scorelines: 10 points, 14, 17, 20 and up. For each rung, her
 |---|---|---|
 {ladder_rows}
 
-Read it like this: there's a {lad[17][0]:.0%} chance the Bills score 17 or more, and a {lad[17][1]:.0%} chance the Vikings do. The gaps are small,
-a couple of points of probability, and they all come from the same thing: our Bills projection is {pb - pmn:.1f} points higher. That small gap is also why, when we replay past games with both teams at once (more on that below), the Bills finish ahead {P['p_buf']:.0%} of the time.
+Read it like this: there's a {lad[17][0]:.0%} chance the Bills score 17 or more, and a {lad[17][1]:.0%} chance the Vikings do. The Bills are ahead by
+{min(gaps):.0f} to {max(gaps):.0f} percentage points on {level_txt}. That's this game in one table: no big edge anywhere, a small one almost everywhere.
 
-## Where the 23 comes from
+## How a 23-point game becomes 53%
 
-Points come from drives, so that's where we start. Four steps:
-
-1. **How good is each side?** This season the Bills average {P['raw']['buf_off']:.2f} points per drive, the most in the NFL
-   ({P['rk']['off']}). Minnesota's defense gives up just {P['raw']['min_def']:.2f} per drive, the fewest. An average offense scores {P['lg']:.2f} per drive.
-2. **Don't overreact to seven games.** A hot start isn't a guarantee, so we blend this season with last season and the league average.
-   That makes the Bills' offense {P['off_b']:.2f} and the Vikings' defense {P['def_m']:.2f}: still far better than average, just less extreme.
-3. **Let them meet.** The Bills' offense is {P['off_b'] - P['lg']:.2f} points per drive better than average. Minnesota's defense is
-   {P['lg'] - P['def_m']:.2f} better than average. Those almost cancel out, leaving about {P['ppd_b']:.2f} points per drive: a bit better than an average offense, which would rank {ppd_rank} this season.
-4. **Count the drives and check against history.** About {P['drv']:.0f} drives a game gets you to about {P['ppd_b'] * P['drv']:.0f}. A last adjustment,
-   learned from past games, trims projections that history says run too high or too low and gives the home team about {P['coef'][2]:.1f} points.
-   Buffalo is on the road, so it lands at **{pb:.1f}**.
-
-Minnesota goes through the same four steps from the other direction: a below-average offense ({P['off_m']:.2f} per drive) against a below-average
-Bills defense ({P['def_b']:.2f} allowed), plus the home bump. That's **{pmn:.1f}**.
-
-So the most interesting matchup of the night, the best offense against the best defense, mostly cancels itself out. Part 2 found that's
-usually what happens: when a top-3 offense meets a top-3 defense, the result lands close to adding the two together.
-
-## From 23 points to those percentages
-
-Nobody scores exactly what we project. So we looked at {len(res):,} past team-scores from 2019-2023 and asked how far off we were. Half the time, a team
-landed within about {miss50:.0f} points of our number. Eight times in ten, within about {miss80:.0f}. (Those are the games the model was built on; on games it had never seen, its average miss was {mae['model']:.1f} points.)
+Nobody scores exactly what we project. So we looked at {len(res):,} past team scores from 2019-2023 and asked how far off we were. Half the time, a team
+landed within about {miss50:.0f} points of our number. Eight times in ten, within about {miss80:.0f}. (Those are the games the model was built on; on games it
+had never seen, its average miss was {mae['model']:.1f} points.)
 
 Then we play Monday's game over and over, once for every one of those past misses, on top of today's projections. In some replays the Bills
-score a lot; in others they're held down. Eight times in ten they land between {P['rng']['BUF'][0]:.0f} and {P['rng']['BUF'][1]:.0f}. Count how often the Bills reach 20 or more in all those replays and you get {lad[20][0]:.0%}. Count
-24 or more and it's {lad[24][0]:.0%}, just under half, because {pb:.1f} is right in the middle. That's the whole ladder.
+score a lot; in others they're held down. Eight times in ten they land between {P['rng']['BUF'][0]:.0f} and {P['rng']['BUF'][1]:.0f}. Count how often the Bills reach 20
+or more in all those replays and you get {lad[20][0]:.0%}. Count 24 or more and it's {lad[24][0]:.0%}, just under half, because {pb:.1f} is right in the middle.
+That's what our {pb:.1f} really is: the middle of a wide range, not a guess at the final score. And it's why a {pb - pmn:.1f}-point edge only gets the Bills
+to {P['p_buf']:.0%}. When a typical miss is {miss50:.0f} points either way, {pb - pmn:.1f} is a nudge, not a shove.
 
-**Who wins?** Same idea, both teams at once. We replay {wt['n_pairs']:,} real past games, each team's miss side by side, on top of Monday's projections.
-Buffalo finishes ahead in {P['p_buf']:.0%} of them. (A game tied after 60 minutes counts as half for each side, since overtime is close to a coin flip.)
+**Who wins?** Same idea, both teams at once. We took {wt['n_pairs']:,} real past games and noted how far off we were for each team in that same game.
+Then we applied each pair of misses to Monday's projections and checked who came out ahead. Buffalo did in {P['p_buf']:.0%} of them. (A game tied after
+60 minutes counts as half for each side, since overtime is close to a coin flip.)
 
-## Why not just call it a tie?
-
-Because the model doesn't. Its projection is {pb:.1f} to {pmn:.1f}: rounding makes it look even, but Buffalo is ahead by {pb - pmn:.1f} points,
-and that's enough to tip the win chance to {P['p_buf']:.0%}. We're not rounding it to a made-up final like 23-20 or 24-21: those numbers would be ours,
-not the model's. The model's call is the {pb:.1f}-{pmn:.1f} projection and the {P['p_buf']:.0%} win chance, and both are written into our Ledger entries before kickoff.
+So why not call it a tie? Because the model doesn't: {pb:.1f} beats {pmn:.1f}, and that's what tips it to {P['p_buf']:.0%}. Both projections are written into
+our Ledger entries before kickoff.
 
 ## The calls going on the Ledger
 
@@ -274,43 +263,54 @@ not the model's. The model's call is the {pb:.1f}-{pmn:.1f} projection and the {
 
 ![The calls](wk09c-calls.png)
 
-What "gain points" and "lose points" mean: every play moves a drive closer to scoring or further away, and we add it up over the night.
-A team's runs "lose points" if, all told, its running plays left it worse off than before. That's normal: in the {ru['n']} past team-games we
-tested on (2023-2025), a team's runs lost points overall {1 - ru['rate']:.0%} of the time. So {1 - C['buf_ru']['p']:.0%} for the Bills is about the usual
+What "gain points" and "lose points" mean: these aren't scoreboard points. Every play moves a drive closer to scoring or further away, and we add
+that up over the night. A team's runs "lose points" if, all told, its running plays left it worse off than before. That's normal: in the {ru['n']} past
+team games we tested on (2023-2025), a team's runs lost points overall {1 - ru['rate']:.0%} of the time. So {1 - C['buf_ru']['p']:.0%} for the Bills is about the usual
 rate, a shade better; the Vikings' {1 - C['min_ru']['p']:.0%} is well above it.
 
 {ledger_status()}
 
+## Where the 23 comes from: the NFL's best offense meets its best defense, and they cancel out
+
+The most interesting matchup of the night, the best offense against the best defense, mostly cancels itself out. Part 2 found that's
+usually what happens: when a top-3 offense meets a top-3 defense, the result lands close to adding the two together.
+
+Points come from drives, so that's where we start. Four steps:
+
+1. **How good is each side?** This season the Bills average {P['raw']['buf_off']:.2f} points per drive, the most in the NFL
+   ({P['rk']['off']}). Minnesota's defense gives up just {P['raw']['min_def']:.2f} per drive, the fewest. An average offense scores {P['lg']:.2f} per drive.
+2. **Don't overreact to seven games.** A hot start isn't a guarantee, so we mix in last season and an average team.
+   That makes the Bills' offense {P['off_b']:.2f} and the Vikings' defense {P['def_m']:.2f}: still far better than average, just less extreme.
+3. **Let them meet.** The Bills' offense is {P['off_b'] - P['lg']:.2f} points per drive better than average. Minnesota's defense is
+   {P['lg'] - P['def_m']:.2f} better than average. Those almost cancel out, leaving about {P['ppd_b']:.2f} points per drive: a bit better than an average
+   offense, which would rank {ppd_rank} this season.
+4. **Count the drives and check against history.** About {P['drv']:.0f} drives a game gets you to about {P['ppd_b'] * P['drv']:.0f}. A final check against past games
+   pulls extreme projections back toward normal and gives the home team about {P['coef'][2]:.1f} points. Buffalo is on the road, so it lands at **{pb:.1f}**.
+
+Minnesota goes through the same four steps from the other direction: a below-average offense ({P['off_m']:.2f} per drive) against a below-average
+Bills defense ({P['def_b']:.2f} allowed), plus the home bump. That's **{pmn:.1f}**.
+
 ## Did we check it? Yes, before trusting it
 
-**The scoreline chances.** We ran the model on {mae['n']:,} team-games from week 2 on in 2024, 2025 and 2026 that it had never seen. When it said
-something had a 20% chance or less, it happened {lc.happened.iloc[0]:.0%} of the time (it said {lc.said.iloc[0]:.0%}), and at 80% or more it
-happened {lc.happened.iloc[4]:.0%} (it said {lc.said.iloc[4]:.0%}). In the middle it ran a few points low: when it said {lc.said.iloc[2]:.0%}, it happened
-{lc.happened.iloc[2]:.0%}. At the 20-point line itself it averaged {l20.p.mean():.0%} and teams got there {l20.y.mean():.0%} of the time. So our 20-or-more chances
-for both teams are probably a few points low. Real scores bunch up on 17, 20, 24 and 27, and our model smooths that bunching out, so "at least X"
-comes out a little low right at those lines. We're logging the model's numbers as they are and will fix this before using these lines again.
+**The scoreline chances.** We ran the model on {mae['n']:,} team games from 2024-2026 that it had never seen. At the extremes it was right on: when
+it gave a team a 20% chance or less, it said {lc.said.iloc[0]:.0%} on average and it happened {lc.happened.iloc[0]:.0%}; at 80% or more, it said {lc.said.iloc[4]:.0%} and it
+happened {lc.happened.iloc[4]:.0%}. In the middle it ran a few points low, including right at the 20-point line (it said {l20.p.mean():.0%}, teams got there
+{l20.y.mean():.0%}). Real scores bunch up on 17, 20 and 24, and our model smooths that out. So both teams' 20-or-more chances are probably a few points
+low. We're logging them as they are and will fix this before using these lines again.
 
-**The win chance.** On {wt['n']} unseen games (week 2 on, 2024-2026), the team our model favored won {wt['right']:.0%} of the time. Taking the
+**The win chance.** On {wt['n']} unseen games (week 2 on, 2024-2026), the team our model leaned to won {wt['right']:.0%} of the time. Taking the
 home team every time would have been right {wt['home_won']:.0%} of the time.
 
 ![Win chance test](wk09c-win-test.png)
 
-**The pass and run calls.** These come from a simpler model, tested on {db['n']} past team-games per kind of call (2023-2025, using only
-earlier games each time). We graded it against just guessing the league's usual rate. Lower grade is better:
+*The chart counts a tied game as half a win; the {wt['right']:.0%} above counts it as a miss.*
 
-| Kind of call | Our grade | Guessing the usual rate | Verdict |
-|---|---|---|---|
-| Pass plays gain points | {db['brier']:.3f} | {db['brier_base']:.3f} | Better; its percentages held up in the range where Monday's calls sit |
-| Runs gain or lose points | {ru['brier']:.3f} | {ru['brier_base']:.3f} | A little better |
-| Sacks on more than 6% of dropbacks | {sk['brier']:.3f} | {sk['brier_base']:.3f} | **Worse. Dropped.** |
+**The pass and run calls.** These come from a simpler model, tested on {db['n']} past team games (2023-2025) against just guessing the league's usual
+rate. It beat the guess on pass calls and edged it on run calls. On one kind of call it lost, so we threw that call out.
 
 **The call we threw out.** We were going to say there was a {C['min_sk']['p']:.0%} chance the Bills sack Wentz on more than 6% of his dropbacks.
-But this kind of call did worse than simply guessing the usual rate. When it was confident (above 55%), it said {sk_hi_said:.0%} and was right
-{sk_hi_hap:.0%} of the time. Sacks in one game swing too much to call, so we're not.
-
-**One caution on the run calls.** The run model gets too confident when it says runs will *gain* points (above 55% it said
-{(ru_hi.said * ru_hi.n).sum() / ru_hi.n.sum():.0%}; it happened {(ru_hi.happened * ru_hi.n).sum() / ru_hi.n.sum():.0%}, on only {int(ru_hi.n.sum())} games). Neither of Monday's run calls is in that range:
-in the ranges where they sit, it said {ru_lo.said:.0%} and {ru_mid.said:.0%}, and it happened {ru_lo.happened:.0%} and {ru_mid.happened:.0%}.
+But when this kind of call was confident, it said {sk_hi_said:.0%} and was right {sk_hi_hap:.0%} of the time: worse than just guessing the usual rate.
+Sacks in one game swing too much to call, so we're not.
 
 ## What the model doesn't know
 
@@ -322,6 +322,11 @@ in the ranges where they sit, it said {ru_lo.said:.0%} and {ru_mid.said:.0%}, an
 
 ## For the stat-heads
 
+- Matchup-call backtest grades (Brier score, lower is better), {db['n']} team games per call type: pass plays gain points {db['brier']:.3f} vs {db['brier_base']:.3f}
+  for the league rate (calibrated in the range of Monday's calls); runs {ru['brier']:.3f} vs {ru['brier_base']:.3f}; sacks on 6%+ of dropbacks {sk['brier']:.3f} vs
+  {sk['brier_base']:.3f} (dropped).
+- Run-model caution: above 55% that runs gain points it said {(ru_hi.said * ru_hi.n).sum() / ru_hi.n.sum():.0%} and it happened {(ru_hi.happened * ru_hi.n).sum() / ru_hi.n.sum():.0%}
+  (n={int(ru_hi.n.sum())}). Monday's run calls sit in buckets where it said {ru_lo.said:.0%} / {ru_mid.said:.0%} and it happened {ru_lo.happened:.0%} / {ru_mid.happened:.0%}.
 - Points model {pm.VERSION} (`src/ledger/points_model.py`): ratings = (points + {pm.K} x prior) / (drives + {pm.K}), prior = league + {pm.PRIOR_KEEP} x last
   season's gap; raw = (league + off gap + def gap) x average pace; calibrated score = {P['coef'][0]:.2f} + {P['coef'][1]:.3f} x raw + {P['coef'][2]:.2f} x home,
   fit on 2019-23 (week 2 on). Ladder chances = share of the {len(res):,} empirical training residuals that put the projection at or above each line.
@@ -347,7 +352,7 @@ in the ranges where they sit, it said {ru_lo.said:.0%} and {ru_mid.said:.0%}, an
         "explainer": {
             "kicker": "How we checked it", "title": "Tested on games it never saw.",
             "text": (f"Before trusting the win chance, we ran it on {wt['n']} games from 2024-26 the model had never seen. "
-                     "How often the team it favored won, vs. always taking the home team:"),
+                     "How often the team it leaned to won, vs. always taking the home team:"),
             "bars": [["Our model", round(wt["right"], 3)], ["Home team", round(wt["home_won"], 3)]]},
     }, indent=1))
     print(md)
