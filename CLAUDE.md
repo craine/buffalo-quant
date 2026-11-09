@@ -115,7 +115,8 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.
-- Every article goes through an independent QA review before publishing.
+- Every article goes through the four-stage editorial process in `docs/editorial-process.md` (self-check, Quant,
+  Editor, final check). The site build and `make test` refuse any new story without passing reviews on its exact text.
 
 ## Writing for fans (standing rule from Charlie)
 
