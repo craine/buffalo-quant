@@ -14,15 +14,16 @@
  "explainer": {
   "kicker": "The difference",
   "title": "It was in goal.",
-  "text": "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29; Colten Ellis stopped 22 of 26. Save rate on Sunday:",
+  "text": "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29; Colten Ellis stopped 22 of 26. Goals saved compared with an average goalie on the same shots:",
+  "fmt": "goals",
   "bars": [
    [
     "Hill, Vegas",
-    0.966
+    2.9
    ],
    [
     "Ellis, Buffalo",
-    0.846
+    -0.4
    ]
   ]
  }

@@ -195,6 +195,8 @@ def build_ledger():
         for r in m.itertuples():
             if isinstance(r.outcome, str) and r.outcome != "":
                 res = '<span class="hit">Hit</span>' if (float(r.probability) >= .5) == (r.outcome == "1") else '<span class="miss">Miss</span>'
+                if float(r.probability) < .5:
+                    res += " (we gave it under 50%)"
                 res += f" &middot; {html.escape(str(r.actual_value))}"
             else:
                 res = '<span class="open">Open</span>'
@@ -277,9 +279,9 @@ def build_home(articles, texts):
         for s, _, _, k, d, _ in articles)
     how = ""
     if hd and "explainer" in hd:
-        e = hd["explainer"]; mx = max(v for _, v in e["bars"])
-        rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
-                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
+        e = hd["explainer"]; mx = max(abs(v) for _, v in e["bars"])
+        rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{max(v, 0) / mx:.0%}"></span></span>'
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
