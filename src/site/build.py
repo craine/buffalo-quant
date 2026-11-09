@@ -216,7 +216,21 @@ from the play-by-play. Nothing is deleted or edited.</p>{stats}{table}
     (SITE / "ledger.html").write_text(page("The Ledger | Buffalo Quant Desk", body, "Ledger"))
 
 
+# Stories published before the review gate existed (2026-11-08). Everything else must pass docs/editorial-process.md.
+LEGACY = {"bills-offense-vs-vikings-defense", "wentz-vs-bills-defense", "sabres-vegas-pregame-nov-8", "sabres-blue-jackets-nov-6",
+          "sabres-50-win-mirage", "josh-allen-2018-to-now", "bills-defense-fixed"}
+
+
+def check_reviews(articles=None):
+    from src.site.review_gate import problems
+    bad = {s: problems(ROOT / "reports" / src) for s, src, *_ in (articles or ARTICLES) if s not in LEGACY}
+    bad = {s: p for s, p in bad.items() if p}
+    if bad:
+        raise SystemExit("Review gate (docs/editorial-process.md) blocks:\n" + "\n".join(f"  {s}: {'; '.join(p)}" for s, p in bad.items()))
+
+
 def build_articles():
+    check_reviews()
     out = SITE / "analysis"
     out.mkdir(parents=True, exist_ok=True)
     cards = []

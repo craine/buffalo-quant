@@ -139,7 +139,7 @@ def main(as_of=AS_OF):
     brier = (PRED_P - 0) ** 2
     md = f"""# Golden Knights {int(gm.away_score)}, Sabres {int(gm.home_score)}: Buffalo earned more than one goal. Adin Hill didn't allow it
 
-**Finding: The Sabres lost 4-1 Sunday, but they had the better chances: their shots were worth {f.xg.sum():.1f} goals to Vegas's {a.xg.sum():.1f}.
+**Finding: The Sabres lost {int(gm.away_score)}-{int(gm.home_score)} Sunday, but they had the better chances: their shots were worth {f.xg.sum():.1f} goals to Vegas's {a.xg.sum():.1f}.
 Replay those same shots thousands of times and Buffalo wins about {p_win:.0%}, Vegas about {p_loss:.0%}, and {p_tie:.0%} end tied. The difference was
 in goal. Adin Hill stopped {int(hill.on - hill.ga)} of {int(hill.on)} shots, about {hill.saved:.1f} goals better than an average goalie, one of the best goalie
 nights in the league this season. Our pregame model gave Buffalo a {PRED_P:.0%} chance, a slight lean to Vegas, so it goes on the Ledger as a hit,
@@ -230,7 +230,7 @@ Vegas won because the goals didn't follow the chances, and the model can't see a
 - Replays: {N:,} simulations, each shot an independent coin flip with p = xG. BUF win {p_win:.3f}, tie {p_tie:.3f}, loss {p_loss:.3f}.
 - GSAx = xG on unblocked shots faced minus goals allowed. Hill {hill.saved:+.2f} ({int(hill.on)} shots on goal), Ellis {ellis.saved:+.2f}. Hill's game ranks
   {ordn(n_better + 1)} of {len(gg)} 2026-27 goalie games. Season GSAx before/after: Hill {hill_before:+.2f}/{hill_after:+.2f}, Ellis {ellis_before:+.2f}/{ellis_after:+.2f}
-  (this season only; shot values rescaled with games through Nov. 8, so Hill's pregame -1.8 reads -1.9 here).
+  (this season only; shot values rescaled with games through Nov. 8, so Hill's pregame {card[int(hill.goalie_id)]:+.1f} reads {hill_before:+.1f} here).
 - Strength: five on five BUF {es_f:.2f}, VGK {es_a:.2f}; all other situations BUF {st_f:.2f}, VGK {st_a:.2f}. Final two minutes (58:00 on): VGK {late.xg.sum():.2f} on {len(late)} shots.
 - Blocked attempts: attributed to the shooting team. Power play = 5v4, 5v3, 4v3 from the shooter's side.
 - Ledger {PRED_ID}: p = {PRED_P}, outcome 0, Brier {brier:.4f}; scored a hit because p < 0.5 and the event didn't happen. Model nhl-game-v0.1.

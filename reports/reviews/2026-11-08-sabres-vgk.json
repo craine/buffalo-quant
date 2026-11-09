@@ -1,0 +1,32 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "dc077d89062ebbdd7ff5ebba1f367d4bd0bd5a6afa398c11714bfde1f442262f",
+   "at_utc": "2026-11-09T01:48:12Z",
+   "notes": "Checklist run: literal digits in story text reviewed (score and card values now computed); generator reproduces outputs; both charts viewed; claims map to code; samples labeled; no betting language."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "dc077d89062ebbdd7ff5ebba1f367d4bd0bd5a6afa398c11714bfde1f442262f",
+   "at_utc": "2026-11-09T01:48:13Z",
+   "notes": "Publish with fixes; all 10 fixes applied in 62fccac.",
+   "report": "2026-11-08-sabres-vgk-quant.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "dc077d89062ebbdd7ff5ebba1f367d4bd0bd5a6afa398c11714bfde1f442262f",
+  "at_utc": "2026-11-09T01:48:12Z",
+  "notes": "Checklist run: literal digits in story text reviewed (score and card values now computed); generator reproduces outputs; both charts viewed; claims map to code; samples labeled; no betting language."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "dc077d89062ebbdd7ff5ebba1f367d4bd0bd5a6afa398c11714bfde1f442262f",
+  "at_utc": "2026-11-09T01:48:13Z",
+  "notes": "Publish with fixes; all 10 fixes applied in 62fccac.",
+  "report": "2026-11-08-sabres-vgk-quant.md"
+ }
+}
