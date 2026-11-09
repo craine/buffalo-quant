@@ -14,7 +14,9 @@ Read only the story body (ignore "For the stat-heads"), then:
 2. **Would a fan care?** Is the most interesting thing first? Is there a "so what" for every number? Cut what doesn't
    earn its place. Flag anything boring.
 3. **Plain English.** Flag every term, abbreviation or construction a fan wouldn't know ("shrunk toward the prior",
-   "per 100", "rescaled", decimals that look like stats). Give the plain replacement.
+   "per 100", "rescaled", decimals that look like stats). Give the plain replacement. Watch for words that mean
+   something different in the other sport: our readers follow both the Bills and the Sabres ("special teams" is kickers
+   and punts to a football fan; in hockey stories say "power play" or "with someone in the penalty box").
 4. **Explaining the data.** Every story must show where its key number comes from, with a real example, in words a fan
    follows. Check that the explanation is right-sized: enough to trust it, not a methods paper.
 5. **Flow and length.** Headers that tell the story, short paragraphs, no repeated points.

@@ -19,6 +19,9 @@ ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-vikings-prediction", "2026-wk09-prediction.md", "2026-11-09", "Bills &middot; Week 9 preview, part 3",
      "As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.",
      "wk09c-ladder.png"),
+    ("sabres-vegas-postgame-nov-8", "2026-11-08-sabres-vgk.md", "2026-11-08", "Sabres &middot; Post-game",
+     "Buffalo's chances were worth more than Vegas's. Adin Hill stopped 28 of 29 and had one of the league's best goalie nights. Our model leaned slightly to Vegas, a hit, but a near coin flip.",
+     "sabres-vgk-post-flow.png"),
     ("bills-offense-vs-vikings-defense", "2026-wk09-bills-offense-vs-vikings-defense.md", "2026-11-09", "Bills &middot; Week 9 preview, part 2",
      "The Vikings send five or more rushers on 73% of dropbacks, more than any defense by a mile. Josh Allen has been one of the best in the league against it.",
      "wk09-blitz.png"),
@@ -195,6 +198,8 @@ def build_ledger():
         for r in m.itertuples():
             if isinstance(r.outcome, str) and r.outcome != "":
                 res = '<span class="hit">Hit</span>' if (float(r.probability) >= .5) == (r.outcome == "1") else '<span class="miss">Miss</span>'
+                if float(r.probability) < .5:
+                    res += " (we gave it under 50%)"
                 res += f" &middot; {html.escape(str(r.actual_value))}"
             else:
                 res = '<span class="open">Open</span>'
@@ -291,9 +296,9 @@ def build_home(articles, texts):
         for s, _, _, k, d, _ in articles)
     how = ""
     if hd and "explainer" in hd:
-        e = hd["explainer"]; mx = max(v for _, v in e["bars"])
-        rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{v / mx:.0%}"></span></span>'
-                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
+        e = hd["explainer"]; mx = max(abs(v) for _, v in e["bars"])
+        rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{max(v, 0) / mx:.0%}"></span></span>'
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
