@@ -22,7 +22,7 @@ To see how unusual that is, we replayed Sunday's game 20,000 times, letting each
 replays, Vegas 38%, and 16% ended tied. The Sabres scored one goal or fewer in only 8% of them. (That 46% happens to match our
 pregame number. It's a coincidence: the pregame number came from each team's form before the game; this one comes only from Sunday's shots.)
 
-The full-strength edge was clear: **3.2 to 1.8 in chances.** On special teams, Vegas won 1.8 to 0.7. And a full goal's worth of Vegas's
+The full-strength edge was clear: **3.2 to 1.8 in chances.** When someone was in the penalty box, on a power play either way, Vegas won 1.8 to 0.7. And a full goal's worth of Vegas's
 3.6 (1.0, on 7 shots) came in the final two minutes, after it led 4-1 and the game was decided.
 
 ## A big first period, then a shorthanded goal turned it
@@ -86,7 +86,9 @@ our model doesn't try to predict a goalie's hot night; our tests say it can't be
 
 - **Buffalo won at full strength, 3.2 to 1.8 in chances.** And it did that against a defense that had given up the 4th-fewest chances
   overall coming in. In all, the Sabres created 3.9 goals' worth, well above their 3.1 average.
-- **Special teams lost it.** The power play came up empty Sunday and gave up more than it created.
+- **The power play hurt, but it didn't decide it.** With someone in the penalty box, Vegas had the better chances, 1.8 to 0.7, though
+  0.9 of that came in the final two minutes with the game decided. Buffalo's power play came up empty, and Marner's shorthanded goal opened
+  the scoring. Three of Vegas's four goals came at full strength, where Buffalo had the better chances.
 - **What carries over is the chances, not the goalie's night.** Two of our tests point the same way. The chances a team gives up carry over from one
   half of a season to the next far better than a goalie's numbers do, and a team's edge in chances carries over from one season to the next far better
   than its finishing or goaltending. One night isn't a trend, but Buffalo's even-strength edge is the kind of thing that tends to last; Hill's afternoon

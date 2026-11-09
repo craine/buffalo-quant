@@ -38,6 +38,22 @@
    "at_utc": "2026-11-09T01:55:55Z",
    "notes": "Round 2 PASS: all six final-check fixes verified; generator reproduces the story byte for byte.",
    "report": "2026-11-08-sabres-vgk-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "b8ae6a77c4b5d3bfe11e61ac1ade529a98c323c9dd70add7066b14e75002068e",
+   "at_utc": "2026-11-09T02:10:26Z",
+   "notes": "Round 3 FAIL: 'The power play lost it' contradicted the lead (3 of 4 Vegas goals at 5v5). Replaced with the Quant's fuller fix; late PP chances and goals by strength now computed.",
+   "report": "2026-11-08-sabres-vgk-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "b8ae6a77c4b5d3bfe11e61ac1ade529a98c323c9dd70add7066b14e75002068e",
+   "at_utc": "2026-11-09T02:12:22Z",
+   "notes": "Round 4 PASS: power-play bullet verified claim by claim; generator reproduces story byte for byte.",
+   "report": "2026-11-08-sabres-vgk-final.md"
   }
  ],
  "self": {
@@ -62,9 +78,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "d809cc39c83b48548147729ad62ac0785160f5ab42a5c9631eabc47b0f2832ed",
-  "at_utc": "2026-11-09T01:55:55Z",
-  "notes": "Round 2 PASS: all six final-check fixes verified; generator reproduces the story byte for byte.",
+  "sha256": "b8ae6a77c4b5d3bfe11e61ac1ade529a98c323c9dd70add7066b14e75002068e",
+  "at_utc": "2026-11-09T02:12:22Z",
+  "notes": "Round 4 PASS: power-play bullet verified claim by claim; generator reproduces story byte for byte.",
   "report": "2026-11-08-sabres-vgk-final.md"
  }
 }

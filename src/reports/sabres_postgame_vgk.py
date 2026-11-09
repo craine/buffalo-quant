@@ -54,7 +54,9 @@ def main(as_of=AS_OF):
     st_f, st_a = f.xg.sum() - es_f, a.xg.sum() - es_a
     sh_a = a[a.strength.isin(["4v5", "3v5", "3v4"])].xg.sum()
     late = a[a.t >= 3480]  # final two minutes, after Vegas led 4-1
-    late_f = f[f.t >= 3480]
+    late_pp_a = a[(a.t >= 3480) & a.strength.isin(pp_codes)].xg.sum()
+    vgk_goals = allg[(allg.goal == 1) & (allg.team == THEM)]
+    vgk_es_goals = int((vgk_goals.strength == "5v5").sum())
 
     # goalies: this game, and the season before/after
     gk = g.groupby(["opp", "goalie_id"]).agg(on=("on_goal", "sum"), xga=("xg", "sum"), ga=("goal", "sum")).reset_index()
@@ -166,7 +168,7 @@ To see how unusual that is, we replayed Sunday's game {N:,} times, letting each 
 replays, Vegas {p_loss:.0%}, and {p_tie:.0%} ended tied. The Sabres scored one goal or fewer in only {p_held1:.0%} of them. (That {p_win:.0%} happens to match our
 pregame number. It's a coincidence: the pregame number came from each team's form before the game; this one comes only from Sunday's shots.)
 
-The full-strength edge was clear: **{es_f:.1f} to {es_a:.1f} in chances.** On special teams, Vegas won {st_a:.1f} to {st_f:.1f}. And a full goal's worth of Vegas's
+The full-strength edge was clear: **{es_f:.1f} to {es_a:.1f} in chances.** When someone was in the penalty box, on a power play either way, Vegas won {st_a:.1f} to {st_f:.1f}. And a full goal's worth of Vegas's
 {a.xg.sum():.1f} ({late.xg.sum():.1f}, on {len(late)} shots) came in the final two minutes, after it led {int(gm.away_score)}-{int(gm.home_score)} and the game was decided.
 
 ## A big first period, then a shorthanded goal turned it
@@ -226,7 +228,9 @@ our model doesn't try to predict a goalie's hot night; our tests say it can't be
 
 - **Buffalo won at full strength, {es_f:.1f} to {es_a:.1f} in chances.** And it did that against a defense that had given up the {ordn(vgk_allow_rk)}-fewest chances
   overall coming in. In all, the Sabres created {f.xg.sum():.1f} goals' worth, well above their {buf_create:.1f} average.
-- **Special teams lost it.** The power play came up empty Sunday and gave up more than it created.
+- **The power play hurt, but it didn't decide it.** With someone in the penalty box, Vegas had the better chances, {st_a:.1f} to {st_f:.1f}, though
+  {late_pp_a:.1f} of that came in the final two minutes with the game decided. Buffalo's power play came up empty, and Marner's shorthanded goal opened
+  the scoring. {['None', 'One', 'Two', 'Three', 'Four'][vgk_es_goals]} of Vegas's {['no', 'one', 'two', 'three', 'four', 'five', 'six'][len(vgk_goals)]} goals came at full strength, where Buffalo had the better chances.
 - **What carries over is the chances, not the goalie's night.** Two of our tests point the same way. The chances a team gives up carry over from one
   half of a season to the next far better than a goalie's numbers do, and a team's edge in chances carries over from one season to the next far better
   than its finishing or goaltending. One night isn't a trend, but Buffalo's even-strength edge is the kind of thing that tends to last; Hill's afternoon

@@ -1,20 +1,26 @@
-# Quant final check, round 2: Sabres post-game, Vegas 4, Buffalo 1
+# Quant final check, round 4: power-play bullet
 
 **Result: PASS.**
 
-All six fixes appear in the regenerated story and the site summary. The extra "In all" edit is correct. Re-running the generator reproduces `reports/2026-11-08-sabres-vgk.md` byte for byte.
+The bullet is accurate, every number in it comes from the generator, and re-running the generator reproduces the story byte for byte.
 
-## Changed lines checked
+## Bullet, claim by claim
 
-1. **Carry-over bullet:** now credits each finding to the test that produced it.
-   - Chances allowed carry over from one half of a season to the next (pregame test: 0.75, 0.63, 0.69, against 0.07 to 0.45 for goalies).
-   - A team's edge in chances carries over from one season to the next better than finishing or goaltending (50-win story: 0.72, against 0.32 and 0.21).
-   - "One night isn't a trend" is included. Supported.
-2. **Hot-night line:** now reads "our model doesn't try to predict a goalie's hot night; our tests say it can't be done reliably from a goalie's recent numbers." The claim now covers only our model and our tests. Supported.
-3. **Receipts:** "That meant our model leaned slightly toward Vegas" uses the house word, and "favorite" is gone. Nothing in the changed text is betting language.
-4. **Vegas defense:** "4th-fewest chances overall coming in" now says it is an all-situations rank (2.60 a game). Correct.
-5. **Blocked shots:** "A team has about 15 shots blocked in a typical game, and only 7 times in 556 team games..." Average 15.4; 7 of 556. Correct and no longer ambiguous.
-6. **Site summary in `src/site/build.py`:** "Our model leaned slightly to Vegas, a hit, but a near coin flip." Consistent with the story.
-7. **Extra edit:** "In all, the Sabres created 3.9 goals' worth, well above their 3.1 average." 3.9 is the all-situations total (3.91) and the average coming in was 3.09. Correct.
+- **"Vegas had the better chances, 1.8 to 0.7":** `st_a` and `st_f` are each team's total minus its five-on-five chances.
+  - This game had only three states: five on five, a Vegas power play and a Buffalo power play.
+  - So these totals cover exactly the penalty-box time: Vegas 1.81, Buffalo 0.72. This matches my raw count.
+- **"though 0.9 of that came in the final two minutes with the game decided":**
+  - `late_pp_a` is Vegas's power-play chances at 58:00 or later. It uses the same set of shots as the 1.8 (unblocked, not at an empty net), so the 0.9 really is part of the 1.8.
+  - Value 0.886. My hand list: six power-play shots after Buffalo's slashing minor at 58:53, totaling 0.203 + 0.145 + 0.052 + 0.051 + 0.389 + 0.048 = 0.888. The small gap is the season rescale factor.
+  - Vegas had led 4-1 since 50:00. Rounding is consistent (1.81 and 0.89).
+- **"Buffalo's power play came up empty":** 5 power-play shots worth 0.49, no goals.
+- **"Marner's shorthanded goal opened the scoring":** first goal of the game, 2nd period at 12:17, with Vegas down a man (4 on 5).
+- **"Three of Vegas's four goals came at full strength":** `vgk_goals` counts every Vegas goal (4; none into an empty net). `vgk_es_goals` counts those at five on five: 3, by Eichel and Hertl twice. This matches the raw plays.
+- **"where Buffalo had the better chances":** five on five, 3.19 to 1.84.
+- **"didn't decide it":** supported. Without any power-play time the score is 3-1 Vegas, and the bullet no longer contradicts the lead ("The difference was in goal").
 
-No new issues. I edited no files and did not run the Ledger grade script.
+## Code note (not blocking)
+
+The number words in line 233 come from fixed lists. The generator would crash if Vegas had more than 4 five-on-five goals or more than 6 total. That can't happen here because the generator is pinned to games through Nov 8, but it's worth hardening before the next post-game reuses this template.
+
+I edited no files and did not run the Ledger grade script.
