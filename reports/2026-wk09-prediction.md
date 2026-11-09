@@ -1,8 +1,7 @@
 # Bills at Vikings: our prediction for Monday night
 
-**Finding: This one is about as close as games get. Our model has both teams scoring about 23 points, but at nearly every
-scoreline, Buffalo is a little more likely to get there. Add it all up and the Bills win 53% of the time.
-If we have to name a final: Bills 23, Vikings 20.**
+**Finding: This one is about as close as games get. Our model projects Bills 23.4, Vikings 22.8: rounded, 23 apiece,
+with the edge to Buffalo. That small edge shows up at nearly every scoreline, and it gives the Bills a 53% chance to win.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -60,12 +59,11 @@ score a lot; in others they're held down. Eight times in ten they land between 1
 **Who wins?** Same idea, both teams at once. We replay 1,247 real past games, each team's miss side by side, on top of Monday's projections.
 Buffalo finishes ahead in 53% of them. (A game tied after 60 minutes counts as half for each side, since overtime is close to a coin flip.)
 
-## Why Bills 23, Vikings 20?
+## Why not just call it a tie?
 
-Our projections aren't real football scores; nobody finishes with 23.4. Real scores bunch up around field goals and touchdowns. Since 2019
-the most common NFL finals have been 20-17, 27-24, 23-20. We take the common final closest to our two projections, with the Bills winning, since they're
-our model's favorite. That's 23-20, a final that's happened 33 times in 1,865 games from 2019 to 2025 (ties not counted). We look at the 10 most common finals; a longer list can land on a different score. It's a way of saying "close, slight Bills edge,"
-not a separate prediction, so it doesn't go on the Ledger. Exact scores almost never hit.
+Because the model doesn't. Its projection is 23.4 to 22.8: rounding makes it look even, but Buffalo is ahead by 0.6 points,
+and that's enough to tip the win chance to 53%. We're not rounding it to a made-up final like 23-20 or 24-21: those numbers would be ours,
+not the model's. The model's call is the 23.4-22.8 projection and the 53% win chance, and both are written into our Ledger entries before kickoff.
 
 ## The calls going on the Ledger
 
@@ -137,7 +135,6 @@ in the ranges where they sit, it said 24% and 38%, and it happened 26% and 37%.
   margins within half a point split 50/50. Residual correlation 0.035. Out of sample (2024-26, week 2 on, n=617): Brier 0.2263 vs 0.2492
   (50/50) and 0.2486 (training home-win rate 0.534). The "grade" in the story is the Brier score: the average squared gap between
   the chance we gave and what happened (1 or 0); tied test games count as 0.5 there and in the chart, and as misses in "the team it favored won".
-- Named final: the 10 most frequent regular-season finals 2019-2025 (ties excluded), nearest to (favorite, underdog) projections by squared distance.
 - Matchup model v0.1-locshift (`src/ledger/model_v01.py`): expected = league + 0.5 x (offense gap + defense gap), plus the pooled within-team game-to-game
   spread; P = share of that spread above the threshold. EPA per dropback (with scrambles and sacks), EPA per designed rush.
   Bills dropback EPA expected +0.031 (offense +0.309, Vikings defense -0.247, league +0.056);

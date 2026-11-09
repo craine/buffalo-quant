@@ -1,13 +1,12 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bills at Vikings: our prediction for Monday night | Buffalo Quant Desk</title><meta name="description" content="As close as games get: both teams around 23 points, but at nearly every scoreline Buffalo is a step ahead. Bills win 53% of the time. Call it 23-20.">
-<meta property="og:title" content="Bills at Vikings: our prediction for Monday night | Buffalo Quant Desk"><meta property="og:description" content="As close as games get: both teams around 23 points, but at nearly every scoreline Buffalo is a step ahead. Bills win 53% of the time. Call it 23-20.">
+<title>Bills at Vikings: our prediction for Monday night | Buffalo Quant Desk</title><meta name="description" content="As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.">
+<meta property="og:title" content="Bills at Vikings: our prediction for Monday night | Buffalo Quant Desk"><meta property="og:description" content="As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.">
 <meta property="og:image" content="https://buffaloquant.com/analysis/wk09c-ladder.png"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="../favicon.svg"><link rel="stylesheet" href="../style.css?v=392cd16e"></head><body>
 <header class="site"><div class="wrap"><a class="mark" href="../index.html">BUFFALO <b>QUANT</b> DESK</a><nav><a href="../index.html" class="">Home</a><a href="../analysis/" class="on">Analysis</a><a href="../cards/" class="">Cards</a><a href="../ledger.html" class="">Ledger</a><a href="../about.html" class="">About</a></nav></div></header>
-<main class="wrap"><div class="kicker">Bills &middot; Week 9 preview, part 3</div><h1>Bills at Vikings: our prediction for Monday night</h1><p class="dek">As close as games get: both teams around 23 points, but at nearly every scoreline Buffalo is a step ahead. Bills win 53% of the time. Call it 23-20.</p><div class="meta">November 9, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: This one is about as close as games get. Our model has both teams scoring about 23 points, but at nearly every
-scoreline, Buffalo is a little more likely to get there. Add it all up and the Bills win 53% of the time.
-If we have to name a final: Bills 23, Vikings 20.</strong></p>
+<main class="wrap"><div class="kicker">Bills &middot; Week 9 preview, part 3</div><h1>Bills at Vikings: our prediction for Monday night</h1><p class="dek">As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.</p><div class="meta">November 9, 2026 &middot; Buffalo Quant Desk</div><p><strong>Finding: This one is about as close as games get. Our model projects Bills 23.4, Vikings 22.8: rounded, 23 apiece,
+with the edge to Buffalo. That small edge shows up at nearly every scoreline, and it gives the Bills a 53% chance to win.</strong></p>
 <p><em>Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Part 3 of our week 9 preview.
 <a href="wentz-vs-bills-defense.html">Part 1</a> covered Carson Wentz against the Bills defense; <a href="bills-offense-vs-vikings-defense.html">part 2</a>
 covered Josh Allen against Minnesota's defense. Numbers are 2026 through week 8.</em></p>
@@ -92,11 +91,10 @@ score a lot; in others they're held down. Eight times in ten they land between 1
 24 or more and it's 47%, just under half, because 23.4 is right in the middle. That's the whole ladder.</p>
 <p><strong>Who wins?</strong> Same idea, both teams at once. We replay 1,247 real past games, each team's miss side by side, on top of Monday's projections.
 Buffalo finishes ahead in 53% of them. (A game tied after 60 minutes counts as half for each side, since overtime is close to a coin flip.)</p>
-<h2>Why Bills 23, Vikings 20?</h2>
-<p>Our projections aren't real football scores; nobody finishes with 23.4. Real scores bunch up around field goals and touchdowns. Since 2019
-the most common NFL finals have been 20-17, 27-24, 23-20. We take the common final closest to our two projections, with the Bills winning, since they're
-our model's favorite. That's 23-20, a final that's happened 33 times in 1,865 games from 2019 to 2025 (ties not counted). We look at the 10 most common finals; a longer list can land on a different score. It's a way of saying "close, slight Bills edge,"
-not a separate prediction, so it doesn't go on the Ledger. Exact scores almost never hit.</p>
+<h2>Why not just call it a tie?</h2>
+<p>Because the model doesn't. Its projection is 23.4 to 22.8: rounding makes it look even, but Buffalo is ahead by 0.6 points,
+and that's enough to tip the win chance to 53%. We're not rounding it to a made-up final like 23-20 or 24-21: those numbers would be ours,
+not the model's. The model's call is the 23.4-22.8 projection and the 53% win chance, and both are written into our Ledger entries before kickoff.</p>
 <h2>The calls going on the Ledger</h2>
 <div class="tablewrap"><table>
 <thead>
@@ -216,7 +214,6 @@ in the ranges where they sit, it said 24% and 38%, and it happened 26% and 37%.<
   margins within half a point split 50/50. Residual correlation 0.035. Out of sample (2024-26, week 2 on, n=617): Brier 0.2263 vs 0.2492
   (50/50) and 0.2486 (training home-win rate 0.534). The "grade" in the story is the Brier score: the average squared gap between
   the chance we gave and what happened (1 or 0); tied test games count as 0.5 there and in the chart, and as misses in "the team it favored won".</li>
-<li>Named final: the 10 most frequent regular-season finals 2019-2025 (ties excluded), nearest to (favorite, underdog) projections by squared distance.</li>
 <li>Matchup model v0.1-locshift (<code>src/ledger/model_v01.py</code>): expected = league + 0.5 x (offense gap + defense gap), plus the pooled within-team game-to-game
   spread; P = share of that spread above the threshold. EPA per dropback (with scrambles and sacks), EPA per designed rush.
   Bills dropback EPA expected +0.031 (offense +0.309, Vikings defense -0.247, league +0.056);

@@ -17,7 +17,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-vikings-prediction", "2026-wk09-prediction.md", "2026-11-09", "Bills &middot; Week 9 preview, part 3",
-     "As close as games get: both teams around 23 points, but at nearly every scoreline Buffalo is a step ahead. Bills win 53% of the time. Call it 23-20.",
+     "As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.",
      "wk09c-ladder.png"),
     ("bills-offense-vs-vikings-defense", "2026-wk09-bills-offense-vs-vikings-defense.md", "2026-11-09", "Bills &middot; Week 9 preview, part 2",
      "The Vikings send five or more rushers on 73% of dropbacks, more than any defense by a mile. Josh Allen has been one of the best in the league against it.",

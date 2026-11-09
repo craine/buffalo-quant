@@ -87,17 +87,6 @@ def points_block():
 LADDER = [10, 14, 17, 20, 24, 27, 30, 35]
 
 
-def named_final(pb, pmn, top=10, seasons=(2019, 2025)):
-    """The common NFL final (top-`top` most frequent, regular season) closest to our projections, with the model's favorite winning."""
-    sc = pm._scores()
-    h = sc[sc.home == 1].merge(sc[sc.home == 0][["game_id", "score"]], on="game_id", suffixes=("_h", "_a"))
-    h = h[h.season.between(*seasons) & (h.score_h != h.score_a)]
-    pairs = h.apply(lambda r: (int(max(r.score_h, r.score_a)), int(min(r.score_h, r.score_a))), axis=1).value_counts()
-    common = pairs.head(top)
-    fav, dog = (pb, pmn) if pb >= pmn else (pmn, pb)
-    best = min(common.index, key=lambda wl: (wl[0] - fav) ** 2 + (wl[1] - dog) ** 2)
-    return best, common, len(h)
-
 
 def matchup_calls():
     """Model v0.1 calls for both offenses, with the out-of-sample test for each call type."""
@@ -150,9 +139,6 @@ def main():
     n_ahead = sum(round(b * 100) > round(m * 100) for b, m in lad.values())
     n_level = sum(round(b * 100) == round(m * 100) for b, m in lad.values())
     miss50, miss80 = np.quantile(np.abs(res), [0.5, 0.8])
-    (fw, fl), common, n_finals = named_final(pb, pmn)
-    top3 = ", ".join(f"{a}-{b}" for a, b in common.index[:3])
-    fav_n = int(common[(fw, fl)])
     lt = pm.build_frame([2024, 2025, SEASON], max_week={2024: 99, 2025: 99, SEASON: THRU})
     lt["model"] = pm.predict(P["coef"], lt.raw, lt.home)
     lc = pd.DataFrame([(pm.prob_at_least(m, t, res), y >= t) for m, y in zip(lt.model, lt.score) for t in LADDER], columns=["p", "y"])
@@ -222,9 +208,8 @@ def main():
     ladder_rows = "\n".join(f"| {t} or more | **{lad[t][0]:.0%}** | {lad[t][1]:.0%} |" for t in LADDER)
     md = f"""# Bills at Vikings: our prediction for Monday night
 
-**Finding: This one is about as close as games get. Our model has both teams scoring about {pb:.0f} points, but at nearly every
-scoreline, Buffalo is a little more likely to get there. Add it all up and the Bills win {P['p_buf']:.0%} of the time.
-If we have to name a final: Bills {fw}, Vikings {fl}.**
+**Finding: This one is about as close as games get. Our model projects Bills {pb:.1f}, Vikings {pmn:.1f}: rounded, {pb:.0f} apiece,
+with the edge to Buffalo. That small edge shows up at nearly every scoreline, and it gives the Bills a {P['p_buf']:.0%} chance to win.**
 
 *Bills at Vikings, Monday Night Football, Nov. 9, 8:15 p.m. ET, U.S. Bank Stadium (indoors). Part 3 of our week 9 preview.
 [Part 1](wentz-vs-bills-defense.html) covered Carson Wentz against the Bills defense; [part 2](bills-offense-vs-vikings-defense.html)
@@ -275,12 +260,11 @@ score a lot; in others they're held down. Eight times in ten they land between {
 **Who wins?** Same idea, both teams at once. We replay {wt['n_pairs']:,} real past games, each team's miss side by side, on top of Monday's projections.
 Buffalo finishes ahead in {P['p_buf']:.0%} of them. (A game tied after 60 minutes counts as half for each side, since overtime is close to a coin flip.)
 
-## Why Bills {fw}, Vikings {fl}?
+## Why not just call it a tie?
 
-Our projections aren't real football scores; nobody finishes with {pb:.1f}. Real scores bunch up around field goals and touchdowns. Since 2019
-the most common NFL finals have been {top3}. We take the common final closest to our two projections, with the Bills winning, since they're
-our model's favorite. That's {fw}-{fl}, a final that's happened {fav_n} times in {n_finals:,} games from 2019 to 2025 (ties not counted). We look at the {len(common)} most common finals; a longer list can land on a different score. It's a way of saying "close, slight Bills edge,"
-not a separate prediction, so it doesn't go on the Ledger. Exact scores almost never hit.
+Because the model doesn't. Its projection is {pb:.1f} to {pmn:.1f}: rounding makes it look even, but Buffalo is ahead by {pb - pmn:.1f} points,
+and that's enough to tip the win chance to {P['p_buf']:.0%}. We're not rounding it to a made-up final like 23-20 or 24-21: those numbers would be ours,
+not the model's. The model's call is the {pb:.1f}-{pmn:.1f} projection and the {P['p_buf']:.0%} win chance, and both are written into our Ledger entries before kickoff.
 
 ## The calls going on the Ledger
 
@@ -347,7 +331,6 @@ in the ranges where they sit, it said {ru_lo.said:.0%} and {ru_mid.said:.0%}, an
   margins within half a point split 50/50. Residual correlation {wt['corr']:.3f}. Out of sample (2024-26, week 2 on, n={wt['n']}): Brier {wt['brier']:.4f} vs {wt['brier_half']:.4f}
   (50/50) and {wt['brier_home']:.4f} (training home-win rate {wt['home_rate']:.3f}). The "grade" in the story is the Brier score: the average squared gap between
   the chance we gave and what happened (1 or 0); tied test games count as 0.5 there and in the chart, and as misses in "the team it favored won".
-- Named final: the {len(common)} most frequent regular-season finals 2019-2025 (ties excluded), nearest to (favorite, underdog) projections by squared distance.
 - Matchup model {V01} (`src/ledger/model_v01.py`): expected = league + 0.5 x (offense gap + defense gap), plus the pooled within-team game-to-game
   spread; P = share of that spread above the threshold. EPA per dropback (with scrambles and sacks), EPA per designed rush.
   Bills dropback EPA expected {C['buf_db']['expected']:+.3f} (offense {C['buf_db']['off_mean']:+.3f}, Vikings defense {C['buf_db']['def_mean']:+.3f}, league {C['buf_db']['league']:+.3f});
@@ -360,7 +343,7 @@ in the ranges where they sit, it said {ru_lo.said:.0%} and {ru_mid.said:.0%}, an
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": "Our projection for Monday night",
         "big": [[round(pb), "Bills, projected points"], [round(pmn), "Vikings, projected points"]],
-        "note": f"At nearly every scoreline Buffalo is a step ahead: {lad[20][0]:.0%} vs {lad[20][1]:.0%} to reach 20. Bills win {P['p_buf']:.0%} of the time. If we have to name it: {fw}-{fl} Bills.",
+        "note": f"At nearly every scoreline Buffalo is a step ahead: {lad[20][0]:.0%} vs {lad[20][1]:.0%} to reach 20. Bills win {P['p_buf']:.0%} of the time. Projection: Bills {pb:.1f}, Vikings {pmn:.1f}.",
         "explainer": {
             "kicker": "How we checked it", "title": "Tested on games it never saw.",
             "text": (f"Before trusting the win chance, we ran it on {wt['n']} games from 2024-26 the model had never seen. "
