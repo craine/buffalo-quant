@@ -7,7 +7,7 @@ What a card shows (all from the NHL play-by-play feed; regular season):
 - Goals and assists: goal events (shootouts excluded). Cross-checked against the feed's own running season goal total.
 - Chances created: the goals his own unblocked shots were worth (our xG model, empty net excluded, rescaled per season so
   league xG = league goals). Finishing = goals on those shots minus chances.
-- Power-play goals: goals scored with more skaters on the ice than the opponent and the opponent's goalie in net.
+- Power-play goals: the other side short-handed by a penalty (skaters compared without an extra attacker); penalty shots excluded.
 - Faceoffs, hits, blocked shots, takeaways, giveaways: event counts (recorded by the league's scorers, which vary by rink).
 - Ranks: among all NHL forwards or defensemen with MIN_GP+ games this season, per game.
 No ice time: our feed has no shift data yet, so nothing here is per minute or "on the ice".
@@ -75,14 +75,26 @@ def main(as_of=AS_OF):
     s = s.merge(pt, on=["game_id", "player_id"], how="left", suffixes=("_shot", ""))
     s["team"] = s["team"].fillna(s["team_shot"])
     u = s[unb.reindex(s.index, fill_value=False) if False else ((s.unblocked == 1) & (s.empty_net_against == 0))]
-    pp = s[(s.goal == 1) & (s.skaters_for > s.skaters_against) & (s.skaters_against >= 3) & (s.empty_net_against == 0)]
+    sc = query("SELECT game_id, eventId, situationCode FROM raw_nhl_plays WHERE typeDescKey='goal'")
+    gl = s[s.goal == 1].merge(sc, on=["game_id", "eventId"], how="left")
+    code = gl.situationCode.astype(str).str.zfill(4)
+    ag, ask, hsk, hg = (code.str[i].astype(int) for i in range(4))   # [away goalie][away skaters][home skaters][home goalie]
+    own_g, own_sk = np.where(gl.is_home == 1, hg, ag), np.where(gl.is_home == 1, hsk, ask)
+    opp_g, opp_sk = np.where(gl.is_home == 1, ag, hg), np.where(gl.is_home == 1, ask, hsk)
+    # skaters not counting an extra attacker (a pulled goalie); a power play = the other side short-handed by a penalty
+    pp = gl[((own_sk - (own_g == 0)) > (opp_sk - (opp_g == 0))) & (opp_sk >= 3)]
+    en_goals = s[(s.goal == 1) & (s.empty_net_against == 1)]
     parts += [u.groupby(["season", "player_id", "team"]).xg.sum().rename("ixg"),
               u.groupby(["season", "player_id", "team"]).goal.sum().rename("ig_unb"),
               s.groupby(["season", "player_id", "team"]).on_goal.sum().rename("sog"),
               u[u.dist < 20].groupby(["season", "player_id", "team"]).size().rename("close"),
               u[u.rebound == 1].groupby(["season", "player_id", "team"]).size().rename("reb"),
-              pp.groupby(["season", "player_id", "team"]).size().rename("ppg")]
+              pp.groupby(["season", "player_id", "team"]).size().rename("ppg"),
+              en_goals.groupby(["season", "player_id", "team"]).size().rename("en_g")]
     t = pd.concat(parts, axis=1).fillna(0).reset_index()
+    first = pt.merge(gm[["game_id", "game_date"]], on="game_id").merge(ros[["game_id", "player_id", "season"]].drop_duplicates(), on=["game_id", "player_id"])
+    first = first.groupby(["season", "player_id", "team"]).game_date.min().rename("first_game").reset_index()
+    t = t.merge(first, on=["season", "player_id", "team"], how="left")
     t = t[t.gp > 0]
     t["a"] = t.a1 + t.a2
     t["p"] = t.g + t.a
@@ -105,6 +117,14 @@ def main(as_of=AS_OF):
     lg = elig.groupby("grp")[["p", "ixg", "gp"]].sum()
     lg_rates = {k: dict(p_pg=round(float(lg.loc[k, "p"] / lg.loc[k, "gp"]), 2), ixg_pg=round(float(lg.loc[k, "ixg"] / lg.loc[k, "gp"]), 2)) for k in lg.index}
 
+    # ---- how well chances and finishing carry over from one season to the next (complete seasons, 40+ games in both)
+    tot = t[t.season < SEASON].groupby(["season", "player_id"])[["gp", "ixg", "ig_unb"]].sum().reset_index()
+    tot = tot[tot.gp >= 40]
+    tot["c_pg"], tot["f_pg"] = tot.ixg / tot.gp, (tot.ig_unb - tot.ixg) / tot.gp
+    nxt = tot.assign(season=tot.season + 10001)
+    pair = tot.merge(nxt, on=["season", "player_id"], suffixes=("", "_prev"))
+    carry = dict(chances=round(float(pair.c_pg.corr(pair.c_pg_prev)), 2), finishing=round(float(pair.f_pg.corr(pair.f_pg_prev)), 2), pairs=int(len(pair)))
+
     # ---- cards: every skater who has dressed for the Sabres this season
     buf = t[(t.season == SEASON) & (t.team == TEAM)].sort_values(["p", "g", "gp"], ascending=False)
     dates = dict(zip(gm.game_id, gm.game_date))
@@ -121,13 +141,14 @@ def main(as_of=AS_OF):
             gpts.append(int((gg.scorer == pid).sum() + (gg.a1 == pid).sum() + (gg.a2 == pid).sum()))
         num = ros[(ros.player_id == pid) & (ros.season == SEASON) & (ros.team == TEAM)].number.dropna()
         seasons = [dict(season=SEASON_LABEL(x.season), team=x.team, gp=int(x.gp), g=int(x.g), a=int(x.a), p=int(x.p),
-                        ixg=round(float(x.ixg), 1)) for x in t[t.player_id == pid].sort_values(["season", "gp"]).itertuples()]
+                        ixg=round(float(x.ixg), 1)) for x in t[t.player_id == pid].sort_values(["season", "first_game"]).itertuples()]
         fo = int(r.fow + r.fol)
         cards.append(dict(
             id=pid, name=name.get(pid, str(pid)), team=TEAM, number=int(num.mode().iloc[0]) if len(num) else None,
             pos=pos_of.get(pid, ""), grp="F" if pos_of.get(pid) in FWD else "D",
             gp=int(r.gp), g=int(r.g), a=int(r.a), p=int(r.p), ppg=int(r.ppg), sog=int(r.sog),
-            ixg=round(float(r.ixg), 1), fin=round(float(r.ig_unb - r.ixg), 1), close=int(r.close), reb=int(r.reb),
+            ixg=round(float(r.ixg), 1), ixg_pg=round(float(r.ixg / r.gp), 2), fin=round(float(r.ig_unb - r.ixg), 1), en_g=int(r.en_g),
+            close=int(r.close), reb=int(r.reb),
             hits=int(r.hits), blocks=int(r.blocks), take=int(r.take), give=int(r.give),
             fo_pct=round(float(r.fow / fo), 3) if fo >= 50 else None, fo_n=fo,
             p_rk=int(e.p_rk) if e is not None else None, ixg_rk=int(e.ixg_rk) if e is not None else None,
@@ -136,7 +157,7 @@ def main(as_of=AS_OF):
             spark=list(np.cumsum(gpts).astype(int).tolist()), seasons=seasons, small=bool(r.gp < MIN_GP)))
     OUT.mkdir(parents=True, exist_ok=True)
     meta = dict(as_of=as_of, season=SEASON_LABEL(SEASON), team=TEAM, min_gp=MIN_GP, n_groups=n_grp, lg=lg_rates,
-                goal_check=dict(players=int(len(chk)), mismatches=int(len(mism))), cal=round(float(cal.loc[SEASON]), 3))
+                goal_check=dict(players=int(len(chk)), mismatches=int(len(mism))), cal=round(float(cal.loc[SEASON]), 3), carry=carry)
     (OUT / "skaters.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
     for c in cards:
         print(f"{c['number']!s:>3} {c['name']:<24} {c['pos']} GP {c['gp']:>2} {c['g']}-{c['a']}-{c['p']} PPG {c['ppg']} SOG {c['sog']} "

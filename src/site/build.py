@@ -430,8 +430,8 @@ def skater_tile(c, m):
 <div class="gspark">{spark_svg(c['spark'], tc, "Points, running total")}<small>Points, running total, game by game</small></div>
 {'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
 <div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>G</th><th>A</th><th>P</th><th>Chances</th></tr>{rows}</table>
-<p><b>This season:</b> {c['ppg']} power-play goals, {c['sog']} shots on goal, {c['close']} shots from within 20 feet, {c['reb']} rebound shots.
-Chances created {c['ixg']:.1f}{ixg_rk}. Faceoffs won: {fo}.</p>
+<p><b>This season:</b> {c['ppg']} power-play goals, {c['sog']} shots on goal; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed).
+Chances created {c['ixg']:.1f}, or {c['ixg_pg']:.2f} a game{ixg_rk}. Faceoffs won: {fo}.</p>
 <p>{c['hits']} hits, {c['blocks']} blocked shots, {c['take']} takeaways, {c['give']} giveaways.</p></div></div></label>"""
 
 
@@ -444,17 +444,18 @@ def skater_howto(m):
     return f"""<h2>How to read a skater card</h2>
 <p><b>Points</b> are goals plus assists, the big number. The rank compares his points per game with every NHL forward or defenseman who has
 played {m['min_gp']} or more games this season ({m['n_groups'].get('F', 0)} forwards, {m['n_groups'].get('D', 0)} defensemen). The average forward
-in that group scores {lgf.get('p_pg', 0):.2f} points a game; the average defenseman, {lgd.get('p_pg', 0):.2f}.</p>
+in that group averages {lgf.get('p_pg', 0):.2f} points a game; defensemen, {lgd.get('p_pg', 0):.2f}.</p>
 <p><b>Chances created</b> is what his own shots were worth in goals. Every shot that reaches the net or misses it has a chance of going in,
-based on where it came from and what kind of shot it was; add them up and you get his chances. The average forward creates {lgf.get('ixg_pg', 0):.2f}
-a game. <b>Finishing</b> is his goals on those shots minus his chances: positive means he's scored more than the chances were worth. Over a
-season, finishing bounces around much more than chances do, so a big plus or minus early on often fades.</p>
-<p><b>On the back:</b> power-play goals (scored with more skaters on the ice than the other team), shots, close-in and rebound shots, faceoffs
-(shown once he's taken 50), and hits, blocked shots, takeaways and giveaways. Those last four are recorded by each rink's scorers, and some rinks
-count more generously than others.</p>
+based on where it came from and what kind of shot it was; add them up and you get his chances. Shots at an empty net don't count. Forwards average
+{lgf.get('ixg_pg', 0):.2f} a game; defensemen, {lgd.get('ixg_pg', 0):.2f}. <b>Finishing</b> is his goals on those shots minus his chances: positive means he's
+scored more than the chances were worth. Finishing bounces around much more than chances do. For players with 40+ games in back-to-back seasons
+({m['carry']['pairs']} pairs, 2023-24 to 2025-26), on a scale where 1 means one season perfectly predicts the next and 0 means not at all, chances
+per game scored {m['carry']['chances']:.2f} and finishing {m['carry']['finishing']:.2f}. So a big plus or minus early on often fades.</p>
+<p><b>On the back:</b> power-play goals (scored while the other team was short-handed by a penalty), shots, close-in and rebound shots,
+faceoffs (shown once he's taken 50), and hits, blocked shots, takeaways and giveaways. Those last four are recorded by each rink's scorers.</p>
 <p><b>What's not here yet:</b> ice time. Our feed doesn't include shift data yet, so nothing on these cards is per minute or "while he's on
 the ice." That's next.</p>
-<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. We checked every
+<p><b>The source:</b> the NHL's own play-by-play and our model of each shot's chance of going in, the same one behind our Sabres stories. We checked every
 player's goal total against the league feed's own running count. Cards marked <b>small sample</b> have fewer than {m['min_gp']} games.
 Not affiliated with the NHL or any team; card designs are our own.</p>"""
 
@@ -477,8 +478,8 @@ def build_skater_cards(out, groups):
 Numbers through {asof}.</p>
 <div class="cards one">{skater_tile(c, m)}</div>
 <h2>This season</h2><ul class="rules">
-<li><b>Chances created {c['ixg']:.1f}</b>: what his own shots were worth in goals. He has {c['g']} goals; finishing {c['fin']:+.1f}.</li>
-<li><b>{c['sog']} shots on goal</b>, {c['close']} from within 20 feet, {c['reb']} rebound shots. {c['ppg']} power-play goals.</li>
+<li><b>Chances created {c['ixg']:.1f}</b> ({c['ixg_pg']:.2f} a game): what his own shots at a goalie were worth in goals. He has {c['g']} goals{(f", {c['en_g']} of them into an empty net" if c['en_g'] else "")}; finishing {c['fin']:+.1f}{(" (empty-net goals don't count toward it)" if c['en_g'] else "")}.</li>
+<li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {c['ppg']} power-play goals.</li>
 {'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
 {'<li>He also played for another team this season; the card counts his Sabres games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""

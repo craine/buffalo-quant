@@ -13,7 +13,7 @@ import pandas as pd
 from src.db import ROOT, query
 from src.metrics.nhl_team import shots
 
-AS_OF = "2026-11-07"
+AS_OF = "2026-11-10"
 SEASON = 20262027
 TEAMS = ["BUF", "VGK"]          # cards built for every goalie who has played for these teams this season
 SHRINK_SHOTS = 600              # shots of "average" added to the blend
