@@ -155,14 +155,14 @@ def main():
     for y, r_ in zip(ys, mm.itertuples()):
         ax.barh(y, r_.p, 0.6, color=BLUE if r_.hit else "#C9CDD4", zorder=2)
         ax.text(r_.p + 0.01, y, f"{r_.p:.0%}  {'HIT' if r_.hit else 'MISS'}", va="center", fontsize=10, fontweight="bold",
-                color=INK if r_.hit else RED)
+                color=INK if r_.hit else MUTED)
     ax.axvline(0.5, color=MUTED, lw=1, ls=(0, (3, 3)), zorder=1)
-    ax.set_yticks(ys, mm.label, fontsize=10)
+    ax.set_yticks(ys, [l + (" (by 0.003)" if i == "P0005" else "") for i, l in zip(mm.index, mm.label)], fontsize=10)
     ax.set_xlim(0, 1.05); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"Our seven calls: {week_hits} right, {7 - week_hits} wrong",
            "Bar = the chance we gave before kickoff. Blue = it went our way; gray = it didn't.",
-           f"One game, {len(p):,} plays. Every call was logged on the Ledger before kickoff and graded from the final play-by-play.")
+           f"7 calls, 1 game. Every call was logged on the Ledger before kickoff and graded from the final play-by-play.")
     fig.savefig(OUT / "wk09d-scorecard.png"); plt.close(fig)
 
     def plain(team, metric, word):
@@ -172,24 +172,65 @@ def main():
         how = "gained" if x.num > 0 else "lost"
         return f"{how} {amt:.3f} points over {int(x.den)} {word}" if amt < 0.5 else f"{how} about {amt:.0f} points over {int(x.den)} {word}"
     happened = {"P0002": f"Bills {buf}, Vikings {mn}", "P0003": f"Bills {buf}", "P0004": f"Vikings {mn}",
-                "P0005": plain("BUF", "dropback_epa", "pass plays"), "P0006": plain("MIN", "dropback_epa", "pass plays"),
+                "P0005": plain("BUF", "dropback_epa", "pass plays") + ": basically zero", "P0006": plain("MIN", "dropback_epa", "pass plays"),
                 "P0007": plain("BUF", "rush_epa", "runs"), "P0008": plain("MIN", "rush_epa", "runs")}
     rows = "\n".join(f"| {r_.label} | {r_.p:.0%} | {happened[i].capitalize() if i > 'P0004' else happened[i]} | **{'Hit' if r_.hit else 'Miss'}** |"
                      for i, r_ in zip(mm.index, mm.itertuples()))
     p5 = mm.loc["P0005"]
     b_db, m_db = q["BUF"], q["MIN"]
     pick_txt = " and ".join(x for x in pickers if x) if all(pickers) else f"{len(pickers)} interceptions"
+    # ---- one real play to explain "gaining points": Wentz's first interception
+    ip = query(f"""SELECT play_id, ep, epa, interception_player_id FROM raw_pbp WHERE game_id='{GAME}' AND posteam='MIN'
+                   AND interception=1 ORDER BY play_id""").iloc[0]
+    ex_before, ex_after, ex_cost, ex_who = ip.ep, -(ip.ep + ip.epa), -ip.epa, name_of(ip.interception_player_id)
+    rv = game_values(SEASON, "rush_epa", max_week=THRU)
+    rv = rv[rv.side == "off"]
+    lg_run, lg_run_below = rv.num.sum() / rv.den.sum(), (rv.v < 0).mean()
+    num_word = {0: "Zero", 3: "Three", 6: "Six", 7: "Seven"}.get(mn, str(mn))
+    ord_ = lambda n: f"{n}{'st' if n % 10 == 1 and n != 11 else 'nd' if n % 10 == 2 and n != 12 else 'rd' if n % 10 == 3 and n != 13 else 'th'}"
     md = f"""# Bills {buf}, Vikings {mn}: we nailed Buffalo's half and missed Minnesota's
 
-**Finding: Our model projected the Bills to score {proj['BUF']:.1f} points. They scored {buf}. It projected the Vikings to score {proj['MIN']:.1f}. They
-scored {mn}: in testing, teams fell that far short of our projection only about {round(rare_test * 100)} times in 100. On the Ledger, {week_hits} of our 7 calls
-were right, including the one that matters most: the Bills win. Both misses came from Minnesota's offense, mostly its passing game, which had one of the worst
-nights of any team this season.**
+**We projected the Bills to score {proj['BUF']:.1f}. They scored {buf}. We projected the Vikings to score {proj['MIN']:.1f}. They scored {mn}: teams
+fell that far short of our projection only about {round(rare_test * 100)} times in 100 when we checked the model against past games. Of the seven calls we
+logged before kickoff, {week_hits} hit, including the one that matters most: the Bills win. Both misses came mostly from Minnesota's passing game, which had
+one of the worst nights of any team this season.**
 
-*Bills at Vikings, Monday Night Football, Nov. 9. Our prediction ran Monday morning ([part 3](bills-vikings-prediction.html)) and every call
+*Bills at Vikings, Monday Night Football, Nov. 9. Our prediction ran Monday morning ([our preview](bills-vikings-prediction.html)) and every call
 was logged on the [Ledger](../ledger.html) before kickoff. Here's how they did.*
 
 ![Projected vs. final](wk09d-proj-vs-final.png)
+
+**What "gaining points" means.** Every snap starts from a spot on the field where an average NFL offense can expect a certain number of points
+from the drive. A good play raises that number and a bad one lowers it. Before {ex_who}'s interception in the third quarter, Minnesota could expect
+about {ex_before:.1f} points from that drive. After it, Buffalo had the ball and could expect about {ex_after:.2f}. That one throw cost the Vikings about
+{ex_cost:.1f} points. Add up every pass play and you get whether a team's passing helped or hurt it. Minnesota's cost it about {abs(q['MIN']['epa']):.0f}.
+That doesn't mean {abs(q['MIN']['epa']):.0f} points came off the scoreboard. It means their passing turned drives that should have produced points into drives
+that produced almost nothing.
+
+## Minnesota: what we missed
+
+With Kyler Murray out, Carson Wentz started. He went {wz['cmp']} of {wz['att']} for {wz['yds']} yards, threw {wz['ints']} interceptions ({pick_txt}) and was
+sacked {'once' if wz['sacks'] == 1 else f"{wz['sacks']} times"} before {backup} took over late with the game decided. As a team, Minnesota's pass plays (which include sacks
+and quarterback scrambles) cost it about {abs(m_db['epa']):.0f} points over {m_db['db']} pass plays: play for play, the {ord_(min_rank)}-worst passing night of
+any team this season (out of {len(dv)} team performances). The Vikings turned it over {to_min} times and turned it over on downs {min_downs} more, on their
+way to {mn} points.
+
+**Why our Vikings calls missed.** Our model had Minnesota around {proj['MIN']:.0f} points, built mostly on Kyler Murray's games and last season. We
+expected their score to land between {rng['MIN'][0]:.0f} and {rng['MIN'][1]:.0f} eight times in 10. {num_word} was below that. When we ran the model back over
+past games, only about {round(rare_test * 100)} teams in 100 fell that far short. And the pass call ({mm.loc['P0006'].p:.0%}) was built on the one piece we
+told you we hadn't tested: swapping in Wentz's own numbers. One game can't tell us whether that swap is wrong. It does tell us not to use it on the
+Ledger again until we've tested it, so we won't.
+
+## Buffalo: right on the number
+
+The Bills scored {buf} on {int(drives.loc['BUF', 'n'])} drives, about {drives.loc['BUF', 'pts'] / drives.loc['BUF', 'n']:.1f} points a drive, less than the
+{pm.raw_prediction(*r, 'BUF', 'MIN')[1]:.1f} our model expected, but over more drives than the {pm.raw_prediction(*r, 'BUF', 'MIN')[2]:.0f} it planned on. It came out to
+almost exactly the projection.
+
+Our preview said this was the best offense in football against the best defense at stopping it, and that the two would mostly cancel out.
+That's what happened: Josh Allen went {b_db['cmp']} of {b_db['att']} for {b_db['yds']} yards with {b_db['ints']} interception and was sacked
+{b_db['sacks']} times, and Buffalo's pass plays finished almost exactly even. The run game did the steady work: {int(ru.loc['BUF', 'n'])} runs (not counting
+Allen scrambles) for {int(ru.loc['BUF', 'yds'])} yards.
 
 ## The scorecard
 
@@ -197,73 +238,53 @@ was logged on the [Ledger](../ledger.html) before kickoff. Here's how they did.*
 |---|---|---|---|
 {rows}
 
-![Scorecard](wk09d-scorecard.png)
-
 **How we grade.** A call is a hit when the side we gave 50% or more happens. We also score every call by how far our chance was from what
-happened, squared, so a confident miss costs more than a timid one. Lower is better. This week's calls scored {week_brier:.2f}; guessing 50/50 on
-every one would have scored 0.25. Across all {len(allg)} calls on the Ledger so far, including Sunday's Sabres call, we're {all_hits} for
-{len(allg)} with a score of {all_brier:.2f}. Small numbers, but that's the point of keeping the record: it adds up.
+happened, squared, so a confident miss costs more than a timid one. This week our calls scored {week_brier:.2f}. Guessing 50/50 on every call would
+score 0.25. Lower is better. Across all {len(allg)} calls on the Ledger so far, including Sunday's Sabres call, we're {all_hits} for {len(allg)} with a
+score of {all_brier:.2f}. Eight calls is a small record. That's why we keep it: it grows every week.
 
-**One hit we're not bragging about.** The Bills' pass plays had to gain points overall for that call to hit. Over {b_db['db']} dropbacks they gained
-{b_db['epa']:.3f} points, about as close to zero as it gets. By the rule we set before kickoff, that's a hit, the same way we'd have counted a miss
-by that margin. Fairly, it was a coin landing on its edge. The same goes for the win call in the other direction: at {mm.loc['P0002'].p:.0%}, we
-called it close to a coin flip, and a 17-point win doesn't make it a bold call after the fact.
+**Why "runs lose points" is the expected outcome.** Across the league this season, the average run costs the offense about {abs(lg_run):.2f} points,
+and {lg_run_below:.0%} of teams' games end with their runs below zero. Losing a little on the ground is normal. Running well is the exception.
 
-## Buffalo: right on the number
-
-The Bills scored {buf} on {int(drives.loc['BUF', 'n'])} drives, about {drives.loc['BUF', 'pts'] / drives.loc['BUF', 'n']:.1f} points a drive, less than the
-{pm.raw_prediction(*r, 'BUF', 'MIN')[1]:.1f} our model expected, but over more drives than the {pm.raw_prediction(*r, 'BUF', 'MIN')[2]:.0f} it planned on. It came out to\nalmost exactly the projection.
-
-Part 3 said this was the best offense in football against the best defense at stopping it, and that the two would mostly cancel out.
-That's what happened: Josh Allen went {b_db['cmp']} of {b_db['att']} for {b_db['yds']} yards with {b_db['ints']} interception and was sacked
-{b_db['sacks']} times, and Buffalo's pass plays finished almost exactly even. The run game did the steady work: {int(ru.loc['BUF', 'n'])} designed runs
-for {int(ru.loc['BUF', 'yds'])} yards.
-
-## Minnesota: what we missed
-
-Carson Wentz went {wz['cmp']} of {wz['att']} for {wz['yds']} yards, threw {wz['ints']} interceptions ({pick_txt}) and was sacked
-{wz['sacks']} {'time' if wz['sacks'] == 1 else 'times'} before {backup} took over late with the game decided. As a team, Minnesota's pass plays cost it about
-{abs(m_db['epa']):.0f} points over {m_db['db']} dropbacks: per play, the {min_rank}{'rd' if min_rank == 3 else 'th'}-worst passing game by any team in {len(dv)} games this season. The Vikings turned it over {to_min} times and
-turned it over on downs {min_downs} more, on their way to {mn} points.
-
-**The weak spot that wasn't.** Part 1 said short throws were where the Bills defense was most beatable this season. Monday, Minnesota's
-{m_db['n_short']} short throws cost it {abs(m_db['short_epa']):.0f} points. One game doesn't erase {n_prior}, and it doesn't make that weak spot go away.
-But it was the Bills' second straight strong night: they held Baltimore to {w8_pts} points on {w8_n} drives in week {PRE_THRU}, then Minnesota to {mn}
-on {int(drives.loc['MIN', 'n'])}. Their points allowed per drive went from {d8[1]}th in the league to {d9[1]}th ({d8[0]:.2f} to {d9[0]:.2f}; league {d9[3]:.2f}), though
-the middle of that list is tightly packed.
-
-**Why our Vikings calls missed.** Our model had Minnesota around {proj['MIN']:.0f} points, mostly from Kyler Murray's games and last season, with
-a typical range of {rng['MIN'][0]:.0f} to {rng['MIN'][1]:.0f}. {['Zero','Three','Six','Seven'][[0,3,6,7].index(mn)] if mn in (0,3,6,7) else mn} was below that range: in testing, only about {round(rare_test * 100)} in 100 teams fell
-that far short of their projection. And the pass call ({mm.loc['P0006'].p:.0%}) was built on the one piece we told you we hadn't tested: swapping in Wentz's own
-numbers. One game can't tell us whether that swap is wrong. It does tell us not to use it on the Ledger again until we've tested it, so we won't.
+**One hit we're not bragging about.** The Bills' pass plays had to gain points overall for that call to hit. Over {b_db['db']} pass plays they gained
+{b_db['epa']:.3f} points, about as close to zero as it gets. By the rule we set before kickoff, that's a hit. If it had landed 0.003 the other way,
+we'd have logged a miss. Fairly, it was a coin landing on its edge. The same goes for the win call in the other direction: at {mm.loc['P0002'].p:.0%},
+we called it close to a coin flip, and a 17-point win doesn't make it a bold call after the fact.
 
 ## What it means
 
-- **The Bills' defense has two strong games in a row.** Two games is still a small sample, and Minnesota's quarterback situation helped.
-  We'll know more after the next two.
-- **Next:** the Bills play {nxt_txt} on {nxt_day}. Our prediction and Ledger calls come before kickoff.
-- **The record is the point.** {all_hits} of {len(allg)} so far. Every call stays up, hit or miss.
+- **A known weak spot, closed for a night.** Earlier this season we said throws of under 20 yards downfield were where the Bills defense was most
+  beatable. Monday, Minnesota's {m_db['n_short']} throws of under 20 yards cost it {abs(m_db['short_epa']):.0f} points. One game doesn't erase {n_prior},
+  and it doesn't make that weak spot go away. But it was the second straight strong night: Baltimore scored {w8_pts} points on {w8_n} drives in week
+  {PRE_THRU}, Minnesota {mn} on {int(drives.loc['MIN', 'n'])}. Buffalo now allows about {d9[0]:.1f} points a drive, right around the league average of
+  {d9[3]:.2f} ({ord_(d8[1])} in the league before Monday, {ord_(d9[1])} now). Two games is a small sample, and Minnesota's quarterback situation helped.
+- **What we're changing.** No more untested quarterback swaps on the Ledger.
+- **Next:** the Bills play {nxt_txt} on {nxt_day}, with our predictions logged before kickoff.
 
 ## For the stat-heads
+
+![Scorecard](wk09d-scorecard.png)
 
 - Points model {pm.VERSION}, inputs pinned to 2026 week {PRE_THRU} (as published). Projections BUF {proj['BUF']:.2f}, MIN {proj['MIN']:.2f};
   80% ranges from training residuals. MIN residual {miss_min:+.1f}; share of residuals at or below it: training {rare_train:.3f}, out of sample
   (2024-26, n={len(te)}) {rare_test:.3f}.
+- "Points gained" is nflverse expected points added (EPA). Example play {int(ip.play_id)}: EP {ip.ep:.2f} before, EPA {ip.epa:.2f}.
 - Grades: P0002-P0004 from raw_schedules; P0005-P0008 from clean_team_week (model_v01.game_values, offense side), the same definitions the
   models used. BUF EPA/dropback {p5.actual_value.split()[-1]} ({b_db['epa']:+.4f} total over {b_db['db']}). Brier this week {week_brier:.4f}; all
   graded calls {all_brier:.4f} (n={len(allg)}).
-- MIN EPA per dropback ranks {min_rank} of {len(dv)} 2026 team-games (1 = worst). Short = pass attempts with air yards under 20.
+- League EPA per designed run, 2026 weeks 1-{THRU}: {lg_run:.3f} (n={int(rv.den.sum()):,} runs, {len(rv)} team-games).
+- MIN EPA per dropback ranks {min_rank} of {len(dv)} 2026 team-games (1 = worst). "Under 20 yards downfield" = pass attempts with air yards under 20.
 - BUF points allowed per drive, regular season through week {PRE_THRU}: {d8[0]:.3f} ({d8[1]} of {d8[2]}); through week {THRU}: {d9[0]:.3f} ({d9[1]} of {d9[2]}).
 - Minnesota's team passing numbers include {len(other)} dropbacks by {backup}. Wentz: {wz['db']} dropbacks. An aborted snap that Minnesota lost
-  counts as neither a pass play nor a designed run in these numbers.
+  counts as neither a pass play nor a designed run in these numbers. Murray injury: Kevin O'Connell, Nov. 5 (ESPN), as cited in our preview.
 - Hit rule: the side given 50% or more happens (`ledger.summary`).
-- FTN charting (blitz counts) for this game wasn't published yet when we ran this, so part 2's blitz angle isn't graded here.
+- FTN charting (blitz counts) for this game wasn't published yet when we ran this, so the blitz angle isn't graded here.
 """
     (OUT / f"{SLUG}.md").write_text(md)
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": "Monday night, graded",
         "big": [[buf, f"Bills (we said {proj['BUF']:.1f})"], [mn, f"Vikings (we said {proj['MIN']:.1f})"]],
-        "note": f"{week_hits} of 7 Ledger calls right, including Bills win. Both misses came from Minnesota's passing game.",
+        "note": f"{week_hits} of 7 Ledger calls right, including Bills win. Both misses came mostly from Minnesota's passing game.",
         "explainer": {"kicker": "Receipts", "title": "Every call graded, hit or miss.",
                       "text": "Our calls' score this week, vs. guessing 50/50 on every one (lower is better):",
                       "fmt": "score", "bars": [["Our calls", round(float(week_brier), 2)], ["50/50 guess", 0.25]]},

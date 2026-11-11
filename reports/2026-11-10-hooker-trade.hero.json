@@ -10,7 +10,7 @@
    "in his career"
   ]
  ],
- "note": "Interceptions barely carry over for safeties. What the Bills are getting: a sure tackler whose coverage beats what Buffalo's safeties have allowed.",
+ "note": "Big interception years rarely repeat: safeties with 5+ averaged about 2.5 the next season. Behind them: coverage about average this season, below average before, and better than two of the Bills safeties he joins.",
  "explainer": {
   "kicker": "What carries over",
   "title": "How well one season predicts the next.",
@@ -18,20 +18,20 @@
   "fmt": "score",
   "bars": [
    [
+    "Interceptions",
+    0.27
+   ],
+   [
     "Missed tackles",
     0.3
    ],
    [
-    "Interceptions",
-    0.26
-   ],
-   [
-    "Yards allowed per target",
-    0.19
+    "Yards allowed per throw",
+    0.18
    ],
    [
     "Completions allowed",
-    0.15
+    0.11
    ]
   ]
  }
