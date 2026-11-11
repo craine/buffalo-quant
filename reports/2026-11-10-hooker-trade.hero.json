@@ -3,35 +3,35 @@
  "big": [
   [
    5,
-   "interceptions this season"
+   "of Tennessee's 8 interceptions"
   ],
   [
-   17,
-   "in his career"
+   -0.17,
+   "Bills vs. opponents' usual passing, per play, with Gardner-Johnson"
   ]
  ],
- "note": "Big interception years rarely repeat: safeties with 5+ averaged about 2.5 the next season. Behind them: coverage about average this season, below average before, and better than two of the Bills safeties he joins.",
+ "note": "With Poyer beside Bishop, opponents' passing did 0.13 points a play worse than usual against Buffalo. With Gardner-Johnson, it's done 0.17 better than usual.",
  "explainer": {
-  "kicker": "What carries over",
-  "title": "How well one season predicts the next.",
-  "text": "For safeties, 2018-2025 (0 = not at all, 1 = perfectly):",
+  "kicker": "Bishop's partner",
+  "title": "Bills vs. what opponents' passing usually does, per play.",
+  "text": "Better (+) or worse (-) than each opponent usually does:",
   "fmt": "score",
   "bars": [
    [
-    "Interceptions",
-    0.27
+    "Poyer (2025, 2 vs. backups)",
+    0.13
    ],
    [
-    "Missed tackles",
-    0.3
+    "Rapp (2025, 1 vs. a backup)",
+    0.01
    ],
    [
-    "Yards allowed per throw",
-    0.18
+    "Gardner-Johnson (2026)",
+    -0.17
    ],
    [
-    "Completions allowed",
-    0.11
+    "Hamlin (2026, 2 vs. backups)",
+    0.4
    ]
   ]
  }

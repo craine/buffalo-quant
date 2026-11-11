@@ -1,117 +1,166 @@
-FAIL (two quick wording fixes; every number reproduces)
-
 # Quant final check (stage 4): reports/2026-11-10-hooker-trade.md
 
-I re-derived everything with my own code (/tmp/qf/*.py, read-only DB connection). I did not run the generator. Every number in the body, the stat-heads section, the hero JSON, the dek and the three charts reproduces. Two wording problems overstate the evidence. Both are one-line fixes and need no new analysis.
+## FAIL: two mechanical fixes, then PASS
 
-## Ranked issues
-
-### 1. "The 22 safeties" is really 22 seasons by 16 safeties (MEDIUM, factual)
-Text: body "The 22 safeties with five or more interceptions in a season averaged 5.5 that year"; chart hooker-bigyears.png subtitle "The 22 safeties with 5+ interceptions in a season".
-Evidence: n=22 player-seasons from 16 players.
-- Repeat entries: Simmons appears 3 times (2020, 2021, 2022). Byard, Diggs, Fitzpatrick and H. Smith appear twice each.
-- Hooker's own 2024 season (5 interceptions, then 0 in 2025) is one of the 22. That makes a nice example if the writer wants one.
-Fix:
-- Body: "The 22 times a safety had five or more interceptions in a season (16 different players), he averaged 5.5 that year."
-- Chart subtitle: "22 seasons with 5+ interceptions (16 safeties), 2018-2025."
-
-### 2. "Big interception years don't repeat" is absolute (LOW-MEDIUM, overclaim)
-Text: chart title on hooker-bigyears.png; hero note "Big interception years don't repeat"; image alt text.
-Evidence:
-- 3 of the 22 seasons were followed by another 5+ season: Diggs 2020 (5 then 5), Simmons 2020 (5 then 5), Simmons 2021 (5 then 6).
-- The next-year average of 2.5 is still above the 1.7 for all safeties, so a little does carry over. The body handles this correctly with "Mostly, no."
-Fix: Change to "Big interception years rarely repeat" in the chart title, the hero note and the alt text. Optionally add "(3 of 22 did)."
-
-### 3. Two different "average safety" figures sit side by side (LOW)
-Text:
-- "The average safety misses 8.9%" and "close to the average safety's 8.1"
-- then "league average 8.2" and "league average 8.2%" for safety groups.
-Evidence: Both are correct, but they use different groups:
-- 8.9% and 8.06 come from safeties thrown at 15 or more times (n=58).
-- 8.2% and 8.24 come from all 125 matched safeties pooled by team. Safeties thrown at fewer than 15 times miss only 6.4%, which pulls that average down.
-A reader will see "average safety 8.9%" and then "league average 8.2%" in the next paragraph.
-Fix: Label the second pair "league average for all safeties' combined numbers," or add one short clause explaining the difference.
-
-### 4. "Even a return to his average would help there." (LOW, forecast depends on an unknown)
-Evidence: His 2023-25 rate (8.7%) is below the Bills group's 10.1% and Gardner-Johnson's 19%. But Hamlin is 0 for 21, a small sample. Whether this would help depends on whose snaps Hooker takes, and the story itself says that is still unknown.
-Fix: "His usual rate (8.7%) is below the Bills group's 10.1%," or "That would help if he takes Gardner-Johnson's snaps."
-
-### 5. "coverage scored lower" (LOW, optional)
-Point estimates of 0.18 and 0.11 are lower than 0.27. However, the yards-per-throw range (0.06 to 0.29) overlaps the interceptions range (0.17 to 0.37). The next sentence ("could be off by about 0.1 either way") mostly covers this. You could change it to "coverage scored a bit lower."
-
-## Check 1: matching (passes)
-- Independent rebuild gives 1,085 linked safety-seasons, 12 of them from the first-initial-plus-last-name fallback. Carry-over: 318 pairs from 118 players, 2018 to 2025-next. 2026 is excluded from the pairs.
-- **All 12 fallback matches are correct:**
-  - Kamren/Kam Curl, 2020-26 (7 seasons)
-  - Chauncey/C.J. Gardner-Johnson, NO 2019-21 (51, 94 and 61 targets)
-  - Kameron/Kam Kelly, PIT 2019
-  - Christopher Smith / Chris Smith II, LV 2024
-  - No false matches.
-- **Jessie Bates III** is matched for every season 2018-2026 (26 targets in 2026). Name variants under one PFR id are now included because the join is on the id. Example: Quan/Jartavius Martin, WAS 2023.
-- **2018-19 Raiders:** now present (Gilchrist, Harris, Joseph, Nelson, Joyner, Riley, Swearinger, the last on ARI/LV/NO).
-- **Hooker:** gsis 00-0035632 / HookAm00. Malik Hooker is kept separate. His 2026 TEN rows cover weeks 1-4 and 6-8 (7 games).
-- **One-to-many:** the only collision on the same team and season is the NYJ 2021-23 "Michael Carter" pair (RB and CB). It is dropped and involves no safeties. No PFR id links to two safeties, and no safety links to two PFR ids.
-- **Still unmatched:** 118 of 1,203 nflverse safety-seasons. On the same team, none have a plausible PFR counterpart. The remaining cases are players with no PFR rows (e.g., Lonnie Johnson CAR 2024, Chris Smith II LV 2023) or different people who share a surname. Players labeled DB are still left out, and the stat-heads section discloses this.
-
-## Check 2: numbers (all reproduce)
-- **Carry-over scores:** interceptions 0.274, yards per throw 0.184, completions 0.111, missed tackles 0.303.
-  - My bootstrap (different seed): 0.18-0.36, 0.07-0.29, 0.00-0.22, 0.17-0.41. Half-widths are 0.09 to 0.12, so "about 0.1 either way" holds.
-  - Missed tackles finish ahead of interceptions in 63% of resamples.
-  - Rank-based check: interceptions 0.29, missed tackles 0.25. That supports "about equally."
-- **Five-plus seasons:** 22 seasons, 5.55 that year, 2.55 the next. All pairs averaged 1.74 the next season. "Much closer to the 1.7 than to their big year" is supported: 0.8 away from 1.7 versus 3.0 away from 5.5.
-- **Hooker 2026 tackling:** 3 missed of 55, 5.5%. Average for safeties with 15+ targets is 8.94%. He is tied (2 players) for 16th of 58. One more miss would make it 7.1%.
-- **Hooker 2026 coverage:** 33 targets, 8.30 yards per throw. Average 8.06. He ranks 31st of 58, and 29.5 is the midpoint, so "right in the middle" is supported.
-- **Hooker 2023-25:** 158 targets, 9.06 yards per throw. Average 8.19. He ranks 57th of 76. Missed-tackle rate 8.66% (40th) against an average of 8.88%.
-- **Hooker 2025:** 11.44 yards per throw, 58th of 66.
-- **Bills safeties 2026 (group):** 69 targets, 9.71 yards per throw, 8th-most of 32 teams. 11 missed of 109, 10.09%, 8th-most. League averages 8.24 and 8.22%.
-- **Bills safeties 2026 (by player):**
-  - Bishop: 31 targets, 7.39 yards per throw, 5/50 missed
-  - Gardner-Johnson: 21 targets, 10.38, 6/32 missed (18.75%, shown as 19%)
-  - Hamlin: 13 targets, 13.23, 0/21 missed
-- **Interceptions (nflverse):**
-  - By season: 0, 4, 1, 1, 1, 5, 0, 5, for 17 career regular-season.
-  - 2026 by week: 2 = 1, 6 = 1, 8 = 3. Week 8 was CIN 43, TEN 36, played at Cincinnati.
-  - He is tied with Xavier McKinney at 5. Next best is 4.
-- **"9 regular-season games left":** BUF had its bye in week 7, played 8 games through week 9, and has one game in each of weeks 10-18 (9 games). Correct.
-- **Hero and dek:** 5, 17, 0.27/0.30/0.18/0.11, and "about 2.5" all match. Wording is consistent with the body except issue 2.
-
-## Check 3: wording and brand rules
-- Nothing the stage-2 review removed has come back: no "sure tackler," no "carries over better," and no claim that he beats Bishop or all Bills safeties. The text says Bishop allowed fewer yards per throw than Hooker.
-- No betting language.
-- Correlation, bootstrap and Pearson appear only in the stat-heads section. "Targets" is defined in plain English.
-- Small samples are labeled: 33 throws, 55 tackle attempts, 69 group throws, and the individual Bills safeties.
-
-## Check 4: trade facts
-The text matches the wording verified at stage 2:
-- 2027 2nd-round pick for Hooker plus a 2027 5th-round pick, on Nov. 10, deadline day
-- signed through 2028
-- "most draft capital ... at the trade deadline under Beane," which is now the source's exact wording
-- will play alongside Bishop
-
-A fresh web search did not bring up the buffalobills.com articles again, so these rest on the stage-2 check. Public reports of his 2025 three-year extension are consistent with "signed through 2028."
-
-## Charts
-- **hooker-ints.png:** correct. The "7 games" is right, the source line is now nflverse only, and the week-8 note is correct.
-- **hooker-bigyears.png:** numbers are correct. The subtitle and title need issues 1 and 2. The footer shows the sample.
-- **hooker-carryover.png:** numbers and ranges are correct. It shows 118 players, and the "overlap = no real difference" note is good.
+The headline numbers hold up, and so do all the stage-2 limits. Poyer +0.13 / +0.05, Gardner-Johnson -0.17, Hamlin +0.40 / -0.19,
+the 1-in-16 check, the league ranks and the Rams example all reproduce from my own code (/tmp/qf/a.py, b.py, c.py), and every
+caveat is in the text. The fail comes from two things. One QB flag is wrong in plain English, and that error is published in four
+places. The PFR side of the generator is also not pinned, so re-running it will change the published story. Neither fix touches
+the lede, the Poyer/Gardner-Johnson comparison or the Hamlin asterisk.
 
 ---
 
-# Re-check after fixes (stage 4, round 2): PASS
+## Ranked issues
 
-I re-read the current story, hooker-bigyears.png, the hero JSON and the build.py dek. I did not run the generator.
+### 1. MUST FIX: Spencer Rattler (NO, 2025 week 4) is labeled a backup QB. He was New Orleans's starter that week.
+**Text:** table row `Taylor Rapp, 2025 | 6 | +0.01 | -0.07 (4 games)`; chart label "Taylor Rapp 2025, 6 games (2 vs. backup QBs)" with
+the -0.07 bar; hero bar `"Rapp (2025, 2 vs. backups)"`; stat-heads "2025 wk 4 NO (S.Rattler)".
+**Evidence (NO 2025 dropback leader by week):** Rattler led weeks 1-7. Shough took over in week 8 (35 to 25) and led weeks 8-18.
+So the season-wide "most games led" rule picks Shough (10 games) over Rattler (7) and flags week 4. But in week 4 Rattler was the
+Saints' starter, and Shough had 0 dropbacks. The column is headed "Starting QBs only", so a Saints fan will catch this.
+Every other flag holds up under a "starter at the time" reading. CAR Dalton (Young out, the only game Dalton led), HOU Mills
+(weeks 9-12 while Stroud was out), NYJ week 18 Cook, BAL Fagnano (third QB used) and MIN Wentz (Murray led 6 of the previous 8)
+all stay flagged. NYJ week 2 is borderline: Fields started and left, and Taylor led 16 to 15. It stays flagged under the at-the-time rule.
+**Fix:** Define the regular starter as the QB who has led the team in the most games *through that week* (ties broken by dropbacks).
+Under that rule only NO week 4 changes. Rapp becomes **-0.02 (5 games)** against starting QBs (163 dropbacks; my value -0.017), and
+he has 1 vs. backup QBs, not 2. Update the table cell, the chart label and bar, the hero bar (`"Rapp (2025, 1 vs. backups)"`) and the
+stat-heads definition and list. Poyer (+0.05, 7), Gardner-Johnson (-0.17, 5) and Hamlin (-0.19, 1) are unchanged under either rule.
+For the record: if NYJ week 2 were also counted as a starter game, Rapp's starting-QB figure would be +0.01 (6 games).
 
-## The five fixes
-1. **Counts.** The body now says "The 22 times a safety had five or more interceptions in a season (16 different players)". The chart subtitle says "22 seasons with 5+ interceptions (16 safeties), 2018-2025". Both match my independent count: 22 seasons, 16 unique PFR ids. The code computes both values in carryover() (ex['players'], ex['repeat']).
-2. **"Rarely repeat (3 of 22 did)."** This matches my count of next-season interceptions at 5 or more: Diggs 2020 went 5 then 5, Simmons 2020 went 5 then 5, Simmons 2021 went 5 then 6. The chart title, hero note and alt text all say "rarely repeat".
-3. **League average comparison.** The text now says "all NFL safeties combined: 8.2 / 8.2%". The added explanation, "lower than the 8.9% above because safeties who are rarely thrown at miss fewer tackles", is supported. Safeties with fewer than 15 targets in 2026 missed 6.4% of tackles (67 players). Safeties with 15 or more missed 8.94%, and all of them pooled missed 8.22%.
-4. **Tackling comparison.** The text now says "His usual rate over the three seasons before this one (8.7%) is below the Bills group's 10.1%." Both figures are correct (8.66% and 10.09%). It is a plain comparison and no longer reads as a forecast.
-5. **"coverage scored a bit lower".** Fine.
+### 2. MUST FIX: the PFR numbers aren't pinned, so re-running changes the published story (CLAUDE.md: "Re-running it reproduces the published numbers")
+**Evidence:** The PFR queries filter `week <= THRU` (9). `pfr_thru` is computed live, and right now raw_pfr_def week 9 has only 2 teams
+(BAL, JAX). When PFR posts week 9, a re-run will change several things. The dateline will flip to "through week 9". The league yards
+per throw (7.2), Tennessee's rank (29th), the safety averages (8.2 for 2026), the tackling universe (58) and the 8.9% average and
+16th-best rank can all move. The sentence "PFR hasn't charted Green Bay's week 9 yet" is hard-coded and would become false.
+**Fix:** Pin PFR with a constant (`PFR_THRU = 8`) and use it in every raw_pfr_def query, `safety_seasons()` included. Drop the
+`pfr_thru` auto-detect, or keep it only as an assert. Also add the `AS_OF` date the other generators use.
 
-## Nothing else changed
-- Headline, intro, trade paragraph, tackling and coverage sections, the Bills by-player figures, the "What it means" bullets (other than fix 4) and the stat-heads section are identical to the version I checked in round 1. All their numbers still reproduce.
-- The hero numbers (5, 17, 0.27/0.30/0.18/0.11) and the dek are unchanged and still correct.
-- The chart numbers (5.5, 2.5, 1.7, 318 pairs) are unchanged.
+### 3. SHOULD FIX: "If the Poyer-era number comes back against real starters, the trade did its job."
+**Problem:** This sentence has two issues. It credits the trade for any change, which goes against the coordinator/roster confound
+the story states three paragraphs earlier. It is also unclear which number it means: Poyer against starters is +0.05, not +0.13.
+**Fix:** "If the number climbs back toward Poyer-era levels against starting quarterbacks (+0.05), that fits the trade working.
+It still won't separate Hooker from the coordinator."
 
-## Optional grammar nit (does not block)
-"...(16 different players), he averaged 5.5 that year. The next year they averaged 2.5" switches pronoun from "he" to "they". A possible rewrite: "those seasons averaged 5.5 interceptions; the next year, 2.5".
+### 4. MINOR
+- "Buffalo's best stretch with Bishop came with a steady veteran beside him." Hamlin's +0.40 sits higher in the same table. Add
+  "against starting quarterbacks". Poyer's +0.05 is the best of the four there.
+- "Throws his way gained 8.8 yards with Poyer..." reads as a total. Make it "8.8 yards **each**", as the Editor wrote it.
+- Stat-heads: "Flagged Bills opponents" lists 6, but NYJ week 18 (B.Cook) is also flagged. It's left out because week 18 isn't a
+  pairing game (Bishop played 15%). Say "Flagged games in these pairings".
+- Stat-heads p = 0.063 comes from 20,000 draws. Full enumeration over all 2,002 splits gives 0.064 (128/2002). "1 in 16" holds either way.
+- Chart 1 footer still says "Opponent's norm". "What that opponent usually does" would match the x-axis.
+- Dek "is the fix they're counting on" and the lede's "So the Bills spent..." attribute motive. They're acceptable as framing and
+  don't need a change.
+
+---
+
+## Verified (independent code)
+1. **Backup-QB rule** reproduces exactly: 2025 wk2 NYJ Taylor, wk4 NO Rattler, wk8 CAR Dalton, wk12 HOU Mills, wk18 NYJ Cook; 2026 wk8
+   BAL Fagnano, wk9 MIN Wentz. No ties under games-led. Starting-QB values: Poyer +0.051 (7 games, 220 dropbacks), Rapp -0.065 (4),
+   Gardner-Johnson -0.174 (5), Hamlin LV -0.187 (1). The rule is sensible except for Rattler (issue 1).
+2. **Chance check:** gap 0.302. My permutation (50k draws, different seed) gives two-sided 0.064, and exact enumeration gives 0.064.
+   One-sided is 0.026. Because it is two-sided, "(either way)" is accurate, and "about 1 time in 16" is fair.
+3. **League context:** 2025 Bills +0.089, 9th; 2026 +0.010, 14th. +0.128 ranks 6th among 2025 defenses; -0.174 ranks 31st among
+   2026 defenses (also 31st in 2025). 32 teams each season.
+4. **Worked example:** 2026 wk5 LA (Stafford): 55 dropbacks, 19.44 EPA, norm 0.011, so +0.342 over usual and -0.342 for Buffalo.
+   It's the worst of the 5 Gardner-Johnson games. Under the table's + = better for Buffalo convention, the sign is consistent.
+5. **Other numbers:**
+   - Pairings 9/283, 6/194, 5/221 and 3/105, for 803 total. Hamlin's three are LV -0.19, BAL +0.78 and MIN +0.77.
+   - Bishop 8.81 on 27 and 9.19 on 21.
+   - Safety averages 8.63 and 8.24 depend on the universe. Mine are 8.55 and 8.29. Either way, "both a bit worse" holds.
+   - TEN 8.21, 29th of 32, league 7.23.
+   - Hooker 8.30 on 33; the rest 8.20 on 232.
+   - Interceptions 5 of 8, rest 3. McKinney has 5 in nflverse and play-by-play (week 9 vs. NE: 2), and nobody has more.
+   - Hooker missed tackles 3 of 55, 5.5%, against a pooled 8.9%. He is 16th either way; "ties him for 16th-best of 58" is the
+     generator's universe.
+   - Hooker: 7 games (weeks 1-4 and 6-8), 8th season (2019-2026), 17 career regular-season interceptions.
+   - 9 Bills games left.
+   - PFR 2026 coverage: weeks 1-8 are complete and week 9 has 2 teams, so the "through week 8" dateline is right today.
+6. **Limits:**
+   - "Tracked with" appears in the headline, dek and chart.
+   - "1 in 16 ... suggestive, not proof".
+   - The starters-only column and the Poyer +0.05 line are both there.
+   - Hamlin's asterisk is in the text, and his bar is grey on the chart.
+   - The coordinator/roster confound is stated.
+   - Hooker's yards per throw are the same as his teammates'.
+   - Small samples are labeled.
+   - No "bet" or "betting" anywhere. The body has no jargon: EPA, dropbacks and norm appear only in stat-heads.
+   - The headline matches the instruction.
+   - Overclaims are limited to issue 3 and the "best stretch" line.
+7. **Charts:** I viewed both. They're readable, on-brand, and their labels match the text. Chart 1 needs the Rapp label and bar
+   change from issue 1.
+
+---
+
+# Re-check after fixes (2026-11-10)
+
+## PASS
+
+Both must-fixes and the should-fix are applied correctly. I re-derived everything that changed with my own code (/tmp/qf/d.py, e.py)
+and found no new issues. Two cosmetic nits remain; neither blocks publishing.
+
+### 1. Starter rule: confirmed
+I implemented the rule myself on all 25 Bills games in 2025 and 2026 weeks 1-9, including 2024 for the "main passer the season
+before" condition. A game is flagged when its dropback leader is neither the team's games-led leader through that week (ties
+broken by dropbacks) nor its main passer the season before.
+
+**Flagged games in the pairings** (these match yours exactly):
+- 2025 wk2 NYJ, Taylor
+- 2025 wk8 CAR, Dalton
+- 2025 wk12 HOU, Mills
+- 2026 wk8 BAL, Fagnano
+- 2026 wk9 MIN, Wentz
+
+2025 wk18 NYJ (Cook) is also flagged, but it isn't a pairing game.
+
+**Previously flagged games that are now cleared:**
+- NO wk4 (Rattler): led NO's games through week 4.
+- CIN wk14 (Burrow): the games-led leader through week 14 was Flacco in my data, not Browning, but Burrow is cleared as 2024's main passer either way.
+- PIT wk13 (Rodgers), CLE wk16 (Sanders) and LV wk6 (Cousins): each led their team's games as of that week.
+
+All the other games are the team's usual starter. Nothing is mis-flagged.
+
+**Starting-QB values (dropback-weighted):**
+
+| Partner | Starting QBs only | Games | Backup-QB games |
+|---|---|---|---|
+| Poyer | +0.051 | 7 | 2 |
+| Rapp | -0.017 | 5 | 1 |
+| Gardner-Johnson | -0.174 | 5 | 0 |
+| Hamlin | -0.187 | 1 | 2 |
+
+These match the table, the chart, the hero bars ("Rapp (2025, 1 vs. backups)") and the stat-heads text.
+
+**Borderline game, disclosed and not blocking:** NYJ wk2. Fields started, and Taylor led 16 dropbacks to 15. Through week 2 the
+games-led count is tied 1-1, and Fields wins the tie-break on dropbacks (40 to 16). If that game counted as a starter game, Rapp's
+starting-QB value would be +0.01 over 6 games. It affects only the Rapp cell.
+
+### 2. PFR pin: confirmed
+The generator now uses `PFR_THRU = 8` in safety_seasons, the Bishop query and the Tennessee query, with no live detection. My
+week-8-pinned recompute:
+
+**Tennessee and Hooker:**
+- TEN 8.21 yards per throw, 29th of 32. League 7.235, shown as 7.2.
+- Hooker 8.30 on 33 throws; the rest 8.20 on 232.
+- Interceptions: 8 for the team, 5 for Hooker, 3 for everyone else.
+
+**Bishop:** 8.81 on 27 throws and 9.19 on 21, unchanged.
+
+**Missed tackles (my safety universe, 55 safeties):** pooled rate 8.96%, which rounds to 9.0%. That confirms the 8.9% to 9.0% move
+came from dropping PFR week 9. Hooker is 16th, untied, in my universe. "Ties him for 16th-best of 58" is the generator's universe
+and is consistent with mine.
+
+**Safety yards per throw:** 8.63 / 8.23 in the generator against 8.55 / 8.27 in mine. The difference comes from how safeties are
+defined. Either way, "both a bit worse than the average safety" holds.
+
+### 3. Wording: confirmed in the text, chart and hero
+- The tracking bullet, the "Against starting quarterbacks, ... best stretch" line, "8.8 yards each", "Flagged games in these
+  pairings" and the Green Bay "as of 2026-11-10" note are all present.
+- The chart 1 footer now reads "What that opponent usually does = ...".
+- Chart 1: Rapp is labeled "(1 vs. backup QBs)" with a -0.02 bar.
+- The dek is unchanged and fine.
+- No "bet" or "betting", and no jargon in the body.
+
+### Nits (optional)
+- Chart label "1 vs. backup QBs" and hero "1 vs. backups" are plural. "1 vs. a backup QB" would read better.
+- The NYJ wk2 borderline above could get a stat-heads note: "(Fields started and left hurt; Taylor led 16-15)".

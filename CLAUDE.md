@@ -73,11 +73,12 @@ All confirmed live for 2026 on 2026-09-20.
 | Schedules (one file) | `schedules/games.parquet` | all |
 | PFR advanced passing | `pfr_advstats/advstats_week_pass_{year}.parquet` | 2018+ (hard floor) |
 | PFR advanced defense | `pfr_advstats/advstats_week_def_{year}.parquet` | 2018+ |
+| Snap counts | `snap_counts/snap_counts_{year}.parquet` | 2012+ (loaded 2018+); verified 2026-11-10; carries `pfr_player_id` |
 
 Current-season files update as games finish. Ingest must be idempotent: re-running replaces
 the season's rows, never duplicates them.
 
-Other candidate sources (FTN charting, participation, Next Gen Stats, injuries, snap counts)
+Other candidate sources (FTN charting, participation, Next Gen Stats, injuries)
 are **unverified**. Confirm the URL returns 200 and inspect the schema before relying on one,
 and add it to this table when you do.
 

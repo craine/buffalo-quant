@@ -1,108 +1,158 @@
-# Editor review, stage 3: reports/2026-11-10-hooker-trade.md
+# Editor review (stage 3): reports/2026-11-10-hooker-trade.md (v2, Bishop's-partner angle)
 
-## Verdict: NEEDS EDITS (not a rewrite)
+## Verdict: NEEDS EDITS (light). No rewrite needed.
 
-The story makes sense, and the interception history and the 5.5 to 2.5 example are strong. Four things stand in the way of a regular fan:
-1. The headline doesn't state the finding, and the lead runs four sentences.
-2. "Per target" appears all through the body and is never explained.
-3. The body never says where the 0.27 score comes from (the source, the math, how we checked).
-4. The site dek says interceptions are "the shakiest part of a safety's game," which the story's own data contradicts. Completions allowed (0.11) and yards allowed (0.18) carry over less.
+The angle works and every Quant limit is in the text: "tracked with", 1 in 16, Poyer +0.05 vs. starters, Hamlin's backup QBs,
+the coordinator confound, Hooker's yards per throw matching his teammates'. "Bet" and "betting" appear nowhere (checked story, dek
+and hero). The problems are order and wording, not substance:
+1. The caveats come in the wrong order. A fan sees Hamlin's +0.40, the biggest bar, and has to read three paragraphs before
+   learning it's mostly backup QBs. The caveats are also spread over four paragraphs; three short bullets would cover them.
+2. The lede's comparison phrasing ("0.13 points per pass play less than... gave up 0.17 more") makes the reader do sign math.
+3. "Norm" appears in the table header, the track bullet and the hero. Fans don't say "norm".
+4. The worked example never says what "gained 19.4" means. It reads like the Rams scored 19.4 points.
 
-The body also says "The bet is on this season," which is betting language.
+No edit below needs a new number. Every figure used is already in the story.
 
-## The one-sentence version
+## One-sentence version (radio)
 
-"The Bills paid a second-round pick for a safety tied for the NFL lead with five interceptions, but big interception years don't repeat: safeties who had five or more averaged about two and a half the next season."
+"The Bills' pass defense has tracked with whoever plays next to Cole Bishop: good with Jordan Poyer last year, near the bottom
+of the league with C.J. Gardner-Johnson this year. So they spent a second-round pick on Amani Hooker, who has 5 of Tennessee's
+8 interceptions."
 
-Right now this sentence is not the headline, and the lead only gets to it by implication ("Don't build on them"). The 2.5 number, the best fact in the story, doesn't show up until paragraph 4.
+The lede says this, but in four bold sentences and with awkward sign wording. The headline ("Cole Bishop needed a partner") is a
+causal claim, a notch stronger than "tracked with". See edits 1-2.
 
 ## Edits, most important first
 
-### 1. Site dek is factually off (src/site/build.py, "bills-trade-amani-hooker")
-Old: `Amani Hooker arrives tied for the NFL lead in interceptions, the shakiest part of a safety's game to count on. Behind them: average coverage this season, and better numbers than two of the Bills safeties he joins.`
-New: `Amani Hooker arrives tied for the NFL lead with 5 interceptions. Don't count on that pace: safeties with five-interception years averaged about 2.5 the next season. Behind them: average coverage this season, and fewer yards allowed than two of the Bills safeties he joins.`
-Why: In the story's own chart, interceptions (0.27) carry over about as well as tackling and better than both coverage numbers, so "shakiest" is wrong. The new version uses only numbers already in the story.
+### 1. Headline: match the "tracked with" limit
+OLD: `# Cole Bishop needed a partner. The Bills just traded for the playmaker on a bad Tennessee defense`
+NEW: `# The Bills' pass defense has tracked with Cole Bishop's partner. Now they've traded for a playmaker`
+Reason: "needed" says the partner caused it, and the Quant limited that claim. The new headline is still a hook and leaves Hooker
+for the dek and lede. If you want Tennessee in the headline: "...Now they've traded for the playmaker on a bad Tennessee defense".
 
-### 2. Headline: put the finding in it
-Old: `# The Bills paid a second-round pick for Amani Hooker. Here's what they're actually getting`
-New: `# The Bills paid a second-round pick for Amani Hooker's 5 interceptions. History says don't count on 5 more`
+### 2. Lede: plain direction, a shorter bold block, one built-in hedge
+OLD:
+```
+**The Bills' pass defense has tracked with whoever plays next to Cole Bishop. With Jordan Poyer beside him last season, Buffalo gave up
+0.13 points per pass play less than its opponents usually gain, about 6th-best in the league. With C.J. Gardner-Johnson this
+season, it gave up 0.17 more, about 31st of 32. Amani Hooker is the fix the Bills are counting on: on a Tennessee defense that ranks
+29th of 32 in yards allowed per throw, he made 5 of the team's 8 interceptions.**
+```
+NEW:
+```
+**The Bills' pass defense has tracked with whoever plays next to Cole Bishop. With Jordan Poyer beside him last season, opponents'
+passing did 0.13 points a play worse than usual against Buffalo, about 6th-best in the league. With C.J. Gardner-Johnson this season,
+it's done 0.17 better than usual, about 31st of 32. Amani Hooker is the fix the Bills are counting on: on a Tennessee defense that
+ranks 29th of 32 in yards allowed per throw, he made 5 of the team's 8 interceptions.**
 
-### 3. Lead: the radio sentence first, short sentences
-Old:
-`**Hooker arrives with 5 interceptions, tied with Xavier McKinney for the NFL lead. Don't build on them: for safeties, a big interception year tells you little about the next one. Behind the interceptions is a safety who has been about average in coverage this season and below average the three seasons before. Even so, he has allowed fewer yards per throw than two of the Bills safeties he joins.**`
-New:
-`**Hooker arrives with 5 interceptions, tied with Xavier McKinney for the NFL lead. Don't count on that pace: safeties who had five or more in a season averaged about 2.5 the next. Behind the interceptions is a safety who's been about average in coverage this season and below average the three seasons before. He has still given up fewer yards per throw than C.J. Gardner-Johnson or Damar Hamlin, two of the safeties he joins.**`
-Why: The computed 2.5 is what a host can repeat. Naming Gardner-Johnson and Hamlin is clearer than "two of the Bills safeties" and is backed by the body.
+Small samples, and other things changed along with the partner. Details below.
+```
+Reason: "Gave up 0.17 more" makes the reader work out whether more is good. Saying what opponents did against their usual answers
+it. The one-line hedge right under the lede means a reader who stops there still gets the caveat.
 
-### 4. Remove the betting metaphor (brand rule 1)
-Old: `The bet is on this season and the two years left on his contract.`
-New: `The Bills are paying for this season and the two years left on his contract.`
+### 3. Dateline: replace "coverage charting"
+OLD: `Game results are through week 9 of the 2026 season; coverage charting
+is through week 8.*`
+NEW: `Game results are through week 9 of the 2026 season. Yards-per-throw and tackling numbers come from Pro Football
+Reference's charting, which is through week 8.*`
 
-### 5. Add the missing "where the number comes from" paragraph (Writing for fans rule)
-The body has the example (5.5 to 2.5) and the range (±0.1). It does not name the source, give the math in plain words, or say how we checked. Insert this after the paragraph that ends `interceptions scored 0.27.` and before the chart:
-`How we got that score: from Pro Football Reference's play-by-play charting (via nflverse), we took each safety's rate in one season (interceptions per throw at him, for example) and set it beside his rate the next season, for all 318 pairs. If the players who were high one year were always high the next, the score would be 1. If the next year looked random, it would be 0. To check it, we re-ran the math 2,000 times, each time on a random reshuffle of the players. That's where the "give or take about 0.1" below comes from. The 5.5-to-2.5 drop is what a score of 0.27 looks like on the field: the next year lands much closer to average than to the big year.`
-Note: "per throw at him" is the per-target rate. No new numbers (318 and 2,000 are already in the story).
+### 4. Table: drop "norm", say which way is good, shorter headers
+OLD:
+```
+| Bishop's partner | Games | Points per pass play vs. the opponent's norm | Against regular starting QBs only |
+```
+NEW:
+```
+| Bishop's partner | Games | Points per pass play vs. opponent's usual (+ = better) | Starting QBs only |
+```
+Keep 4 columns. They read fine once the headers are short, and the 4th column is the caveat itself. Under the table, change
+OLD: `For scale: across all 32 defenses, the Bills were +0.09 over all of 2025 (9th) and are +0.01 so far this season (14th).`
+NEW: `For scale: across all 32 defenses, the Bills were +0.09 over all of 2025 (9th) and are +0.01 so far this season (14th).
+Every row is a small sample, 3 to 9 games.`
 
-### 6. Replace "target" in the body with "throw"
-Define it once, then use "throw" everywhere in the body (stat-heads section can keep "target"):
-- Old: `coverage scored lower: yards allowed per target 0.18, completions allowed 0.11.`
-  New: `coverage scored lower: yards allowed per throw 0.18, completions allowed 0.11.`
-- Old: `Passes thrown at Hooker have gained 8.3 yards per target this season\n(33 targets, a small sample), close to the average safety's 8.1 (31st of 58, 1st = fewest yards allowed).`
-  New: `Passes thrown his way (the stat sheets call them "targets") have gained 8.3 yards per throw this season (33 throws, a small sample), close to the average safety's 8.1. That's 31st of 58 safeties, right in the middle.`
-- Old: `Over 2023 to 2025 he allowed 9.1 per target, more than the average safety's 8.2 (57th of 76\nsafeties thrown at 60+ times). Last season alone he allowed 11.4, 58th of 66.`
-  New: `Over 2023 to 2025 he allowed 9.1 yards per throw, more than the average safety's 8.2 (57th of 76 safeties thrown at 60+ times). Last season alone he allowed 11.4, 58th of 66.`
-- Old: `As a group, Buffalo's safeties have allowed 9.7 yards per target this season`
-  New: `As a group, Buffalo's safeties have allowed 9.7 yards per throw this season`
-- Old: `That's 69 targets, a small sample,`
-  New: `That's 69 throws, a small sample,`
-- Old: `Cole Bishop has\nallowed 7.4 yards per target (31 targets), fewer than Hooker. C.J. Gardner-Johnson has allowed 10.4 (21\ntargets)`
-  New: `Cole Bishop has allowed 7.4 yards per throw (31 throws), fewer than Hooker. C.J. Gardner-Johnson has allowed 10.4 (21 throws)`
-- Old: `Damar Hamlin has allowed 13.2 (13 targets).`
-  New: `Damar Hamlin has allowed 13.2 (13 throws).`
-- Hero JSON bar label: `"Yards allowed per target"` -> `"Yards allowed per throw"`.
+### 5. Reorder the caveats: Hamlin right after the table, then the explainer, then one "How we checked it" with three bullets
+Move the Hamlin paragraph up so it directly follows the "For scale" line (unchanged text, slightly tightened):
+OLD:
+```
+**The Hamlin games need an asterisk.** Two of the three, Baltimore and Minnesota, came against backup quarterbacks.
+The one against a regular starter, Las Vegas, came out -0.19, as bad as the Gardner-Johnson games.
+```
+NEW (placed right after the table and "For scale" line):
+```
+**Ignore Hamlin's +0.40.** Two of his three games, Baltimore and Minnesota, came against backup quarterbacks. In the one against
+a regular starter, Las Vegas, the defense came out -0.19, as bad as the Gardner-Johnson games.
+```
+If "Ignore" feels too strong to Charlie, use "**Hamlin's +0.40 needs an asterisk.**"
 
-### 7. Shorter sentences that can be read aloud
-- Old: `We looked at every safety who was thrown at 25 or more times in back-to-back seasons from 2018 to 2025 (318 pairs of seasons, 118 players) and asked: does a big interception year repeat? Mostly, no.`
-  New: `We looked at every safety thrown at 25 or more times in back-to-back seasons from 2018 to 2025: 318 pairs of seasons from 118 players. Does a big interception year repeat? Mostly, no.`
-- Old: `The 22 safeties who had five or more interceptions in a season averaged 5.5 that year and 2.5 the\nnext: much closer to the 1.7 the whole group averaged than to their big year.`
-  New: `The 22 safeties with five or more interceptions in a season averaged 5.5 that year. The next year they averaged 2.5, much closer to the 1.7 the whole group averaged than to their big year.`
-- Old: `With this few players, those scores could\neach be off by about 0.1 either way (the lines on the chart), so the honest reading is that interceptions and tackling carry over about equally,\nand only a little.`
-  New: `With this few players, each score could be off by about 0.1 either way (the black lines on the chart). The honest reading: interceptions and tackling carry over about equally, and only a little.`
-- Old: `This season Hooker has missed 3 of 55 tackle attempts (5.5%, a small\nsample), better than the average safety's 8.9% (tied for 16th fewest of 58 safeties thrown at 15+\ntimes).`
-  New: `This season Hooker has missed 3 of 55 tackle attempts (5.5%, a small sample). The average safety misses 8.9%. That ties him for 16th-fewest misses among 58 safeties thrown at 15+ times.`
-  Why: in the current version, the ranking in parentheses reads as if it belongs to "the average safety."
+Then merge "How we checked it" and "What else changed" into one paragraph with bullets:
+OLD: the two paragraphs beginning `**How we checked it.** Two things can fake a pattern...` and `**What else changed.** The partner isn't the only difference...`
+NEW:
+```
+**How we checked it.** Three things could fake a pattern like this:
 
-### 8. "Don't expect five more" bullet: make the full-season framing clear
-Old: `Safeties with big interception years averaged about 2.5 the next full season, and Hooker has\n  9 regular-season games left with Buffalo.`
-New: `Safeties with five-interception years averaged about 2.5 over the whole next season, all 17 games. Hooker has 9 regular-season games left with Buffalo.`
-Final check (stage 4): the Quant wrote "about 8 games left," and the story says 9. Please confirm the 9 against the Bills' remaining schedule.
+- **Luck.** We shuffled the 14 Poyer and Gardner-Johnson games between the two groups at random, 20,000 times. A gap this big,
+  in either direction, showed up about 1 time in 16. That's suggestive, not proof.
+- **Quarterbacks.** Two of Poyer's games came against backups. Take them out and his number drops to +0.05. All 5 Gardner-Johnson
+  games came against regular starters.
+- **Everything else that changed.** This season also brought a new defensive coordinator, Jim Leonhard, and other roster changes.
+  These numbers can't separate those from the safety next to Bishop.
 
-### 9. Add a small-sample label to this season's interceptions (Quant item 10)
-Old: `then 5 in 7 games this season.\nThree of this year's 5 came in one game, week 8 at Cincinnati.`
-New: `then 5 in 7 games this season. Three of this year's 5 came in one game, week 8 at Cincinnati, so this year's total rests on a handful of plays.`
+Bishop himself barely moved. Throws his way gained 8.8 yards each with Poyer beside him and 9.2 with Gardner-Johnson, both a bit
+worse than an average safety that year (8.6 and 8.2). That's only 27 and 21 throws. The difference was around him.
+```
+Reason: all the same caveats and numbers, about 20% shorter, and each one is a scannable label. "The difference was around him"
+(from the Quant's wording) explains why the Bishop numbers are there at all.
 
-### 10. Carry-over chart (reports/hooker-carryover.png): passes the five-second test only partly
-The title is the takeaway, which is good. But a fan won't know what "Line = likely range" means, and two blue bars against two gray ones looks like a ranking ("these two are the good ones"), which the Quant said the data doesn't support.
-- Subtitle: `Line = likely range.` -> `Black line = where the true score likely falls. Overlapping lines = no real difference.`
-- Subtitle: `Safeties with 25+ targets in back-to-back seasons` -> `Safeties thrown at 25+ times in back-to-back seasons`
-- Bar label: `Yards allowed per target` -> `Yards allowed per throw`
-- Color: make only Interceptions Bills blue (the story's subject) and the other three gray.
-- Footer: `Range: 95%, resampling players.` -> `Range: middle 95% of 2,000 reshuffles of the players.`
-- Optional, recommended: the 5.5 / 2.5 / 1.7 comparison is the most fan-readable fact in the story and has no chart. A three-bar chart ("Big year: 5.5. Next year: 2.5. Typical safety next year: 1.7. n = 22 safeties") would pass the five-second test better than the 0-to-1 chart and would make a stronger site hero image. It uses existing numbers only.
+### 6. Worked example: say what "19.4" is and tie it to the table
+OLD:
+```
+Example: the Rams normally gain about 0.01 points per pass play. In week 5
+they gained 19.4 on 55 pass plays against Buffalo, about 0.34 a play more than usual. The partner is the other safety on the
+field for the most snaps, from the league's snap counts.
+```
+NEW:
+```
+Example: the Rams' pass plays are normally worth about 0.01 points each. In week 5 against Buffalo, their 55 pass plays were worth
+19.4 points combined, about 0.34 a play more than usual. That game counts as -0.34 for Buffalo, one of the five games behind
+Gardner-Johnson's -0.17. The partner is the other safety who played the most snaps that game, from the league's snap counts.
+```
+Check for the writer and the final Quant: week 5 2026 is a Gardner-Johnson game (weeks 1-5, Stafford listed). The game-level
+-0.34 is the sign-flipped version of the published +0.34, not a new number. If the generator doesn't produce that game value as
+signed, phrase it as "That game counts against Buffalo".
 
-### 11. Interceptions chart (reports/hooker-ints.png): passes
-The title is the takeaway, 2026 is highlighted, and the footer gives the source and sample. Optional: annotate the 2026 bar "3 in one game (Wk 8 at CIN)".
+### 7. Hooker tackling sentence: too many parentheses
+OLD: `He's missed 3 of 55 tackle attempts (5.5%), better than the average
+safety's 8.9% (tied for 16th-fewest misses among 58 safeties thrown at 15+ times).`
+NEW: `He tackles well, too: 3 misses on 55 tries (5.5%), against 8.9% for the average safety. That ties him for 16th of 58
+regular safeties.`
+("Thrown at 15+ times" is already in stat-heads as "safeties with 15+ targets".)
 
-### 12. Hero JSON note: minor
-Old: `Interceptions barely carry over for safeties.`
-New: `Big interception years don't repeat: safeties with 5+ averaged about 2.5 the next season.`
-Why: "barely" overstates a 0.27 score the story calls "a little." The 2.5 is more concrete. Keep the rest of the note.
+### 8. "What we'll track": remove "norm"
+OLD: `Bills pass defense against each opponent's norm with Bishop and Hooker together`
+NEW: `Bills pass defense against what each opponent usually does, with Bishop and Hooker together`
 
-## Checked and fine
-- No reintroduced Quant removals: no "sure tackler," no claim that tackling carries over better than interceptions, and Bishop is shown as better than Hooker.
-- Football terms are correct (snaps, trade deadline, takeaway, starter). Apart from "bet" (edit 4), no betting language.
-- Small-sample labels are present for 55 tackle attempts, 33 throws, 69 Bills throws, and individual Bills safeties. The 2026 interceptions label is added in edit 9.
-- Jargon: "correlation," "bootstrap," and "Pearson" appear only in the stat-heads section. "Draft capital" stays because it is the Bills' own wording, which the Quant pinned.
-- Order works: lead, then interception history, then why it doesn't repeat, then what he is, then what it means. Length is about right once edit 5 is added. The "What to watch" bullet repeats the missed-tackle point from the section above, but it is short enough to keep.
+### 9. Hero JSON: jargon
+- big[1] label OLD: `Bills pass D vs. opponents' norm, with Gardner-Johnson` -> NEW: `Bills pass defense per play vs. what opponents usually do, with Gardner-Johnson`
+- note OLD: `...beat opponents' norms by 0.13 points a play. With Gardner-Johnson, it lost 0.17.` -> NEW: `...held opponents 0.13 points a play below their usual. With Gardner-Johnson, they've been 0.17 above it.`
+- explainer title OLD: `Bills pass defense vs. opponents' norm, per pass play.` -> NEW: `Bills pass defense vs. what opponents usually do, per pass play.`
 
-No edit requires a new number.
+### 10. Chart 1 (hooker-bishop-partner.png): passes, but just barely
+The title already carries the takeaway and the "tracked" limit. Five-second problems:
+- The dark/light key lives only in the subtitle. Add direct labels on the Poyer pair ("All games" next to the dark bar,
+  "Starting QBs only" next to the light one), then shorten the subtitle to "+ = better than that opponent usually does. Small samples (3-9 games)."
+- The light bars change color by sign (pale blue, pale red), so color carries two meanings. Optional: make all light bars
+  one neutral grey and keep blue/red for the dark bars only.
+- Hamlin's +0.40 is the biggest mark on the page. The label "(2 vs. backup QBs)" is there, but consider greying his dark bar, as
+  the Quant suggested.
+No numbers change.
+
+### 11. Chart 2 (hooker-ten-ints.png): passes the five-second test. Optional subtitle fix: "Interceptions, 2026 weeks 1-9 (Tennessee's bye was week 9)."
+
+### 12. Small things
+- "Hooker has been the exception where it matters most" -> "Hooker has been the exception". "Where it matters most" is an
+  opinion the numbers don't show, and the next sentences make the point.
+- Dek (build.py) is fine as is. It uses "tracked with" and "counting on".
+
+## Not changed, on purpose
+Every Quant limit stays: "tracked with", 1 in 16, +0.05, Hamlin's backups, the coordinator confound, "about the same as his
+teammates", "small sample". Edits 2 and 5 make them easier to find, not weaker.

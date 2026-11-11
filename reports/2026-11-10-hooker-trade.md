@@ -1,94 +1,99 @@
-# The Bills paid a second-round pick for Amani Hooker's 5 interceptions. History says don't count on 5 more
+# The Bills' pass defense has tracked with Cole Bishop's partner. Now they've traded for a playmaker
 
-**Hooker arrives with 5 interceptions, tied with Xavier McKinney for the NFL lead. Don't count on that pace: safeties who had five or more in a
-season averaged about 2.5 the next. Behind the interceptions is a safety who's been about average in coverage this season and below
-average the three seasons before. He has still given up fewer yards per throw than C.J. Gardner-Johnson or Damar Hamlin, two of the safeties
-he joins.**
+**With Jordan Poyer beside Cole Bishop last season, opponents' passing did 0.13 points a play worse than usual against Buffalo, about
+6th-best in the league. With C.J. Gardner-Johnson this season, it's done 0.17 better than usual, about 31st of 32. So the Bills
+spent a second-round pick on Amani Hooker, who has 5 of Tennessee's 8 interceptions on a defense that ranks 29th of 32 in yards
+allowed per throw.**
+
+Small samples, and other things changed along with the partner. Details below.
 
 *The Bills traded a 2027 second-round pick to Tennessee for Hooker and a 2027 fifth-round pick on Tuesday, Nov. 10, deadline day. He's
-signed through 2028. (Trade terms as announced by the Bills.) Numbers below are through week 9 of the 2026 season.*
+signed through 2028. (Trade terms as announced by the Bills.) Game results are through week 9 of the 2026 season. Yards-per-throw and
+tackling numbers come from Pro Football Reference's charting, which is through week 8.*
 
-![Hooker's interceptions by season](hooker-ints.png)
+![Bishop's partner](hooker-bishop-partner.png)
 
-## The interceptions are real, and they come in bunches
+## Bishop's partner problem
 
-Hooker has 17 regular-season interceptions in 8 seasons, all with Tennessee. They don't arrive evenly: he had
-5 in 2024, then 0 in 2025, then 5 in 7 games this season.
-Three of this year's 5 came in one game, week 8 at Cincinnati, so this
-year's total rests on a handful of plays.
+Here's how the Bills' pass defense did in games where Bishop and each partner both played most of the snaps:
 
-That's normal for safeties, and it's the main thing to understand about this trade. We looked at every safety thrown at 25 or more
-times in back-to-back seasons from 2018 to 2025: 318 pairs of seasons from 118 players. Does a big interception year repeat? Mostly,
-no. The 22 times a safety had five or more interceptions in a season (16 different players), those seasons averaged 5.5
-interceptions. The next year, 2.5, much closer to the 1.7 the whole group averaged than to their big year. On a scale where 0 means "one season tells you nothing about the next" and
-1 means "it tells you everything," interceptions scored 0.27.
+| Bishop's partner | Games | Points per pass play vs. opponent's usual (+ = better) | Starting QBs only |
+|---|---|---|---|
+| Jordan Poyer, 2025 | 9 | +0.13 | +0.05 (7 games) |
+| Taylor Rapp, 2025 | 6 | +0.01 | -0.02 (5 games) |
+| C.J. Gardner-Johnson, 2026 | 5 | -0.17 | -0.17 (5 games) |
+| Damar Hamlin, 2026 | 3 | +0.40 | -0.19 (1 game) |
 
-![Big interception years rarely repeat](hooker-bigyears.png)
+For scale: across all 32 defenses, the Bills were +0.09 over all of 2025 (9th) and are +0.01 so far this season (14th).
+Every row is a small sample, 3 to 9 games.
 
-How we got that score: from Pro Football Reference's play-by-play charting (via nflverse), we took each safety's rate in one season
-(interceptions per throw at him, for example) and set it beside his rate the next season, for all 318 pairs. If the players who were
-high one year were always high the next, the score would be 1. If the next year looked random, it would be 0. To check it, we re-ran the
-math 2,000 times, each time on a random reshuffle of the players. That's where the "give or take about 0.1" below comes from. The
-5.5-to-2.5 drop is what a score of 0.27 looks like on the field: the next year lands much closer to average than to the
-big year.
+**Hamlin's +0.40 needs an asterisk.** Two of his three games, Baltimore and Minnesota, came against backup quarterbacks. The one against a
+regular starter, Las Vegas, came out -0.19, as bad as the Gardner-Johnson games.
 
-![What carries over](hooker-carryover.png)
+**Where these numbers come from.** Every pass play starts from a spot on the field where an average offense can expect a certain number of points,
+and the play raises or lowers that number. We add those changes up for each opponent's passes against Buffalo, then compare them with what the same
+offense does in its other games that season. Example: the Rams normally gain about 0.01 points per pass play. In week 5
+their 55 pass plays against Buffalo were worth 19.4 points combined, about 0.34 a play more than usual. That game counts as
+-0.34 for Buffalo, one of the 5 games behind Gardner-Johnson's -0.17. The partner is the other safety on the field for the most
+snaps, from the league's snap counts.
 
-To be fair to Hooker, little about a safety carries over well. Tackling scored about the same as interceptions (0.30), and
-coverage scored a bit lower: yards allowed per throw 0.18, completions allowed 0.11. With this few players, each score could be off
-by about 0.1 either way (the black lines on the chart). The honest reading: interceptions and tackling carry over about equally, and only a little. Safeties are hard to measure, and every number here comes with that warning.
+**How we checked it.**
+- **Luck.** We shuffled the 14 Poyer and Gardner-Johnson games between the two groups 20,000 times. A gap this big (either way) showed
+  up about 1 time in 16. Suggestive, not proof.
+- **Quarterbacks.** Two of Poyer's games came against backups. Without them his number drops to +0.05. All 5 Gardner-Johnson games
+  came against regular starters.
+- **Everything else that changed.** This season also brought a new defensive coordinator, Jim Leonhard, and other roster changes. These numbers
+  can't separate those from the safety next to Bishop.
 
-## What the Bills are getting
+Bishop's own coverage barely moved. Throws his way gained 8.8 yards each with Poyer beside him (27 throws) and 9.2 with
+Gardner-Johnson (21). Both are a bit worse than the average safety (8.6 and 8.2), on small samples.
+The difference was around him.
 
-**Tackling: good this season, average before.** This season Hooker has missed 3 of 55 tackle attempts (5.5%, a small
-sample). The average safety misses 8.9%. That ties him for 16th-fewest misses among 58 safeties
-thrown at 15+ times. One more miss would have put him at 7.1%. Over 2023 to 2025 he missed 8.7%, about the
-same as the average safety's 8.9%.
+## Hooker: the one making plays in Tennessee
 
-**Coverage: about average now, below average before.** Passes thrown his way (the stat sheets call them "targets") have gained
-8.3 yards per throw this season (33 throws, a small sample), close to the average safety's 8.1. That's 31st of
-58 safeties, right in the middle. Over 2023 to 2025 he allowed 9.1 yards per throw, more than the average safety's 8.2 (57th of 76
-safeties thrown at 60+ times). Last season alone he allowed 11.4, 58th of 66.
+Tennessee's defense has been bad: passes against it have gained 8.2 yards per throw, 29th of 32 (league average
+7.2). Hooker has been the exception. He has 5 of the Titans' 8 interceptions in 7 games, tied with Xavier McKinney for the NFL lead;
+everyone else on that defense has 3 combined. He tackles well, too: 3 misses on 55 tries (5.5%),
+against 9.0% for the average safety. That ties him for 16th-best of 58 regular safeties.
 
-**How he compares with the Bills' safeties.** As a group, Buffalo's safeties have allowed 9.7 yards per throw this season (the
-8th-most of 32 teams; all NFL safeties combined: 8.2) and missed 10.1% of their tackle attempts (the
-8th-most; all NFL safeties combined: 8.2%, lower than the 8.9% above because safeties who are rarely
-thrown at miss fewer tackles). That's 69 throws, a small sample, and it isn't spread evenly. Cole Bishop has
-allowed 7.4 yards per throw (31 throws), fewer than Hooker. C.J. Gardner-Johnson has allowed 10.4 (21
-throws) and missed 19% of his tackle attempts; Damar Hamlin has allowed 13.2 (13 throws). Hooker's
-8.3 beats those two, and the Bills say he'll play alongside Bishop. All of these are a few dozen throws each, so treat them as hints.
+![Tennessee's interceptions](hooker-ten-ints.png)
+
+One honest caveat: in yards allowed per throw, he's been about the same as his teammates (8.3 on 33 throws vs. 8.2 for the rest
+of the defense). The case for Hooker is the ball-hawking and the tackling, not that throws at him go nowhere. All of this is seven games, a small
+sample.
 
 ## What it means
 
-- **Don't expect five more.** Safeties with five-interception years averaged about 2.5 over the whole next season. Hooker has 9 regular-season games left with Buffalo. If the interceptions keep coming, that's a bonus. Think "starter who's been average-to-below in coverage
-  and is tackling well right now," not "takeaway machine."
+- **It's about the pair, not just the player.** Against starting quarterbacks, Buffalo's best stretch with Bishop came with a steady veteran beside him. Hooker is in his
+  8th season and making plays, and he likely takes the snaps Gardner-Johnson and Hamlin have split.
+- **What we'll track.** Bills pass defense against what each opponent usually does, with Bishop and Hooker together, over the 9 games left, with backup-QB
+  games marked. If it climbs back toward the Poyer-era level against starting quarterbacks (+0.05), that fits the trade working. It still
+  won't separate Hooker from the new coordinator.
 - **It's a real price.** Per the Bills, it's the most draft capital the team has used to acquire a player at the trade deadline under general
-  manager Brandon Beane. The Bills are paying for this season and the two years left on his contract.
-- **What to watch.** Whether he takes snaps from Gardner-Johnson or Hamlin, and whether this season's tackling holds up. Buffalo's safeties
-  have missed tackles more often than most teams'. His usual rate over the three seasons before this one (8.7%) is below the Bills group's 10.1%.
+  manager Brandon Beane: a second-round pick for a title push this season, with two more years of Hooker after it.
 
 ## For the stat-heads
 
-- Interceptions: nflverse weekly player stats (gsis 00-0035632), regular season. 2026 through week 9. Co-leader(s): Xavier McKinney.
-  He also has one playoff interception (not counted). PFR's charting counts interceptions slightly differently from nflverse; the
-  carry-over analysis uses PFR counts, Hooker's career totals use nflverse.
-- Coverage: Pro Football Reference charting via nflverse (`pfr_advstats` def). Targets, completions, yards allowed, missed tackles,
-  combined tackles. Missed-tackle rate = missed / (missed + combined tackles). Charted by humans; treat as noisy.
-- Safeties: PFR rows matched to nflverse weekly player stats on season and team (OAK/SD/STL normalized), then name with suffixes and punctuation
-  removed; 12 more player-seasons matched on first initial + last name where that key is unique on the team. Players nflverse lists as
-  "DB" rather than a safety position are left out, which thins the 2018-2021 sample most.
-- Year-to-year: Pearson correlation of each rate between consecutive seasons, safeties with 25+ targets in both, 2018-2025,
-  n=318 pairs from 118 players: interceptions per target 0.274 (95% 0.17 to 0.37),
-  yards per target 0.184 (0.06 to 0.29), completion rate 0.111 (-0.00 to
-  0.22), missed-tackle rate 0.303 (0.17 to 0.41). Intervals: 2,000 bootstrap draws resampling
-  players (pairs share players). Missed tackles beat interceptions in 63% of draws: no real difference. r of 0.27 means one season
-  explains about 7% of the next season's spread.
-- Five-plus interception seasons (PFR counts, 25+ targets both years): n=22, 5.55 that season, 2.55 the next; all pairs
-  1.74 the next season.
-- Hooker 2026: 33 targets, 8.30 yards/target, 3 missed of 55 attempts. 2023-2025: 158 targets,
-  9.06 yards/target, missed-tackle rate 0.087 (40th of 76).
-- Bills safeties 2026: 69 targets, 9.71 yards/target, 11 missed of 109 attempts. League team safety
-  groups: 8.24 yards/target, missed-tackle rate 0.082. By player (10+ targets):
-  Cole Bishop 31 tgt, 7.4 yds/tgt, 5/50 missed; C.J. Gardner-Johnson 21 tgt, 10.4 yds/tgt, 6/32 missed; Damar Hamlin 13 tgt, 13.2 yds/tgt, 0/21 missed.
-- Trade terms, "most draft capital ... at the trade deadline under Beane" and Hooker playing alongside Bishop: buffalobills.com,
-  "Bills land impact safety Amani Hooker in trade with Titans" and "'A difference maker'...", Nov. 10, 2026.
+- Pass defense: nflverse play-by-play, dropbacks (pass attempts, sacks, scrambles; no two-point tries), EPA allowed, regular season. Opponent's
+  norm = that offense's EPA per dropback in its other games that season (2026 through week 9). Value = (EPA allowed - norm x dropbacks)
+  / dropbacks, sign flipped so + = better than norm. Counts every Bills dropback in the game, not only snaps with both safeties on the field.
+- League context: same value for all 32 defenses. +0.128 would rank 6th among 2025 defenses; -0.174 31st among 2026.
+- Pairings: nflverse snap counts (`raw_snap_counts`), safeties (S/FS/SS/SAF) with 50%+ of defensive snaps; partner = the other one with the
+  most snaps. Bishop + Jordan Poyer: weeks 8-16, 283 dropbacks; + Taylor Rapp: weeks 1-6, 194; + C.J. Gardner-Johnson:
+  weeks 1-5, 221; + Damar Hamlin: weeks 6-9, 105. Week 6 2026 was shared (Hamlin over 50%, Gardner-Johnson under);
+  week 9 also had Geno Stone at 50%+. Games where Bishop played under 50%, or where the other safety is listed as "DB" (week 17 2025,
+  Cameron Lewis), are excluded. Not adjusted for cornerbacks, pass rush, coordinator or injuries.
+- Backup QB: the passer who led a team-game in dropbacks, when he is neither the one who has led that team in the most games through that
+  week (ties: dropbacks) nor the team's main passer the season before. Flagged games in these pairings: 2025 wk 2 NYJ (T.Taylor); 2025 wk 8 CAR (A.Dalton); 2025 wk 12 HOU (D.Mills); 2026 wk 8 BAL (J.Fagnano); 2026 wk 9 MIN (C.Wentz).
+- Chance check: permutation of the 14 games between Poyer and Gardner-Johnson labels, 20,000 draws (seed 0), dropback-weighted;
+  two-sided p = 0.063 for a gap of 0.302.
+- Bishop coverage by partner (PFR charting): 2025 with Poyer 27 targets, 8.81 yards/target; 2026 with
+  Gardner-Johnson 21 targets, 9.19. Matched safeties: 8.63 (2025), 8.23 (2026).
+- Tennessee 2026: PFR charting through week 8 (Tennessee's week-9 bye means it's complete for them): all charted defenders
+  8.21 yards/target (29th of 32, 1st = fewest); Hooker 8.30 on 33; rest 8.20 on 232.
+  Interceptions: 8 team, 5 Hooker (PFR and nflverse agree). The tie for the NFL lead (Xavier McKinney) is from nflverse
+  player stats through week 9; PFR hadn't charted Green Bay's week 9 as of 2026-11-10. Career: 17 regular-season interceptions.
+- Missed-tackle rate = missed / (missed + combined tackles), safeties with 15+ targets (58). PFR safeties matched to nflverse
+  by season, team and name (suffixes removed; 12 by initial + last name where unique); DB-labeled players excluded.
+- Trade terms and "most draft capital ... at the trade deadline under Beane": buffalobills.com, "Bills land impact safety Amani Hooker in trade
+  with Titans" and "'A difference maker'...", Nov. 10, 2026.

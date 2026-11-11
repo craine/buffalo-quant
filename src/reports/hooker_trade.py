@@ -1,6 +1,6 @@
 """Bills trade for safety Amani Hooker (Nov 10, 2026 deadline). What the data says he brings, in plain English.
 
-Writes reports/2026-11-10-hooker-trade.md, two PNGs and a hero JSON. Every number is computed here, except the trade terms,
+Writes reports/2026-11-10-hooker-trade.md, two PNGs and a hero JSON. Angle (Charlie): Bishop's partner problem. Every number is computed here, except the trade terms,
 which are reported facts cited to the Bills' announcement. Pinned: games through 2026 week THRU.
 Coverage numbers (targets, yards allowed, missed tackles) are Pro Football Reference charting via nflverse: human-charted, noisy.
 Safeties are identified by matching PFR names to nflverse weekly player stats (see match_safeties).
@@ -19,6 +19,8 @@ from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
 
 OUT = ROOT / "reports"
 SEASON, THRU = 2026, 9
+PFR_THRU = 8                   # PFR charting complete through week 8 as of AS_OF; pinned so re-runs reproduce
+AS_OF = "2026-11-10"
 HOOKER = "00-0035632"          # gsis id
 HOOKER_PFR = "HookAm00"        # PFR id (matched by name+team+season, verified unique)
 SAFETY = ("SAF", "FS", "SS", "S")
@@ -89,7 +91,7 @@ def safety_seasons():
     pw = pw[(pw.season < SEASON) | (pw.week <= THRU)]
     pf = query("""SELECT season, week, team, pfr_player_name AS name, pfr_player_id, def_ints, def_targets, def_completions_allowed,
                   def_yards_allowed, def_missed_tackles, def_tackles_combined FROM raw_pfr_def WHERE game_type='REG'""")
-    pf = pf[(pf.season < SEASON) | (pf.week <= THRU)]
+    pf = pf[(pf.season < SEASON) | (pf.week <= PFR_THRU)]
     x, n_tier2 = match_safeties(pw, pf)
     s = x.groupby(["season", "pfr_player_id"]).agg(
         name=("name", "last"), g=("week", "nunique"), ints=("def_ints", "sum"), tgt=("def_targets", "sum"),
@@ -127,224 +129,292 @@ def carryover(s, draws=2000, seed=0):
     return out, len(a), int(a.season.min()), int(a.season_n.max()), len(players), ci, mt_ahead, ex
 
 
+def pass_d_by_pair(team, seasons):
+    """Each game: the defense's pass plays, points allowed, and what that opponent's passing usually does
+    (its points per pass play in its other games that season, games through week THRU in SEASON).
+    Pair = the two safeties with the most defensive snaps, each on the field for 50%+ of them."""
+    sl = ",".join(map(str, seasons))
+    p = query(f"""SELECT season, week, posteam, defteam, epa FROM raw_pbp WHERE season_type='REG' AND qb_dropback=1
+                  AND epa IS NOT NULL AND season IN ({sl}) AND COALESCE(two_point_attempt,0)=0""")
+    p = p[(p.season < SEASON) | (p.week <= THRU)]
+    g = p.groupby(["season", "week", "posteam", "defteam"]).agg(n=("epa", "size"), epa=("epa", "sum")).reset_index()
+    tot = g.groupby(["season", "posteam"])[["n", "epa"]].sum()
+    o = tot.loc[list(zip(g.season, g.posteam))].to_numpy()
+    g["norm"] = (o[:, 1] - g.epa) / (o[:, 0] - g.n)          # opponent's points per pass play elsewhere
+    g["vs"] = g.epa - g.norm * g.n                            # points allowed beyond that norm
+    # the passer who led each team-game in dropbacks; "regular starter" = the one who did that in the most games
+    sl_q = ",".join(map(str, [min(seasons) - 1] + list(seasons)))
+    q = query(f"""SELECT season, week, posteam, COALESCE(passer_player_id, rusher_player_id) AS qb,
+                  COALESCE(passer_player_name, rusher_player_name) AS qb_name FROM raw_pbp WHERE season_type='REG'
+                  AND qb_dropback=1 AND epa IS NOT NULL AND season IN ({sl_q}) AND COALESCE(two_point_attempt,0)=0""")
+    q = q[(q.season < SEASON) | (q.week <= THRU)]
+    gq = (q.groupby(["season", "week", "posteam", "qb", "qb_name"]).size().rename("dbs").reset_index()
+          .sort_values(["dbs", "qb"]).groupby(["season", "week", "posteam"]).tail(1))
+    # regular starter as of each game: the passer who has led the team in the most games through that week (ties: dropbacks)
+    def starter_asof(r):
+        h = gq[(gq.season == r.season) & (gq.posteam == r.posteam) & (gq.week <= r.week)]
+        t = h.groupby("qb").agg(gms=("week", "size"), dbs=("dbs", "sum")).reset_index().sort_values(["gms", "dbs", "qb"])
+        return t.qb.iloc[-1]
+    # ... or the team's main passer the season before (catches a starter returning from injury, e.g. Burrow 2025)
+    prev = (gq.groupby(["season", "posteam", "qb"]).agg(gms=("week", "size"), dbs=("dbs", "sum")).reset_index()
+            .sort_values(["gms", "dbs", "qb"]).groupby(["season", "posteam"]).tail(1).set_index(["season", "posteam"]).qb)
+    gq = gq[gq.season.isin(seasons)].copy()
+    gq["starter"] = [starter_asof(r) for r in gq.itertuples()]
+    gq["prev"] = [prev.get((r.season - 1, r.posteam)) for r in gq.itertuples()]
+    gq["backup"] = (gq.qb != gq.starter) & (gq.qb != gq.prev)
+    g = g.merge(gq[["season", "week", "posteam", "qb_name", "backup"]], on=["season", "week", "posteam"])
+    pass_d_by_pair.all_teams = g
+    sn = query(f"""SELECT season, week, team, player, pfr_player_id, defense_snaps, defense_pct FROM raw_snap_counts
+                   WHERE game_type='REG' AND season IN ({sl}) AND team='{team}' AND position IN ('S','FS','SS','SAF')""")
+    sn = sn[(sn.season < SEASON) | (sn.week <= THRU)]
+    rows = []
+    for (se, wk), x in sn.groupby(["season", "week"]):
+        x = x[x.defense_pct >= 0.5].sort_values("defense_snaps", ascending=False)
+        rows.append((se, wk, list(x.player)))
+    pr = pd.DataFrame(rows, columns=["season", "week", "safeties"])
+    return g[g.defteam == team].merge(pr, on=["season", "week"]), sn
+
+
 def main():
     pw, x, s, n_tier2 = safety_seasons()
-    h = pw[pw.player_id == HOOKER]
-    hs = h.groupby("season").agg(ints=("i", "sum"))
-    career_ints = int(hs.ints.sum())
+    co, n_pairs, y0, y1, n_players, ci, mt_ahead, ex = carryover(s)
     lead = pw[pw.season == SEASON].groupby(["player_id", "name"]).i.sum()
-    top = lead.max()
-    co_leaders = [n for (pid, n), v in lead.items() if v == top and pid != HOOKER]
-    h_ints = int(hs.loc[SEASON, "ints"])
-    hw = h[h.season == SEASON]
-    h_games = int(hw.week.nunique())
-    best_game = hw.groupby("week").agg(i=("i", "sum"), opp=("team", "first")).sort_values("i").iloc[-1]
-    best_wk = int(hw.groupby("week").i.sum().idxmax())
-    best_opp = query(f"""SELECT CASE WHEN home_team='TEN' THEN away_team ELSE home_team END AS opp,
-                         CASE WHEN home_team='TEN' THEN 'vs.' ELSE 'at' END AS ha FROM raw_schedules
-                         WHERE season={SEASON} AND week={best_wk} AND (home_team='TEN' OR away_team='TEN')""").iloc[0]
-    team_names = {"CIN": "Cincinnati"}
+    co_leaders = [n for (pid, n), v in lead.items() if v == lead.max() and pid != HOOKER]
+    h_ints = int(lead.xs(HOOKER, level="player_id").iloc[0])
+    h_games = int(pw[(pw.player_id == HOOKER) & (pw.season == SEASON)].week.nunique())
+    career = int(pw[pw.player_id == HOOKER].i.sum())
+    n_seasons = int(pw[pw.player_id == HOOKER].season.nunique())
 
-    hp = s[s.pfr_player_id == HOOKER_PFR].set_index("season")
-    # 2026 among safeties
+    # ---- Bishop and his partner: Bills pass defense vs. each opponent's norm
+    bg, bsn = pass_d_by_pair("BUF", [SEASON - 1, SEASON])
+    bg = bg[bg.safeties.map(lambda v: "Cole Bishop" in v and len(v) >= 2)].copy()
+    bg["partner"] = bg.safeties.map(lambda v: next(p for p in v if p != "Cole Bishop"))
+    # Hamlin's week-9 game had Geno Stone as a third safety; the partner is the top-snap other safety (Hamlin)
+    pr = bg.groupby(["season", "partner"]).agg(games=("week", "size"), plays=("n", "sum"), epa=("epa", "sum"),
+                                               vs=("vs", "sum"), wks=("week", lambda w: f"{min(w)}-{max(w)}")).reset_index()
+    pr["per"] = pr.vs / pr.plays
+    pr["allowed"] = pr.epa / pr.plays
+    pr = pr.sort_values(["season", "games"], ascending=[True, False])
+    get = lambda se, nm: pr[(pr.season == se) & pr.partner.str.contains(nm)].iloc[0]
+    poy, rap, cj, ham = get(SEASON - 1, "Poyer"), get(SEASON - 1, "Rapp"), get(SEASON, "Gardner"), get(SEASON, "Hamlin")
+    ham_g = bg[(bg.season == SEASON) & (bg.partner.str.contains("Hamlin"))].sort_values("week")
+    ham_opp = list(ham_g.posteam)
+    ham_wo_min = ham_g[ham_g.posteam != "MIN"]
+    ham_wo_min_per = ham_wo_min.vs.sum() / ham_wo_min.n.sum()
+    reg = bg[~bg.backup]
+    pr_reg = reg.groupby(["season", "partner"]).agg(games=("week", "size"), plays=("n", "sum"), vs=("vs", "sum"))
+    pr_reg["per"] = pr_reg.vs / pr_reg.plays
+    reg_of = lambda r: pr_reg.loc[(r.season, r.partner)] if (r.season, r.partner) in pr_reg.index else None
+    nb = lambda r: int(bg[(bg.season == r.season) & (bg.partner == r.partner)].backup.sum())
+    ham_lv = ham_g[~ham_g.backup].iloc[0]
+    # how often a gap as big as Poyer vs. Gardner-Johnson shows up by chance: shuffle which games go to which partner
+    gp = bg[((bg.season == poy.season) & (bg.partner == poy.partner)) | ((bg.season == cj.season) & (bg.partner == cj.partner))]
+    lab = (gp.partner == poy.partner).to_numpy()
+    vs_, n_ = gp.vs.to_numpy(), gp.n.to_numpy()
+    gap = vs_[~lab].sum() / n_[~lab].sum() - vs_[lab].sum() / n_[lab].sum()
+    rng = np.random.default_rng(0)
+    perm = []
+    for _ in range(20000):
+        l2 = rng.permutation(lab)
+        perm.append(vs_[~l2].sum() / n_[~l2].sum() - vs_[l2].sum() / n_[l2].sum())
+    p_gap = float((np.abs(np.array(perm)) >= abs(gap)).mean())   # two-sided: a gap this big either way
+    # league context: the same number for every defense, full 2025 and 2026 through week THRU
+    lgx = pass_d_by_pair.all_teams
+    tv = lgx.groupby(["season", "defteam"]).agg(vs=("vs", "sum"), n=("n", "sum"))
+    tv["per"] = -(tv.vs / tv.n)                                   # + = better than norm
+    rank_in = lambda se, v: int((tv.loc[se].per > v).sum()) + 1
+    poy_rank, cj_rank = rank_in(SEASON - 1, -poy.per), rank_in(SEASON, -cj.per)
+    buf25, buf26 = tv.loc[(SEASON - 1, "BUF")].per, tv.loc[(SEASON, "BUF")].per
+    buf25_rk, buf26_rk = rank_in(SEASON - 1, buf25), rank_in(SEASON, buf26)
+    # worked example: the Bills' worst Gardner-Johnson game
+    wx = bg[(bg.season == SEASON) & (bg.partner == cj.partner)].assign(pp=lambda d: d.vs / d.n).sort_values("pp").iloc[-1]
+    team_name = {"LA": "Rams", "DET": "Lions", "NE": "Patriots", "LAC": "Chargers", "HOU": "Texans"}
+    # Bishop's own coverage with each partner (PFR charting, by game)
+    bp = query(f"""SELECT season, week, def_targets t, def_yards_allowed y FROM raw_pfr_def WHERE game_type='REG' AND pfr_player_id='BishCo00'
+                   AND (season < {SEASON} OR week <= {PFR_THRU})""")
+    bp = bp.merge(bg[["season", "week", "partner"]], on=["season", "week"]).groupby(["season", "partner"])[["t", "y"]].sum()
+    bp["ypt"] = bp.y / bp.t
+    bish_cj = bp.loc[(SEASON, cj.partner)]
+    bish_poy = bp.loc[(SEASON - 1, poy.partner)]
+    saf_ypt = s.groupby("season").apply(lambda d: d.yds.sum() / d.tgt.sum())
+    pfr_thru = PFR_THRU
+
+    # ---- Hooker on a bad Tennessee defense
+    td = query(f"""SELECT team, pfr_player_id id, pfr_player_name name, def_targets t, def_yards_allowed y, def_ints i,
+                   def_missed_tackles mt, def_tackles_combined tk FROM raw_pfr_def WHERE game_type='REG' AND season={SEASON} AND week<={PFR_THRU}""")
+    tmy = td.groupby("team")[["y", "t"]].sum()
+    tmy["ypt"] = tmy.y / tmy.t
+    ten_rank, n_teams = int(tmy.ypt.rank(method="min")["TEN"]), len(tmy)
+    lg_ypt = td.y.sum() / td.t.sum()
+    ten = td[td.team == "TEN"].groupby("id")[["t", "y", "i", "mt", "tk"]].sum()
+    hk, rest = ten.loc[HOOKER_PFR], ten.drop(HOOKER_PFR)
+    ten_ints, rest_ints = int(ten.i.sum()), int(rest.i.sum())
+    rest_ypt, hk_ypt = rest.y.sum() / rest.t.sum(), hk.y / hk.t
+    # tackling among safeties (same safety universe as before)
     z = s[(s.season == SEASON) & (s.tgt >= MIN_TGT_SEASON)].copy()
-    z["rk_ypt"] = z.ypt.rank(method="min")
     z["rk_mt"] = z.mt_pct.rank(method="min")
     hz = z[z.pfr_player_id == HOOKER_PFR].iloc[0]
     mt_tied = int((z.mt_pct == hz.mt_pct).sum()) > 1
-    lg26 = dict(ypt=z.yds.sum() / z.tgt.sum(), mt=z.mt.sum() / (z.mt.sum() + z.tk.sum()))
-    # 2025 alone
-    z5 = s[(s.season == SEASON - 1) & (s.tgt >= MIN_TGT)].copy()
-    z5["rk_ypt"] = z5.ypt.rank(method="min")
-    h25 = z5[z5.pfr_player_id == HOOKER_PFR].iloc[0]
-    # 2023-2025 pooled
-    p3 = s[s.season.between(SEASON - 3, SEASON - 1)].groupby(["pfr_player_id"]).agg(
-        name=("name", "last"), tgt=("tgt", "sum"), yds=("yds", "sum"), mt=("mt", "sum"), tk=("tk", "sum")).reset_index()
-    p3 = p3[p3.tgt >= MIN_TGT_3YR].copy()
-    p3["ypt"] = p3.yds / p3.tgt
-    p3["mt_pct"] = p3.mt / (p3.mt + p3.tk)
-    p3["rk_ypt"] = p3.ypt.rank(method="min")
-    p3["rk_mt"] = p3.mt_pct.rank(method="min")
-    h3 = p3[p3.pfr_player_id == HOOKER_PFR].iloc[0]
-    lg3 = dict(ypt=p3.yds.sum() / p3.tgt.sum(), mt=p3.mt.sum() / (p3.mt.sum() + p3.tk.sum()))
-    # every team's safeties this season, and the Bills' by player
-    xs = x[x.season == SEASON]
-    tm = xs.groupby("team").agg(tgt=("def_targets", "sum"), yds=("def_yards_allowed", "sum"),
-                                mt=("def_missed_tackles", "sum"), tk=("def_tackles_combined", "sum"))
-    tm["ypt"] = tm.yds / tm.tgt
-    tm["mt_pct"] = tm.mt / (tm.mt + tm.tk)
-    tm["rk_ypt"] = tm.ypt.rank(method="min", ascending=False)   # 1 = most yards allowed
-    tm["rk_mt"] = tm.mt_pct.rank(method="min", ascending=False)  # 1 = most missed tackles
-    lg_tm = dict(ypt=tm.yds.sum() / tm.tgt.sum(), mt=tm.mt.sum() / (tm.mt.sum() + tm.tk.sum()))
-    bufs = tm.loc["BUF"]
-    bp = xs[xs.team == "BUF"].groupby("pfr_player_id").agg(name=("name", "last"), tgt=("def_targets", "sum"),
-                                                          yds=("def_yards_allowed", "sum"), mt=("def_missed_tackles", "sum"),
-                                                          tk=("def_tackles_combined", "sum"))
-    bp["ypt"] = bp.yds / bp.tgt
-    bp = bp[bp.tgt >= 10].sort_values("tgt", ascending=False)
-    bn = {r.name: r for r in bp.itertuples()}
-    bishop, cjgj, hamlin = (next(r for n, r in bn.items() if k in n) for k in ("Bishop", "Gardner-Johnson", "Hamlin"))
-    co, n_pairs, y0, y1, n_players, ci, mt_ahead, ex = carryover(s)
-
-    # ---- chart 1: interceptions by season
-    fig, ax = plt.subplots(figsize=(9.5, 4.4), dpi=200)
-    yrs = list(hs.index)
-    ax.bar([str(y) for y in yrs], hs.ints, color=[BLUE if y == SEASON else GRAY for y in yrs], width=0.6, zorder=2)
-    for i, (y, r) in enumerate(hs.iterrows()):
-        ax.text(i, r.ints + 0.1, f"{int(r.ints)}", ha="center", fontsize=11, fontweight="bold", color=INK)
-    ax.text(len(yrs) - 1, hs.ints.iloc[-1] + 0.55, f"{int(best_game.i)} in one game (Wk {best_wk} {best_opp.ha} {best_opp.opp})", ha="center", fontsize=8.5, color=MUTED)
-    ax.set_ylim(0, max(hs.ints) + 1.6)
-    ax.set_yticks(range(0, int(max(hs.ints)) + 1))
-    ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Amani Hooker's interceptions come in bunches",
-           f"Regular-season interceptions by season, all with Tennessee. {SEASON} is through week {THRU} ({h_games} games).",
-           f"{career_ints} career regular-season interceptions.", src="Source: nflverse weekly player stats. Regular season.")
-    fig.savefig(OUT / "hooker-ints.png"); plt.close(fig)
-
-    # ---- chart 2: what carries over (with ranges)
-    lab = {"mt_pct": "Missed tackles", "int_rate": "Interceptions", "ypt": "Yards allowed per throw",
-           "cmp_pct": "Completions allowed"}
-    order = ["cmp_pct", "ypt", "int_rate", "mt_pct"]
-    fig, ax = plt.subplots(figsize=(9.5, 4.4), dpi=200)
-    ys = range(len(order))
-    ax.barh([lab[k] for k in order], [co[k] for k in order], color=[BLUE if k == "int_rate" else GRAY for k in order],
-            height=0.55, zorder=2)
-    for i, k in enumerate(order):
-        lo, hi = ci[k]
-        ax.plot([lo, hi], [i, i], color=INK, lw=1.4, zorder=3)
-        ax.text(hi + 0.015, i, f"{co[k]:.2f}", va="center", fontsize=10.5, fontweight="bold", color=INK)
-    ax.set_xlim(0, 1)
-    ax.set_xlabel("How well one season predicts the next (0 = not at all, 1 = perfectly)", fontsize=9.5)
-    ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "For safeties, little carries over from one season to the next",
-           f"Safeties thrown at {MIN_TGT}+ times in back-to-back years, {y0}-{y1} ({n_players} players). Black line = likely range; overlap = no real difference.",
-           "Interceptions per throw, yards and completions allowed per throw, missed tackles per tackle attempt. Range: middle 95% of 2,000 reshuffles of the players.")
-    fig.savefig(OUT / "hooker-carryover.png"); plt.close(fig)
-
-    # ---- chart 3: big interception years, then the next year
-    fig, ax = plt.subplots(figsize=(9.5, 4.4), dpi=200)
-    bars = [("Their big year", ex["this"], BLUE), ("The next year", ex["nxt"], RED), ("Typical safety, next year", ex["all_nxt"], GRAY)]
-    ax.bar([b[0] for b in bars], [b[1] for b in bars], color=[b[2] for b in bars], width=0.55, zorder=2)
-    for i, b in enumerate(bars):
-        ax.text(i, b[1] + 0.12, f"{b[1]:.1f}", ha="center", fontsize=13, fontweight="bold", color=INK)
-    ax.set_ylim(0, ex["this"] + 1); ax.set_ylabel("Interceptions", fontsize=10)
-    ax.tick_params(axis="x", labelsize=11)
-    ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"Big interception years rarely repeat ({ex['repeat']} of {ex['n']} did)",
-           f"{ex['n']} seasons with 5+ interceptions ({ex['players']} safeties), {y0}-{y1}: what they averaged that year and the next.",
-           f"Safeties thrown at {MIN_TGT}+ times in both seasons ({n_pairs} pairs). Regular seasons; PFR interception counts.")
-    fig.savefig(OUT / "hooker-bigyears.png"); plt.close(fig)
-
-    lead_txt = f"tied with {co_leaders[0]} for the NFL lead" if len(co_leaders) == 1 else (
-        "the NFL lead" if not co_leaders else f"tied for the NFL lead with {len(co_leaders)} others")
+    lg26_mt = z.mt.sum() / (z.mt.sum() + z.tk.sum())
     left = int(query(f"""SELECT COUNT(*) AS n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week>{THRU}
                          AND (home_team='BUF' OR away_team='BUF')""").n.iloc[0])
-    words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven']
-    att26 = int(hz.mt + hz.tk)
-    min_pts = query("SELECT home_score FROM raw_schedules WHERE game_id='2026_09_BUF_MIN'").home_score.iloc[0]
-    md = f"""# The Bills paid a second-round pick for Amani Hooker's {h_ints} interceptions. History says don't count on {h_ints} more
+    nm = lambda full: full.split()[-1] if "Gardner" not in full else "Gardner-Johnson"
 
-**Hooker arrives with {h_ints} interceptions, {lead_txt}. Don't count on that pace: safeties who had five or more in a
-season averaged about {ex['nxt']:.1f} the next. Behind the interceptions is a safety who's been about average in coverage this season and below
-average the three seasons before. He has still given up fewer yards per throw than C.J. Gardner-Johnson or Damar Hamlin, two of the safeties
-he joins.**
+    # ---- chart 1: Bishop's partner, all games and against regular starters only
+    fig, ax = plt.subplots(figsize=(9.5, 5.0), dpi=200)
+    order = [poy, rap, cj, ham]
+    labels = [f"{r.partner}\n{int(r.season)}, {r.games} games" + (f" ({nb(r)} vs. " + ("a backup QB)" if nb(r) == 1 else "backup QBs)") if nb(r) else "") for r in order]
+    ys = np.arange(len(order))[::-1] * 1.0
+    for y_, r in zip(ys, order):
+        v_all = -r.per
+        rr = reg_of(r)
+        v_reg = -rr.per if rr is not None else None
+        ax.barh(y_ + 0.17, v_all, 0.32, color=GRAY if r is ham else (BLUE if v_all > 0 else RED), zorder=2)
+        ax.text(v_all + (0.01 if v_all >= 0 else -0.01), y_ + 0.17, f"{v_all:+.2f}", va="center", ha="left" if v_all >= 0 else "right",
+                fontsize=9.5, fontweight="bold", color=INK)
+        if v_reg is not None:
+            ax.barh(y_ - 0.17, v_reg, 0.32, color="#C9CDD4", zorder=2)
+            if r is poy:
+                ax.text(-0.01, y_ + 0.17, "All games", ha="right", va="center", fontsize=8.5, color=MUTED)
+                ax.text(-0.01, y_ - 0.17, "Starting QBs only", ha="right", va="center", fontsize=8.5, color=MUTED)
+            ax.text(v_reg + (0.01 if v_reg >= 0 else -0.01), y_ - 0.17, f"{v_reg:+.2f}", va="center", ha="left" if v_reg >= 0 else "right",
+                    fontsize=9, color=MUTED)
+    ax.axvline(0, color=INK, lw=0.9)
+    ax.set_yticks(ys, labels, fontsize=9.5)
+    lim = 0.55
+    ax.set_xlim(-lim, lim)
+    ax.set_xlabel("Points per pass play, better (+) or worse (-) than what that opponent usually does", fontsize=9.5)
+    ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
+    finish(fig, "The Bills' pass defense has tracked with Cole Bishop's partner",
+           "Games where Bishop and the partner both played most snaps. Gray Hamlin bar: 2 of 3 games vs. backup QBs.",
+           f"What that opponent usually does = its points per pass play in its other games that season. {int(pr.plays.sum())} pass plays, "
+           f"{SEASON - 1} and {SEASON} through week {THRU}.", src="Source: nflverse play-by-play and snap counts. Regular season.")
+    fig.savefig(OUT / "hooker-bishop-partner.png"); plt.close(fig)
+
+    # ---- chart 2: Tennessee's interceptions
+    fig, ax = plt.subplots(figsize=(9.5, 4.0), dpi=200)
+    ax.barh([1, 0], [h_ints, rest_ints], color=[BLUE, GRAY], height=0.55, zorder=2)
+    ax.set_yticks([1, 0], ["Amani Hooker", "Every other Titan"], fontsize=11)
+    for y_, v in ((1, h_ints), (0, rest_ints)):
+        ax.text(v + 0.08, y_, str(v), va="center", fontsize=13, fontweight="bold", color=INK)
+    ax.set_xlim(0, max(h_ints, rest_ints) + 1); ax.set_xticks(range(0, max(h_ints, rest_ints) + 1))
+    ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
+    finish(fig, f"On a bad defense, Hooker made the plays: {h_ints} of Tennessee's {ten_ints} interceptions",
+           f"Interceptions, {SEASON} weeks 1-{THRU} (Tennessee's bye was week 9). Tennessee ranks {ordn(ten_rank)} of {n_teams} in yards allowed per throw.",
+           f"Hooker played {h_games} games.", src="Source: Pro Football Reference charting via nflverse. Regular season.")
+    fig.savefig(OUT / "hooker-ten-ints.png"); plt.close(fig)
+
+    lead_txt = f"tied with {co_leaders[0]} for the NFL lead" if len(co_leaders) == 1 else "the NFL lead"
+    poy_reg, rap_reg, cj_reg = reg_of(poy), reg_of(rap), reg_of(cj)
+    chance = round(1 / p_gap) if p_gap > 0 else None
+    md = f"""# The Bills' pass defense has tracked with Cole Bishop's partner. Now they've traded for a playmaker
+
+**With Jordan Poyer beside Cole Bishop last season, opponents' passing did {-poy.per:.2f} points a play worse than usual against Buffalo, about
+{ordn(poy_rank)}-best in the league. With C.J. Gardner-Johnson this season, it's done {cj.per:.2f} better than usual, about {ordn(cj_rank)} of 32. So the Bills
+spent a second-round pick on Amani Hooker, who has {h_ints} of Tennessee's {ten_ints} interceptions on a defense that ranks {ordn(ten_rank)} of {n_teams} in yards
+allowed per throw.**
+
+Small samples, and other things changed along with the partner. Details below.
 
 *The Bills traded a 2027 second-round pick to Tennessee for Hooker and a 2027 fifth-round pick on Tuesday, Nov. 10, deadline day. He's
-signed through 2028. (Trade terms as announced by the Bills.) Numbers below are through week {THRU} of the {SEASON} season.*
+signed through 2028. (Trade terms as announced by the Bills.) Game results are through week {THRU} of the {SEASON} season. Yards-per-throw and
+tackling numbers come from Pro Football Reference's charting, which is through week {pfr_thru}.*
 
-![Hooker's interceptions by season](hooker-ints.png)
+![Bishop's partner](hooker-bishop-partner.png)
 
-## The interceptions are real, and they come in bunches
+## Bishop's partner problem
 
-Hooker has {career_ints} regular-season interceptions in {len(hs)} seasons, all with Tennessee. They don't arrive evenly: he had
-{int(hs.loc[SEASON - 2, 'ints'])} in {SEASON - 2}, then {int(hs.loc[SEASON - 1, 'ints'])} in {SEASON - 1}, then {h_ints} in {h_games} games this season.
-{words[int(best_game.i)].capitalize()} of this year's {h_ints} came in one game, week {best_wk} {best_opp.ha} {team_names.get(best_opp.opp, best_opp.opp)}, so this
-year's total rests on a handful of plays.
+Here's how the Bills' pass defense did in games where Bishop and each partner both played most of the snaps:
 
-That's normal for safeties, and it's the main thing to understand about this trade. We looked at every safety thrown at {MIN_TGT} or more
-times in back-to-back seasons from {y0} to {y1}: {n_pairs} pairs of seasons from {n_players} players. Does a big interception year repeat? Mostly,
-no. The {ex['n']} times a safety had five or more interceptions in a season ({ex['players']} different players), those seasons averaged {ex['this']:.1f}
-interceptions. The next year, {ex['nxt']:.1f}, much closer to the {ex['all_nxt']:.1f} the whole group averaged than to their big year. On a scale where 0 means "one season tells you nothing about the next" and
-1 means "it tells you everything," interceptions scored {co['int_rate']:.2f}.
+| Bishop's partner | Games | Points per pass play vs. opponent's usual (+ = better) | Starting QBs only |
+|---|---|---|---|
+| Jordan Poyer, {SEASON - 1} | {poy.games} | {-poy.per:+.2f} | {-poy_reg.per:+.2f} ({int(poy_reg.games)} games) |
+| Taylor Rapp, {SEASON - 1} | {rap.games} | {-rap.per:+.2f} | {-rap_reg.per:+.2f} ({int(rap_reg.games)} games) |
+| C.J. Gardner-Johnson, {SEASON} | {cj.games} | {-cj.per:+.2f} | {-cj_reg.per:+.2f} ({int(cj_reg.games)} games) |
+| Damar Hamlin, {SEASON} | {ham.games} | {-ham.per:+.2f} | {-ham_lv.vs / ham_lv.n:+.2f} (1 game) |
 
-![Big interception years rarely repeat](hooker-bigyears.png)
+For scale: across all 32 defenses, the Bills were {buf25:+.2f} over all of {SEASON - 1} ({ordn(buf25_rk)}) and are {buf26:+.2f} so far this season ({ordn(buf26_rk)}).
+Every row is a small sample, {min(r.games for r in (poy, rap, cj, ham))} to {max(r.games for r in (poy, rap, cj, ham))} games.
 
-How we got that score: from Pro Football Reference's play-by-play charting (via nflverse), we took each safety's rate in one season
-(interceptions per throw at him, for example) and set it beside his rate the next season, for all {n_pairs} pairs. If the players who were
-high one year were always high the next, the score would be 1. If the next year looked random, it would be 0. To check it, we re-ran the
-math 2,000 times, each time on a random reshuffle of the players. That's where the "give or take about 0.1" below comes from. The
-{ex['this']:.1f}-to-{ex['nxt']:.1f} drop is what a score of {co['int_rate']:.2f} looks like on the field: the next year lands much closer to average than to the
-big year.
+**Hamlin's {-ham.per:+.2f} needs an asterisk.** Two of his three games, Baltimore and Minnesota, came against backup quarterbacks. The one against a
+regular starter, Las Vegas, came out {-ham_lv.vs / ham_lv.n:+.2f}, as bad as the Gardner-Johnson games.
 
-![What carries over](hooker-carryover.png)
+**Where these numbers come from.** Every pass play starts from a spot on the field where an average offense can expect a certain number of points,
+and the play raises or lowers that number. We add those changes up for each opponent's passes against Buffalo, then compare them with what the same
+offense does in its other games that season. Example: the {team_name.get(wx.posteam, wx.posteam)} normally gain about {wx.norm:.2f} points per pass play. In week {int(wx.week)}
+their {int(wx.n)} pass plays against Buffalo were worth {wx.epa:.1f} points combined, about {wx.vs / wx.n:.2f} a play more than usual. That game counts as
+{-wx.vs / wx.n:+.2f} for Buffalo, one of the {cj.games} games behind Gardner-Johnson's {-cj.per:+.2f}. The partner is the other safety on the field for the most
+snaps, from the league's snap counts.
 
-To be fair to Hooker, little about a safety carries over well. Tackling scored about the same as interceptions ({co['mt_pct']:.2f}), and
-coverage scored a bit lower: yards allowed per throw {co['ypt']:.2f}, completions allowed {co['cmp_pct']:.2f}. With this few players, each score could be off
-by about 0.1 either way (the black lines on the chart). The honest reading: interceptions and tackling carry over about equally, and only a little. Safeties are hard to measure, and every number here comes with that warning.
+**How we checked it.**
+- **Luck.** We shuffled the {poy.games + cj.games} Poyer and Gardner-Johnson games between the two groups 20,000 times. A gap this big (either way) showed
+  up about 1 time in {chance}. Suggestive, not proof.
+- **Quarterbacks.** Two of Poyer's games came against backups. Without them his number drops to {-poy_reg.per:+.2f}. All {cj.games} Gardner-Johnson games
+  came against regular starters.
+- **Everything else that changed.** This season also brought a new defensive coordinator, Jim Leonhard, and other roster changes. These numbers
+  can't separate those from the safety next to Bishop.
 
-## What the Bills are getting
+Bishop's own coverage barely moved. Throws his way gained {bish_poy.ypt:.1f} yards each with Poyer beside him ({int(bish_poy.t)} throws) and {bish_cj.ypt:.1f} with
+Gardner-Johnson ({int(bish_cj.t)}). Both are a bit worse than the average safety ({saf_ypt.loc[SEASON - 1]:.1f} and {saf_ypt.loc[SEASON]:.1f}), on small samples.
+The difference was around him.
 
-**Tackling: good this season, average before.** This season Hooker has missed {int(hz.mt)} of {att26} tackle attempts ({hz.mt_pct:.1%}, a small
-sample). The average safety misses {lg26['mt']:.1%}. That {'ties him for' if mt_tied else 'makes him'} {ordn(int(hz.rk_mt))}-fewest misses among {len(z)} safeties
-thrown at {MIN_TGT_SEASON}+ times. One more miss would have put him at {(hz.mt + 1) / (att26 + 1):.1%}. Over {SEASON - 3} to {SEASON - 1} he missed {h3.mt_pct:.1%}, about the
-same as the average safety's {lg3['mt']:.1%}.
+## Hooker: the one making plays in Tennessee
 
-**Coverage: about average now, below average before.** Passes thrown his way (the stat sheets call them "targets") have gained
-{hz.ypt:.1f} yards per throw this season ({int(hz.tgt)} throws, a small sample), close to the average safety's {lg26['ypt']:.1f}. That's {ordn(int(hz.rk_ypt))} of
-{len(z)} safeties, right in the middle. Over {SEASON - 3} to {SEASON - 1} he allowed {h3.ypt:.1f} yards per throw, more than the average safety's {lg3['ypt']:.1f} ({ordn(int(h3.rk_ypt))} of {len(p3)}
-safeties thrown at {MIN_TGT_3YR}+ times). Last season alone he allowed {h25.ypt:.1f}, {ordn(int(h25.rk_ypt))} of {len(z5)}.
+Tennessee's defense has been bad: passes against it have gained {tmy.loc['TEN', 'ypt']:.1f} yards per throw, {ordn(ten_rank)} of {n_teams} (league average
+{lg_ypt:.1f}). Hooker has been the exception. He has {h_ints} of the Titans' {ten_ints} interceptions in {h_games} games, {lead_txt};
+everyone else on that defense has {rest_ints} combined. He tackles well, too: {int(hz.mt)} misses on {int(hz.mt + hz.tk)} tries ({hz.mt_pct:.1%}),
+against {lg26_mt:.1%} for the average safety. That {'ties him for' if mt_tied else 'puts him'} {ordn(int(hz.rk_mt))}-best of {len(z)} regular safeties.
 
-**How he compares with the Bills' safeties.** As a group, Buffalo's safeties have allowed {bufs.ypt:.1f} yards per throw this season (the
-{ordn(int(bufs.rk_ypt))}-most of {len(tm)} teams; all NFL safeties combined: {lg_tm['ypt']:.1f}) and missed {bufs.mt_pct:.1%} of their tackle attempts (the
-{ordn(int(bufs.rk_mt))}-most; all NFL safeties combined: {lg_tm['mt']:.1%}, lower than the {lg26['mt']:.1%} above because safeties who are rarely
-thrown at miss fewer tackles). That's {int(bufs.tgt)} throws, a small sample, and it isn't spread evenly. Cole Bishop has
-allowed {bishop.ypt:.1f} yards per throw ({int(bishop.tgt)} throws), fewer than Hooker. C.J. Gardner-Johnson has allowed {cjgj.ypt:.1f} ({int(cjgj.tgt)}
-throws) and missed {cjgj.mt / (cjgj.mt + cjgj.tk):.0%} of his tackle attempts; Damar Hamlin has allowed {hamlin.ypt:.1f} ({int(hamlin.tgt)} throws). Hooker's
-{hz.ypt:.1f} beats those two, and the Bills say he'll play alongside Bishop. All of these are a few dozen throws each, so treat them as hints.
+![Tennessee's interceptions](hooker-ten-ints.png)
+
+One honest caveat: in yards allowed per throw, he's been about the same as his teammates ({hk_ypt:.1f} on {int(hk.t)} throws vs. {rest_ypt:.1f} for the rest
+of the defense). The case for Hooker is the ball-hawking and the tackling, not that throws at him go nowhere. All of this is seven games, a small
+sample.
 
 ## What it means
 
-- **Don't expect {words[h_ints]} more.** Safeties with five-interception years averaged about {ex['nxt']:.1f} over the whole next season. Hooker has {left} regular-season games left with Buffalo. If the interceptions keep coming, that's a bonus. Think "starter who's been average-to-below in coverage
-  and is tackling well right now," not "takeaway machine."
+- **It's about the pair, not just the player.** Against starting quarterbacks, Buffalo's best stretch with Bishop came with a steady veteran beside him. Hooker is in his
+  {n_seasons}th season and making plays, and he likely takes the snaps Gardner-Johnson and Hamlin have split.
+- **What we'll track.** Bills pass defense against what each opponent usually does, with Bishop and Hooker together, over the {left} games left, with backup-QB
+  games marked. If it climbs back toward the Poyer-era level against starting quarterbacks ({-poy_reg.per:+.2f}), that fits the trade working. It still
+  won't separate Hooker from the new coordinator.
 - **It's a real price.** Per the Bills, it's the most draft capital the team has used to acquire a player at the trade deadline under general
-  manager Brandon Beane. The Bills are paying for this season and the two years left on his contract.
-- **What to watch.** Whether he takes snaps from Gardner-Johnson or Hamlin, and whether this season's tackling holds up. Buffalo's safeties
-  have missed tackles more often than most teams'. His usual rate over the three seasons before this one ({h3.mt_pct:.1%}) is below the Bills group's {bufs.mt_pct:.1%}.
+  manager Brandon Beane: a second-round pick for a title push this season, with two more years of Hooker after it.
 
 ## For the stat-heads
 
-- Interceptions: nflverse weekly player stats (gsis {HOOKER}), regular season. {SEASON} through week {THRU}. Co-leader(s): {', '.join(co_leaders) or 'none'}.
-  He also has one playoff interception (not counted). PFR's charting counts interceptions slightly differently from nflverse; the
-  carry-over analysis uses PFR counts, Hooker's career totals use nflverse.
-- Coverage: Pro Football Reference charting via nflverse (`pfr_advstats` def). Targets, completions, yards allowed, missed tackles,
-  combined tackles. Missed-tackle rate = missed / (missed + combined tackles). Charted by humans; treat as noisy.
-- Safeties: PFR rows matched to nflverse weekly player stats on season and team (OAK/SD/STL normalized), then name with suffixes and punctuation
-  removed; {n_tier2} more player-seasons matched on first initial + last name where that key is unique on the team. Players nflverse lists as
-  "DB" rather than a safety position are left out, which thins the {y0}-2021 sample most.
-- Year-to-year: Pearson correlation of each rate between consecutive seasons, safeties with {MIN_TGT}+ targets in both, {y0}-{y1},
-  n={n_pairs} pairs from {n_players} players: interceptions per target {co['int_rate']:.3f} (95% {ci['int_rate'][0]:.2f} to {ci['int_rate'][1]:.2f}),
-  yards per target {co['ypt']:.3f} ({ci['ypt'][0]:.2f} to {ci['ypt'][1]:.2f}), completion rate {co['cmp_pct']:.3f} ({ci['cmp_pct'][0]:.2f} to
-  {ci['cmp_pct'][1]:.2f}), missed-tackle rate {co['mt_pct']:.3f} ({ci['mt_pct'][0]:.2f} to {ci['mt_pct'][1]:.2f}). Intervals: 2,000 bootstrap draws resampling
-  players (pairs share players). Missed tackles beat interceptions in {mt_ahead:.0%} of draws: no real difference. r of {co['int_rate']:.2f} means one season
-  explains about {co['int_rate'] ** 2:.0%} of the next season's spread.
-- Five-plus interception seasons (PFR counts, {MIN_TGT}+ targets both years): n={ex['n']}, {ex['this']:.2f} that season, {ex['nxt']:.2f} the next; all pairs
-  {ex['all_nxt']:.2f} the next season.
-- Hooker {SEASON}: {int(hz.tgt)} targets, {hz.ypt:.2f} yards/target, {int(hz.mt)} missed of {att26} attempts. {SEASON - 3}-{SEASON - 1}: {int(h3.tgt)} targets,
-  {h3.ypt:.2f} yards/target, missed-tackle rate {h3.mt_pct:.3f} ({ordn(int(h3.rk_mt))} of {len(p3)}).
-- Bills safeties {SEASON}: {int(bufs.tgt)} targets, {bufs.ypt:.2f} yards/target, {int(bufs.mt)} missed of {int(bufs.mt + bufs.tk)} attempts. League team safety
-  groups: {lg_tm['ypt']:.2f} yards/target, missed-tackle rate {lg_tm['mt']:.3f}. By player (10+ targets):
-  {'; '.join(f"{r.name} {int(r.tgt)} tgt, {r.ypt:.1f} yds/tgt, {int(r.mt)}/{int(r.mt + r.tk)} missed" for r in bp.itertuples())}.
-- Trade terms, "most draft capital ... at the trade deadline under Beane" and Hooker playing alongside Bishop: buffalobills.com,
-  "Bills land impact safety Amani Hooker in trade with Titans" and "'A difference maker'...", Nov. 10, 2026.
+- Pass defense: nflverse play-by-play, dropbacks (pass attempts, sacks, scrambles; no two-point tries), EPA allowed, regular season. Opponent's
+  norm = that offense's EPA per dropback in its other games that season ({SEASON} through week {THRU}). Value = (EPA allowed - norm x dropbacks)
+  / dropbacks, sign flipped so + = better than norm. Counts every Bills dropback in the game, not only snaps with both safeties on the field.
+- League context: same value for all 32 defenses. {-poy.per:+.3f} would rank {ordn(poy_rank)} among {SEASON - 1} defenses; {-cj.per:+.3f} {ordn(cj_rank)} among {SEASON}.
+- Pairings: nflverse snap counts (`raw_snap_counts`), safeties (S/FS/SS/SAF) with 50%+ of defensive snaps; partner = the other one with the
+  most snaps. Bishop + {poy.partner}: weeks {poy.wks}, {int(poy.plays)} dropbacks; + {rap.partner}: weeks {rap.wks}, {int(rap.plays)}; + {cj.partner}:
+  weeks {cj.wks}, {int(cj.plays)}; + {ham.partner}: weeks {ham.wks}, {int(ham.plays)}. Week 6 {SEASON} was shared (Hamlin over 50%, Gardner-Johnson under);
+  week 9 also had Geno Stone at 50%+. Games where Bishop played under 50%, or where the other safety is listed as "DB" (week 17 {SEASON - 1},
+  Cameron Lewis), are excluded. Not adjusted for cornerbacks, pass rush, coordinator or injuries.
+- Backup QB: the passer who led a team-game in dropbacks, when he is neither the one who has led that team in the most games through that
+  week (ties: dropbacks) nor the team's main passer the season before. Flagged games in these pairings: {'; '.join(f"{int(r.season)} wk {int(r.week)} {r.posteam} ({r.qb_name})" for r in bg[bg.backup].sort_values(['season', 'week']).itertuples())}.
+- Chance check: permutation of the {poy.games + cj.games} games between Poyer and Gardner-Johnson labels, 20,000 draws (seed 0), dropback-weighted;
+  two-sided p = {p_gap:.3f} for a gap of {gap:.3f}.
+- Bishop coverage by partner (PFR charting): {SEASON - 1} with Poyer {int(bish_poy.t)} targets, {bish_poy.ypt:.2f} yards/target; {SEASON} with
+  Gardner-Johnson {int(bish_cj.t)} targets, {bish_cj.ypt:.2f}. Matched safeties: {saf_ypt.loc[SEASON - 1]:.2f} ({SEASON - 1}), {saf_ypt.loc[SEASON]:.2f} ({SEASON}).
+- Tennessee {SEASON}: PFR charting through week {pfr_thru} (Tennessee's week-9 bye means it's complete for them): all charted defenders
+  {tmy.loc['TEN', 'ypt']:.2f} yards/target ({ordn(ten_rank)} of {n_teams}, 1st = fewest); Hooker {hk_ypt:.2f} on {int(hk.t)}; rest {rest_ypt:.2f} on {int(rest.t.sum())}.
+  Interceptions: {ten_ints} team, {h_ints} Hooker (PFR and nflverse agree). The tie for the NFL lead ({', '.join(co_leaders) or 'none'}) is from nflverse
+  player stats through week {THRU}; PFR hadn't charted Green Bay's week 9 as of {AS_OF}. Career: {career} regular-season interceptions.
+- Missed-tackle rate = missed / (missed + combined tackles), safeties with {MIN_TGT_SEASON}+ targets ({len(z)}). PFR safeties matched to nflverse
+  by season, team and name (suffixes removed; {n_tier2} by initial + last name where unique); DB-labeled players excluded.
+- Trade terms and "most draft capital ... at the trade deadline under Beane": buffalobills.com, "Bills land impact safety Amani Hooker in trade
+  with Titans" and "'A difference maker'...", Nov. 10, 2026.
 """
     (OUT / f"{SLUG}.md").write_text(md)
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": "The Hooker trade",
-        "big": [[h_ints, "interceptions this season"], [career_ints, "in his career"]],
-        "note": f"Big interception years rarely repeat: safeties with 5+ averaged about {ex['nxt']:.1f} the next season. Behind them: coverage about average this season, below average before, and better than two of the Bills safeties he joins.",
-        "explainer": {"kicker": "What carries over", "title": "How well one season predicts the next.",
-                      "text": f"For safeties, {y0}-{y1} (0 = not at all, 1 = perfectly):", "fmt": "score",
-                      "bars": [[lab[k], round(co[k], 2)] for k in ("int_rate", "mt_pct", "ypt", "cmp_pct")]},
+        "big": [[h_ints, f"of Tennessee's {ten_ints} interceptions"], [round(float(-cj.per), 2), "Bills vs. opponents' usual passing, per play, with Gardner-Johnson"]],
+        "note": f"With Poyer beside Bishop, opponents' passing did {-poy.per:.2f} points a play worse than usual against Buffalo. With Gardner-Johnson, it's done {cj.per:.2f} better than usual.",
+        "explainer": {"kicker": "Bishop's partner", "title": "Bills vs. what opponents' passing usually does, per play.",
+                      "text": "Better (+) or worse (-) than each opponent usually does:", "fmt": "score",
+                      "bars": [[f"{nm(r.partner)} ({int(r.season)}" + (f", {nb(r)} vs. " + ("a backup)" if nb(r) == 1 else "backups)") if nb(r) else ")"), round(float(-r.per), 2)] for r in order]},
     }, indent=1))
     print(md)
 

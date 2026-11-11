@@ -17,8 +17,8 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-trade-amani-hooker", "2026-11-10-hooker-trade.md", "2026-11-10", "Bills &middot; Trade",
-     "Amani Hooker arrives tied for the NFL lead with 5 interceptions. Don't count on that pace: safeties with five-interception years averaged about 2.5 the next season. Behind them: average coverage this season, and fewer yards allowed than two of the Bills safeties he joins.",
-     "hooker-bigyears.png"),
+     "The Bills' pass defense has tracked with whoever plays next to Cole Bishop. Amani Hooker, who has 5 of Tennessee's 8 interceptions on a bad defense, is the fix they're counting on.",
+     "hooker-bishop-partner.png"),
     ("bills-vikings-postgame", "2026-wk09-postgame.md", "2026-11-10", "Bills &middot; Week 9 post-game",
      "We projected the Bills for 23.4. They scored 23. We projected the Vikings for 22.8. They scored 6. Five of our seven calls hit; here's every one, graded.",
      "wk09d-proj-vs-final.png"),
