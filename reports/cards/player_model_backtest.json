@@ -1,0 +1,406 @@
+{
+ "method": {
+  "W": {
+   "ixg": 0.5,
+   "a": 0.5
+  },
+  "K": {
+   "ixg": 5,
+   "a": 10
+  },
+  "decay": 0.5,
+  "fin_shrink": 40,
+  "fit_on": "2024-25",
+  "tested_on": "2025-26"
+ },
+ "tests": [
+  {
+   "season": 20242025,
+   "checkpoint_games": 17,
+   "cut": "2024-11-14",
+   "skaters": 623,
+   "median_games_after": 60,
+   "results": {
+    "ixg": {
+     "model": {
+      "mse": 0.00165,
+      "abs_err_rest": 1.74,
+      "corr": 0.921
+     },
+     "pace": {
+      "mse": 0.00344,
+      "abs_err_rest": 2.36,
+      "corr": 0.858
+     },
+     "last_season": {
+      "mse": 0.00222,
+      "abs_err_rest": 1.97,
+      "corr": 0.9
+     },
+     "position_avg": {
+      "mse": 0.00612,
+      "abs_err_rest": 3.45,
+      "corr": 0.629
+     }
+    },
+    "g": {
+     "model": {
+      "mse": 0.00517,
+      "abs_err_rest": 3.14,
+      "corr": 0.838
+     },
+     "pace": {
+      "mse": 0.01581,
+      "abs_err_rest": 5.58,
+      "corr": 0.676
+     },
+     "last_season": {
+      "mse": 0.00753,
+      "abs_err_rest": 3.74,
+      "corr": 0.789
+     },
+     "position_avg": {
+      "mse": 0.01219,
+      "abs_err_rest": 4.84,
+      "corr": 0.522
+     }
+    },
+    "a": {
+     "model": {
+      "mse": 0.01142,
+      "abs_err_rest": 4.78,
+      "corr": 0.809
+     },
+     "pace": {
+      "mse": 0.02989,
+      "abs_err_rest": 7.63,
+      "corr": 0.667
+     },
+     "last_season": {
+      "mse": 0.0153,
+      "abs_err_rest": 5.47,
+      "corr": 0.769
+     },
+     "position_avg": {
+      "mse": 0.03289,
+      "abs_err_rest": 7.93,
+      "corr": 0.097
+     }
+    },
+    "p": {
+     "model": {
+      "mse": 0.01979,
+      "abs_err_rest": 6.2,
+      "corr": 0.868
+     },
+     "pace": {
+      "mse": 0.04786,
+      "abs_err_rest": 9.82,
+      "corr": 0.762
+     },
+     "last_season": {
+      "mse": 0.02723,
+      "abs_err_rest": 7.23,
+      "corr": 0.83
+     },
+     "position_avg": {
+      "mse": 0.07096,
+      "abs_err_rest": 11.93,
+      "corr": 0.305
+     }
+    }
+   }
+  },
+  {
+   "season": 20242025,
+   "checkpoint_games": 41,
+   "cut": "2025-01-08",
+   "skaters": 639,
+   "median_games_after": 38,
+   "results": {
+    "ixg": {
+     "model": {
+      "mse": 0.00159,
+      "abs_err_rest": 1.08,
+      "corr": 0.925
+     },
+     "pace": {
+      "mse": 0.00189,
+      "abs_err_rest": 1.18,
+      "corr": 0.911
+     },
+     "last_season": {
+      "mse": 0.00252,
+      "abs_err_rest": 1.35,
+      "corr": 0.887
+     },
+     "position_avg": {
+      "mse": 0.00676,
+      "abs_err_rest": 2.27,
+      "corr": 0.621
+     }
+    },
+    "g": {
+     "model": {
+      "mse": 0.00718,
+      "abs_err_rest": 2.25,
+      "corr": 0.795
+     },
+     "pace": {
+      "mse": 0.01212,
+      "abs_err_rest": 2.96,
+      "corr": 0.694
+     },
+     "last_season": {
+      "mse": 0.00964,
+      "abs_err_rest": 2.64,
+      "corr": 0.741
+     },
+     "position_avg": {
+      "mse": 0.01493,
+      "abs_err_rest": 3.32,
+      "corr": 0.482
+     }
+    },
+    "a": {
+     "model": {
+      "mse": 0.01156,
+      "abs_err_rest": 3.07,
+      "corr": 0.811
+     },
+     "pace": {
+      "mse": 0.01625,
+      "abs_err_rest": 3.67,
+      "corr": 0.775
+     },
+     "last_season": {
+      "mse": 0.01784,
+      "abs_err_rest": 3.78,
+      "corr": 0.729
+     },
+     "position_avg": {
+      "mse": 0.03359,
+      "abs_err_rest": 5.14,
+      "corr": 0.092
+     }
+    },
+    "p": {
+     "model": {
+      "mse": 0.02102,
+      "abs_err_rest": 4.11,
+      "corr": 0.864
+     },
+     "pace": {
+      "mse": 0.02976,
+      "abs_err_rest": 4.92,
+      "corr": 0.826
+     },
+     "last_season": {
+      "mse": 0.03233,
+      "abs_err_rest": 5.05,
+      "corr": 0.799
+     },
+     "position_avg": {
+      "mse": 0.07436,
+      "abs_err_rest": 7.68,
+      "corr": 0.295
+     }
+    }
+   }
+  },
+  {
+   "season": 20252026,
+   "checkpoint_games": 17,
+   "cut": "2025-11-12",
+   "skaters": 632,
+   "median_games_after": 57,
+   "results": {
+    "ixg": {
+     "model": {
+      "mse": 0.00163,
+      "abs_err_rest": 1.62,
+      "corr": 0.918
+     },
+     "pace": {
+      "mse": 0.0028,
+      "abs_err_rest": 2.17,
+      "corr": 0.879
+     },
+     "last_season": {
+      "mse": 0.00221,
+      "abs_err_rest": 1.87,
+      "corr": 0.881
+     },
+     "position_avg": {
+      "mse": 0.00663,
+      "abs_err_rest": 3.43,
+      "corr": 0.619
+     }
+    },
+    "g": {
+     "model": {
+      "mse": 0.00587,
+      "abs_err_rest": 3.28,
+      "corr": 0.819
+     },
+     "pace": {
+      "mse": 0.01598,
+      "abs_err_rest": 5.28,
+      "corr": 0.676
+     },
+     "last_season": {
+      "mse": 0.00801,
+      "abs_err_rest": 3.81,
+      "corr": 0.757
+     },
+     "position_avg": {
+      "mse": 0.01388,
+      "abs_err_rest": 4.87,
+      "corr": 0.476
+     }
+    },
+    "a": {
+     "model": {
+      "mse": 0.01205,
+      "abs_err_rest": 4.69,
+      "corr": 0.82
+     },
+     "pace": {
+      "mse": 0.03439,
+      "abs_err_rest": 7.57,
+      "corr": 0.624
+     },
+     "last_season": {
+      "mse": 0.01465,
+      "abs_err_rest": 5.23,
+      "corr": 0.78
+     },
+     "position_avg": {
+      "mse": 0.03759,
+      "abs_err_rest": 8.13,
+      "corr": 0.076
+     }
+    },
+    "p": {
+     "model": {
+      "mse": 0.02253,
+      "abs_err_rest": 6.43,
+      "corr": 0.868
+     },
+     "pace": {
+      "mse": 0.05312,
+      "abs_err_rest": 9.51,
+      "corr": 0.743
+     },
+     "last_season": {
+      "mse": 0.02825,
+      "abs_err_rest": 7.28,
+      "corr": 0.822
+     },
+     "position_avg": {
+      "mse": 0.08317,
+      "abs_err_rest": 12.24,
+      "corr": 0.263
+     }
+    }
+   }
+  },
+  {
+   "season": 20252026,
+   "checkpoint_games": 41,
+   "cut": "2026-01-03",
+   "skaters": 664,
+   "median_games_after": 37,
+   "results": {
+    "ixg": {
+     "model": {
+      "mse": 0.00191,
+      "abs_err_rest": 1.13,
+      "corr": 0.909
+     },
+     "pace": {
+      "mse": 0.00221,
+      "abs_err_rest": 1.23,
+      "corr": 0.902
+     },
+     "last_season": {
+      "mse": 0.00281,
+      "abs_err_rest": 1.36,
+      "corr": 0.863
+     },
+     "position_avg": {
+      "mse": 0.00705,
+      "abs_err_rest": 2.24,
+      "corr": 0.616
+     }
+    },
+    "g": {
+     "model": {
+      "mse": 0.00752,
+      "abs_err_rest": 2.3,
+      "corr": 0.785
+     },
+     "pace": {
+      "mse": 0.01098,
+      "abs_err_rest": 2.74,
+      "corr": 0.719
+     },
+     "last_season": {
+      "mse": 0.01009,
+      "abs_err_rest": 2.71,
+      "corr": 0.714
+     },
+     "position_avg": {
+      "mse": 0.01522,
+      "abs_err_rest": 3.27,
+      "corr": 0.479
+     }
+    },
+    "a": {
+     "model": {
+      "mse": 0.01445,
+      "abs_err_rest": 3.31,
+      "corr": 0.801
+     },
+     "pace": {
+      "mse": 0.02041,
+      "abs_err_rest": 3.85,
+      "corr": 0.735
+     },
+     "last_season": {
+      "mse": 0.01837,
+      "abs_err_rest": 3.74,
+      "corr": 0.744
+     },
+     "position_avg": {
+      "mse": 0.04111,
+      "abs_err_rest": 5.42,
+      "corr": 0.066
+     }
+    },
+    "p": {
+     "model": {
+      "mse": 0.02539,
+      "abs_err_rest": 4.34,
+      "corr": 0.853
+     },
+     "pace": {
+      "mse": 0.03212,
+      "abs_err_rest": 4.82,
+      "corr": 0.819
+     },
+     "last_season": {
+      "mse": 0.03444,
+      "abs_err_rest": 5.09,
+      "corr": 0.791
+     },
+     "position_avg": {
+      "mse": 0.087,
+      "abs_err_rest": 8.01,
+      "corr": 0.263
+     }
+    }
+   }
+  }
+ ]
+}
