@@ -24,9 +24,9 @@
   },
   "cal": 0.989,
   "carry": {
-   "chances": 0.92,
-   "finishing": 0.22,
-   "pairs": 999
+   "chances": 0.87,
+   "finishing": 0.24,
+   "pairs": 673
   }
  },
  "cards": [

@@ -425,14 +425,18 @@ def skater_tile(c, m):
     return f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
 <div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
 <div class="gname">{html.escape(c['name'])}</div><div class="gpos">{POS_NAME.get(c['pos'], c['pos'])}</div>
-<div class="gbig"><div class="v">{c['p']}</div><div class="l">points ({c['g']} goals, {c['a']} assists)<br>{rank}</div></div>
+<div class="gbig"><div class="v">{c['p']}</div><div class="l">{'point' if c['p'] == 1 else 'points'} ({plural(c['g'], 'goal')}, {plural(c['a'], 'assist')})<br>{rank}</div></div>
 <div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['ixg']:.1f}</b><span>Chances created</span></div><div><b>{c['fin']:+.1f}</b><span>Finishing</span></div></div>
 <div class="gspark">{spark_svg(c['spark'], tc, "Points, running total")}<small>Points, running total, game by game</small></div>
 {'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
 <div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>G</th><th>A</th><th>P</th><th>Chances</th></tr>{rows}</table>
-<p><b>This season:</b> {c['ppg']} power-play goals, {c['sog']} shots on goal; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed).
+<p><b>This season:</b> {plural(c['ppg'], 'power-play goal')}, {c['sog']} shots on goal; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed).
 Chances created {c['ixg']:.1f}, or {c['ixg_pg']:.2f} a game{ixg_rk}. Faceoffs won: {fo}.</p>
 <p>{c['hits']} hits, {c['blocks']} blocked shots, {c['take']} takeaways, {c['give']} giveaways.</p></div></div></label>"""
+
+
+def plural(n, word):
+    return f"{n} {word}" + ("" if n == 1 else "s")
 
 
 def ordn_txt(n):
@@ -443,12 +447,12 @@ def skater_howto(m):
     lgf, lgd = m["lg"].get("F", {}), m["lg"].get("D", {})
     return f"""<h2>How to read a skater card</h2>
 <p><b>Points</b> are goals plus assists, the big number. The rank compares his points per game with every NHL forward or defenseman who has
-played {m['min_gp']} or more games this season ({m['n_groups'].get('F', 0)} forwards, {m['n_groups'].get('D', 0)} defensemen). The average forward
-in that group averages {lgf.get('p_pg', 0):.2f} points a game; defensemen, {lgd.get('p_pg', 0):.2f}.</p>
+played {m['min_gp']} or more games this season ({m['n_groups'].get('F', 0)} forwards, {m['n_groups'].get('D', 0)} defensemen). Forwards in that
+group average {lgf.get('p_pg', 0):.2f} points a game; defensemen, {lgd.get('p_pg', 0):.2f}.</p>
 <p><b>Chances created</b> is what his own shots were worth in goals. Every shot that reaches the net or misses it has a chance of going in,
 based on where it came from and what kind of shot it was; add them up and you get his chances. Shots at an empty net don't count. Forwards average
 {lgf.get('ixg_pg', 0):.2f} a game; defensemen, {lgd.get('ixg_pg', 0):.2f}. <b>Finishing</b> is his goals on those shots minus his chances: positive means he's
-scored more than the chances were worth. Finishing bounces around much more than chances do. For players with 40+ games in back-to-back seasons
+scored more than the chances were worth. Finishing bounces around much more than chances do. For forwards with 40+ games in back-to-back seasons
 ({m['carry']['pairs']} pairs, 2023-24 to 2025-26), on a scale where 1 means one season perfectly predicts the next and 0 means not at all, chances
 per game scored {m['carry']['chances']:.2f} and finishing {m['carry']['finishing']:.2f}. So a big plus or minus early on often fades.</p>
 <p><b>On the back:</b> power-play goals (scored while the other team was short-handed by a penalty), shots, close-in and rebound shots,
@@ -474,17 +478,17 @@ def build_skater_cards(out, groups):
         grp = "forwards" if c["grp"] == "F" else "defensemen"
         rk = f", {ordn_txt(c['p_rk'])} of {c['of']} {grp} in points per game" if c["p_rk"] else ""
         body = f"""<div class="kicker"><a href="index.html">Player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
-<p class="dek">{POS_NAME.get(c['pos'], c['pos']).title()}, {tname.title()}. {c['g']} goals and {c['a']} assists in {c['gp']} games{rk}.
+<p class="dek">{POS_NAME.get(c['pos'], c['pos']).title()}, {tname.title()}. {plural(c['g'], 'goal')} and {plural(c['a'], 'assist')} in {plural(c['gp'], 'game')}{rk}.
 Numbers through {asof}.</p>
 <div class="cards one">{skater_tile(c, m)}</div>
 <h2>This season</h2><ul class="rules">
-<li><b>Chances created {c['ixg']:.1f}</b> ({c['ixg_pg']:.2f} a game): what his own shots at a goalie were worth in goals. He has {c['g']} goals{(f", {c['en_g']} of them into an empty net" if c['en_g'] else "")}; finishing {c['fin']:+.1f}{(" (empty-net goals don't count toward it)" if c['en_g'] else "")}.</li>
-<li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {c['ppg']} power-play goals.</li>
+<li><b>Chances created {c['ixg']:.1f}</b> ({c['ixg_pg']:.2f} a game): what his own shots at a goalie were worth in goals. He has {plural(c['g'], 'goal')}{(f", {c['en_g']} of them into an empty net" if c['en_g'] else "")}; finishing {c['fin']:+.1f}{(" (empty-net goals don't count toward it)" if c['en_g'] else "")}.</li>
+<li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {plural(c['ppg'], 'power-play goal')}.</li>
 {'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
 {'<li>He also played for another team this season; the card counts his Sabres games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,
-                                               f"{c['name']}: {c['g']} goals, {c['a']} assists, {c['p']} points this season."))
+                                               f"{c['name']}: {plural(c['g'], 'goal')}, {plural(c['a'], 'assist')}, {plural(c['p'], 'point')} this season."))
         groups.setdefault(tname.title() + " skaters", []).append(
             f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
             f'<span class="pm"><b>{html.escape(c["name"])}</b><br>{POS_NAME.get(c["pos"], c["pos"]).title()} &middot; {c["g"]}-{c["a"]}-{c["p"]}</span></a>')

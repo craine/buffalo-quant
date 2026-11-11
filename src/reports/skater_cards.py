@@ -123,6 +123,8 @@ def main(as_of=AS_OF):
     tot["c_pg"], tot["f_pg"] = tot.ixg / tot.gp, (tot.ig_unb - tot.ixg) / tot.gp
     nxt = tot.assign(season=tot.season + 10001)
     pair = tot.merge(nxt, on=["season", "player_id"], suffixes=("", "_prev"))
+    pos_all = ros.groupby("player_id").pos.agg(lambda p: p.mode().iloc[0])
+    pair = pair[pair.player_id.map(pos_all).isin(FWD)]        # forwards only, so position differences don't inflate it
     carry = dict(chances=round(float(pair.c_pg.corr(pair.c_pg_prev)), 2), finishing=round(float(pair.f_pg.corr(pair.f_pg_prev)), 2), pairs=int(len(pair)))
 
     # ---- cards: every skater who has dressed for the Sabres this season
