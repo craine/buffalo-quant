@@ -356,7 +356,7 @@ keep score in public.</p>
 TEAM_COLORS = {"BUF": ("#003087", "#FFB81C", "SABRES"), "VGK": ("#333F42", "#B4975A", "GOLDEN KNIGHTS")}
 
 
-def spark_svg(vals, color):
+def spark_svg(vals, color, label="Goals saved vs average, running total"):
     if not vals:
         return ""
     w, h = 238, 54
@@ -366,7 +366,7 @@ def spark_svg(vals, color):
     ys = [h - (v - lo) / rng * h for v in vals]
     zero = h - (0 - lo) / rng * h
     pts = " ".join(f"{x:.1f},{y:.1f}" for x, y in zip(xs, ys))
-    return (f'<svg viewBox="0 -4 {w} {h + 8}" width="100%" height="{h + 8}" role="img" aria-label="Goals saved vs average, running total">'
+    return (f'<svg viewBox="0 -4 {w} {h + 8}" width="100%" height="{h + 8}" role="img" aria-label="{label}">'
             f'<line x1="0" x2="{w}" y1="{zero:.1f}" y2="{zero:.1f}" stroke="#C9CDD4" stroke-dasharray="3 3"/>'
             f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="2.4" stroke-linejoin="round"/>'
             f'<circle cx="{xs[-1]:.1f}" cy="{ys[-1]:.1f}" r="3.5" fill="{color}"/></svg>')
@@ -411,6 +411,85 @@ pile up, they take over.</p>
 <b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
 
 
+POS_NAME = {"C": "CENTER", "L": "LEFT WING", "R": "RIGHT WING", "D": "DEFENSE"}
+
+
+def skater_tile(c, m):
+    tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+    grp = "forwards" if c["grp"] == "F" else "defensemen"
+    rank = (f"<b>{ordn_txt(c['p_rk'])} of {c['of']}</b> {grp} in points per game" if c["p_rk"] else f"fewer than {m['min_gp']} games so far")
+    rows = "".join(f"<tr><td>{r['season']}</td><td>{r['team']}</td><td>{r['gp']}</td><td>{r['g']}</td><td>{r['a']}</td>"
+                   f"<td>{r['p']}</td><td>{r['ixg']:.1f}</td></tr>" for r in c["seasons"])
+    fo = f"{c['fo_pct']:.1%} on {c['fo_n']}" if c["fo_pct"] is not None else "&ndash;"
+    ixg_rk = f" ({ordn_txt(c['ixg_rk'])} of {c['of']} {grp})" if c["ixg_rk"] else ""
+    return f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
+<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
+<div class="gname">{html.escape(c['name'])}</div><div class="gpos">{POS_NAME.get(c['pos'], c['pos'])}</div>
+<div class="gbig"><div class="v">{c['p']}</div><div class="l">points ({c['g']} goals, {c['a']} assists)<br>{rank}</div></div>
+<div class="grow"><div><b>{c['gp']}</b><span>Games</span></div><div><b>{c['ixg']:.1f}</b><span>Chances created</span></div><div><b>{c['fin']:+.1f}</b><span>Finishing</span></div></div>
+<div class="gspark">{spark_svg(c['spark'], tc, "Points, running total")}<small>Points, running total, game by game</small></div>
+{'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
+<div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>G</th><th>A</th><th>P</th><th>Chances</th></tr>{rows}</table>
+<p><b>This season:</b> {c['ppg']} power-play goals, {c['sog']} shots on goal, {c['close']} shots from within 20 feet, {c['reb']} rebound shots.
+Chances created {c['ixg']:.1f}{ixg_rk}. Faceoffs won: {fo}.</p>
+<p>{c['hits']} hits, {c['blocks']} blocked shots, {c['take']} takeaways, {c['give']} giveaways.</p></div></div></label>"""
+
+
+def ordn_txt(n):
+    return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def skater_howto(m):
+    lgf, lgd = m["lg"].get("F", {}), m["lg"].get("D", {})
+    return f"""<h2>How to read a skater card</h2>
+<p><b>Points</b> are goals plus assists, the big number. The rank compares his points per game with every NHL forward or defenseman who has
+played {m['min_gp']} or more games this season ({m['n_groups'].get('F', 0)} forwards, {m['n_groups'].get('D', 0)} defensemen). The average forward
+in that group scores {lgf.get('p_pg', 0):.2f} points a game; the average defenseman, {lgd.get('p_pg', 0):.2f}.</p>
+<p><b>Chances created</b> is what his own shots were worth in goals. Every shot that reaches the net or misses it has a chance of going in,
+based on where it came from and what kind of shot it was; add them up and you get his chances. The average forward creates {lgf.get('ixg_pg', 0):.2f}
+a game. <b>Finishing</b> is his goals on those shots minus his chances: positive means he's scored more than the chances were worth. Over a
+season, finishing bounces around much more than chances do, so a big plus or minus early on often fades.</p>
+<p><b>On the back:</b> power-play goals (scored with more skaters on the ice than the other team), shots, close-in and rebound shots, faceoffs
+(shown once he's taken 50), and hits, blocked shots, takeaways and giveaways. Those last four are recorded by each rink's scorers, and some rinks
+count more generously than others.</p>
+<p><b>What's not here yet:</b> ice time. Our feed doesn't include shift data yet, so nothing on these cards is per minute or "while he's on
+the ice." That's next.</p>
+<p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. We checked every
+player's goal total against the league feed's own running count. Cards marked <b>small sample</b> have fewer than {m['min_gp']} games.
+Not affiliated with the NHL or any team; card designs are our own.</p>"""
+
+
+def build_skater_cards(out, groups):
+    import json
+    src = ROOT / "reports" / "cards" / "skaters.json"
+    if not src.exists():
+        return None
+    d = json.loads(src.read_text())
+    m = d["meta"]
+    asof = datetime.strptime(m["as_of"], "%Y-%m-%d").strftime("%B %-d, %Y")
+    for c in d["cards"]:
+        slug = card_slug(c["name"])
+        tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
+        grp = "forwards" if c["grp"] == "F" else "defensemen"
+        rk = f", {ordn_txt(c['p_rk'])} of {c['of']} {grp} in points per game" if c["p_rk"] else ""
+        body = f"""<div class="kicker"><a href="index.html">Player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
+<p class="dek">{POS_NAME.get(c['pos'], c['pos']).title()}, {tname.title()}. {c['g']} goals and {c['a']} assists in {c['gp']} games{rk}.
+Numbers through {asof}.</p>
+<div class="cards one">{skater_tile(c, m)}</div>
+<h2>This season</h2><ul class="rules">
+<li><b>Chances created {c['ixg']:.1f}</b>: what his own shots were worth in goals. He has {c['g']} goals; finishing {c['fin']:+.1f}.</li>
+<li><b>{c['sog']} shots on goal</b>, {c['close']} from within 20 feet, {c['reb']} rebound shots. {c['ppg']} power-play goals.</li>
+{'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
+{'<li>He also played for another team this season; the card counts his Sabres games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
+{skater_howto(m)}"""
+        (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,
+                                               f"{c['name']}: {c['g']} goals, {c['a']} assists, {c['p']} points this season."))
+        groups.setdefault(tname.title() + " skaters", []).append(
+            f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
+            f'<span class="pm"><b>{html.escape(c["name"])}</b><br>{POS_NAME.get(c["pos"], c["pos"]).title()} &middot; {c["g"]}-{c["a"]}-{c["p"]}</span></a>')
+    return asof
+
+
 def build_cards():
     import json
     src = ROOT / "reports" / "cards" / "goalies.json"
@@ -438,13 +517,15 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 {card_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
                                                f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))
-        groups.setdefault(tname.title(), []).append(
+        groups.setdefault(tname.title() + " goalies", []).append(
             f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
             f'<span class="pm"><b>{html.escape(c["name"])}</b><br>Goalie &middot; {sign_txt(c["gsax"])} goals saved vs. average</span></a>')
-    lists = "".join(f'<h2>{team}</h2><div class="plist">{"".join(items)}</div>' for team, items in groups.items())
+    sk_asof = build_skater_cards(out, groups)
+    order = sorted(groups, key=lambda k: (0 if k.startswith("Sabres") else 1, 0 if k.endswith("skaters") else 1, k))
+    lists = "".join(f'<h2>{team}</h2><div class="plist">{"".join(groups[team])}</div>' for team in order)
     body = f"""<div class="kicker">Player cards</div><h1>Player cards</h1>
-<p class="dek">One card per player, built from every shot and updated as the season goes. Goalies first; skaters and the Bills are next.
-Numbers through {asof}.</p>{lists}"""
+<p class="dek">One card per player, built from the NHL's play-by-play and updated as the season goes: every Sabres skater, plus the goalies.
+The Bills are next. Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>{lists}"""
     (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
 
 
