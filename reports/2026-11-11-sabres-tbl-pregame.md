@@ -64,7 +64,7 @@ samples: a goalie's numbers over a dozen games can swing a lot.
 
 ## Our prediction: Lightning 53%, Sabres 47%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-11 22:14:46 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **3.4 goals for Tampa Bay and 3.2 for Buffalo**, and gives about a 16% chance the game is tied
 after 60 minutes. Close to a coin flip, leaning Tampa Bay.

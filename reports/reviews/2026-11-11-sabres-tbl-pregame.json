@@ -30,6 +30,14 @@
    "at_utc": "2026-11-11T22:09:21Z",
    "notes": "Final PASS (/tmp/quant-tbl.md stage 4): all numbers match Quant's independent rebuild on the real DB; no tie; logger computes 0.471 -> 0.47 = published 47%.",
    "report": "2026-11-11-sabres-tbl-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "cd3e264dda1fbaa3748581a4a061ca6369c8b12e62162546decfcf457e1f1307",
+   "at_utc": "2026-11-11T22:15:24Z",
+   "notes": "Re-recorded after Ledger log P0009 (Sabres 47%, 22:14:46 UTC, before 00:00 UTC puck drop). Only change vs. the text that passed stage 4: the Ledger status line (diff in commit). Numbers unchanged.",
+   "report": "2026-11-11-sabres-tbl-pregame-final.md"
   }
  ],
  "self": {
@@ -54,9 +62,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
-  "at_utc": "2026-11-11T22:09:21Z",
-  "notes": "Final PASS (/tmp/quant-tbl.md stage 4): all numbers match Quant's independent rebuild on the real DB; no tie; logger computes 0.471 -> 0.47 = published 47%.",
+  "sha256": "cd3e264dda1fbaa3748581a4a061ca6369c8b12e62162546decfcf457e1f1307",
+  "at_utc": "2026-11-11T22:15:24Z",
+  "notes": "Re-recorded after Ledger log P0009 (Sabres 47%, 22:14:46 UTC, before 00:00 UTC puck drop). Only change vs. the text that passed stage 4: the Ledger status line (diff in commit). Numbers unchanged.",
   "report": "2026-11-11-sabres-tbl-pregame-final.md"
  }
 }
