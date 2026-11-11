@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
+   "at_utc": "2026-11-11T03:47:53Z",
+   "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
+  "at_utc": "2026-11-11T03:47:53Z",
+  "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+ }
+}

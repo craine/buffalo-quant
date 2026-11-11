@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-vikings-postgame", "2026-wk09-postgame.md", "2026-11-10", "Bills &middot; Week 9 post-game",
+     "We projected the Bills for 23.4. They scored 23. We projected the Vikings for 22.8. They scored 6. Five of our seven calls hit; here's every one, graded.",
+     "wk09d-scorecard.png"),
     ("bills-vikings-prediction", "2026-wk09-prediction.md", "2026-11-09", "Bills &middot; Week 9 preview, part 3",
      "As close as games get: our model projects Bills 23.4, Vikings 22.8. That small Buffalo edge shows up at nearly every scoreline and gives the Bills a 53% chance to win.",
      "wk09c-ladder.png"),
@@ -298,7 +301,7 @@ def build_home(articles, texts):
     if hd and "explainer" in hd:
         e = hd["explainer"]; mx = max(abs(v) for _, v in e["bars"])
         rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{max(v, 0) / mx:.0%}"></span></span>'
-                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.2f}" if e.get("fmt") == "score" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
