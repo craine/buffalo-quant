@@ -307,24 +307,41 @@ def main():
     lead_txt = f"tied with {co_leaders[0]} for the NFL lead" if len(co_leaders) == 1 else "the NFL lead"
     poy_reg, rap_reg, cj_reg = reg_of(poy), reg_of(rap), reg_of(cj)
     chance = round(1 / p_gap) if p_gap > 0 else None
-    md = f"""# The Bills' pass defense has tracked with Cole Bishop's partner. Now they've traded for a playmaker
+    md = f"""# What the Bills get in Amani Hooker: a ball hawk, and a new partner for Cole Bishop
 
-**With Jordan Poyer beside Cole Bishop last season, opponents' passing did {-poy.per:.2f} points a play worse than usual against Buffalo, about
-{ordn(poy_rank)}-best in the league. With C.J. Gardner-Johnson this season, it's done {cj.per:.2f} better than usual, about {ordn(cj_rank)} of 32. So the Bills
-spent a second-round pick on Amani Hooker, who has {h_ints} of Tennessee's {ten_ints} interceptions on a defense that ranks {ordn(ten_rank)} of {n_teams} in yards
-allowed per throw.**
+**Amani Hooker has {h_ints} of Tennessee's {ten_ints} interceptions this season, {lead_txt}, on a defense that ranks {ordn(ten_rank)} of {n_teams} in yards
+allowed per throw. He's also tackling well. And he steps into the open question on the Bills' defense: the spot next to Cole Bishop, where the
+pass defense has tracked with whoever's played there. With Jordan Poyer there last season,
+opponents' passing did {-poy.per:.2f} points a play worse than usual against Buffalo, about {ordn(poy_rank)}-best in the league. With C.J. Gardner-Johnson
+this season, it's done {cj.per:.2f} better than usual, about {ordn(cj_rank)} of 32. Bishop's own coverage barely changed between the two.**
 
-Small samples, and other things changed along with the partner. Details below.
+Small samples, and other things changed along with Bishop's partner. Details below.
 
 *The Bills traded a 2027 second-round pick to Tennessee for Hooker and a 2027 fifth-round pick on Tuesday, Nov. 10, deadline day. He's
 signed through 2028. (Trade terms as announced by the Bills.) Game results are through week {THRU} of the {SEASON} season. Yards-per-throw and
 tackling numbers come from Pro Football Reference's charting, which is through week {pfr_thru}.*
 
+*Updated Nov. 11: headline, lead and story order revised to lead with Hooker. No numbers changed.*
+
+## What Hooker brings: the one making plays in Tennessee
+
+Tennessee's defense has been bad: passes against it have gained {tmy.loc['TEN', 'ypt']:.1f} yards per throw, {ordn(ten_rank)} of {n_teams} (league average
+{lg_ypt:.1f}). Hooker has been the exception. His {h_ints} interceptions came in {h_games} games;
+everyone else on that defense has {rest_ints} combined. He tackles well, too: {int(hz.mt)} misses on {int(hz.mt + hz.tk)} tries ({hz.mt_pct:.1%}),
+against {lg26_mt:.1%} for the average safety. That {'ties him for' if mt_tied else 'puts him'} {ordn(int(hz.rk_mt))}-best of {len(z)} regular safeties.
+
+![Tennessee's interceptions](hooker-ten-ints.png)
+
+One honest caveat: in yards allowed per throw, he's been about the same as his teammates ({hk_ypt:.1f} on {int(hk.t)} throws vs. {rest_ypt:.1f} for the rest
+of the defense). The case for Hooker is the ball-hawking and the tackling, not that throws at him go nowhere. All of this is seven games, a small
+sample.
+
+## What it means for Bishop: the partner problem
+
 ![Bishop's partner](hooker-bishop-partner.png)
 
-## Bishop's partner problem
-
-Here's how the Bills' pass defense did in games where Bishop and each partner both played most of the snaps:
+Hooker likely takes the spot beside Bishop that Gardner-Johnson and Hamlin have split. Here's how the Bills' pass defense did in games
+where Bishop and each partner both played most of the snaps:
 
 | Bishop's partner | Games | Points per pass play vs. opponent's usual (+ = better) | Starting QBs only |
 |---|---|---|---|
@@ -338,6 +355,10 @@ Every row is a small sample, {min(r.games for r in (poy, rap, cj, ham))} to {max
 
 **Hamlin's {-ham.per:+.2f} needs an asterisk.** Two of his three games, Baltimore and Minnesota, came against backup quarterbacks. The one against a
 regular starter, Las Vegas, came out {-ham_lv.vs / ham_lv.n:+.2f}, as bad as the Gardner-Johnson games.
+
+What this means for Bishop himself: his own coverage barely moved. Throws his way gained {bish_poy.ypt:.1f} yards each with Poyer beside him ({int(bish_poy.t)} throws) and {bish_cj.ypt:.1f} with
+Gardner-Johnson ({int(bish_cj.t)}). Both are a bit worse than the average safety ({saf_ypt.loc[SEASON - 1]:.1f} and {saf_ypt.loc[SEASON]:.1f}), on small samples.
+The difference was around him. That's the spot Hooker steps into. Whether it helps is what we'll track.
 
 **Where these numbers come from.** Every pass play starts from a spot on the field where an average offense can expect a certain number of points,
 and the play raises or lowers that number. We add those changes up for each opponent's passes against Buffalo, then compare them with what the same
@@ -354,27 +375,11 @@ snaps, from the league's snap counts.
 - **Everything else that changed.** This season also brought a new defensive coordinator, Jim Leonhard, and other roster changes. These numbers
   can't separate those from the safety next to Bishop.
 
-Bishop's own coverage barely moved. Throws his way gained {bish_poy.ypt:.1f} yards each with Poyer beside him ({int(bish_poy.t)} throws) and {bish_cj.ypt:.1f} with
-Gardner-Johnson ({int(bish_cj.t)}). Both are a bit worse than the average safety ({saf_ypt.loc[SEASON - 1]:.1f} and {saf_ypt.loc[SEASON]:.1f}), on small samples.
-The difference was around him.
-
-## Hooker: the one making plays in Tennessee
-
-Tennessee's defense has been bad: passes against it have gained {tmy.loc['TEN', 'ypt']:.1f} yards per throw, {ordn(ten_rank)} of {n_teams} (league average
-{lg_ypt:.1f}). Hooker has been the exception. He has {h_ints} of the Titans' {ten_ints} interceptions in {h_games} games, {lead_txt};
-everyone else on that defense has {rest_ints} combined. He tackles well, too: {int(hz.mt)} misses on {int(hz.mt + hz.tk)} tries ({hz.mt_pct:.1%}),
-against {lg26_mt:.1%} for the average safety. That {'ties him for' if mt_tied else 'puts him'} {ordn(int(hz.rk_mt))}-best of {len(z)} regular safeties.
-
-![Tennessee's interceptions](hooker-ten-ints.png)
-
-One honest caveat: in yards allowed per throw, he's been about the same as his teammates ({hk_ypt:.1f} on {int(hk.t)} throws vs. {rest_ypt:.1f} for the rest
-of the defense). The case for Hooker is the ball-hawking and the tackling, not that throws at him go nowhere. All of this is seven games, a small
-sample.
 
 ## What it means
 
 - **It's about the pair, not just the player.** Against starting quarterbacks, Buffalo's best stretch with Bishop came with a steady veteran beside him. Hooker is in his
-  {n_seasons}th season and making plays, and he likely takes the snaps Gardner-Johnson and Hamlin have split.
+  {n_seasons}th season and making plays.
 - **What we'll track.** Bills pass defense against what each opponent usually does, with Bishop and Hooker together, over the {left} games left, with backup-QB
   games marked. If it climbs back toward the Poyer-era level against starting quarterbacks ({-poy_reg.per:+.2f}), that fits the trade working. It still
   won't separate Hooker from the new coordinator.

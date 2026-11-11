@@ -61,13 +61,36 @@
    "at_utc": "2026-11-11T04:41:58Z",
    "notes": "v2 final: round 1 FAIL (Rattler mis-flagged; PFR not pinned), fixed (starter = most games through that week OR prior-season main passer; PFR_THRU=8, AS_OF); round 2 PASS (/tmp/quant-hooker-v2-final.md). Applied its optional 'a backup QB' singular label nit; skipped Jets injury note (not in our data).",
    "report": "2026-11-10-hooker-trade-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "049266dc71efdaa950ece4c2cf52a78f10ee011a9f8e550337dea397b3bbb8c8",
+   "at_utc": "2026-11-11T12:30:05Z",
+   "notes": "Nov. 11 revision at Charlie's direction: headline and lead now open with Hooker (what the Bills get) and Bishop (what it means for him); sections reordered (Hooker first, then Bishop's partner); dated update note added; no numbers changed. Self-check softened 'biggest hole' -> 'a real hole' and 'a steadier partner can help with' -> 'could change'."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "e63a9f7e33fffd4dab471f1e35c8d7ef9e4b46a160703674acba404e1ab4a66b",
+   "at_utc": "2026-11-11T12:31:28Z",
+   "notes": "v3 Editor: headline -> 'a new partner for Cole Bishop' (not 'has been missing'); lead adds 'tracked with' and 'Bishop's own coverage barely changed'; McKinney tie de-duplicated; Bishop-himself paragraph moved up, ends 'Whether it helps is what we'll track'; duplicate 'likely takes' cut from takeaways; dek reworded. Changed editor's 'biggest question' to 'the open question' (no ranking computed).",
+   "report": "2026-11-10-hooker-trade-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "82c83577e5dd1fcabf2a9641a711654121c7c2dad921d330d6c21d5fda7845c2",
+   "at_utc": "2026-11-11T12:32:33Z",
+   "notes": "v3 final PASS (/tmp/quant-hooker-v3-final.md): no numbers changed; new wording within limits; applied its note fix ('headline, lead and story order revised').",
+   "report": "2026-11-10-hooker-trade-final.md"
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "b889fd703364c7a9f201a59d0c4e8a6ee310b85b23363eebf5a9432007f73604",
-  "at_utc": "2026-11-11T04:24:43Z",
-  "notes": "Rewritten per Charlie's angle: Bishop's partner problem (opponent-adjusted Bills pass D by safety pairing from new raw_snap_counts) + Hooker as the playmaker on a bad TEN defense (5 of 8 INTs; coverage same as teammates, disclosed). Self-check fixed: Hamlin ex-MIN still +0.23 (not 'closer to even'); Bishop's own coverage barely moved (8.8 vs 9.2), stated as such; removed speculation about Bills' view of Hamlin; 'against the pass' -> 'yards allowed per throw'. Prior reviews were on old text."
+  "sha256": "049266dc71efdaa950ece4c2cf52a78f10ee011a9f8e550337dea397b3bbb8c8",
+  "at_utc": "2026-11-11T12:30:05Z",
+  "notes": "Nov. 11 revision at Charlie's direction: headline and lead now open with Hooker (what the Bills get) and Bishop (what it means for him); sections reordered (Hooker first, then Bishop's partner); dated update note added; no numbers changed. Self-check softened 'biggest hole' -> 'a real hole' and 'a steadier partner can help with' -> 'could change'."
  },
  "quant": {
   "verdict": "pass",
@@ -78,16 +101,16 @@
  },
  "editor": {
   "verdict": "pass",
-  "sha256": "060aae82f0b1e982c08204cddf8416df895d5dc40b9b7ab37e827ae18ead658c",
-  "at_utc": "2026-11-11T04:35:27Z",
-  "notes": "v2 Editor: light edits, all applied: headline no longer implies cause ('has tracked with ... Now they've traded for a playmaker'); lede reworded (opponents' passing did X worse/better than usual) + 'Small samples...' line; dateline names PFR charting; table headers plain; 'Every row is a small sample, 3 to 9 games'; Hamlin asterisk moved under table; how-we-checked as 3 bullets (luck / QBs / everything else); worked example says 'worth 19.4 points combined' and ties to -0.34 in the CJGJ row; tackling sentence simplified ('16th-best of 58'); 'norm' removed from body/hero; chart direct labels, neutral light bars, gray Hamlin bar; TEN bye note; cut 'where it matters most'. Kept 'needs an asterisk' over 'Ignore'.",
+  "sha256": "e63a9f7e33fffd4dab471f1e35c8d7ef9e4b46a160703674acba404e1ab4a66b",
+  "at_utc": "2026-11-11T12:31:28Z",
+  "notes": "v3 Editor: headline -> 'a new partner for Cole Bishop' (not 'has been missing'); lead adds 'tracked with' and 'Bishop's own coverage barely changed'; McKinney tie de-duplicated; Bishop-himself paragraph moved up, ends 'Whether it helps is what we'll track'; duplicate 'likely takes' cut from takeaways; dek reworded. Changed editor's 'biggest question' to 'the open question' (no ranking computed).",
   "report": "2026-11-10-hooker-trade-editor.md"
  },
  "final": {
   "verdict": "pass",
-  "sha256": "a3ef75a10305b5f79e551bbb5d395ab6252444dad1471341fab005ae0ea86701",
-  "at_utc": "2026-11-11T04:41:58Z",
-  "notes": "v2 final: round 1 FAIL (Rattler mis-flagged; PFR not pinned), fixed (starter = most games through that week OR prior-season main passer; PFR_THRU=8, AS_OF); round 2 PASS (/tmp/quant-hooker-v2-final.md). Applied its optional 'a backup QB' singular label nit; skipped Jets injury note (not in our data).",
+  "sha256": "82c83577e5dd1fcabf2a9641a711654121c7c2dad921d330d6c21d5fda7845c2",
+  "at_utc": "2026-11-11T12:32:33Z",
+  "notes": "v3 final PASS (/tmp/quant-hooker-v3-final.md): no numbers changed; new wording within limits; applied its note fix ('headline, lead and story order revised').",
   "report": "2026-11-10-hooker-trade-final.md"
  }
 }
