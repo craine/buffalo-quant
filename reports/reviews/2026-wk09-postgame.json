@@ -6,6 +6,14 @@
    "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
    "at_utc": "2026-11-11T03:47:53Z",
    "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "bf5fb4ff2eb7600fe47fb3a51167b1538be4f5692a06200174b8d28ef9811e8f",
+   "at_utc": "2026-11-11T03:54:09Z",
+   "notes": "Publish with fixes; applied: Wentz line now Wentz-only (8/24, 81, 2 INT, 1 sack; Brosmer named), rarity worded one-sided, gap claim softened, second straight strong game noted, wording fixes, hit rule 50%+, P0002 coin-flip caveat, sample sizes in chart footers, title shows 22.8.",
+   "report": "2026-wk09-postgame-quant.md"
   }
  ],
  "self": {
@@ -13,5 +21,12 @@
   "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
   "at_utc": "2026-11-11T03:47:53Z",
   "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "bf5fb4ff2eb7600fe47fb3a51167b1538be4f5692a06200174b8d28ef9811e8f",
+  "at_utc": "2026-11-11T03:54:09Z",
+  "notes": "Publish with fixes; applied: Wentz line now Wentz-only (8/24, 81, 2 INT, 1 sack; Brosmer named), rarity worded one-sided, gap claim softened, second straight strong game noted, wording fixes, hit rule 50%+, P0002 coin-flip caveat, sample sizes in chart footers, title shows 22.8.",
+  "report": "2026-wk09-postgame-quant.md"
  }
 }
