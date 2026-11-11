@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-lightning-pregame-nov-11", "2026-11-11-sabres-tbl-pregame.md", "2026-11-11", "Sabres &middot; Pregame",
+     "Our model: Lightning 53%, Sabres 47%. Buffalo's second chances meet a Tampa Bay defense that's 3rd at keeping shots away from its net, and the Sabres allow the 6th-most chances in the league.",
+     "sabres-tbl-chances.png"),
     ("bills-trade-amani-hooker", "2026-11-10-hooker-trade.md", "2026-11-10", "Bills &middot; Trade",
      "Amani Hooker has 5 of Tennessee's 8 interceptions and tackles well. He also steps into the spot next to Cole Bishop, where the pass defense has tracked with whoever's played there.",
      "hooker-ten-ints.png"),

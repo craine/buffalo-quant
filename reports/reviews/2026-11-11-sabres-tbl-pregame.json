@@ -1,0 +1,70 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "fa21874dc2b85db006ebcffdcef95e6ab957c40e14c635e29d517cda0209b6b1",
+   "at_utc": "2026-11-11T22:01:13Z",
+   "notes": "Built from the Vegas pregame generator (same model v0.1, same method text). AS_OF 2026-11-10, ratings as of 2026-11-11. Removed Vegas-specific lines (Ellis/Hill starters, Columbus season-high, goalie-switch pattern); no starter claims (none confirmed in our sources). Tie wording restored for close-range rank. Charts viewed. Ledger call not yet logged (needs Charlie's go)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
+   "at_utc": "2026-11-11T22:08:07Z",
+   "notes": "Quant FAIL (stale clean_nhl_shots_xg: 14 games missing Nov 8-10) -> fixed: rebuilt clean_nhl_shots + xg (292/292 games), regenerated; numbers now match Quant's rebuild (BUF 47%, TBL 53%; BUF 6th-most chances allowed; TBL 3rd close shots allowed, 13th chances allowed). Added assert that clean xg covers every raw game. Restored out-of-sample note. Dek and chances-chart title rewritten. Logger to run only after rebuild.",
+   "report": "2026-11-11-sabres-tbl-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
+   "at_utc": "2026-11-11T22:08:07Z",
+   "notes": "Editor light edits applied: lead opens with the call; goalie split-half paragraph trimmed; model explanation shortened; save % format; model-test chart retitled to tonight's 50-55% range; chances y-axis 'better defense is higher'; 'How we measure' moved below table; dek leads with the call. Ran in parallel with Quant for time (puck drop 7 PM); final check covers combined text.",
+   "report": "2026-11-11-sabres-tbl-pregame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
+   "at_utc": "2026-11-11T22:09:21Z",
+   "notes": "Final PASS (/tmp/quant-tbl.md stage 4): all numbers match Quant's independent rebuild on the real DB; no tie; logger computes 0.471 -> 0.47 = published 47%.",
+   "report": "2026-11-11-sabres-tbl-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "cd3e264dda1fbaa3748581a4a061ca6369c8b12e62162546decfcf457e1f1307",
+   "at_utc": "2026-11-11T22:15:24Z",
+   "notes": "Re-recorded after Ledger log P0009 (Sabres 47%, 22:14:46 UTC, before 00:00 UTC puck drop). Only change vs. the text that passed stage 4: the Ledger status line (diff in commit). Numbers unchanged.",
+   "report": "2026-11-11-sabres-tbl-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "fa21874dc2b85db006ebcffdcef95e6ab957c40e14c635e29d517cda0209b6b1",
+  "at_utc": "2026-11-11T22:01:13Z",
+  "notes": "Built from the Vegas pregame generator (same model v0.1, same method text). AS_OF 2026-11-10, ratings as of 2026-11-11. Removed Vegas-specific lines (Ellis/Hill starters, Columbus season-high, goalie-switch pattern); no starter claims (none confirmed in our sources). Tie wording restored for close-range rank. Charts viewed. Ledger call not yet logged (needs Charlie's go)."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
+  "at_utc": "2026-11-11T22:08:07Z",
+  "notes": "Quant FAIL (stale clean_nhl_shots_xg: 14 games missing Nov 8-10) -> fixed: rebuilt clean_nhl_shots + xg (292/292 games), regenerated; numbers now match Quant's rebuild (BUF 47%, TBL 53%; BUF 6th-most chances allowed; TBL 3rd close shots allowed, 13th chances allowed). Added assert that clean xg covers every raw game. Restored out-of-sample note. Dek and chances-chart title rewritten. Logger to run only after rebuild.",
+  "report": "2026-11-11-sabres-tbl-pregame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "4eebcc6be23d2a73d0c59bb1a5dfa411ef869c898bc4cd02352b163f8c7b6c57",
+  "at_utc": "2026-11-11T22:08:07Z",
+  "notes": "Editor light edits applied: lead opens with the call; goalie split-half paragraph trimmed; model explanation shortened; save % format; model-test chart retitled to tonight's 50-55% range; chances y-axis 'better defense is higher'; 'How we measure' moved below table; dek leads with the call. Ran in parallel with Quant for time (puck drop 7 PM); final check covers combined text.",
+  "report": "2026-11-11-sabres-tbl-pregame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "cd3e264dda1fbaa3748581a4a061ca6369c8b12e62162546decfcf457e1f1307",
+  "at_utc": "2026-11-11T22:15:24Z",
+  "notes": "Re-recorded after Ledger log P0009 (Sabres 47%, 22:14:46 UTC, before 00:00 UTC puck drop). Only change vs. the text that passed stage 4: the Ledger status line (diff in commit). Numbers unchanged.",
+  "report": "2026-11-11-sabres-tbl-pregame-final.md"
+ }
+}
