@@ -1,0 +1,30 @@
+{
+ "label": "Sabres vs. Tampa Bay, 7 p.m.: the matchup",
+ "big": [
+  [
+   "53%",
+   "Tampa Bay's chance to win, our model (Sabres 47%)"
+  ],
+  [
+   "4.0",
+   "Sabres rebound shots a game (3rd of 32)"
+  ]
+ ],
+ "note": "Close to a coin flip: our model expects 3.4 goals for Tampa Bay, 3.2 for Buffalo. Rebounds go in 11.5% of the time, about 1.8 times the rate of other shots.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Every shot has a chance of going in.",
+  "text": "A shot from within 10 feet went in 13.8% of the time over the last three seasons; from 60 feet or more, 0.8%. Add up those chances on every shot and you get what a team's chances were worth in goals.",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Rebounds",
+    0.115
+   ],
+   [
+    "Other shots",
+    0.063
+   ]
+  ]
+ }
+}
