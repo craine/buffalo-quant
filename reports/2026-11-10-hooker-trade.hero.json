@@ -1,0 +1,38 @@
+{
+ "label": "The Hooker trade",
+ "big": [
+  [
+   5,
+   "interceptions this season"
+  ],
+  [
+   17,
+   "in his career"
+  ]
+ ],
+ "note": "Interceptions barely carry over for safeties. What the Bills are getting: a sure tackler whose coverage beats what Buffalo's safeties have allowed.",
+ "explainer": {
+  "kicker": "What carries over",
+  "title": "How well one season predicts the next.",
+  "text": "For safeties, 2018-2025 (0 = not at all, 1 = perfectly):",
+  "fmt": "score",
+  "bars": [
+   [
+    "Missed tackles",
+    0.3
+   ],
+   [
+    "Interceptions",
+    0.26
+   ],
+   [
+    "Yards allowed per target",
+    0.19
+   ],
+   [
+    "Completions allowed",
+    0.15
+   ]
+  ]
+ }
+}

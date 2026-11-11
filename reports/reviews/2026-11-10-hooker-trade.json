@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "30c26b5daa41a223e65ab03edcaba769034fcd3a463c40bc51b956ee3293ac2e",
+   "at_utc": "2026-11-11T03:50:46Z",
+   "notes": "Checklist: all numbers computed except trade terms (cited to buffalobills.com); pinned THRU=9; both charts viewed; overclaims fixed (coverage below average 2023-25 stated, carry-over differences called small, 33-target small sample labeled); no betting language."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "30c26b5daa41a223e65ab03edcaba769034fcd3a463c40bc51b956ee3293ac2e",
+  "at_utc": "2026-11-11T03:50:46Z",
+  "notes": "Checklist: all numbers computed except trade terms (cited to buffalobills.com); pinned THRU=9; both charts viewed; overclaims fixed (coverage below average 2023-25 stated, carry-over differences called small, 33-target small sample labeled); no betting language."
+ }
+}

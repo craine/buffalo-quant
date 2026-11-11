@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-trade-amani-hooker", "2026-11-10-hooker-trade.md", "2026-11-10", "Bills &middot; Trade",
+     "Amani Hooker arrives tied for the NFL lead in interceptions. That's the shakiest part of his game to count on. What the Bills are getting: a sure tackler.",
+     "hooker-carryover.png"),
     ("bills-vikings-postgame", "2026-wk09-postgame.md", "2026-11-10", "Bills &middot; Week 9 post-game",
      "We projected the Bills for 23.4. They scored 23. We projected the Vikings for 22.8. They scored 6. Five of our seven calls hit; here's every one, graded.",
      "wk09d-scorecard.png"),
