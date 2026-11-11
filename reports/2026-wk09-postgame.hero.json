@@ -1,0 +1,30 @@
+{
+ "label": "Monday night, graded",
+ "big": [
+  [
+   23,
+   "Bills (we said 23.4)"
+  ],
+  [
+   6,
+   "Vikings (we said 22.8)"
+  ]
+ ],
+ "note": "5 of 7 Ledger calls right, including Bills win. Both misses came mostly from Minnesota's passing game.",
+ "explainer": {
+  "kicker": "Receipts",
+  "title": "Every call graded, hit or miss.",
+  "text": "Our calls' score this week, vs. guessing 50/50 on every one (lower is better):",
+  "fmt": "score",
+  "bars": [
+   [
+    "Our calls",
+    0.22
+   ],
+   [
+    "50/50 guess",
+    0.25
+   ]
+  ]
+ }
+}

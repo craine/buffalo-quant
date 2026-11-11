@@ -6,3 +6,4 @@ pfr_pass: [2018, 2026]   # 2018 hard floor
 pfr_def: [2018, 2026]    # 2018 hard floor
 ftn: [2022, 2026]        # FTN charting starts 2022
 participation: [2018, 2025]  # 2026 not published as of 2026-11-05
+snap_counts: [2018, 2026]  # verified 200 on 2026-11-10; has pfr_player_id

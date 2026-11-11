@@ -1,0 +1,62 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
+   "at_utc": "2026-11-11T03:47:53Z",
+   "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "bf5fb4ff2eb7600fe47fb3a51167b1538be4f5692a06200174b8d28ef9811e8f",
+   "at_utc": "2026-11-11T03:54:09Z",
+   "notes": "Publish with fixes; applied: Wentz line now Wentz-only (8/24, 81, 2 INT, 1 sack; Brosmer named), rarity worded one-sided, gap claim softened, second straight strong game noted, wording fixes, hit rule 50%+, P0002 coin-flip caveat, sample sizes in chart footers, title shows 22.8.",
+   "report": "2026-wk09-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "e506986d10480159164dad46b3fff05a2a31708f3bfc8a507f0e3e2e7aee1554",
+   "at_utc": "2026-11-11T03:58:42Z",
+   "notes": "Editor restructure applied: Minnesota first, new expected-points box (Williams INT 4.06 -> BUF 0.15, cost 4.21), league run value -0.080, pass plays terminology, Murray-out clause sourced to ESPN via preview, What it means made forward-looking, scorecard chart moved to stat-heads with (by 0.003) label and gray miss labels. Kept Quant's one-sided rarity wording.",
+   "report": "2026-wk09-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "d22f045010beb3054224cddf5985ea53bbe98a6d04cbf006ee67739cdfa16d86",
+   "at_utc": "2026-11-11T04:02:09Z",
+   "notes": "Quant final check PASS (/tmp/quant-postgame-final.md); applied its three optional fixes verbatim: 'about 0.15', scorecard footer '7 calls, 1 game', 'came mostly from' in lead and hero.",
+   "report": "2026-wk09-postgame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "10191c7c12ee0d85d774644e20c15d011ed74bbdc229b93faf70da8339060e2e",
+  "at_utc": "2026-11-11T03:47:53Z",
+  "notes": "Checklist: every number computed (literals checked: 7 calls asserted, score words/65%/prior-game count computed); pinned THRU=9 with projections from week-8 inputs; both charts viewed (title shortened); grades reproduce from grade_wk09.outcomes(); no-plays excluded; no betting language ('push' removed)."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "bf5fb4ff2eb7600fe47fb3a51167b1538be4f5692a06200174b8d28ef9811e8f",
+  "at_utc": "2026-11-11T03:54:09Z",
+  "notes": "Publish with fixes; applied: Wentz line now Wentz-only (8/24, 81, 2 INT, 1 sack; Brosmer named), rarity worded one-sided, gap claim softened, second straight strong game noted, wording fixes, hit rule 50%+, P0002 coin-flip caveat, sample sizes in chart footers, title shows 22.8.",
+  "report": "2026-wk09-postgame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "e506986d10480159164dad46b3fff05a2a31708f3bfc8a507f0e3e2e7aee1554",
+  "at_utc": "2026-11-11T03:58:42Z",
+  "notes": "Editor restructure applied: Minnesota first, new expected-points box (Williams INT 4.06 -> BUF 0.15, cost 4.21), league run value -0.080, pass plays terminology, Murray-out clause sourced to ESPN via preview, What it means made forward-looking, scorecard chart moved to stat-heads with (by 0.003) label and gray miss labels. Kept Quant's one-sided rarity wording.",
+  "report": "2026-wk09-postgame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "d22f045010beb3054224cddf5985ea53bbe98a6d04cbf006ee67739cdfa16d86",
+  "at_utc": "2026-11-11T04:02:09Z",
+  "notes": "Quant final check PASS (/tmp/quant-postgame-final.md); applied its three optional fixes verbatim: 'about 0.15', scorecard footer '7 calls, 1 game', 'came mostly from' in lead and hero.",
+  "report": "2026-wk09-postgame-final.md"
+ }
+}

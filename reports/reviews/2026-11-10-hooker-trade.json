@@ -1,0 +1,93 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "30c26b5daa41a223e65ab03edcaba769034fcd3a463c40bc51b956ee3293ac2e",
+   "at_utc": "2026-11-11T03:50:46Z",
+   "notes": "Checklist: all numbers computed except trade terms (cited to buffalobills.com); pinned THRU=9; both charts viewed; overclaims fixed (coverage below average 2023-25 stated, carry-over differences called small, 33-target small sample labeled); no betting language."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "212ab625724d31c17705076b06ec43072997466c83367367fc7d3a7729c240d2",
+   "at_utc": "2026-11-11T04:02:17Z",
+   "notes": "Quant: publish with substantive fixes. All applied: dropped 'sure tackler' (2026 3/55 small sample + 2023-25 average shown); carry-over now 'about equal, only a little' with player-bootstrap 95% ranges on chart; Bills comparison by player (Bishop better, CJGJ/Hamlin worse) with league averages; safety matching rebuilt (suffix-stripped names, initial+last fallback when unique, OAK/SD/STL normalized, ambiguous names dropped, DB exclusion disclosed): 318 pairs/118 players; 5+ INT example (22 seasons: 5.5 -> 2.5, all 1.7); 3 of 5 INTs in week 8 at CIN; Beane wording matched to source; 'regular-season' career; games labels removed from INT chart, footer nflverse-only.",
+   "report": "2026-11-10-hooker-trade-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "5cb379c5044ac7d80593a3594e7ecfb03931f904f70e443a0cec33cff8df48c1",
+   "at_utc": "2026-11-11T04:05:39Z",
+   "notes": "Editor: needs edits, all 12 applied: headline states finding; lead leads with 5+ INT -> 2.5; dek fixed (removed 'shakiest'); 'bet' -> 'paying for'; new how-we-got-that-score paragraph; target -> throw in body (defined once); long sentences split; tackling rank sentence fixed; small-sample note on 2026 INTs; carry-over chart: only INT blue, plain-language range; new big-years chart (5.5/2.5/1.7, n=22) now site hero; hero note reworded. Changed editor's 'all 17 games' to 'whole next season' (2018-20 seasons were 16 games). Games left = 9 computed from schedule.",
+   "report": "2026-11-10-hooker-trade-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a35f4469ad7f1718cea0058a9d0acadb9e9aed388ccd3becf1768d8080bb0a9a",
+   "at_utc": "2026-11-11T04:10:20Z",
+   "notes": "Quant final check: round 1 FAIL on 5 wording issues (no number errors), all fixed; round 2 PASS (/tmp/quant-hooker-final.md). Applied its optional pronoun fix verbatim ('those seasons averaged 5.5 interceptions. The next year, 2.5').",
+   "report": "2026-11-10-hooker-trade-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "b889fd703364c7a9f201a59d0c4e8a6ee310b85b23363eebf5a9432007f73604",
+   "at_utc": "2026-11-11T04:24:43Z",
+   "notes": "Rewritten per Charlie's angle: Bishop's partner problem (opponent-adjusted Bills pass D by safety pairing from new raw_snap_counts) + Hooker as the playmaker on a bad TEN defense (5 of 8 INTs; coverage same as teammates, disclosed). Self-check fixed: Hamlin ex-MIN still +0.23 (not 'closer to even'); Bishop's own coverage barely moved (8.8 vs 9.2), stated as such; removed speculation about Bills' view of Hamlin; 'against the pass' -> 'yards allowed per throw'. Prior reviews were on old text."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "b2c1d71daddfa190e0760da1917fe579cbd4738f11caecf41b5e0aa681fac654",
+   "at_utc": "2026-11-11T04:32:38Z",
+   "notes": "v2 Quant: PUBLISH WITH FIXES; all applied in code: backup-QB flag (starter = most games leading dropbacks; matches Quant's CAR/HOU/BAL/MIN plus NYJ wk2, NO wk4 2025) with starters-only column and light bars; Hamlin LV-only -0.19 disclosed; 'lived and died'/'made or broken' -> 'tracked with'; two-sided permutation p=0.063 ('1 time in 16') + Poyer +0.05 vs starters in a how-we-checked paragraph; league ranks (6th / 31st; BUF 2025 +0.09 9th, 2026 +0.01 14th); Rams wk5 worked example; PFR through wk 8 dateline, McKinney tie credited to nflverse; 'bet' removed; Bishop coverage vs safety avg, 'went well' cut; 'games where both played most snaps'; wk6 shared and PHI wk17 DB exclusion disclosed; hero label. Also cut my own unsourced CB/pass-rush claim.",
+   "report": "2026-11-10-hooker-trade-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "060aae82f0b1e982c08204cddf8416df895d5dc40b9b7ab37e827ae18ead658c",
+   "at_utc": "2026-11-11T04:35:27Z",
+   "notes": "v2 Editor: light edits, all applied: headline no longer implies cause ('has tracked with ... Now they've traded for a playmaker'); lede reworded (opponents' passing did X worse/better than usual) + 'Small samples...' line; dateline names PFR charting; table headers plain; 'Every row is a small sample, 3 to 9 games'; Hamlin asterisk moved under table; how-we-checked as 3 bullets (luck / QBs / everything else); worked example says 'worth 19.4 points combined' and ties to -0.34 in the CJGJ row; tackling sentence simplified ('16th-best of 58'); 'norm' removed from body/hero; chart direct labels, neutral light bars, gray Hamlin bar; TEN bye note; cut 'where it matters most'. Kept 'needs an asterisk' over 'Ignore'.",
+   "report": "2026-11-10-hooker-trade-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a3ef75a10305b5f79e551bbb5d395ab6252444dad1471341fab005ae0ea86701",
+   "at_utc": "2026-11-11T04:41:58Z",
+   "notes": "v2 final: round 1 FAIL (Rattler mis-flagged; PFR not pinned), fixed (starter = most games through that week OR prior-season main passer; PFR_THRU=8, AS_OF); round 2 PASS (/tmp/quant-hooker-v2-final.md). Applied its optional 'a backup QB' singular label nit; skipped Jets injury note (not in our data).",
+   "report": "2026-11-10-hooker-trade-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "b889fd703364c7a9f201a59d0c4e8a6ee310b85b23363eebf5a9432007f73604",
+  "at_utc": "2026-11-11T04:24:43Z",
+  "notes": "Rewritten per Charlie's angle: Bishop's partner problem (opponent-adjusted Bills pass D by safety pairing from new raw_snap_counts) + Hooker as the playmaker on a bad TEN defense (5 of 8 INTs; coverage same as teammates, disclosed). Self-check fixed: Hamlin ex-MIN still +0.23 (not 'closer to even'); Bishop's own coverage barely moved (8.8 vs 9.2), stated as such; removed speculation about Bills' view of Hamlin; 'against the pass' -> 'yards allowed per throw'. Prior reviews were on old text."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "b2c1d71daddfa190e0760da1917fe579cbd4738f11caecf41b5e0aa681fac654",
+  "at_utc": "2026-11-11T04:32:38Z",
+  "notes": "v2 Quant: PUBLISH WITH FIXES; all applied in code: backup-QB flag (starter = most games leading dropbacks; matches Quant's CAR/HOU/BAL/MIN plus NYJ wk2, NO wk4 2025) with starters-only column and light bars; Hamlin LV-only -0.19 disclosed; 'lived and died'/'made or broken' -> 'tracked with'; two-sided permutation p=0.063 ('1 time in 16') + Poyer +0.05 vs starters in a how-we-checked paragraph; league ranks (6th / 31st; BUF 2025 +0.09 9th, 2026 +0.01 14th); Rams wk5 worked example; PFR through wk 8 dateline, McKinney tie credited to nflverse; 'bet' removed; Bishop coverage vs safety avg, 'went well' cut; 'games where both played most snaps'; wk6 shared and PHI wk17 DB exclusion disclosed; hero label. Also cut my own unsourced CB/pass-rush claim.",
+  "report": "2026-11-10-hooker-trade-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "060aae82f0b1e982c08204cddf8416df895d5dc40b9b7ab37e827ae18ead658c",
+  "at_utc": "2026-11-11T04:35:27Z",
+  "notes": "v2 Editor: light edits, all applied: headline no longer implies cause ('has tracked with ... Now they've traded for a playmaker'); lede reworded (opponents' passing did X worse/better than usual) + 'Small samples...' line; dateline names PFR charting; table headers plain; 'Every row is a small sample, 3 to 9 games'; Hamlin asterisk moved under table; how-we-checked as 3 bullets (luck / QBs / everything else); worked example says 'worth 19.4 points combined' and ties to -0.34 in the CJGJ row; tackling sentence simplified ('16th-best of 58'); 'norm' removed from body/hero; chart direct labels, neutral light bars, gray Hamlin bar; TEN bye note; cut 'where it matters most'. Kept 'needs an asterisk' over 'Ignore'.",
+  "report": "2026-11-10-hooker-trade-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "a3ef75a10305b5f79e551bbb5d395ab6252444dad1471341fab005ae0ea86701",
+  "at_utc": "2026-11-11T04:41:58Z",
+  "notes": "v2 final: round 1 FAIL (Rattler mis-flagged; PFR not pinned), fixed (starter = most games through that week OR prior-season main passer; PFR_THRU=8, AS_OF); round 2 PASS (/tmp/quant-hooker-v2-final.md). Applied its optional 'a backup QB' singular label nit; skipped Jets injury note (not in our data).",
+  "report": "2026-11-10-hooker-trade-final.md"
+ }
+}
