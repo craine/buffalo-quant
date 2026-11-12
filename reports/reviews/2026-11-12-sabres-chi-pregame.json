@@ -46,6 +46,14 @@
    "at_utc": "2026-11-12T23:00:34Z",
    "notes": "Re-check on 7ada2eec: all 4 required fixes in and computed in generator (8 short/4 over/12 swing; pooled 8.5 pts ~4 SE; coin-flip removed; shootout loss). Hero title/note fixed. Not taken: b2b chart footer source (cosmetic).",
    "report": "2026-11-12-sabres-chi-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "c041cff8fbe2131e40654247e765f0cdea962c7a42186e895c803b28a336205c",
+   "at_utc": "2026-11-12T23:01:50Z",
+   "notes": "Re-check on c041cff8: only 3x 'percentage points', removed duplicate bad-bounces sentence, b2b chart footer now credits final scores; numbers, hero, dek, Ledger P0010 unchanged and correct. Nit: '4 points'/'12 points' wording consistency.",
+   "report": "2026-11-12-sabres-chi-pregame-final.md"
   }
  ],
  "self": {
@@ -70,9 +78,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
-  "at_utc": "2026-11-12T22:59:39Z",
-  "notes": "All stage 2/3 required fixes applied; new numbers (8.5-pt gap 4.0 SE, 46 vs 38 n242, 49 vs 45 n1155, 12-pt swing, SO loss, P0010 0.57) re-derived and match; brand clean. Non-blocking: b2b chart source line.",
+  "sha256": "c041cff8fbe2131e40654247e765f0cdea962c7a42186e895c803b28a336205c",
+  "at_utc": "2026-11-12T23:01:50Z",
+  "notes": "Re-check on c041cff8: only 3x 'percentage points', removed duplicate bad-bounces sentence, b2b chart footer now credits final scores; numbers, hero, dek, Ledger P0010 unchanged and correct. Nit: '4 points'/'12 points' wording consistency.",
   "report": "2026-11-12-sabres-chi-pregame-final.md"
  }
 }
