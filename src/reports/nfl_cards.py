@@ -48,6 +48,8 @@ RANK_ON = {"QB": ("epa_db", "points added per dropback"), "RB": ("scrim", "yards
 
 
 def norm(name):
+    import unicodedata
+    name = unicodedata.normalize("NFKD", str(name)).encode("ascii", "ignore").decode()   # Estimé -> Estime
     name = re.sub(r"\b(jr|sr|ii|iii|iv|v)\b\.?", "", str(name).lower())
     return re.sub(r"[^a-z]", "", name)
 
