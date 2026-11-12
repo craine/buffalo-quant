@@ -1,0 +1,34 @@
+{
+ "label": "Chances while the game was close, in goals",
+ "big": [
+  [
+   0.8,
+   "Sabres"
+  ],
+  [
+   2.0,
+   "Lightning"
+  ]
+ ],
+ "note": "Final: Lightning 8, Sabres 3. Tampa scored 8 on shots worth 3.5.",
+ "explainer": {
+  "kicker": "In goal",
+  "title": "The 4th-worst night of the season.",
+  "text": "Goals saved compared with an average goalie on the same shots:",
+  "fmt": "goals",
+  "bars": [
+   [
+    "Luukkonen",
+    -2.3
+   ],
+   [
+    "Ellis",
+    -2.2
+   ],
+   [
+    "Vasilevskiy, Tampa",
+    0.5
+   ]
+  ]
+ }
+}
