@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Chicago, 8 p.m.: the matchup",
+ "big": [
+  [
+   "57%",
+   "Buffalo's chance to win, our model (Chicago 43%)"
+  ],
+  [
+   "38%",
+   "How often tired road teams won when our model gave them 46%"
+  ]
+ ],
+ "note": "Chicago creates the fewest chances in the NHL. But Buffalo played last night, and the model doesn't count that: road teams on the second night of a back-to-back, against a rested home team, have won 38% since 2023-24, against 47% when rested.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Second nights cost road teams.",
+  "text": "Since 2023-24, road teams playing the second night in a row against a rested home team won 38% of 643 games. Rested road teams won 47%.",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Tired road teams",
+    0.383
+   ],
+   [
+    "Rested road teams",
+    0.468
+   ]
+  ]
+ }
+}

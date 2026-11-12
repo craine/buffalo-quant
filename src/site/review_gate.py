@@ -1,6 +1,7 @@
 """Publishing gate: a story builds only after self, quant, editor and final reviews pass on its exact text."""
 import hashlib
 import json
+import pathlib
 import shutil
 from datetime import datetime, timezone
 from pathlib import Path
@@ -34,7 +35,8 @@ def record(md_path, stage, verdict, notes, report=None):
     entry = dict(verdict=verdict, sha256=sha(md_path), at_utc=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"), notes=notes)
     if report:
         dst = REVIEWS / f"{Path(md_path).stem}-{stage}.md"
-        shutil.copyfile(report, dst)
+        if pathlib.Path(report).resolve() != pathlib.Path(dst).resolve():   # reviewers may write straight to the reviews folder
+            shutil.copyfile(report, dst)
         entry["report"] = dst.name
     rec.setdefault("history", []).append(dict(stage=stage, **entry))
     rec[stage] = entry
