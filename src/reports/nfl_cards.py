@@ -40,16 +40,25 @@ def main(week=None):
     link = pl.dropna(subset=["pfr_id"]).set_index("pfr_id").gsis_id
 
     # games and snaps, by week (offense or defense snaps > 0)
-    sn = query(f"""SELECT week, team, pfr_player_id, position, offense_snaps, offense_pct, defense_snaps, defense_pct
+    # a game counts if he played any snaps (special teams included), since box-score stats include special-teams plays;
+    # a player gets a card if he has offensive or defensive snaps this season
+    sn = query(f"""SELECT week, team, pfr_player_id, position, offense_snaps, offense_pct, defense_snaps, defense_pct, st_snaps
                    FROM raw_snap_counts WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
-    sn = sn[(sn.offense_snaps.fillna(0) + sn.defense_snaps.fillna(0)) > 0].copy()
+    sn = sn[(sn.offense_snaps.fillna(0) + sn.defense_snaps.fillna(0) + sn.st_snaps.fillna(0)) > 0].copy()
+    od = sn.groupby("pfr_player_id").apply(lambda x: (x.offense_snaps.fillna(0) + x.defense_snaps.fillna(0)).sum(), include_groups=False)
+    sn = sn[sn.pfr_player_id.isin(od[od > 0].index)]
     sn["gsis"] = sn.pfr_player_id.map(link)
     unlinked = sn[sn.gsis.isna()].pfr_player_id.nunique()
     sn = sn.dropna(subset=["gsis"])
     sn["snaps"] = sn.offense_snaps.fillna(0) + sn.defense_snaps.fillna(0)
     sn["pct"] = np.where(sn.offense_snaps.fillna(0) >= sn.defense_snaps.fillna(0), sn.offense_pct, sn.defense_pct)
-    games = sn.groupby("gsis").agg(gp=("week", "nunique"), snaps=("snaps", "sum"), pct=("pct", "mean"),
+    sn.loc[sn.snaps == 0, "pct"] = np.nan        # special-teams-only games don't count toward snap share
+    games = sn.groupby("gsis").agg(snaps=("snaps", "sum"), pct=("pct", "mean"),
                                    off=("offense_snaps", "sum"), dfn=("defense_snaps", "sum"))
+    pw_cur = query(f"SELECT player_id, week FROM raw_player_week WHERE season={SEASON} AND season_type='REG' AND week<={week}")
+    gweeks = (pd.concat([sn[["gsis", "week"]], pw_cur.rename(columns={"player_id": "gsis"})])
+              .drop_duplicates().groupby("gsis").week.apply(lambda w: sorted(w)))    # a snap row or a stat line: the snap file misses some games
+    games["gp"] = gweeks.reindex(games.index).map(len)
     last = sn.sort_values("week").groupby("gsis").tail(1).set_index("gsis")
     teams_played = sn.groupby("gsis").team.unique()
 
@@ -140,7 +149,7 @@ def main(week=None):
     cards = []
     for r in c.to_dict("records"):
         col, label = big[r["grp"]]
-        weeks = sorted(sn[sn.gsis == r["id"]].week.unique())
+        weeks = gweeks.loc[r["id"]]
         if col == "pressures":
             per = pfw[pfw.gsis == r["id"]].groupby("week").pressures.sum()
         elif col == "snaps":
@@ -156,6 +165,7 @@ def main(week=None):
                              rec_yds=int(x.rec_yds), rec_td=int(x.rec_td), tackles=int(x.tk_s + x.tk_a), sacks=float(x.sacks),
                              def_int=int(x.def_int), pd=int(x.pd)) for x in h.itertuples()]
         r["small"] = bool(r["gp"] < MIN_GP if r["grp"] != "QB" else r["n_db"] < MIN_DB)
+        r["number"] = None if r["number"] is None or r["number"] != r["number"] else int(r["number"])
         for k, v in list(r.items()):
             if isinstance(v, (np.integer,)):
                 r[k] = int(v)

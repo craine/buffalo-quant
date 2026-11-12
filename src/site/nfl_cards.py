@@ -23,6 +23,10 @@ GROUP_NAME = {"QB": "quarterbacks", "RB": "running backs", "WR": "wide receivers
 GROUP_ORDER = ["QB", "RB", "WR", "TE", "OL", "DL", "LB", "DB"]
 
 
+def team_name(tname):
+    return tname.title().replace("49Ers", "49ers")
+
+
 def slugs_for(cards):
     base = {}
     for c in cards:
@@ -157,16 +161,16 @@ def build_nfl_cards():
     for c in cards:
         tc, ta, tname = NFL_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
         moved = f" He also played for {', '.join(c['other_teams'])} this season; the card counts his whole season." if c["other_teams"] else ""
-        body = f"""<div class="kicker"><a href="index.html">NFL player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
-<p class="dek">{pos_label(c)}, {tname.title()}. {c['big']:g} {c['big_label']} in {plural(c['gp'], 'game')}. Numbers through Week {m['week']} of the {m['season']} season.{moved}</p>
+        body = f"""<div class="kicker"><a href="index.html">NFL player cards</a> &middot; {team_name(tname)}</div><h1>{html.escape(c['name'])}</h1>
+<p class="dek">{pos_label(c)}, {team_name(tname)}. {c['big']:g} {c['big_label']} in {plural(c['gp'], 'game')}. Numbers through Week {m['week']} of the {m['season']} season.{moved}</p>
 <div class="cards one">{tile(c, m)}</div>
 <h2>This season</h2><p>{season_line(c)}</p>
 {'<p><b>Small sample.</b> These numbers can move a lot.</p>' if c['small'] else ''}
 {howto(m)}"""
         (out / f"{slugs[c['id']]}.html").write_text(page(f"{c['name']} | NFL player card | Buffalo Quant Desk", body, "Cards", 2,
-                                                       f"{c['name']}, {pos_label(c)}, {tname.title()}: {c['big']:g} {c['big_label']} this season."))
+                                                       f"{c['name']}, {pos_label(c)}, {team_name(tname)}: {c['big']:g} {c['big_label']} this season."))
         key = ("0" if c["team"] == "BUF" else "1" + tname, GROUP_ORDER.index(c["grp"]))
-        groups.setdefault(key, (tname.title(), c["grp"], []))[2].append(
+        groups.setdefault(key, (team_name(tname), c["grp"], []))[2].append(
             (-c["big"], f'<a class="pcard" href="{slugs[c["id"]]}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
                         f'<span class="pm"><b>{html.escape(c["name"])}</b><br>{pos_label(c)} &middot; {c["big"]:g} {c["big_label"]}</span></a>'))
     teams, lists, seen = [], "", set()
