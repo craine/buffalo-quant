@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-lightning-postgame-nov-11", "2026-11-12-sabres-tbl.md", "2026-11-12", "Sabres &middot; Post-game",
+     "Tampa had better than twice Buffalo's chances while the game was close, then the Sabres had one of the worst nights in goal in the NHL this season.",
+     "sabres-tbl-post-flow.png"),
     ("sabres-hot-cold", "2026-11-11-sabres-hot-cold.md", "2026-11-11", "Sabres &middot; Players",
      "Power, Quinn and Benson are running furthest ahead of their history; McLeod, Doan and Norris are likely to heat up. Our player rating, tested on last season, beat going by pace.",
      "sabres-hotcold-pace.png"),
