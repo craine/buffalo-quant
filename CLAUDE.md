@@ -135,8 +135,14 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   player's `last_season` is recent; otherwise match snap counts to box scores by team, name and week (`src/reports/nfl_cards.py`).
 - Every source lists edge rushers as linebackers. The NFL cards group linebackers with 1+ pressure and <6 tackles a game as pass rushers.
 - PFR charting can lag a week behind box scores; use only fully charted weeks (`nfl_cards.py` computes `pfr_week`).
-- NFL cards (`reports/cards/nfl_players.json`) are pinned by `WEEK` in `src/reports/nfl_cards.py`; refresh with `--latest` (manual for now).
-  `--latest` stops before the first week with an unplayed game: handle postponed games before automating it.
+- **Weekly NFL cards refresh** (`.github/workflows/nfl-refresh.yml`, Tuesday and Wednesday 12:17 UTC): loads the new week, runs
+  `nfl_cards --latest`, and commits `reports/cards/nfl_players.json` to `main` as `buffalo-quant-bot`. Same approved bot exception as the
+  NHL refresh, for that one file only. It refuses to publish unless `scripts/validate_nfl_cards.py`, `tests/test_nfl_cards.py` and
+  `tests/test_review_gate.py` pass and pinned story files are untouched. `WEEK` in `nfl_cards.py` is only the default for a manual run.
+- NFL weeks (`week_status`): a week's window is its first scheduled game plus five days (the longest real week, 2024–26, is exactly 5).
+  It's complete when every game in the window is final. A game rescheduled past the window is **postponed**: it doesn't hold the week,
+  and the cards index names it until it's played. An unfinished game still inside a window that ended 3+ days ago (cancelled, or the
+  schedule not updated) fails validation on purpose: check the schedule rather than letting the cards quietly stop.
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.

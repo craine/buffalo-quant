@@ -1,0 +1,60 @@
+name: NFL cards refresh
+# Weekly: after Monday Night Football, load the new week from nflverse, rebuild the NFL player cards, validate them (building the site
+# locally to test the pages), and commit reports/cards/nfl_players.json to main. Cloudflare Pages builds the site itself on every deploy.
+# Runs Tuesday and again Wednesday, in case nflverse posts the week's stats late; a run with nothing new changes nothing.
+# A postponed game doesn't hold the week: the cards skip it and say so until it's played (src/reports/nfl_cards.py week_status).
+on:
+  schedule:
+    - cron: "17 12 * * 2,3"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nfl-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install pandas==3.0.5 pyarrow==26.0.1 pytest pyyaml markdown
+      - name: Load NFL data
+        run: |
+          mkdir -p data
+          # schedules and the player master list are single files
+          python -m src.ingest.nflverse --only raw_schedules,raw_players
+          # career history on the cards goes back to 2018
+          python -m src.ingest.nflverse --only player_week,snap_counts
+          # this season only
+          python -m src.ingest.nflverse --only pbp,pfr_def,rosters_weekly --from 2026
+      - name: Rebuild NFL cards
+        run: python -m src.reports.nfl_cards --latest
+      - name: Validate the card data
+        run: PYTHONPATH=. python scripts/validate_nfl_cards.py
+      - name: Build site
+        run: python -m src.site.build
+      - name: Test cards and pages; confirm pinned files untouched
+        run: |
+          set -o pipefail
+          python -m pytest -q -rs tests/test_nfl_cards.py tests/test_review_gate.py | tee /tmp/pytest.txt
+          if grep -qi "skipped" /tmp/pytest.txt; then echo "Tests were skipped; refusing to publish"; exit 1; fi
+          git diff --exit-code -- reports/cards/skaters.json reports/cards/goalies.json reports/*.md ledger/
+      - name: Commit if anything changed
+        run: |
+          git config user.name "buffalo-quant-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reports/cards/nfl_players.json
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          w=$(python -c "import json;m=json.load(open('reports/cards/nfl_players.json'))['meta'];print(f\"Week {m['week']}, rosters Week {m['roster_week']}\")")
+          git commit -m "NFL cards refresh: through $w"
+          git pull --rebase origin main
+          git push origin HEAD:main

@@ -63,11 +63,37 @@ def norm(name):
     return re.sub(r"[^a-z]", "", name)
 
 
+def week_status(season=SEASON):
+    """For each regular-season week: complete or not, and any postponed games. A week's window runs from its first scheduled game
+    through five days later (Thursday through Tuesday). The week is complete when every game scheduled in that window is final. A game
+    moved past the window is postponed: it doesn't hold the week open, and it's listed until it's played."""
+    return weeks_from_schedule(query(f"SELECT week, game_id, gameday, home_score FROM raw_schedules WHERE season={season} "
+                                     "AND game_type='REG' ORDER BY week, gameday"))
+
+
+def weeks_from_schedule(sch):
+    """week_status on a schedule frame (week, game_id, gameday, home_score). Each week also gets `ends` (last day of its window)
+    and `open`, the games inside the window that aren't final."""
+    sch = sch.copy()
+    sch["gameday"] = pd.to_datetime(sch.gameday)
+    out = {}
+    for w, g in sch.groupby("week"):
+        end = g.gameday.min() + pd.Timedelta(days=5)
+        inside, late = g[g.gameday <= end], g[g.gameday > end]
+        out[int(w)] = dict(complete=bool(inside.home_score.notna().all()), ends=end.date(),
+                           open=sorted(inside[inside.home_score.isna()].game_id),
+                           postponed=sorted(late[late.home_score.isna()].game_id))
+    return out
+
+
 def latest_week(season=SEASON):
-    """Newest week whose games are all final and whose player stats are loaded."""
-    sch = query(f"SELECT week, SUM(home_score IS NULL) open FROM raw_schedules WHERE season={season} AND game_type='REG' GROUP BY week ORDER BY week")
-    first_open = sch[sch.open > 0].week.min()
-    done = (first_open - 1) if pd.notna(first_open) else sch.week.max()
+    """Newest week such that it and every week before it is complete, and whose player stats are loaded."""
+    st = week_status(season)
+    done = 0
+    for w in sorted(st):
+        if not st[w]["complete"]:
+            break
+        done = w
     have = query(f"SELECT MAX(week) w FROM raw_player_week WHERE season={season} AND season_type='REG'").w.iloc[0]
     return int(min(done, have))
 
@@ -338,7 +364,9 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
                 r[k] = None if np.isnan(v) else float(v)
         cards.append(r)
 
-    meta = dict(season=SEASON, week=week, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
+    st = week_status()
+    postponed = [gid for w in sorted(st) if w <= week for gid in st[w]["postponed"]]
+    meta = dict(season=SEASON, week=week, postponed=postponed, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
                 linked_by_name=fallback, unlinked=unlinked, dropped=dropped)
     OUT.mkdir(parents=True, exist_ok=True)
