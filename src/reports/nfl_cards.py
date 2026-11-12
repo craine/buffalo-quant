@@ -23,7 +23,7 @@ OUT = ROOT / "reports" / "cards"
 SEASON = 2026
 WEEK = 9              # cards pinned through this week; --latest uses the newest complete week
 ROSTER_WEEK = 10      # rosters as of this week (each player's latest entry up to it); --latest uses the newest
-ROSTERED = {"ACT": "Active roster", "INA": "Active roster (inactive for the latest game)", "RES": "Reserve list (injured reserve or similar)",
+ROSTERED = {"ACT": "Active roster", "INA": "Active roster (inactive for the latest game)", "RES": "Injured reserve or other reserve list",
             "DEV": "Practice squad"}
 MIN_FGA, MIN_PUNTS = 10, 15
 MIN_GP = 4            # games played, to be ranked
@@ -131,7 +131,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}").d.iloc[0]
 
     # ---- rosters: each player's latest entry up to ROSTER_WEEK
-    ro = query(f"""SELECT week, team, gsis_id, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
+    ro = query(f"""SELECT week, team, gsis_id, full_name, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
                    WHERE season={SEASON} AND game_type='REG' AND week<={roster_week} AND gsis_id IS NOT NULL ORDER BY week, team, gsis_id""")
     ro = ro.sort_values(["week", "team"]).groupby("gsis_id").tail(1).set_index("gsis_id")
     on_roster = ro[ro.status.isin(ROSTERED)]
@@ -184,7 +184,10 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
         q = qb.loc[gid] if gid in qb.index else None
         jn = ro.loc[gid, "jersey_number"] if gid in ro.index and ro.loc[gid, "jersey_number"] == ro.loc[gid, "jersey_number"] else (
             info.loc[gid, "jersey_number"] if gid in info.index else None)
-        name = info.loc[gid, "display_name"] if gid in info.index else (last.loc[gid, "player"] if played else gid)
+        name = (info.loc[gid, "display_name"] if gid in info.index else ro.loc[gid, "full_name"] if gid in ro.index
+                else last.loc[gid, "player"] if played else None)
+        if not isinstance(name, str) or not name.strip():
+            continue                    # never publish a card without a name
         played_team = last.loc[gid, "team"] if played else None
         last_wk = int(last.loc[gid, "week"]) if played else 0
         # current team: the roster's, when the roster entry is at least as new as his last game; else the team he last played for
@@ -226,6 +229,10 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     per_press = c.pressures / c.gp_pfr.clip(lower=1)
     c["edge"] = (c.grp == "LB") & (per_press >= EDGE_PRESS) & (c.tackles / c.gp < EDGE_TACKLES)
     c.loc[c.edge, "grp"] = "DL"
+    # a skill player with no carries or targets whose work is returning kicks gets the special-teams card
+    c["ret_yds"] = c.kr_yds + c.pr_yds
+    returner = c.grp.isin(["RB", "FB", "WR", "TE"]) & (c.car == 0) & (c.tgt == 0) & (c.kr + c.pr > 0)
+    c.loc[returner, "grp"] = "ST"
 
     qualified = {"QB": lambda d: d.n_db >= MIN_DB, "K": lambda d: d.fg_att >= MIN_FGA, "P": lambda d: d.punts >= MIN_PUNTS}
 
@@ -249,6 +256,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     wk = wk.rename(columns={"pt_att": "punts"})
     by_week = {col: wk.groupby(["player_id", "week"])[col].sum() for col in ("pass_yds", "scrim", "rec_yds", "tackles", "pd", "fg_made", "punts")}
     by_week["st_snaps"] = sn.groupby(["gsis", "week"]).st_snaps.sum()
+    by_week["ret_yds"] = (wk.kickoff_return_yards + wk.punt_return_yards).groupby([wk.player_id, wk.week]).sum()
     by_week["pressures"] = pf.groupby(["gsis", "week"]).def_pressures.sum()
     by_week["snaps"] = sn.groupby(["gsis", "week"]).od.sum()
 
@@ -275,6 +283,8 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     cards = []
     for r in c.to_dict("records"):
         col, label = BIG[r["grp"]]
+        if r["grp"] == "ST" and r["kr"] + r["pr"] > 0:
+            col, label = "ret_yds", "return yards"
         weeks = gweeks.loc[r["id"]] if r["gp"] else []
         s = by_week[col]
         r["spark"] = np.cumsum([int(s.get((r["id"], w), 0)) for w in weeks]).tolist()

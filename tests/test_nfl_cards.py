@@ -62,6 +62,9 @@ def test_every_card_has_a_matching_page():
         dek = re.search(r'<p class="dek">([^<]*)', html).group(1)
         m = re.search(r"(-?[\d.,]+) ([A-Za-z -]+?) in (\d+) games?", dek)
         m0 = re.search(r"Hasn't played this season \(([\d,]+) NFL games? since 2018\)", dek)
+        if "Hasn't played in an NFL regular-season game yet" in dek:
+            assert any(c["gp"] == 0 and c["big"] == 0 for c in byname[name]), stem
+            continue
         assert m or m0, (stem, dek)
         if m:
             assert any(float(m.group(1).replace(",", "")) == c["big"] and c["gp"] == int(m.group(3)) for c in byname[name]), (stem, dek)
