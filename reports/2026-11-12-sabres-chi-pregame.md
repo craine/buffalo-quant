@@ -44,14 +44,14 @@ story on [last year's 50-win season](sabres-50-win-mirage.html).
 
 Since the start of 2023-24 there have been 643 games like tonight's: a road team playing for the second night in a row against a
 home team that had at least a day off. The tired road team won **38%** of them. When both teams were rested, road teams won 47%
-(3,099 games). That's a gap of 8.5 points over 643 games, far too big to be luck, and it showed up in every
+(3,099 games). That's a gap of 8.5 percentage points over 643 games, far too big to be luck, and it showed up in every
 season (this season's 49 games are a small sample on their own).
 
 **Our model misses it.** It rates teams by the chances they create and allow, and it doesn't know who played the night before. Look
 at last season and this one, games the model never saw while it was being built. In the 242 games like tonight's, it gave the tired
-road team 46% on average, and those teams won 38%: **8 points short.** Rested road teams went the other way, winning
+road team 46% on average, and those teams won 38%: **8 percentage points short.** Rested road teams went the other way, winning
 49% when it gave them 45%, 4 points better than it said. So the model is a little low on road teams in general, and
-the second night swings that by about 12 points. Over 242 games, a gap that size is too big to write off as a few bad bounces.
+the second night swings that by about 12 points.
 
 **Where the drop comes from is less clear.** Tired road teams still got about 47% of the chances in those games, barely below the 48% for
 rested road teams. Their usual starting goalie was in net 37% of the time, against 62% when rested, but the goalies who did play
@@ -79,7 +79,7 @@ samples: a goalie's numbers over a dozen games can swing a lot.
 
 Our model expects about **3.5 goals for Buffalo and 3.0 for Chicago**, and gives about a 16% chance the game is tied after 60
 minutes. That's the number we log, because it's the model we've tested. The back-to-back history above says to read it as
-too high: in games like this, tired road teams have fallen about 8 points short of what the model said.
+too high: in games like this, tired road teams have fallen about 8 percentage points short of what the model said.
 
 **Where the number comes from.** The same chances numbers above. Buffalo creates chances worth 3.13 goals a game; Chicago allows
 3.42. Eighteen games is a small sample, so we blend in last season's numbers and pull them toward the league average. That makes

@@ -22,6 +22,30 @@
    "at_utc": "2026-11-12T22:56:19Z",
    "notes": "Numbers all re-derive; fix: rested road teams also beat model (2.7 SE, not 'a little'), 'coin flip' uncomputed, 'not luck' needs pooled ~4 SE test, Oct 13 was a shootout loss; hero causal title/def",
    "report": "2026-11-12-sabres-chi-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+   "at_utc": "2026-11-12T22:59:39Z",
+   "notes": "All stage 2/3 required fixes applied; new numbers (8.5-pt gap 4.0 SE, 46 vs 38 n242, 49 vs 45 n1155, 12-pt swing, SO loss, P0010 0.57) re-derived and match; brand clean. Non-blocking: b2b chart source line.",
+   "report": "2026-11-12-sabres-chi-pregame-final.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+   "at_utc": "2026-11-12T23:00:23Z",
+   "notes": "Re-review of 7ada2eec: all 8 editor fixes landed; Quant reframing (8 short / 4 over / 12-pt swing) reads plainly. Optional: 'percentage points' once, drop duplicate 'not luck' line.",
+   "report": "2026-11-12-sabres-chi-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+   "at_utc": "2026-11-12T23:00:34Z",
+   "notes": "Re-check on 7ada2eec: all 4 required fixes in and computed in generator (8 short/4 over/12 swing; pooled 8.5 pts ~4 SE; coin-flip removed; shootout loss). Hero title/note fixed. Not taken: b2b chart footer source (cosmetic).",
+   "report": "2026-11-12-sabres-chi-pregame-quant.md"
   }
  ],
  "self": {
@@ -31,17 +55,24 @@
   "notes": "Numbers dumped and checked; back-to-back effect checked a second way (raw win rates and chance share, all 4 seasons, consistent every season) besides the out-of-sample model check; goalie explanation tested and reported as small rather than assumed; betting words scanned ('pick' removed); logged number is the tested model's, rest caveat stated separately without an unlogged second number."
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
-  "at_utc": "2026-11-12T22:53:53Z",
-  "notes": "Needs edits: lead (drop 'leans', one radio sentence), backward results-vs-chances bullet, 'we've logged' contradiction, hero explainer text/bars mismatch, plain-English fixes",
+  "verdict": "pass",
+  "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+  "at_utc": "2026-11-12T23:00:23Z",
+  "notes": "Re-review of 7ada2eec: all 8 editor fixes landed; Quant reframing (8 short / 4 over / 12-pt swing) reads plainly. Optional: 'percentage points' once, drop duplicate 'not luck' line.",
   "report": "2026-11-12-sabres-chi-pregame-editor.md"
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "c698feadce53a719a2bc9500b12bb17722c5c6c0e8b268ca01781ba634b42a4d",
-  "at_utc": "2026-11-12T22:56:19Z",
-  "notes": "Numbers all re-derive; fix: rested road teams also beat model (2.7 SE, not 'a little'), 'coin flip' uncomputed, 'not luck' needs pooled ~4 SE test, Oct 13 was a shootout loss; hero causal title/def",
+  "verdict": "pass",
+  "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+  "at_utc": "2026-11-12T23:00:34Z",
+  "notes": "Re-check on 7ada2eec: all 4 required fixes in and computed in generator (8 short/4 over/12 swing; pooled 8.5 pts ~4 SE; coin-flip removed; shootout loss). Hero title/note fixed. Not taken: b2b chart footer source (cosmetic).",
   "report": "2026-11-12-sabres-chi-pregame-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "7ada2eec711693750e8b31003d213a1749310c1ed3a0ecacdd639b04851fdc21",
+  "at_utc": "2026-11-12T22:59:39Z",
+  "notes": "All stage 2/3 required fixes applied; new numbers (8.5-pt gap 4.0 SE, 46 vs 38 n242, 49 vs 45 n1155, 12-pt swing, SO loss, P0010 0.57) re-derived and match; brand clean. Non-blocking: b2b chart source line.",
+  "report": "2026-11-12-sabres-chi-pregame-final.md"
  }
 }

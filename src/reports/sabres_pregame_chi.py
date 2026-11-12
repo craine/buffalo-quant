@@ -16,6 +16,7 @@ from src.db import ROOT, query
 from src.metrics.nhl_team import shots
 from src.ledger import nhl_game_model as gmod
 from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
+import src.reports.sabres_postgame as spg
 from src.reports.sabres_postgame import finish, ordn
 
 OUT = ROOT / "reports"
@@ -238,7 +239,8 @@ def main(as_of=AS_OF):
            f"Unblocked shots, empty net excluded, all situations. Sabres {int(b.gp)} games, Blackhawks {int(v.gp)}.")
     fig.savefig(OUT / "sabres-chi-chances.png"); plt.close(fig)
 
-    # ---- chart 2: the back-to-back, by season
+    # ---- chart 2: the back-to-back, by season (win rates from final scores, so credit those)
+    _src, spg.SRC = spg.SRC, "Source: NHL final scores and schedule (league game feed)."
     fig, ax = plt.subplots(figsize=(9.5, 4.9), dpi=200)
     seas = list(by.index); xs = np.arange(len(seas)); w = 0.36
     lab_s = [f"{str(x_)[:4]}-{str(x_)[6:]}" + (" so far" if x_ == SEASON else "") for x_ in seas]
@@ -255,6 +257,7 @@ def main(as_of=AS_OF):
            "Road teams playing for the second night in a row, against a home team that had at least a day off. Lower in every season.",
            f"Regular-season NHL games, 2023-24 through {pd.to_datetime(last_date):%b. %-d}, 2026: {n_t} tired-road games, {n_r} with both teams rested. Any win counts (regulation, OT, shootout).")
     fig.savefig(OUT / "sabres-chi-b2b.png"); plt.close(fig)
+    spg.SRC = _src
 
     if __import__("os").environ.get("DUMP"):
         print("REC", recd(US), recd(THEM), "GP", b.gp, v.gp, "last", last_date, "chi rest", chi_rest)
@@ -324,14 +327,14 @@ story on [last year's 50-win season](sabres-50-win-mirage.html).
 
 Since the start of 2023-24 there have been {n_t} games like tonight's: a road team playing for the second night in a row against a
 home team that had at least a day off. The tired road team won **{w_t:.0%}** of them. When both teams were rested, road teams won {w_r:.0%}
-({n_r:,} games). That's a gap of {pool_gap * 100:.1f} points over {n_t} games, far too big to be luck, and it showed up in every
+({n_r:,} games). That's a gap of {pool_gap * 100:.1f} percentage points over {n_t} games, far too big to be luck, and it showed up in every
 season (this season's {int(by.n_tired.loc[SEASON])} games are a small sample on their own).
 
 **Our model misses it.** It rates teams by the chances they create and allow, and it doesn't know who played the night before. Look
 at last season and this one, games the model never saw while it was being built. In the {m_n_t} games like tonight's, it gave the tired
-road team {m_said_t:.0%} on average, and those teams won {m_won_t:.0%}: **{short_t * 100:.0f} points short.** Rested road teams went the other way, winning
+road team {m_said_t:.0%} on average, and those teams won {m_won_t:.0%}: **{short_t * 100:.0f} percentage points short.** Rested road teams went the other way, winning
 {m_won_r:.0%} when it gave them {m_said_r:.0%}, {beat_r * 100:.0f} points better than it said. So the model is a little low on road teams in general, and
-the second night swings that by about {swing * 100:.0f} points. Over {m_n_t} games, a gap that size is too big to write off as a few bad bounces.
+the second night swings that by about {swing * 100:.0f} points.
 
 **Where the drop comes from is less clear.** Tired road teams still got about {sh_t:.0%} of the chances in those games, barely below the {sh_r:.0%} for
 rested road teams. Their usual starting goalie was in net {no1_t:.0%} of the time, against {no1_r:.0%} when rested, but the goalies who did play
@@ -356,7 +359,7 @@ samples: a goalie's numbers over a dozen games can swing a lot.
 
 Our model expects about **{mu_b:.1f} goals for Buffalo and {mu_v:.1f} for Chicago**, and gives about a {p_tie:.0%} chance the game is tied after 60
 minutes. That's the number we log, because it's the model we've tested. The back-to-back history above says to read it as
-too high: in games like this, tired road teams have fallen about {short_t * 100:.0f} points short of what the model said.
+too high: in games like this, tired road teams have fallen about {short_t * 100:.0f} percentage points short of what the model said.
 
 **Where the number comes from.** The same chances numbers above. Buffalo creates chances worth {b.xgf_pg:.2f} goals a game; Chicago allows
 {v.xga_pg:.2f}. Eighteen games is a small sample, so we blend in last season's numbers and pull them toward the league average. That makes
