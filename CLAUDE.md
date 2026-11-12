@@ -74,6 +74,7 @@ All confirmed live for 2026 on 2026-09-20.
 | PFR advanced passing | `pfr_advstats/advstats_week_pass_{year}.parquet` | 2018+ (hard floor) |
 | PFR advanced defense | `pfr_advstats/advstats_week_def_{year}.parquet` | 2018+ |
 | Snap counts | `snap_counts/snap_counts_{year}.parquet` | 2012+ (loaded 2018+); verified 2026-11-10; carries `pfr_player_id` |
+| Players (one file) | `players/players.parquet` | all; verified 2026-11-12; links `gsis_id` to `pfr_id` (snap counts, PFR charting) |
 
 Current-season files update as games finish. Ingest must be idempotent: re-running replaces
 the season's rows, never duplicates them.
@@ -121,6 +122,14 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   attempts only for multi-year series that cross 2022/2023, or split at 2023.
 - nflverse `pass_attempt` counts sacks. Use `pass_attempt == 1 and sack == 0` for true attempts.
 - Participation pressure charting changed definition in 2023 even for pass attempts; compare within season.
+- Combined tackles = `def_tackles_solo + def_tackles_with_assist + def_tackle_assists`. Matched ESPN on the 4 players checked and is the
+  closest to PFR's count (exact for 59% of players, about 1.8 high on average); solo + assists alone undercounts.
+- `raw_players.pfr_id` can point a rookie at a retired player with the same PFR id (e.g. `WoodPe00`). Only trust the link when the
+  player's `last_season` is recent; otherwise match snap counts to box scores by team, name and week (`src/reports/nfl_cards.py`).
+- Every source lists edge rushers as linebackers. The NFL cards group linebackers with 1+ pressure and <6 tackles a game as pass rushers.
+- PFR charting can lag a week behind box scores; use only fully charted weeks (`nfl_cards.py` computes `pfr_week`).
+- NFL cards (`reports/cards/nfl_players.json`) are pinned by `WEEK` in `src/reports/nfl_cards.py`; refresh with `--latest` (manual for now).
+  `--latest` stops before the first week with an unplayed game: handle postponed games before automating it.
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
 - 2026 Bills play-caller is still Joe Brady (HC); Carmichael is a non-play-calling OC.
