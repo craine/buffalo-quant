@@ -141,7 +141,9 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   `tests/test_review_gate.py` pass and pinned story files are untouched. `WEEK` in `nfl_cards.py` is only the default for a manual run.
 - NFL weeks (`week_status`): a week's window is its first scheduled game plus five days (the longest real week, 2024–26, is exactly 5).
   It's complete when every game in the window is final. A game rescheduled past the window is **postponed**: it doesn't hold the week,
-  and the cards index names it until it's played. An unfinished game still inside a window that ended 3+ days ago (cancelled, or the
+  and the cards index names it until it's played and loaded; it's also left out of the charting week, team last-week notes and the
+  week date. A week counts only once every final game's box score, snap counts and play-by-play have loaded (a Tuesday run can be
+  early for Monday night); if the schedule is past the cards by a day or more, validation fails. An unfinished game still inside a window that ended 3+ days ago (cancelled, or the
   schedule not updated) fails validation on purpose: check the schedule rather than letting the cards quietly stop.
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.

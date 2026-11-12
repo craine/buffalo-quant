@@ -104,13 +104,10 @@ def test_week_status_postponed_game_does_not_hold_the_week():
     assert weeks_from_schedule(_sched(rows))[10]["postponed"] == []
 
 
-def test_latest_week_stops_at_first_incomplete_week(monkeypatch):
-    import src.reports.nfl_cards as nc
-    import pandas as pd
-    monkeypatch.setattr(nc, "week_status", lambda season=nc.SEASON: {8: dict(complete=True), 9: dict(complete=False),
-                                                                     10: dict(complete=True)})
-    monkeypatch.setattr(nc, "query", lambda sql: pd.DataFrame({"w": [10]}))
-    assert nc.latest_week() == 8
+def test_latest_week_stops_at_first_incomplete_week():
+    from src.reports.nfl_cards import ready_week
+    st = {8: dict(complete=True, final=["a"]), 9: dict(complete=False, final=["b"]), 10: dict(complete=True, final=["c"])}
+    assert ready_week(st, {"a", "b", "c"}) == 8
 
 
 def test_postponed_note_wording():
@@ -120,3 +117,38 @@ def test_postponed_note_wording():
     assert "The Bills at Dolphins game from Week 10 was postponed" in one and "after it's played" in one
     two = postponed_note(["2026_10_BUF_MIA", "2026_11_SF_KC"])
     assert " and the 49ers at Chiefs game from Week 11 were postponed" in two and "They aren't" in two
+
+
+def test_week_waits_until_every_final_game_has_stats():
+    from src.reports.nfl_cards import ready_week, schedule_week, weeks_from_schedule
+    rows = [(8, "2026_08_A_B", "2026-11-01", 20), (9, "2026_09_A_B", "2026-11-05", 20), (9, "2026_09_C_D", "2026-11-09", 17)]
+    st = weeks_from_schedule(_sched(rows))
+    assert schedule_week(st) == 9
+    assert ready_week(st, {"2026_08_A_B", "2026_09_A_B"}) == 8            # Monday night final, stats not posted yet
+    assert ready_week(st, {"2026_08_A_B", "2026_09_A_B", "2026_09_C_D"}) == 9
+
+
+def test_postponed_game_is_skipped_until_played_and_loaded():
+    from src.reports.nfl_cards import ready_week, skipped_games, weeks_from_schedule
+    rows = [(9, "2026_09_A_B", "2026-11-05", 20), (9, "2026_09_BUF_MIN", "2026-11-25", None)]
+    st = weeks_from_schedule(_sched(rows))
+    assert ready_week(st, {"2026_09_A_B"}) == 9
+    assert skipped_games(st, {"2026_09_A_B"}, 9) == ["2026_09_BUF_MIN"]
+    played = weeks_from_schedule(_sched([rows[0], (9, "2026_09_BUF_MIN", "2026-11-25", 24)]))
+    assert skipped_games(played, {"2026_09_A_B"}, 9) == ["2026_09_BUF_MIN"]   # final but stats not loaded: still skipped
+    assert skipped_games(played, {"2026_09_A_B", "2026_09_BUF_MIN"}, 9) == []
+    assert skipped_games(st, {"2026_09_A_B"}, 8) == []                       # only weeks the cards cover
+
+
+def test_game_moved_within_its_week_still_holds_the_week():
+    from src.reports.nfl_cards import weeks_from_schedule
+    rows = [(5, "2026_05_A_B", "2026-10-08", 20), (5, "2026_05_C_D", "2026-10-13", None)]   # Sunday game moved to Tuesday
+    st = weeks_from_schedule(_sched(rows))[5]
+    assert not st["complete"] and st["open"] == ["2026_05_C_D"] and st["postponed"] == []
+
+
+def test_ingest_rejects_unknown_source():
+    import pytest
+    from src.ingest.nflverse import main
+    with pytest.raises(SystemExit):
+        main(["--only", "snapcounts"])
