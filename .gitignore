@@ -3,3 +3,5 @@ data/
 *.parquet
 __pycache__/
 .pytest_cache/
+# built by Cloudflare Pages on every deploy (python -m src.site.build); never commit
+site/

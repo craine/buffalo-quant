@@ -1,6 +1,6 @@
 name: Cards refresh
-# After the daily NHL ingest publishes new data, rebuild the league player cards and the site, validate them, and commit to main.
-# Only the league card files and the built site change. Files behind published stories (skaters.json, goalies.json, reports/*.md)
+# After the daily NHL ingest publishes new data, rebuild the league player cards, validate them (building the site locally to test the
+# pages), and commit the two card data files to main. Cloudflare Pages builds the site itself on every deploy. Files behind published stories (skaters.json, goalies.json, reports/*.md)
 # are pinned to their own AS_OF dates; the run fails if any of them would change.
 on:
   workflow_run:
@@ -54,7 +54,7 @@ jobs:
         run: |
           git config user.name "buffalo-quant-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add reports/cards/skaters_league.json reports/cards/goalies_league.json site
+          git add reports/cards/skaters_league.json reports/cards/goalies_league.json
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           d=$(python -c "import json;print(json.load(open('reports/cards/skaters_league.json'))['meta']['as_of'])")
           git commit -m "Cards refresh: games through $d"

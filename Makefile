@@ -4,7 +4,7 @@ ingest:
 	$(PY) -m src.ingest.nflverse
 clean:
 	$(PY) -m src.clean.build
-test:
+test: site
 	$(PY) -m pytest -q tests
 report:
 	$(PY) -m src.reports.defense_baseline
