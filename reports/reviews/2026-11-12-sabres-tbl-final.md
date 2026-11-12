@@ -1,15 +1,13 @@
-# Final check: 2026-11-12-sabres-tbl
+# Final check (fresh Quant, Nov 12): 2026-11-12-sabres-tbl
 
-The Quant checked the post-Editor text with independent code. Every new or changed number was verified:
-- Buffalo's chances while down by two or more: 78% (2.73 / 3.52)
-- The first 18:49 before the first goal
-- Tampa's 29 shots worth 3.48 goals
-- The goalies' season wording
-- Tied after 60 minutes: 0.167
-- Power-play goals: Buffalo 1, Tampa 2
-- Both chart titles
-- No betting words, no penalty counts
+The generator was re-run independently. The .md, the hero JSON and both PNGs came out byte-identical to the files on disk.
 
-Must-fix: "turned a loss into a blowout" assumed Buffalo loses with average goaltending, which isn't computed. Changed to "turned it into a blowout".
-Nit applied: "more than doubled up".
-No new numbers.
+New and changed numbers, all verified:
+- Ranks coming in: 9th and 27th, with 5 teams worse. These now match the pregame story.
+- Replays: exact 0.0117 (about once in 85); 0.419 / 0.168 / 0.413.
+- Shot counts: 34/14 and 16/15, totaling 48.
+- Sabourin chance: 0.466, against Buffalo's 0.787.
+- The goalie-test link resolves to the claim.
+- Hero title: 4th-worst.
+
+The whole text was read through: no betting language, no penalty counts, and stat terms appear only in the stat-heads section. No remaining issues. PASS.

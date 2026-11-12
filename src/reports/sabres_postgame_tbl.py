@@ -36,6 +36,7 @@ def main(as_of=AS_OF):
     s = s[s.game_id.isin(keep)].copy()
     unb = (s.unblocked == 1) & (s.empty_net_against == 0)
     cal = s[unb].groupby("season").goal.sum() / s[unb].groupby("season").xg.sum()
+    s["xg_raw"] = s.xg
     s["xg"] = s.xg * s.season.map(cal)
     names = query("SELECT player_id, MAX(first)||' '||MAX(last) AS name FROM raw_nhl_rosters GROUP BY player_id").set_index("player_id").name
     gm = query(f"SELECT * FROM raw_nhl_games WHERE game_id={G}").iloc[0]
@@ -56,6 +57,10 @@ def main(as_of=AS_OF):
     cf, ca = close[close.team == US].xg.sum(), close[close.team == THEM].xg.sum()
     bf, ba = behind[behind.team == US].xg.sum(), behind[behind.team == THEM].xg.sum()
     n_cf, n_ca = int((close.team == US).sum()), int((close.team == THEM).sum())
+    n_bf, n_ba = int((behind.team == US).sum()), int((behind.team == THEM).sum())
+    assert (g["diff"] <= 0).all(), "Buffalo never led; table labels assume it"
+    big = close[close.team == THEM].sort_values("xg").iloc[-1]
+    assert big.xg > cf / 2 and big.rebound == 1
 
     # league-wide: share of chances taken by a team that trails by 2+ (this season, all games through AS_OF)
     lg = s[s.season == SEASON].sort_values(["game_id", "period", "t", "eventId"]).copy()
@@ -70,14 +75,17 @@ def main(as_of=AS_OF):
     trail_share = down2 / (down2 + up2)
     even_share = 0.5
 
-    # replays: each shot an independent coin flip with p = its chance of going in
-    rng = np.random.default_rng(7)
-    N = 200000
-    simf = (rng.random((N, len(f))) < f.xg.values).sum(1)
-    sima = (rng.random((N, len(a))) < a.xg.values).sum(1)
-    p_win, p_tie = (simf > sima).mean(), (simf == sima).mean()
+    # exact replay math: each shot goes in or misses at its own chance (Poisson-binomial, by convolution)
+    def pmf(ps):
+        d = np.array([1.0])
+        for q in ps:
+            d = np.convolve(d, [1 - q, q])
+        return d
+    pf, pa = pmf(f.xg.values), pmf(a.xg.values)
+    joint = np.outer(pf, pa)                      # [buffalo goals, tampa goals]
+    p_win, p_tie = np.tril(joint, -1).sum(), np.trace(joint)
     p_loss = 1 - p_win - p_tie
-    p_8 = (sima >= them_sc).mean()
+    p_8 = pa[them_sc:].sum()
 
     per = g.pivot_table(index="period", columns="team", values="xg", aggfunc="sum").fillna(0)
     pp_codes = ["5v4", "5v3", "4v3"]
@@ -111,7 +119,14 @@ def main(as_of=AS_OF):
     lg_sv = 1 - u[u.on_goal == 1].goal.sum() / u.on_goal.sum()
 
     # context: season averages before this game
-    pre = u[u.game_id != G]
+    # "coming in" = games before this game's date, with shot values scaled on those games only (matches the pregame story)
+    before = set(query(f"SELECT game_id FROM raw_nhl_games WHERE game_date < '{gm.game_date}'").game_id)
+    sb = s[s.game_id.isin(before)].copy()
+    sb["xg"] = sb.xg_raw
+    ub = (sb.unblocked == 1) & (sb.empty_net_against == 0)
+    cal_b = sb[ub].groupby("season").goal.sum() / sb[ub].groupby("season").xg.sum()
+    sb["xg"] = sb.xg * sb.season.map(cal_b)
+    pre = sb[ub & (sb.season == SEASON)]
     tf = pre.groupby(["game_id", "team"]).xg.sum()
     ta = pre.groupby(["game_id", "opp"]).xg.sum()
     buf_for, buf_ag = tf.xs(US, level=1).mean(), ta.xs(US, level=1).mean()
@@ -155,7 +170,7 @@ def main(as_of=AS_OF):
     ax.set_xticks([0, 10, 20, 30, 40, 50, 60], ["0", "", "20", "", "40", "", "60"])
     ax.set_xlabel("Game minute"); ax.set_ylabel("Goals the chances were worth (running total)")
     ax.legend(frameon=False, loc="lower right"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Tampa led in chances while it was close; Buffalo's came from behind",
+    finish(fig, "Tampa had the chances while it was close; Buffalo's came once it was down",
            f"Running total of each team's chances. Final: chances {f.xg.sum():.1f} to {a.xg.sum():.1f}, score {them_sc}-{us_sc} Tampa. Red dots = Sabres goals, black = Lightning.",
            f"Unblocked shots, empty net excluded. Sabres {len(f)} unblocked shots, Lightning {len(a)}. Nov. 11, 2026, in Buffalo.")
     fig.savefig(OUT / "sabres-tbl-post-flow.png"); plt.close(fig)
@@ -190,7 +205,7 @@ def main(as_of=AS_OF):
     gw = lambda v: f"{abs(v):.1f} goals {'better' if v >= 0 else 'worse'} than an average goalie"
     md = f"""# Lightning {them_sc}, Sabres {us_sc}: outplayed early, then sunk in goal
 
-**Finding: Fans who thought the Sabres were bad early are right: while the game was close, Tampa's chances were worth {ca:.1f} goals to Buffalo's {cf:.1f}.
+**Finding: The Sabres were badly outplayed while this game was still close: Tampa's chances were worth {ca:.1f} goals to Buffalo's {cf:.1f}.
 Then the goaltending turned it into a blowout. Ukko-Pekka Luukkonen and Colten Ellis allowed {them_sc} goals on shots worth {a.xg.sum():.1f}, the
 {ordn(n_worse + 1)}-worst night in goal for any NHL team this season, out of {len(tg)}.**
 
@@ -205,15 +220,15 @@ Over the whole game, the chances came out even: Buffalo's {len(f)} shots that we
 
 | Score when the shot was taken | Sabres chances, in goals | Lightning chances, in goals |
 |---|---|---|
-| Tied, or within one goal | {cf:.1f} ({n_cf} shots) | {ca:.1f} ({n_ca} shots) |
-| Sabres down two or more | {bf:.1f} | {ba:.1f} |
+| Tied, or Sabres down one | {cf:.1f} ({n_cf} shots) | {ca:.1f} ({n_ca} shots) |
+| Sabres down two or more | {bf:.1f} ({n_bf} shots) | {ba:.1f} ({n_ba} shots) |
 
 In the first {fg_min}:{fg_sec:02d}, before anyone scored, Tampa's chances were worth {e_a:.1f} goals to Buffalo's {e_f:.1f}, and the first period as a whole
 went {per.loc[1, THEM]:.1f} to {per.loc[1, US]:.1f} Tampa. While the game was within reach, **Tampa had better than twice Buffalo's chances.** That's a small sample,
 {n_cf + n_ca} shots, nearly all of them in the first period.
 
 Buffalo's push came from behind, and it was real: down two or more, the Sabres got {bf / (bf + ba):.0%} of the chances. Across the NHL this season, a team
-that far behind gets {trail_share:.0%}, so this was more than Tampa just sitting back. Down 4-0 in the second, the Sabres scored three times in
+that far behind gets {trail_share:.0%}, so this looks like more than the usual effect of Tampa sitting on a lead, though it's only {n_bf + n_ba} shots. Down 4-0 in the second, the Sabres scored three times in
 {burst // 60} minutes {burst % 60} seconds, the last {clock(gl[gl.team == US].t.max())} into the third, to make it 4-3. Just {plural_s(comeback_gap)} later, Nikita Kucherov
 made it 5-3, and that was the turn.
 
@@ -225,14 +240,14 @@ made it 5-3, and that was the turn.
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Add those up and you get what a team's chances were
 worth in goals. Wednesday shows the range: Josh Doan's tip-in from {gl[gl.who == 'Josh Doan'].dist.iloc[0]:.0f} feet had a {gl[gl.who == 'Josh Doan'].xg.iloc[0]:.0%} chance of going in;
-Tage Thompson's slap shot from {gl[gl.who == 'Tage Thompson'].dist.iloc[0]:.0f} feet about {gl[gl.who == 'Tage Thompson'].xg.iloc[0]:.0%}. Add up all {len(a)} of Tampa's shots that
+Tage Thompson's slap shot from {gl[gl.who == 'Tage Thompson'].dist.iloc[0]:.0f} feet about {gl[gl.who == 'Tage Thompson'].xg.iloc[0]:.0%}. While it was close, one Tampa rebound, {names[big.shooter_id]}'s from {big.dist:.0f} feet, was a {big.xg:.0%} chance by itself,
+more than half of Buffalo's {cf:.1f} total in that stretch. Add up all {len(a)} of Tampa's shots that
 weren't blocked and they were worth {a.xg.sum():.1f} goals. Tampa scored {them_sc}. The shot locations come from the NHL's own
 play-by-play. (The full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
 
-To see how unusual {them_sc} goals on those chances is, we replayed the game {N:,} times, letting each shot go in or miss at its own chance. Tampa scored
-{them_sc} or more in **{p_8:.1%} of the replays**, about once in {round(1 / p_8)}. Over the whole game the replays came out about even: Buffalo {p_win:.0%}, Tampa {p_loss:.0%},
-tied after 60 minutes {p_tie:.0%}. The catch: {bf / f.xg.sum():.0%} of Buffalo's chances came after it was already down two or more. While the game was
-still close, Tampa had the better of it.
+To see how unusual {them_sc} goals on those chances is, imagine replaying the game over and over, with each shot going in or missing at its own
+chance. Tampa would score {them_sc} or more **{p_8:.1%} of the time**, about once in {round(1 / p_8)} games. Over the whole game those replays come out about even:
+Buffalo wins {p_win:.0%}, Tampa {p_loss:.0%}, tied after 60 minutes {p_tie:.0%}. The catch: {bf / f.xg.sum():.0%} of Buffalo's chances came after it was already down two or more.
 
 ## The goaltending
 
@@ -247,11 +262,11 @@ Add the two Sabres goalies together and it's **{-team_night:.1f} goals worse tha
 
 Luukkonen's season goes from {gw(upl_before)} to {gs(upl_after)} ({upl_n} games). Ellis's season goes from
 {gs(ell_before)} to {gs(ell_after)} ({ell_n} games). One night moved Ellis from above average to below. Both seasons are short enough that one game swings them hard,
-which is also why our game model doesn't lean on goalies: in our tests, a goalie's first half of a season told us little about his second half.
+which is also why our game model doesn't lean on goalies: in [our tests](sabres-vegas-pregame-nov-8.html), a goalie's first half of a season told us little about his second half.
 
 ## Receipts: our pregame call
 
-Before the game we logged **a {PRED_P:.0%} chance the Sabres win** on the [Ledger](../ledger.html). We leaned Tampa, barely. That counts as a hit, but a soft one: a
+Before the game we logged **a {PRED_P:.0%} chance the Sabres win** on the [Ledger](../ledger.html). Tampa won, so it counts as a hit, but a soft one: a
 {PRED_P:.0%} call is close to a coin flip. Scored the usual way (the gap between our chance and what happened, squared; lower is better), it comes to
 {brier:.2f}, a little better than a 50/50 guess's 0.25. That makes our record {hits} of {len(m)} on graded calls.
 
@@ -260,8 +275,8 @@ that. The model doesn't try to predict a night like this in goal.
 
 ## What it means for Buffalo
 
-- **The early game is the worry, not the final score.** Tampa more than doubled up the Sabres on chances while it was close. Coming in, Buffalo had been close to even on
-  chances this season: {buf_for:.1f} created per game ({ordn(rk_for)} of 32) and {buf_ag:.1f} allowed (only {32 - rk_ag} {'team' if 32 - rk_ag == 1 else 'teams'} allowed more), with the league average at {lg_pg:.1f}. Tampa's {per.loc[1, THEM]:.1f} in the first period alone was {per.loc[1, THEM] / buf_ag:.0%} of what
+- **The early game is the worry, not the final score.** Coming in, Buffalo had been giving up more than
+  it created: {buf_for:.1f} chances created per game ({ordn(rk_for)} of 32) and {buf_ag:.1f} allowed ({ordn(rk_ag)}; only {32 - rk_ag} {'team' if 32 - rk_ag == 1 else 'teams'} allowed more), with the league average at {lg_pg:.1f}. Tampa's {per.loc[1, THEM]:.1f} in the first period alone was {per.loc[1, THEM] / buf_ag:.0%} of what
   Buffalo usually allows in a whole game.
 - **The goaltending is the kind of thing that doesn't carry over.** A night like this is rare, and in our tests a goalie's numbers swing far more
   from stretch to stretch than a team's chances do. Expect better in net; don't expect it to fix the early-game problem.
@@ -273,7 +288,7 @@ that. The model doesn't try to predict a night like this in goal.
 - Score state: shots taken with BUF trailing by 0-1 (or leading): BUF {cf:.2f}, TBL {ca:.2f}; trailing by 2+: BUF {bf:.2f}, TBL {ba:.2f}. Five on five: BUF {es_f:.2f}, TBL {es_a:.2f}.
 - Power play: chances BUF {pp_f:.2f}, TBL {pp_a:.2f}; power-play goals BUF {int(((gl.team == US) & gl.strength.isin(pp_codes)).sum())}, TBL {them_pp}.
 - Score effects: league 2026-27, share of xG taken by the trailing team when the margin is 2+: {trail_share:.3f}.
-- Replays: {N:,} simulations, each shot an independent coin flip with p = xG. BUF win {p_win:.3f}, tie {p_tie:.3f}, loss {p_loss:.3f}; TBL {them_sc}+ goals {p_8:.4f}.
+- Replays: exact Poisson-binomial over shots (each an independent Bernoulli with p = xG). BUF win {p_win:.3f}, tie {p_tie:.3f}, loss {p_loss:.3f}; TBL {them_sc}+ goals {p_8:.4f}.
 - GSAx = xG on unblocked shots faced minus goals allowed. Luukkonen {upl.saved:+.2f} ({int(upl.on)} SOG), Ellis {ellis.saved:+.2f} ({int(ellis.on)} SOG), Vasilevskiy
   {vasy.saved:+.2f} ({int(vasy.on)} SOG). BUF team GSAx {team_night:+.2f}, {ordn(n_worse + 1)}-lowest of {len(tg)} 2026-27 team games. Save rate on shots on goal: BUF {sv_us:.3f}, league {lg_sv:.3f}.
 - Ledger {PRED_ID}: p = {PRED_P}, outcome 0, Brier {brier:.4f}; scored a hit because p < 0.5 and the event didn't happen. Model nhl-game-v0.1.
@@ -284,7 +299,7 @@ that. The model doesn't try to predict a night like this in goal.
         "big": [[round(float(cf), 1), "Sabres"], [round(float(ca), 1), "Lightning"]],
         "note": f"Final: Lightning {them_sc}, Sabres {us_sc}. Tampa scored {them_sc} on shots worth {a.xg.sum():.1f}.",
         "explainer": {
-            "kicker": "In goal", "title": f"The {ordn(n_worse + 1)}-worst night of the season.",
+            "kicker": "In goal", "title": f"The NHL's {ordn(n_worse + 1)}-worst night in goal this season.",
             "text": "Goals saved compared with an average goalie on the same shots:",
             "fmt": "goals",
             "bars": [["Luukkonen", round(float(upl.saved), 1)], ["Ellis", round(float(ellis.saved), 1)], ["Vasilevskiy, Tampa", round(float(vasy.saved), 1)]]},

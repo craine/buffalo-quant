@@ -1,9 +1,6 @@
-# Editor review: 2026-11-12-sabres-tbl
+# Editor re-review (fresh editor, Nov 12): 2026-11-12-sabres-tbl
 Round 1: FAIL.
-- Must-fix: the goalie chart title claimed "3 teams" when the count is games. The "first table" sentence was clunky. "Tied" needed "after 60 minutes".
-- Should-fix and nits: the lead didn't meet fans where they are. The paragraph wasn't in game order. The method didn't tie back to the score. Signed goalie numbers needed plain words, and the flow chart title was ambiguous. "Hit" sounded self-serving. There was repetition, and the power-play bullet wasn't forward-looking.
-All applied.
-
-Round 2: FAIL on one must-fix. The flow chart title clipped. It has been shortened and re-rendered, and the clean result was checked visually. Nit applied: "unblocked" became "shots that weren't blocked".
-
-The Editor stated that once the title is fixed this is a PASS, and no further Editor read is needed. The final Quant check confirms the new 78% figure.
+- Must-fix: the "coming in" rank conflicted with the pregame story. It was a real bug: the wrap included other teams' Nov 11 games and has been fixed to 9th / 27th. The lead was about fans rather than the game.
+- Should-fix: table labels and shot counts, a method example tied to 2.0 vs 0.8, the hero title, the chart title.
+- Nits: repetition, and betting-adjacent wording ("leaned").
+Round 2: PASS. Optional nits applied (a duplicate sentence and a repeated clause were removed).
