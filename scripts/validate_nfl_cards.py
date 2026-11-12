@@ -6,7 +6,7 @@ import sys
 from src.db import ROOT, query
 import datetime
 
-from src.reports.nfl_cards import SEASON, latest_week, schedule_week, week_status
+from src.reports.nfl_cards import SEASON, latest_week, loaded_games, stall_check, week_status
 
 d = json.loads((ROOT / "reports" / "cards" / "nfl_players.json").read_text())
 m, cards = d["meta"], d["cards"]
@@ -15,13 +15,12 @@ fail = []
 want = latest_week()
 if m["week"] != want:
     fail.append(f"cards are through Week {m['week']} but the newest complete week is {want}")
-# the schedule says a week is over, but its stats still haven't posted a day after the week ended: the cards would quietly stall
+# the schedule says a week is over, but two days after its last game its stats still haven't posted: the cards would quietly stall
 today = datetime.date.today()
 st = week_status()
-sw = schedule_week(st)
-if sw > m["week"] and (today - st[sw]["ends"]).days >= 1:
-    fail.append(f"Week {sw} ended {st[sw]['ends']} and its games are final, but the cards are still through Week {m['week']}: "
-                "nflverse hasn't posted every game's box score, snap counts and play-by-play yet. Re-run once it has")
+msg = stall_check(st, m["week"], today, loaded_games())
+if msg:
+    fail.append(msg)
 # a week whose window closed 3+ days ago but still has unfinished games would freeze the cards without anyone noticing
 for w, s in sorted(st.items()):
     if w > m["week"] and s["open"] and (today - s["ends"]).days >= 3:

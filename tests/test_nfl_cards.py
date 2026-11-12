@@ -152,3 +152,25 @@ def test_ingest_rejects_unknown_source():
     from src.ingest.nflverse import main
     with pytest.raises(SystemExit):
         main(["--only", "snapcounts"])
+
+
+def test_stall_check_timing():
+    import datetime as dt
+    from src.reports.nfl_cards import stall_check, weeks_from_schedule
+    rows = [(8, "2026_08_A_B", "2026-11-01", 20),
+            (9, "2026_09_A_B", "2026-11-05", 20), (9, "2026_09_C_D", "2026-11-09", 17)]          # Thursday start, Monday night
+    st, have = weeks_from_schedule(_sched(rows)), {"2026_08_A_B", "2026_09_A_B"}
+    assert stall_check(st, 8, dt.date(2026, 11, 10), have) is None                                  # Tuesday run: early is fine
+    msg = stall_check(st, 8, dt.date(2026, 11, 11), have)                                            # Wednesday run: fail
+    assert msg and "2026_09_C_D" in msg and "2026_09_A_B" not in msg
+    assert stall_check(st, 9, dt.date(2026, 11, 11), have) is None                                  # cards caught up
+    wed = [(11, "2026_11_A_B", "2026-11-22", 20), (12, "2026_12_A_B", "2026-11-25", 20), (12, "2026_12_C_D", "2026-11-30", 17)]
+    assert stall_check(weeks_from_schedule(_sched(wed)), 11, dt.date(2026, 12, 1), {"2026_11_A_B"}) is None   # Wednesday-start week, Tuesday run
+    w18 = [(17, "2026_17_A_B", "2027-01-03", 20), (18, "2026_18_A_B", "2027-01-10", 20)]          # Sunday-only final week
+    assert stall_check(weeks_from_schedule(_sched(w18)), 17, dt.date(2027, 1, 12), {"2026_17_A_B"})          # caught by the Tuesday run
+
+
+def test_week_date_ignores_a_postponed_game_played_later():
+    from src.reports.nfl_cards import weeks_from_schedule
+    rows = [(9, "2026_09_A_B", "2026-11-05", 20), (9, "2026_09_C_D", "2026-11-08", 17), (9, "2026_09_BUF_MIN", "2026-11-18", 24)]
+    assert str(weeks_from_schedule(_sched(rows))[9]["last"]) == "2026-11-08"

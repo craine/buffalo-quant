@@ -143,7 +143,9 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   It's complete when every game in the window is final. A game rescheduled past the window is **postponed**: it doesn't hold the week,
   and the cards index names it until it's played and loaded; it's also left out of the charting week, team last-week notes and the
   week date. A week counts only once every final game's box score, snap counts and play-by-play have loaded (a Tuesday run can be
-  early for Monday night); if the schedule is past the cards by a day or more, validation fails. An unfinished game still inside a window that ended 3+ days ago (cancelled, or the
+  early for Monday night); two days after a week's last game, if it still hasn't, validation fails and names the games. If nflverse
+  never posts one game's snaps or play-by-play, the cards can't pass that week: report it upstream (nflverse-data issues) and tell
+  Charlie rather than adding a workaround. An unfinished game still inside a window that ended 3+ days ago (cancelled, or the
   schedule not updated) fails validation on purpose: check the schedule rather than letting the cards quietly stop.
 - `raw_schedules.home_coach`/`away_coach` is stale for 2026 Bills games (still McDermott). Don't use it for eras.
 - `temp` is missing for many outdoor games (about half of 2022 and 2026). Disclose exclusions.
