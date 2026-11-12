@@ -148,7 +148,8 @@ def main(week=None):
     snw = sn.groupby(["gsis", "week"]).snaps.sum()
 
     # history (2018 on), box-score seasons
-    hs = query(f"SELECT season, week, team, pfr_player_id FROM raw_snap_counts WHERE game_type='REG' AND season<{SEASON}")
+    hs = query(f"""SELECT season, week, team, pfr_player_id FROM raw_snap_counts WHERE game_type='REG' AND season<{SEASON}
+                   AND COALESCE(offense_snaps, 0) + COALESCE(defense_snaps, 0) + COALESCE(st_snaps, 0) > 0""")
     hs["player_id"] = hs.pfr_player_id.map(link)
     hw = pd.concat([hs.dropna(subset=["player_id"])[["player_id", "season", "week", "team"]],
                     pw[pw.season < SEASON][["player_id", "season", "week", "team"]]]).drop_duplicates(["player_id", "season", "week"])
