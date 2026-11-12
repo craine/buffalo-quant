@@ -110,6 +110,8 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
 - **The site is built by Cloudflare Pages, not committed.** Pages runs `python -m src.site.build` (output `site/`) on every deploy,
   production and preview. `site/` is gitignored: commit the inputs (code, `reports/`, card JSON, `ledger/`), never the pages. The build
   reads only repo files (no database), so anything a page shows must be in a committed file. `make test` builds the site first.
+  On Cloudflare (`CF_PAGES` set) a failed NFL card build fails the deploy instead of shipping without `/cards/nfl/`. Python is
+  pinned by `.python-version`.
 
 ## Known gotchas
 
