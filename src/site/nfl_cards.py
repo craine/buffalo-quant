@@ -23,6 +23,18 @@ GROUP_NAME = {"QB": "quarterbacks", "RB": "running backs", "WR": "wide receivers
 GROUP_ORDER = ["QB", "RB", "WR", "TE", "OL", "DL", "LB", "DB"]
 
 
+SINGULAR = {"passing yards": "passing yard", "yards from scrimmage": "yard from scrimmage", "receiving yards": "receiving yard",
+            "snaps": "snap", "pressures": "pressure", "tackles": "tackle", "passes defended": "pass defended"}
+
+
+def big_txt(c):
+    return f"{c['big']:g} {SINGULAR.get(c['big_label'], c['big_label']) if c['big'] == 1 else c['big_label']}"
+
+
+def pl(n, one, many):
+    return f"{n:g} {one if n == 1 else many}"
+
+
 def team_name(tname):
     return tname.title().replace("49Ers", "49ers")
 
@@ -60,7 +72,7 @@ def small_stats(c, lg):
     if g == "OL":
         return [(c["gp"], "Games"), (f"{c['snap_pct']:.0%}", "Snap share"), (c["penalties"], "Penalties")]
     if g == "DL":
-        return [(c["gp"], "Games"), (f"{c['sacks']:g}", "Sacks"), (c["qb_hits"], "QB hits")]
+        return [(c["gp"], "Games"), (f"{c['sacks']:g}", "Sacks"), (c["tackles"], "Tackles")]
     if g == "LB":
         return [(c["gp"], "Games"), (c["tfl"], "Tackles for loss"), (f"{c['sacks']:g}", "Sacks")]
     return [(c["gp"], "Games"), (c["def_int"], "Interceptions"), (c["tackles"], "Tackles")]
@@ -86,23 +98,26 @@ def history(c):
 
 def season_line(c):
     g = c["grp"]
+    yd = lambda n: pl(n, "yard", "yards")
+    car = pl(c["car"], "carry", "carries")
     if g == "QB":
-        return (f"{c['cmp']} of {c['att']} passing for {c['pass_yds']} yards, {plural(c['pass_td'], 'touchdown')}, "
-                f"{plural(c['ints'], 'interception')}; sacked {plural(c['sacked'], 'time')}; {plural(c['car'], 'carry', )} for {c['rush_yds']} yards. "
-                f"{plural(c['n_db'], 'dropback')} (passes, sacks and scrambles).").replace("carrys", "carries")
+        return (f"{c['cmp']} of {c['att']} passing for {yd(c['pass_yds'])}, {plural(c['pass_td'], 'touchdown')}, "
+                f"{plural(c['ints'], 'interception')}; sacked {plural(c['sacked'], 'time')}; {car} for {yd(c['rush_yds'])}. "
+                f"{plural(c['n_db'], 'dropback')} (passes, sacks and scrambles).")
     if g == "RB":
-        return (f"{plural(c['car'], 'carry')} for {c['rush_yds']} yards and {plural(c['rush_td'], 'touchdown')}; "
-                f"{c['rec']} catches on {plural(c['tgt'], 'target')} for {c['rec_yds']} yards. {plural(c['fum_lost'], 'fumble')} lost.").replace("carrys", "carries")
+        return (f"{car} for {yd(c['rush_yds'])} and {plural(c['rush_td'], 'touchdown')}; "
+                f"{pl(c['rec'], 'catch', 'catches')} on {plural(c['tgt'], 'target')} for {yd(c['rec_yds'])}. {plural(c['fum_lost'], 'fumble')} lost.")
     if g in ("WR", "TE"):
-        return (f"{c['rec']} catches on {plural(c['tgt'], 'target')} for {c['rec_yds']} yards and {plural(c['rec_td'], 'touchdown')}. "
+        return (f"{pl(c['rec'], 'catch', 'catches')} on {plural(c['tgt'], 'target')} for {yd(c['rec_yds'])} and {plural(c['rec_td'], 'touchdown')}. "
                 f"{plural(c['fum_lost'], 'fumble')} lost.")
     if g == "OL":
-        return f"{plural(c['snaps'], 'snap')} ({c['snap_pct']:.0%} of his team's plays in the games he played); {plural(c['penalties'], 'penalty')} called on him.".replace("penaltys", "penalties")
-    cov = (f" In coverage he's been thrown at {plural(c['cov_tgt'], 'time')}, allowing {c['cov_cmp']} catches for {c['cov_yds']} yards."
+        return (f"{plural(c['snaps'], 'snap')} ({c['snap_pct']:.0%} of his team's plays in the games he played); "
+                f"{pl(c['penalties'], 'penalty', 'penalties')} called on him.")
+    cov = (f" In coverage he's been thrown at {plural(c['cov_tgt'], 'time')}, allowing {pl(c['cov_cmp'], 'catch', 'catches')} for {yd(c['cov_yds'])}."
            if g == "DB" and c["cov_tgt"] else "")
-    return (f"{plural(c['tackles'], 'tackle')} ({c['tfl']} for a loss), {c['sacks']:g} sacks, {plural(c['qb_hits'], 'QB hit')}, "
-            f"{plural(c['pressures'], 'pressure')}, {plural(c['def_int'], 'interception')}, {c['pd']} passes defended, "
-            f"{c['ff']} forced fumbles; {plural(c['missed_tk'], 'missed tackle')}.{cov}")
+    return (f"{plural(c['tackles'], 'tackle')} ({c['tfl']} for a loss), {pl(c['sacks'], 'sack', 'sacks')}, {plural(c['def_int'], 'interception')}, "
+            f"{pl(c['pd'], 'pass defended', 'passes defended')}, {pl(c['ff'], 'forced fumble', 'forced fumbles')}. From game charting: "
+            f"{plural(c['pressures'], 'pressure')} on the quarterback and {plural(c['missed_tk'], 'missed tackle')}.{cov}")
 
 
 def rank_text(c, m):
@@ -118,9 +133,9 @@ def tile(c, m):
     tc, ta, tname = NFL_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
     sm = "".join(f"<div><b>{v}</b><span>{l}</span></div>" for v, l in small_stats(c, m["lg"]))
     return f"""<label class="gc" style="--tc:{tc};--ta:{ta}"><input type="checkbox"><div class="gci">
-<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{c['number'] or ''}</div></div>
+<div class="gf"><div class="gtop"><div class="tm">{tname}<br>{m['season']}</div><div class="no">{'' if c['number'] is None else c['number']}</div></div>
 <div class="gname">{html.escape(c['name'])}</div><div class="gpos">{pos_label(c)}</div>
-<div class="gbig"><div class="v">{c['big']:g}</div><div class="l">{c['big_label']}<br>{rank_text(c, m)}</div></div>
+<div class="gbig"><div class="v">{c['big']:g}</div><div class="l">{big_txt(c).split(' ', 1)[1]}<br>{rank_text(c, m)}</div></div>
 <div class="grow">{sm}</div>
 <div class="gspark">{spark_svg(c['spark'], tc, c['big_label'].capitalize() + ", running total")}<small>{c['big_label'].capitalize()}, running total, game by game</small></div>
 {'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
@@ -129,6 +144,7 @@ def tile(c, m):
 
 def howto(m):
     lg = m["lg"]
+    pfr_note = f", which runs through Week {m['pfr_week']}" if m["pfr_week"] < m["week"] else ""
     return f"""<h2>How to read an NFL card</h2>
 <p><b>The big number</b> is the stat that matters most for the position: passing yards for quarterbacks, yards from scrimmage (rushing plus
 receiving) for running backs, receiving yards for receivers and tight ends, pressures on the quarterback for pass rushers, tackles for
@@ -136,11 +152,11 @@ linebackers, and passes defended for defensive backs. The rank compares him per 
 least {m['min_gp']} games.</p>
 <p><b>Quarterbacks are ranked on points added per dropback.</b> Every play changes how many points a team can expect to score on that drive,
 based on down, distance and field position. A 15-yard completion on 3rd and 10 adds a lot; a sack loses some. Add that up over every
-dropback (passes, sacks and scrambles) and divide: the league average this season is {lg['QB']:+.2f}. Quarterbacks need {m['min_db']}
+dropback (passes, sacks and scrambles) and divide: across every dropback in the league this season it's {lg['QB_all']:+.2f}. Quarterbacks need {m['min_db']}
 dropbacks to be ranked.</p>
 <p><b>Pass rushers</b> include defensive linemen and the edge rushers listed as linebackers: a linebacker with at least one pressure and fewer
 than five tackles a game is carded with the pass rushers. <b>Pressures</b> (sacks, hits and hurries on the quarterback) come from
-Pro Football Reference's game charting.</p>
+Pro Football Reference's game charting{pfr_note}. Sacks are the official count, so they can differ slightly from the charting.</p>
 <p><b>Offensive linemen</b> get playing time and penalties only: the public data doesn't credit individual linemen for blocks or sacks allowed.</p>
 <p><b>The source:</b> nflverse's weekly player stats, snap counts and play-by-play, and Pro Football Reference charting, regular season only,
 through Week {m['week']}. Stats are season totals; a player who changed teams sits with the team he played for most recently. Cards marked
@@ -162,17 +178,17 @@ def build_nfl_cards():
         tc, ta, tname = NFL_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
         moved = f" He also played for {', '.join(c['other_teams'])} this season; the card counts his whole season." if c["other_teams"] else ""
         body = f"""<div class="kicker"><a href="index.html">NFL player cards</a> &middot; {team_name(tname)}</div><h1>{html.escape(c['name'])}</h1>
-<p class="dek">{pos_label(c)}, {team_name(tname)}. {c['big']:g} {c['big_label']} in {plural(c['gp'], 'game')}. Numbers through Week {m['week']} of the {m['season']} season.{moved}</p>
+<p class="dek">{pos_label(c)}, {team_name(tname)}. {big_txt(c)} in {plural(c['gp'], 'game')}. Numbers through Week {m['week']} of the {m['season']} season.{moved}</p>
 <div class="cards one">{tile(c, m)}</div>
 <h2>This season</h2><p>{season_line(c)}</p>
 {'<p><b>Small sample.</b> These numbers can move a lot.</p>' if c['small'] else ''}
 {howto(m)}"""
         (out / f"{slugs[c['id']]}.html").write_text(page(f"{c['name']} | NFL player card | Buffalo Quant Desk", body, "Cards", 2,
-                                                       f"{c['name']}, {pos_label(c)}, {team_name(tname)}: {c['big']:g} {c['big_label']} this season."))
+                                                       f"{c['name']}, {pos_label(c)}, {team_name(tname)}: {big_txt(c)} this season."))
         key = ("0" if c["team"] == "BUF" else "1" + tname, GROUP_ORDER.index(c["grp"]))
         groups.setdefault(key, (team_name(tname), c["grp"], []))[2].append(
-            (-c["big"], f'<a class="pcard" href="{slugs[c["id"]]}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
-                        f'<span class="pm"><b>{html.escape(c["name"])}</b><br>{pos_label(c)} &middot; {c["big"]:g} {c["big_label"]}</span></a>'))
+            (-c["big"], f'<a class="pcard" href="{slugs[c["id"]]}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{"" if c["number"] is None else c["number"]}</span>'
+                        f'<span class="pm"><b>{html.escape(c["name"])}</b><br>{pos_label(c)} &middot; {big_txt(c)}</span></a>'))
     teams, lists, seen = [], "", set()
     for key in sorted(groups):
         tn, grp, items = groups[key]

@@ -15,9 +15,10 @@ from src.db import ROOT, query
 
 OUT = ROOT / "reports" / "cards"
 SEASON = 2026
+WEEK = 9              # cards pinned through this week; the refresh passes --latest
 MIN_GP = 4            # games with snaps, to be ranked
 MIN_DB = 100          # QB dropbacks, to be ranked
-EDGE_PRESS, EDGE_TACKLES = 1.0, 5.0   # per game: a "linebacker" who rushes the passer like an edge rusher
+EDGE_PRESS, EDGE_TACKLES = 1.0, 6.0   # per game: a "linebacker" who rushes the passer like an edge rusher
 GROUPS = ["QB", "RB", "WR", "TE", "OL", "DL", "LB", "DB"]
 POS_NAME = {"QB": "Quarterback", "RB": "Running back", "FB": "Fullback", "WR": "Wide receiver", "TE": "Tight end",
             "C": "Center", "G": "Guard", "OT": "Tackle", "T": "Tackle", "OL": "Offensive line", "DE": "Defensive end",
@@ -74,9 +75,16 @@ def main(week=None):
                    AND two_point_attempt=0""")
     qb = db.groupby("qb").agg(n_db=("epa", "size"), epa=("epa", "sum"))
 
-    # PFR charting: pressures, missed tackles, coverage
+    # PFR charting: pressures, missed tackles, coverage. Use only weeks where every game is charted.
+    sch_n = query(f"SELECT week, COUNT(*) n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week")
+    pf_n = query(f"SELECT week, COUNT(DISTINCT game_id) n FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week")
+    full = sch_n.merge(pf_n, on="week", how="left", suffixes=("", "_pf")).fillna(0)
+    full_weeks = full[full.n_pf >= full.n].week
+    pfr_week = int(full_weeks.max()) if len(full_weeks) else 0
+    assert list(full_weeks) == list(range(1, pfr_week + 1)), f"PFR charting has gaps: {full.to_dict('records')}"
+    games["gp_pfr"] = gweeks.reindex(games.index).map(lambda w: sum(x <= pfr_week for x in w))
     pf = query(f"""SELECT week, pfr_player_id, def_pressures, def_missed_tackles, def_targets, def_completions_allowed, def_yards_allowed
-                   FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
+                   FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={pfr_week}""")
     pf["gsis"] = pf.pfr_player_id.map(link)
     pft = pf.dropna(subset=["gsis"]).groupby("gsis")[["def_pressures", "def_missed_tackles", "def_targets",
                                                       "def_completions_allowed", "def_yards_allowed"]].sum()
@@ -94,7 +102,7 @@ def main(week=None):
         tackles = int(t.def_tackles_solo + t.def_tackle_assists)
         r = dict(id=gid, name=p.display_name, team=last.loc[gid, "team"], grp=grp, pos=p.position,
                  number=int(p.jersey_number) if pd.notna(p.jersey_number) else None,
-                 gp=int(g.gp), snaps=int(g.snaps), snap_pct=round(float(g.pct), 3),
+                 gp=int(g.gp), gp_pfr=int(g.gp_pfr), snaps=int(g.snaps), snap_pct=round(float(g.pct), 3),
                  other_teams=[x for x in teams_played.loc[gid] if x != last.loc[gid, "team"]],
                  cmp=int(t.completions), att=int(t.attempts), pass_yds=int(t.passing_yards), pass_td=int(t.passing_tds),
                  ints=int(t.passing_interceptions), sacked=int(t.sacks_suffered),
@@ -105,12 +113,12 @@ def main(week=None):
                  def_int=int(t.def_interceptions), pd=int(t.def_pass_defended), ff=int(t.def_fumbles_forced),
                  pressures=int(f.def_pressures), missed_tk=int(f.def_missed_tackles), cov_tgt=int(f.def_targets),
                  cov_cmp=int(f.def_completions_allowed), cov_yds=int(f.def_yards_allowed), penalties=int(t.penalties),
-                 n_db=int(q.n_db) if q is not None else 0, epa_db=round(float(q.epa / q.n_db), 3) if q is not None and q.n_db else None)
+                 n_db=int(q.n_db) if q is not None else 0, epa_db=float(q.epa / q.n_db) if q is not None and q.n_db else None)
         rows.append(r)
     c = pd.DataFrame(rows)
     # Edge rushers are listed as linebackers in every source. Card them with the pass rushers when they play like one:
     # at least 1 pressure and fewer than 5 tackles a game.
-    edge = (c.grp == "LB") & (c.pressures / c.gp >= EDGE_PRESS) & (c.tackles / c.gp < EDGE_TACKLES)
+    edge = (c.grp == "LB") & (c.pressures / c.gp_pfr.clip(lower=1) >= EDGE_PRESS) & (c.tackles / c.gp < EDGE_TACKLES)
     c.loc[edge, "grp"] = "DL"
     c["edge"] = edge
 
@@ -126,7 +134,8 @@ def main(week=None):
     c["rk"], c["of"] = None, None
     for grp, (col, _) in rank_on.items():
         m = (c.grp == grp) & ((c.n_db >= MIN_DB) if grp == "QB" else (c.gp >= MIN_GP))
-        val = c.loc[m, col] if grp == "QB" else c.loc[m, col] / c.loc[m, "gp"]
+        den = c.loc[m, "gp_pfr"].clip(lower=1) if col == "pressures" else c.loc[m, "gp"]
+        val = c.loc[m, col] if grp == "QB" else c.loc[m, col] / den
         c.loc[m, "rk"] = val.rank(ascending=False, method="min").astype(int)
         c.loc[m, "of"] = int(m.sum())
 
@@ -139,12 +148,20 @@ def main(week=None):
     snw = sn.groupby(["gsis", "week"]).snaps.sum()
 
     # history (2018 on), box-score seasons
+    hs = query(f"SELECT season, week, team, pfr_player_id FROM raw_snap_counts WHERE game_type='REG' AND season<{SEASON}")
+    hs["player_id"] = hs.pfr_player_id.map(link)
+    hw = pd.concat([hs.dropna(subset=["player_id"])[["player_id", "season", "week", "team"]],
+                    pw[pw.season < SEASON][["player_id", "season", "week", "team"]]]).drop_duplicates(["player_id", "season", "week"])
+    hgp = hw.groupby(["player_id", "season"]).week.nunique().rename("gp_all")
+    hteam = hw.sort_values("week").groupby(["player_id", "season"]).team.agg(lambda x: "/".join(dict.fromkeys(x))).rename("teams")
     hist = pw[pw.season < SEASON].groupby(["player_id", "season"]).agg(
-        team=("team", lambda x: x.mode().iloc[0]), gp=("week", "nunique"), pass_yds=("passing_yards", "sum"),
+        team=("team", "last"), gp=("week", "nunique"), pass_yds=("passing_yards", "sum"),
         pass_td=("passing_tds", "sum"), ints=("passing_interceptions", "sum"), rush_yds=("rushing_yards", "sum"),
         rush_td=("rushing_tds", "sum"), rec=("receptions", "sum"), rec_yds=("receiving_yards", "sum"), rec_td=("receiving_tds", "sum"),
         tk_s=("def_tackles_solo", "sum"), tk_a=("def_tackle_assists", "sum"), sacks=("def_sacks", "sum"), def_int=("def_interceptions", "sum"),
         pd=("def_pass_defended", "sum")).reset_index()
+    hist = hist.join(hgp, on=["player_id", "season"]).join(hteam, on=["player_id", "season"])
+    hist["gp"], hist["team"] = hist.gp_all.fillna(hist.gp).astype(int), hist.teams.fillna(hist.team)
 
     cards = []
     for r in c.to_dict("records"):
@@ -167,24 +184,26 @@ def main(week=None):
         r["small"] = bool(r["gp"] < MIN_GP if r["grp"] != "QB" else r["n_db"] < MIN_DB)
         r["number"] = None if r["number"] is None or r["number"] != r["number"] else int(r["number"])
         for k, v in list(r.items()):
-            if isinstance(v, (np.integer,)):
+            if isinstance(v, (bool, np.bool_)):
+                r[k] = bool(v)
+            elif isinstance(v, (int, np.integer)):
                 r[k] = int(v)
-            elif isinstance(v, (np.floating,)):
+            elif isinstance(v, (float, np.floating)):
                 r[k] = None if np.isnan(v) else float(v)
         cards.append(r)
 
     # league averages per game for context
-    lg = {}
+    lg = {"QB_all": float(db.epa.sum() / len(db))}
     for grp, (col, label) in rank_on.items():
         m = (c.grp == grp) & ((c.n_db >= MIN_DB) if grp == "QB" else (c.gp >= MIN_GP))
         lg[grp] = round(float(c.loc[m, col].mean() if grp == "QB" else (c.loc[m, col] / c.loc[m, "gp"]).mean()), 3)
-    meta = dict(season=SEASON, week=week, min_gp=MIN_GP, min_db=MIN_DB, lg=lg, n=len(cards), unlinked_snap_players=int(unlinked))
+    meta = dict(season=SEASON, week=week, pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB, lg=lg, n=len(cards), unlinked_snap_players=int(unlinked))
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "nfl_players.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
+    (OUT / "nfl_players.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1, allow_nan=False))
     print(f"NFL cards through week {week}: {len(cards)} players; {unlinked} snap-count players without a gsis link")
     print(c.groupby("grp").size().to_dict())
     return meta, cards
 
 
 if __name__ == "__main__":
-    main(int(sys.argv[1]) if len(sys.argv) > 1 else None)
+    main(None if "--latest" in sys.argv else WEEK)
