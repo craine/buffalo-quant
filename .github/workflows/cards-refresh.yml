@@ -46,7 +46,9 @@ jobs:
         run: python -m src.site.build
       - name: Test data, cards and pages; confirm pinned files untouched
         run: |
-          python -m pytest -q tests/test_nhl.py tests/test_cards.py tests/test_review_gate.py
+          set -o pipefail
+          python -m pytest -q -rs tests/test_nhl.py tests/test_cards.py tests/test_review_gate.py | tee /tmp/pytest.txt
+          if grep -qi "skipped" /tmp/pytest.txt; then echo "Tests were skipped; refusing to publish"; exit 1; fi
           git diff --exit-code -- reports/cards/skaters.json reports/cards/goalies.json reports/*.md ledger/
       - name: Commit if anything changed
         run: |

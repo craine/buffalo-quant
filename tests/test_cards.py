@@ -53,7 +53,8 @@ def test_every_card_has_a_page_that_matches_it():
         assert stamp in page, c["name"]
     for c in load("goalies_league.json")["cards"]:
         page = (SITE / "cards" / f"{slugs[('G', c['id'])]}.html").read_text()
-        assert f"{c['gsax']:.1f} goals saved" in page or f"{c['gsax']:+.1f} goals saved" in page, c["name"]
+        dek = re.search(r'<p class="dek">([^<]*)', page).group(1)
+        assert re.search(rf"{re.escape(format(c['gsax'], '.1f'))} goals saved .* {c['rk']} of {c['of']}", dek), (c["name"], dek)
         assert stamp in page, c["name"]
 
 

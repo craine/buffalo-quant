@@ -1,4 +1,5 @@
 """Gate for the daily cards refresh: fail loudly instead of publishing bad cards."""
+import argparse
 import datetime as dt
 import json
 import sys
@@ -33,9 +34,10 @@ latest = query(f"SELECT MAX(game_date) d FROM raw_nhl_games WHERE {DONE}").d.ilo
 if as_of != latest:
     fail.append(f"cards are through {as_of} but the data has games through {latest}")
 today = dt.date.today()
-in_season = today.month in (10, 11, 12, 1, 2, 3, 4)
-if in_season and (today - dt.date.fromisoformat(latest)).days > 4:
-    fail.append(f"newest completed game is {latest}, more than 4 days old: the NHL ingest may be stale")
+# season is under way (this season has games) and it's not summer; 7 days covers the holiday and All-Star breaks
+in_season = today.month in (10, 11, 12, 1, 2, 3, 4) and ng > 0
+if in_season and (today - dt.date.fromisoformat(latest)).days > 7:
+    fail.append(f"newest completed game is {latest}, more than 7 days old: the NHL ingest may be stale")
 if sum(m["teams"].values()) != 2 * ng:
     fail.append(f"team games sum {sum(m['teams'].values())} != 2 x {ng} games")
 if not 0.85 <= m["cal"] <= 1.15:
@@ -45,8 +47,17 @@ if len(gcards) < 50:
 if any(c.get("rate_p82") is None for c in cards if c["gp"] >= 5):
     fail.append("skaters with 5+ games missing a rating")
 
-fpr = json.loads((ROOT / "config" / "xg_fingerprint.json").read_text())["seasons"]
+FP = ROOT / "config" / "xg_fingerprint.json"
 now = query("SELECT season, SUM(xg) xg, COUNT(xg) n FROM clean_nhl_shots_xg WHERE season < 20262027 GROUP BY season")
+ap = argparse.ArgumentParser()
+ap.add_argument("--update-fingerprint", action="store_true",
+                help="after a deliberate change (NHL edited old play-by-play, model or library change): record the current totals")
+if ap.parse_args().update_fingerprint:
+    doc = json.loads(FP.read_text())
+    doc["seasons"] = {str(int(x.season)): {"xg_sum": round(float(x.xg), 6), "n": int(x.n)} for x in now.itertuples()}
+    FP.write_text(json.dumps(doc, indent=1))
+    print("fingerprint updated:", doc["seasons"])
+fpr = json.loads(FP.read_text())["seasons"]
 for x in now.itertuples():
     ref = fpr.get(str(int(x.season)))
     if ref is None or ref["n"] != x.n or abs(ref["xg_sum"] - x.xg) > 1e-3:
