@@ -172,6 +172,12 @@ def main(as_of=AS_OF):
     m_said_t, m_won_t, m_n_t = (1 - mt_.p_home).mean(), (1 - mt_.home_won).mean(), len(mt_)
     m_said_r, m_won_r, m_n_r = (1 - mr_.p_home).mean(), (1 - mr_.home_won).mean(), len(mr_)
     m_se = (m_won_t * (1 - m_won_t) / m_n_t) ** 0.5
+    m_se_r = (m_won_r * (1 - m_won_r) / m_n_r) ** 0.5
+    short_t = m_said_t - m_won_t            # how far tired road teams fell short of the model (points of win chance)
+    beat_r = m_won_r - m_said_r             # how far rested road teams beat it
+    swing = short_t + beat_r
+    pool_gap = w_r - w_t                    # all four seasons, no model
+    pool_se = (w_t * (1 - w_t) / n_t + w_r * (1 - w_r) / n_r) ** 0.5
     # goaltending on the second night (complete seasons): who starts, and goals saved vs average
     gsh = u[u.goalie_id.notna()].groupby(["game_id", "opp", "goalie_id"]).agg(sh=("xg", "size"), xga=("xg", "sum"), ga_=("goal", "sum")).reset_index()
     start = gsh.sort_values("sh", ascending=False).drop_duplicates(["game_id", "opp"])
@@ -187,7 +193,8 @@ def main(as_of=AS_OF):
     no1_r, gsv_r = goalie_part(rested)
     chi_last = ga[(ga.home == THEM) | (ga.away == THEM)].game_date.max()
     chi_rest = (pd.Timestamp(GAME_DATE) - chi_last).days
-    buf_prev = ga[((ga.away == US) & (ga.r_a == 1)) & (ga.season == SEASON)]
+    buf_prev = ga[((ga.away == US) & (ga.r_a == 1)) & (ga.season == SEASON)].merge(
+        gm[["game_id", "last_period_type"]].astype({"game_id": "int64"}), on="game_id", how="left")
 
     most = lambda rank: "most" if rank == 1 else f"{ordn(rank)}-most"
     fewest = lambda rank: "fewest" if rank == 1 else f"{ordn(rank)}-fewest"
@@ -197,12 +204,12 @@ def main(as_of=AS_OF):
     bin_i = next(k for k, (lo, hi) in enumerate(cal_bins) if lo <= fav_p < hi)
     fig, ax = plt.subplots(figsize=(9.5, 4.8), dpi=200)
     xs = np.arange(len(calb)); w = 0.36
-    ax.bar(xs - w / 2, [c[1] for c in calb], w, color=GRAY, label="What the model said (favorite's chance)", zorder=2)
-    ax.bar(xs + w / 2, [c[2] for c in calb], w, color=BLUE, label="How often the favorite actually won", zorder=2)
+    ax.bar(xs - w / 2, [c[1] for c in calb], w, color=GRAY, label="What the model said (likelier team's chance)", zorder=2)
+    ax.bar(xs + w / 2, [c[2] for c in calb], w, color=BLUE, label="How often the likelier team actually won", zorder=2)
     for x_, c in zip(xs, calb):
         ax.text(x_ - w / 2, c[1] + 0.01, f"{c[1]:.0%}", ha="center", va="bottom", fontsize=9, color=MUTED)
         ax.text(x_ + w / 2, c[2] + 0.01, f"{c[2]:.0%}", ha="center", va="bottom", fontsize=9.5, color=INK)
-    ax.set_xticks(xs, [f"Favorite given {c[0]}\n({c[3]} games)" for c in calb], fontsize=9.5)
+    ax.set_xticks(xs, [f"Likelier team given {c[0]}\n({c[3]} games)" for c in calb], fontsize=9.5)
     ax.set_ylim(0, 0.9); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.legend(frameon=False, fontsize=9, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"Teams given {calb[bin_i][0]}, like Buffalo tonight, won {calb[bin_i][2]:.0%} in 2025-26",
@@ -270,11 +277,12 @@ def main(as_of=AS_OF):
     gap = m_said_t - m_won_t
     bp = buf_prev.iloc[0] if len(buf_prev) else None
     prev_line = (f" Buffalo's only other second night this season was {pd.to_datetime(bp.game_date):%b. %-d} at {'Montreal' if bp.home == 'MTL' else bp.home}, "
-                 f"a {int(bp.home_score)}-{int(bp.away_score)} loss." if bp is not None and bp.home_score > bp.away_score else "")
+                 f"a {int(bp.home_score)}-{int(bp.away_score)} {dict(SO='shootout ', OT='overtime ').get(bp.last_period_type, '')}loss." if bp is not None and bp.home_score > bp.away_score else "")
     md = f"""# Sabres at Blackhawks: the NHL's weakest team by chances, but Buffalo is on tired legs
 
-**Our model leans Buffalo in Chicago: Sabres {p_b:.0%}, Blackhawks {1 - p_b:.0%}. Chicago creates the {fewest(chi_f)} chances in the
-league and allows the {most(chi_a)}. But the model doesn't know the Sabres played last night, and that matters: last season and this one, road teams playing a second straight night against a rested home team won {m_won_t:.0%} of the time when our model gave them {m_said_t:.0%}.**
+**Chicago creates the {fewest(chi_f)} chances in the NHL and allows the {most(chi_a)}, and our model gives the Sabres a {p_b:.0%} chance to win
+(Blackhawks {1 - p_b:.0%}). But Buffalo played last night, and the model doesn't know that. Road teams on the second night of a back-to-back
+against a rested home team have won only {m_won_t:.0%} of the time, even though our model gave them {m_said_t:.0%}. Read our {p_b:.0%} as too high.**
 
 *Buffalo at Chicago, Thursday, Nov. 12, 8 p.m. ET, United Center. The Sabres lost 8-3 to Tampa Bay at home last night; the Blackhawks
 haven't played since Nov. 7. Numbers are 2026-27 through {pd.to_datetime(last_date):%B %-d}: Sabres {recd(US)} in {int(b.gp)} games, Blackhawks
@@ -302,7 +310,7 @@ out empty-net shots.
 ## How we measure "chances"
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Over the last three seasons
-({n_pri:,} shots that reached the net or missed it), a shot from within 10 feet went in {close10:.1%} of the time; one from 60 feet or more, {far60:.1%}. Add
+({n_pri:,} shots that weren't blocked, not counting empty nets), a shot from within 10 feet went in {close10:.1%} of the time; one from 60 feet or more, {far60:.1%}. Add
 up those chances on every shot and you get what a team's chances were worth in goals.
 
 **The source:** the NHL's own play-by-play feed, which records where every shot came from. **The math:** each shot's chance
@@ -316,18 +324,20 @@ story on [last year's 50-win season](sabres-50-win-mirage.html).
 
 Since the start of 2023-24 there have been {n_t} games like tonight's: a road team playing for the second night in a row against a
 home team that had at least a day off. The tired road team won **{w_t:.0%}** of them. When both teams were rested, road teams won {w_r:.0%}
-({n_r:,} games). The gap showed up in every one of the four seasons, which is why we don't think it's luck.
+({n_r:,} games). That's a gap of {pool_gap * 100:.1f} points over {n_t} games, far too big to be luck, and it showed up in every
+season (this season's {int(by.n_tired.loc[SEASON])} games are a small sample on their own).
 
-**Our model misses it.** It rates teams by the chances they create and allow, and it doesn't know who played the night before. In the
-{m_n_t} games like tonight's from last season and this one (games the model never saw while it was being built), it gave the tired road team
-{m_said_t:.0%} on average. Those teams won {m_won_t:.0%}. A gap that size over {m_n_t} games is about {gap / m_se:.1f} times what chance alone would usually
-produce. Rested road teams, by comparison, won a little more often than it said ({m_won_r:.0%} against {m_said_r:.0%}).
+**Our model misses it.** It rates teams by the chances they create and allow, and it doesn't know who played the night before. Look
+at last season and this one, games the model never saw while it was being built. In the {m_n_t} games like tonight's, it gave the tired
+road team {m_said_t:.0%} on average, and those teams won {m_won_t:.0%}: **{short_t * 100:.0f} points short.** Rested road teams went the other way, winning
+{m_won_r:.0%} when it gave them {m_said_r:.0%}, {beat_r * 100:.0f} points better than it said. So the model is a little low on road teams in general, and
+the second night swings that by about {swing * 100:.0f} points. Over {m_n_t} games, a gap that size is too big to write off as a few bad bounces.
 
-**Where the drop comes from is less clear.** Tired road teams still got {sh_t:.1%} of the chances in those games, only a little below the {sh_r:.1%} for
+**Where the drop comes from is less clear.** Tired road teams still got about {sh_t:.0%} of the chances in those games, barely below the {sh_r:.0%} for
 rested road teams. Their usual starting goalie was in net {no1_t:.0%} of the time, against {no1_r:.0%} when rested, but the goalies who did play
-were only about {abs(gsv_t):.2f} of a goal a game worse than average. Neither explains the whole gap. What we can say is how often it's happened.{prev_line}
+were only about {abs(gsv_t):.2f} of a goal a game worse than average. Both are small next to the drop in wins. What we can say is how often it's happened.
 
-Both Sabres goalies played in last night's loss.
+**For Buffalo tonight:** both Sabres goalies played in last night's loss.{prev_line}
 
 ## In goal
 
@@ -345,12 +355,14 @@ samples: a goalie's numbers over a dozen games can swing a lot.
 {ledger_status}
 
 Our model expects about **{mu_b:.1f} goals for Buffalo and {mu_v:.1f} for Chicago**, and gives about a {p_tie:.0%} chance the game is tied after 60
-minutes. That's the number we've logged, because it's the model we've tested. The back-to-back history above says to read it as
-too high: if tonight goes the way games like it have, it's closer to a coin flip.
+minutes. That's the number we log, because it's the model we've tested. The back-to-back history above says to read it as
+too high: in games like this, tired road teams have fallen about {short_t * 100:.0f} points short of what the model said.
 
 **Where the number comes from.** The same chances numbers above. Buffalo creates chances worth {b.xgf_pg:.2f} goals a game; Chicago allows
 {v.xga_pg:.2f}. Eighteen games is a small sample, so we blend in last season's numbers and pull them toward the league average. That makes
-Buffalo's attack worth {off_r[US]:.2f} a game and Chicago's defense {def_r[THEM]:.2f}, against a league average of {lg_r:.2f}. We do the same the other way
+Buffalo's attack worth {off_r[US]:.2f} a game and Chicago's defense {def_r[THEM]:.2f}, against a league average of {lg_r:.2f}. (That's a hair above the
+table's {lg.xgf_pg:.2f} because the model works with chances before we match them to this season's real goals; it has its own formula for turning
+them into goals.) We do the same the other way
 for Chicago. Home ice adds about {coef[2]:.2f} of a goal for the Blackhawks. Then we play the game out on paper many times. Ties after 60
 minutes go the way they have for home teams in past overtimes and shootouts ({p_ot:.0%} home wins).
 
@@ -371,8 +383,9 @@ on our list to test as part of the model itself, the same way we tested goalies,
   the team with the puck.
 - **Buffalo's own end.** The Sabres allow the {most(buf_a)} chances in the league, and Tampa Bay had more than twice their chances last night
   while the game was close (see last night's [post-game](sabres-lightning-postgame-nov-11.html)).
-- **Results vs. chances.** Buffalo is {l5_rec} in its last {nb5} games with {b5:.0%} of the chances in them. Five games is a small sample,
-  but over a full season, results that run ahead of the chances tend to fade (see our [50-win story](sabres-50-win-mirage.html)).
+- **Results vs. chances.** Buffalo's results have been running behind its chances: {gfa.loc[US].GF / b.gp:.2f} goals a game scored on
+  chances worth {b.xgf_pg:.2f}, and {gfa.loc[US].GA / b.gp:.2f} allowed on chances worth {b.xga_pg:.2f}. Over a full season, gaps like that
+  tend to close (see our [50-win story](sabres-50-win-mirage.html)). That points to better nights ahead, not to any one game.
 
 ## For the stat-heads
 
@@ -383,13 +396,13 @@ on our list to test as part of the model itself, the same way we tested goalies,
 - Back-to-back: rest = days since the team's previous game in the same season; tired road = road rest 1 and home rest 2+; rested = both 2+.
   {n_t} tired-road and {n_r:,} rested games, 2023-24 through {last_date}, regular season. Road win rate by season (tired / rested):
   {'; '.join(f"{str(x_)[:4]}-{str(x_)[6:]} {r.tired:.3f} / {r.rested:.3f}" for x_, r in zip(by.index, by.itertuples()))}. Model check, out of sample
-  (2025-26 and 2026-27 to date): tired road mean p {m_said_t:.3f}, won {m_won_t:.3f}, n {m_n_t}, binomial SE {m_se:.3f}; rested road mean p {m_said_r:.3f},
-  won {m_won_r:.3f}, n {m_n_r}. Road xG share: tired {sh_t:.3f}, rested {sh_r:.3f}. "Usual starter" = the goalie who faced the most shots in the most games
+  (2025-26 and 2026-27 to date): tired road mean p {m_said_t:.3f}, won {m_won_t:.3f}, n {m_n_t}, binomial SE {m_se:.3f} (gap = {gap / m_se:.1f} SE); rested road mean p {m_said_r:.3f},
+  won {m_won_r:.3f}, n {m_n_r}, SE {m_se_r:.3f} ({beat_r / m_se_r:.1f} SE). Pooled 4-season gap {pool_gap:.3f}, SE {pool_se:.3f} ({pool_gap / pool_se:.1f} SE). Road xG share: tired {sh_t:.3f}, rested {sh_r:.3f}. "Usual starter" = the goalie who faced the most shots in the most games
   for that team that season; starter per game = goalie who faced the most unblocked shots; complete seasons only. GSAx per game for the road team:
   tired {gsv_t:+.3f}, rested {gsv_r:+.3f}.
 - Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`), ratings as of {GAME_DATE}. Team xGF/xGA per game shrunk with
   K={gmod.K} games toward league + {gmod.PRIOR_KEEP} x last season's edge; goals = {coef[0]:.3f} + {coef[1]:.3f} x expected + {coef[2]:.3f} x home
-  (fit 2023-25); independent Poisson; regulation ties to home at {p_ot:.3f}. Brier: 2025-26 {bt[20252026]['brier']:.4f} (home-team rate
+  (fit 2023-25), on unrescaled xG (league avg {lg_r:.3f} vs rescaled {lg.xgf_pg:.3f}); independent Poisson; regulation ties to home at {p_ot:.3f}. Brier: 2025-26 {bt[20252026]['brier']:.4f} (home-team rate
   {bt[20252026]['b_home']:.4f}, record log5 {bt[20252026]['b_rec']:.4f}, coin 0.25); 2026-27 to date {bt[SEASON]['brier']:.4f}. No goalie or rest term.
 """
     (OUT / "2026-11-12-sabres-chi-pregame.md").write_text(md)
@@ -398,10 +411,10 @@ on our list to test as part of the model itself, the same way we tested goalies,
         "big": [[f"{p_b:.0%}", f"Buffalo's chance to win, our model (Chicago {1 - p_b:.0%})"],
                 [f"{m_won_t:.0%}", f"How often tired road teams won when our model gave them {m_said_t:.0%}"]],
         "note": (f"Chicago creates the {fewest(chi_f)} chances in the NHL. But Buffalo played last night, and the model doesn't count that: "
-                 f"road teams on the second night of a back-to-back have won {w_t:.0%} since 2023-24, against {w_r:.0%} when rested."),
-        "explainer": {"kicker": "How we know", "title": "Every shot has a chance of going in.",
-                      "text": (f"A shot from within 10 feet went in {close10:.1%} of the time over the last three seasons; from 60 feet or more, "
-                               f"{far60:.1%}. Add up those chances on every shot and you get what a team's chances were worth in goals."),
+                 f"road teams on the second night of a back-to-back, against a rested home team, have won {w_t:.0%} since 2023-24, against {w_r:.0%} when rested."),
+        "explainer": {"kicker": "How we know", "title": "Second nights cost road teams.",
+                      "text": (f"Since 2023-24, road teams playing the second night in a row against a rested home team won {w_t:.0%} of "
+                               f"{n_t} games. Rested road teams won {w_r:.0%}."),
                       "fmt": "pct", "bars": [["Tired road teams", round(float(w_t), 3)], ["Rested road teams", round(float(w_r), 3)]]},
     }, indent=1))
     print(md)

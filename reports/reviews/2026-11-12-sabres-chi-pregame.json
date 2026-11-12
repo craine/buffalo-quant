@@ -6,6 +6,22 @@
    "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
    "at_utc": "2026-11-12T22:52:20Z",
    "notes": "Numbers dumped and checked; back-to-back effect checked a second way (raw win rates and chance share, all 4 seasons, consistent every season) besides the out-of-sample model check; goalie explanation tested and reported as small rather than assumed; betting words scanned ('pick' removed); logged number is the tested model's, rest caveat stated separately without an unlogged second number."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
+   "at_utc": "2026-11-12T22:53:53Z",
+   "notes": "Needs edits: lead (drop 'leans', one radio sentence), backward results-vs-chances bullet, 'we've logged' contradiction, hero explainer text/bars mismatch, plain-English fixes",
+   "report": "2026-11-12-sabres-chi-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "c698feadce53a719a2bc9500b12bb17722c5c6c0e8b268ca01781ba634b42a4d",
+   "at_utc": "2026-11-12T22:56:19Z",
+   "notes": "Numbers all re-derive; fix: rested road teams also beat model (2.7 SE, not 'a little'), 'coin flip' uncomputed, 'not luck' needs pooled ~4 SE test, Oct 13 was a shootout loss; hero causal title/def",
+   "report": "2026-11-12-sabres-chi-pregame-quant.md"
   }
  ],
  "self": {
@@ -13,5 +29,19 @@
   "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
   "at_utc": "2026-11-12T22:52:20Z",
   "notes": "Numbers dumped and checked; back-to-back effect checked a second way (raw win rates and chance share, all 4 seasons, consistent every season) besides the out-of-sample model check; goalie explanation tested and reported as small rather than assumed; betting words scanned ('pick' removed); logged number is the tested model's, rest caveat stated separately without an unlogged second number."
+ },
+ "editor": {
+  "verdict": "fail",
+  "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
+  "at_utc": "2026-11-12T22:53:53Z",
+  "notes": "Needs edits: lead (drop 'leans', one radio sentence), backward results-vs-chances bullet, 'we've logged' contradiction, hero explainer text/bars mismatch, plain-English fixes",
+  "report": "2026-11-12-sabres-chi-pregame-editor.md"
+ },
+ "quant": {
+  "verdict": "fail",
+  "sha256": "c698feadce53a719a2bc9500b12bb17722c5c6c0e8b268ca01781ba634b42a4d",
+  "at_utc": "2026-11-12T22:56:19Z",
+  "notes": "Numbers all re-derive; fix: rested road teams also beat model (2.7 SE, not 'a little'), 'coin flip' uncomputed, 'not luck' needs pooled ~4 SE test, Oct 13 was a shootout loss; hero causal title/def",
+  "report": "2026-11-12-sabres-chi-pregame-quant.md"
  }
 }
