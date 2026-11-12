@@ -1,7 +1,7 @@
 # buffalo-quant
 
 Buffalo Quant Desk: Bills and Sabres analytics with a graded, public prediction Ledger.
-Live site: https://buffaloquant.com (Cloudflare Pages serves `site/`).
+Live site: https://buffaloquant.com (Cloudflare Pages builds `site/` from this repo on every deploy).
 
 ```
 pip install -r requirements.txt

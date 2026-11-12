@@ -1,8 +1,9 @@
-"""Static site -> site/. Cloudflare Pages serves site/ as-is (no build command).
+"""Static site -> site/. Cloudflare Pages runs this on every deploy (`python -m src.site.build`); site/ is not committed.
 
 Content comes only from committed files: reports/*.md + PNGs and ledger/*.csv.
 """
 import html
+import os
 import sys
 import re
 import shutil
@@ -673,6 +674,8 @@ def main():
         from src.site.nfl_cards import build_nfl_cards
         build_nfl_cards()
     except Exception as e:  # noqa: BLE001
+        if os.environ.get("CF_PAGES"):   # no tests run on Cloudflare: fail the deploy rather than ship without NFL cards
+            raise
         print(f"WARNING: NFL cards not built: {e!r}", file=sys.stderr)
     shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
