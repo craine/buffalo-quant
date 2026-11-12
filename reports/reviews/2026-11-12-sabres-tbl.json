@@ -1,0 +1,137 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "c904af95eeb7604d5021c0a8af26af13fe476ca525681e5a13674eb814fbd92e",
+   "at_utc": "2026-11-12T12:46:50Z",
+   "notes": "Self-check: all numbers from code (asserts on score, goalie teams, burst<5min, close-game ratio>2); surprising 'even chances' checked a second way by score state (Tampa 2.0 vs 0.8 while within one) -> lead built on that; goalie team night rank n_worse+1=4th (corrected from my verbal '3rd'); charts viewed; no penalty counts published (attribution unverified); no betting language."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "4f7b3ea398896e43925f09af7aa9379d6b3c8a192c5650ac6646c17eb1bca310",
+   "at_utc": "2026-11-12T12:49:50Z",
+   "notes": "Quant round-1 fixes applied: lead no longer overclaims; model-tilt claim cut; score effects computed league-wide (trailing team 53%) and Buffalo's 65% framed against it; 200k replays, 'about even'; small-sample label; league avg and ranks; 'almost 19 minutes'; 'shots'; Tampa line gray; histogram excludes Buffalo's game; straight apostrophe."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "4f7b3ea398896e43925f09af7aa9379d6b3c8a192c5650ac6646c17eb1bca310",
+   "at_utc": "2026-11-12T12:51:07Z",
+   "notes": "Independent Quant, 2 rounds, FAIL->PASS; every number re-derived.",
+   "report": "2026-11-12-sabres-tbl-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "b8be2089e39c47d7a90378d97689e3f205b39b5321c4ca3a7c35c3a1426b0057",
+   "at_utc": "2026-11-12T12:52:42Z",
+   "notes": "Editor round-1 edits applied (lead, game-order paragraph, tie-back line, 'the catch', tied after 60, plain goalie season wording, chart titles, 'leaned Tampa, barely', trimmed repetition, PP bullet moved to stat-heads)."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "79fe2211bc6f2738e3bd8b219f3e1b80985a6a379d89123f17c7cbaa80e066cb",
+   "at_utc": "2026-11-12T12:53:25Z",
+   "notes": "Editor 2 rounds; all edits applied; title re-rendered and viewed.",
+   "report": "2026-11-12-sabres-tbl-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a374d1b30ee3242c7a68ba9d10650c98c09e049532c34c5aeeb4d832d9b94d1d",
+   "at_utc": "2026-11-12T12:54:05Z",
+   "notes": "Final Quant: all new numbers verified; lead overclaim fixed ('turned it into a blowout').",
+   "report": "2026-11-12-sabres-tbl-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "21f7537a04d4f915c9397d30ae16b74b19ca3d62d60f66126967c1b5f72470c6",
+   "at_utc": "2026-11-12T13:04:11Z",
+   "notes": "Re-review round (fresh Quant + Editor): 'coming in' now uses games before Nov 11 with their own scale factor (9th / 27th, matches pregame); lead reworded; table labels + shot counts; Sabourin example tied to 2.0 vs 0.8 (asserted); exact replay math (1.2%, once in 85); score-effect claim softened with sample size; goalie-test claim linked; 'slightly more likely'; hero + chart titles."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:04:41Z",
+   "notes": "Fresh-review fixes applied; see editor/quant notes."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:04:41Z",
+   "notes": "Fresh independent Quant; 5 issues, all fixed.",
+   "report": "2026-11-12-sabres-tbl-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:04:42Z",
+   "notes": "Fresh Editor; 2 rounds, PASS; nits applied.",
+   "report": "2026-11-12-sabres-tbl-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:05:19Z",
+   "notes": "Fresh final Quant on exact text; byte-identical regeneration; all new numbers verified.",
+   "report": "2026-11-12-sabres-tbl-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:05:19Z",
+   "notes": "Fresh-review fixes applied."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:05:19Z",
+   "notes": "Fresh independent Quant; 5 issues, all fixed.",
+   "report": "2026-11-12-sabres-tbl-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+   "at_utc": "2026-11-12T13:05:19Z",
+   "notes": "Fresh Editor; 2 rounds, PASS; nits applied.",
+   "report": "2026-11-12-sabres-tbl-editor.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+  "at_utc": "2026-11-12T13:05:19Z",
+  "notes": "Fresh-review fixes applied."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+  "at_utc": "2026-11-12T13:05:19Z",
+  "notes": "Fresh independent Quant; 5 issues, all fixed.",
+  "report": "2026-11-12-sabres-tbl-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+  "at_utc": "2026-11-12T13:05:19Z",
+  "notes": "Fresh Editor; 2 rounds, PASS; nits applied.",
+  "report": "2026-11-12-sabres-tbl-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "7a0cae772d3f0291b0d1b767a6e00653072d761ff77867997f6b2022113e0c2a",
+  "at_utc": "2026-11-12T13:05:19Z",
+  "notes": "Fresh final Quant on exact text; byte-identical regeneration; all new numbers verified.",
+  "report": "2026-11-12-sabres-tbl-final.md"
+ }
+}
