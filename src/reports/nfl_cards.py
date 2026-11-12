@@ -98,6 +98,17 @@ def latest_week(season=SEASON):
     return int(min(done, have))
 
 
+
+def rounded(x, places=6):
+    """Round floats so a rebuild on another machine doesn't change last-digit noise (and make a refresh commit for nothing)."""
+    if isinstance(x, float):
+        return round(x, places)
+    if isinstance(x, dict):
+        return {k: rounded(v, places) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [rounded(v, places) for v in x]
+    return x
+
 def tackles(df):
     # solo + the tackler credited on a shared tackle + assists: matches ESPN's and PFR's combined tackles
     return df.def_tackles_solo + df.def_tackles_with_assist + df.def_tackle_assists
@@ -370,7 +381,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
                 linked_by_name=fallback, unlinked=unlinked, dropped=dropped)
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "nfl_players.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1, allow_nan=False))
+    (OUT / "nfl_players.json").write_text(json.dumps(rounded(dict(meta=meta, cards=cards)), indent=1, allow_nan=False))
     print(f"NFL cards through week {week} (charting through {pfr_week}): {len(cards)} players; "
           f"{fallback} linked by team/name/weeks; unlinked {unlinked}")
     print(c.groupby("grp").size().to_dict())
