@@ -1,6 +1,7 @@
 """NFL player card pages: site/cards/nfl/<slug>.html and site/cards/nfl/index.html, from reports/cards/nfl_players.json."""
 import html
 import json
+import os
 from datetime import datetime
 
 from src.db import ROOT
@@ -308,6 +309,8 @@ def postponed_note(games):
 def build_nfl_cards():
     src = ROOT / "reports" / "cards" / "nfl_players.json"
     if not src.exists():
+        if os.environ.get("CF_PAGES"):
+            raise FileNotFoundError(f"{src} is missing; the NFL cards would be left off the site")
         return None
     d = json.loads(src.read_text())
     m, cards = d["meta"], d["cards"]

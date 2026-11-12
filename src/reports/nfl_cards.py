@@ -82,21 +82,46 @@ def weeks_from_schedule(sch):
         inside, late = g[g.gameday <= end], g[g.gameday > end]
         out[int(w)] = dict(complete=bool(inside.home_score.notna().all()), ends=end.date(),
                            open=sorted(inside[inside.home_score.isna()].game_id),
+                           final=sorted(inside[inside.home_score.notna()].game_id), late=sorted(late.game_id),
                            postponed=sorted(late[late.home_score.isna()].game_id))
     return out
 
 
-def latest_week(season=SEASON):
-    """Newest week such that it and every week before it is complete, and whose player stats are loaded."""
-    st = week_status(season)
+def loaded_games(season=SEASON):
+    """Games whose box scores, snap counts and play-by-play have all loaded."""
+    ids = [set(query(f"SELECT DISTINCT game_id FROM {t} WHERE season={season} AND game_id IS NOT NULL").game_id)
+           for t in ("raw_player_week", "raw_snap_counts", "raw_pbp")]
+    return set.intersection(*ids)
+
+
+def ready_week(st, loaded):
+    """Newest week such that it and every week before it is complete and every one of their games has loaded. A game that is final
+    on the schedule but whose stats haven't posted yet holds the week, so the cards never go out "through Week N" missing a game."""
+    done = 0
+    for w in sorted(st):
+        if not st[w]["complete"] or not set(st[w]["final"]) <= loaded:
+            break
+        done = w
+    return done
+
+
+def schedule_week(st):
+    """Newest week such that it and every week before it is complete on the schedule (stats loaded or not)."""
     done = 0
     for w in sorted(st):
         if not st[w]["complete"]:
             break
         done = w
-    have = query(f"SELECT MAX(week) w FROM raw_player_week WHERE season={season} AND season_type='REG'").w.iloc[0]
-    return int(min(done, have))
+    return done
 
+
+def skipped_games(st, loaded, week):
+    """Postponed games the cards leave out: moved past their week's window and not yet played and loaded."""
+    return [g for w in sorted(st) if w <= week for g in st[w]["late"] if g not in loaded]
+
+
+def latest_week(season=SEASON):
+    return ready_week(week_status(season), loaded_games(season))
 
 
 def rounded(x, places=6):
@@ -116,6 +141,9 @@ def tackles(df):
 
 def main(week=WEEK, roster_week=ROSTER_WEEK):
     week = week or latest_week()
+    st, loaded = week_status(), loaded_games()
+    skip = skipped_games(st, loaded, week)
+    notin = (" AND game_id NOT IN (" + ",".join(f"'{g}'" for g in skip) + ")") if skip else ""   # ids come from the schedule
     roster_week = roster_week or int(query(f"SELECT MAX(week) w FROM raw_rosters_weekly WHERE season={SEASON}").w.iloc[0])
     pl = query("SELECT gsis_id, pfr_id, display_name, position, jersey_number, rookie_season, last_season FROM raw_players ORDER BY gsis_id")
     pl = pl.drop_duplicates("gsis_id")
@@ -168,10 +196,10 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     games["gp"] = gweeks.reindex(games.index).map(len)
     last = played_rows.sort_values(["week", "team"]).groupby("gsis").tail(1).set_index("gsis")
     teams_played = played_rows.sort_values("week").groupby("gsis").team.agg(lambda x: list(dict.fromkeys(x)))
-    tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}
-                   UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
+    tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin}
+                   UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin}""")
     team_last = tw.groupby("team").week.max()
-    week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}").d.iloc[0]
+    week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}{notin}").d.iloc[0]
 
     # ---- rosters: each player's latest entry up to ROSTER_WEEK
     ro = query(f"""SELECT week, team, gsis_id, full_name, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
@@ -200,8 +228,8 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     qb = db.groupby("qb").agg(n_db=("epa", "size"), epa=("epa", "sum"))
 
     # ---- PFR charting, through the last week with every game charted (and no gaps before it)
-    sch_n = query(f"SELECT week, COUNT(*) n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week ORDER BY week")
-    pf_n = query(f"SELECT week, COUNT(DISTINCT game_id) n FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week")
+    sch_n = query(f"SELECT week, COUNT(*) n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin} GROUP BY week ORDER BY week")
+    pf_n = query(f"SELECT week, COUNT(DISTINCT game_id) n FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin} GROUP BY week")
     full = sch_n.merge(pf_n, on="week", how="left", suffixes=("", "_pf")).fillna(0)
     gap = full[full.n_pf < full.n].week.min()
     pfr_week = int(gap - 1) if pd.notna(gap) else week
@@ -375,9 +403,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
                 r[k] = None if np.isnan(v) else float(v)
         cards.append(r)
 
-    st = week_status()
-    postponed = [gid for w in sorted(st) if w <= week for gid in st[w]["postponed"]]
-    meta = dict(season=SEASON, week=week, postponed=postponed, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
+    meta = dict(season=SEASON, week=week, postponed=skip, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
                 linked_by_name=fallback, unlinked=unlinked, dropped=dropped)
     OUT.mkdir(parents=True, exist_ok=True)

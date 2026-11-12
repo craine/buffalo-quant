@@ -57,6 +57,9 @@ def main(argv=None):
     ap.add_argument("--from", dest="start", type=int)
     a = ap.parse_args(argv)
     only = {x for x in a.only.split(",") if x}
+    unknown = only - set(SOURCES) - set(SINGLE_FILE)
+    if unknown:
+        ap.error(f"unknown --only name(s): {sorted(unknown)}; use {sorted(SOURCES)} or {sorted(SINGLE_FILE)}")
     cfg = yaml.safe_load(open(ROOT / "config" / "seasons.yaml"))
     con = connect()
     for table, path in SINGLE_FILE.items():

@@ -6,7 +6,7 @@ import sys
 from src.db import ROOT, query
 import datetime
 
-from src.reports.nfl_cards import SEASON, latest_week, week_status
+from src.reports.nfl_cards import SEASON, latest_week, schedule_week, week_status
 
 d = json.loads((ROOT / "reports" / "cards" / "nfl_players.json").read_text())
 m, cards = d["meta"], d["cards"]
@@ -15,15 +15,23 @@ fail = []
 want = latest_week()
 if m["week"] != want:
     fail.append(f"cards are through Week {m['week']} but the newest complete week is {want}")
-# a week whose window closed 3+ days ago but still has unfinished games would freeze the cards without anyone noticing
+# the schedule says a week is over, but its stats still haven't posted a day after the week ended: the cards would quietly stall
 today = datetime.date.today()
-for w, s in sorted(week_status().items()):
+st = week_status()
+sw = schedule_week(st)
+if sw > m["week"] and (today - st[sw]["ends"]).days >= 1:
+    fail.append(f"Week {sw} ended {st[sw]['ends']} and its games are final, but the cards are still through Week {m['week']}: "
+                "nflverse hasn't posted every game's box score, snap counts and play-by-play yet. Re-run once it has")
+# a week whose window closed 3+ days ago but still has unfinished games would freeze the cards without anyone noticing
+for w, s in sorted(st.items()):
     if w > m["week"] and s["open"] and (today - s["ends"]).days >= 3:
         fail.append(f"Week {w} ended {s['ends']} but {s['open']} still have no final score: cancelled, rescheduled without a new "
                     "date, or not loaded yet. Check the schedule; the cards can't move past it until it's settled")
         break
-if m["dropped"]:
+if len(m["dropped"]) > 3:   # a few brand-new signings can be missing a name or position for a day; more means something broke
     fail.append(f"{len(m['dropped'])} players dropped: {m['dropped'][:5]}")
+elif m["dropped"]:
+    print(f"note: {len(m['dropped'])} players dropped (allowed up to 3): {m['dropped']}")
 if len(m["unlinked"]) > 10:
     fail.append(f"{len(m['unlinked'])} snap-count players couldn't be linked")
 if m["pfr_week"] < m["week"] - 2:
