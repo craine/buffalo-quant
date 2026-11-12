@@ -3,6 +3,7 @@
 Content comes only from committed files: reports/*.md + PNGs and ledger/*.csv.
 """
 import html
+import sys
 import re
 import shutil
 from datetime import datetime, timezone
@@ -661,8 +662,11 @@ def main():
     build_ledger()
     build_about()
     build_cards()
-    from src.site.nfl_cards import build_nfl_cards
-    build_nfl_cards()
+    try:   # an NFL card problem must not stop the NHL cards or the stories from publishing
+        from src.site.nfl_cards import build_nfl_cards
+        build_nfl_cards()
+    except Exception as e:  # noqa: BLE001
+        print(f"WARNING: NFL cards not built: {e!r}", file=sys.stderr)
     shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):

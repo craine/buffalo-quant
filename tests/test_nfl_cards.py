@@ -20,7 +20,10 @@ def test_one_card_per_player_all_teams():
     d = load()
     ids = [c["id"] for c in d["cards"]]
     assert len(ids) == len(set(ids)) and len({c["team"] for c in d["cards"]}) == 32
-    assert d["meta"]["unlinked_snap_players"] <= 10
+    # every season row of every card covers at least one game; this season's row matches the card
+    for c in d["cards"]:
+        assert c["seasons"] and c["seasons"][-1]["season"] == d["meta"]["season"] and c["seasons"][-1]["gp"] == c["gp"], c["name"]
+    assert len(d["meta"]["unlinked"]) <= 10
 
 
 def test_numbers_hang_together():
@@ -45,9 +48,9 @@ def test_every_card_has_a_matching_page():
     for stem, html in pages.items():
         name = re.search(r"<h1>([^<]*)</h1>", html).group(1).replace("&#x27;", "'").replace("&amp;", "&")
         dek = re.search(r'<p class="dek">([^<]*)', html).group(1)
-        m = re.search(r"(-?[\d.]+) ([a-z ]+?) in (\d+) games?", dek)
+        m = re.search(r"(-?[\d.,]+) ([a-z ]+?) in (\d+) games?", dek)
         assert m, (stem, dek)
-        assert any(f"{c['big']:g}" == m.group(1) and c["gp"] == int(m.group(3)) for c in byname[name]), (stem, dek)
+        assert any(float(m.group(1).replace(",", "")) == c["big"] and c["gp"] == int(m.group(3)) for c in byname[name]), (stem, dek)
         assert f"Week {week}" in dek, stem
 
 
