@@ -411,10 +411,15 @@ def card_tile(c, m):
 <div class="gspark">{spark_svg(c['spark'], tc)}<small>Goals saved vs. average, running total, game by game (dashed line = average)</small></div>
 {'<div class="gsmall">SMALL SAMPLE</div>' if c['small'] else ''}<div class="gflip">TAP TO FLIP &#8635;</div></div>
 <div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>Games</th><th>Shots</th><th>Save</th><th>vs. Avg</th></tr>{rows}</table>
-<p><b>Blended rating: {c['blend']:+.2f}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
+<p><b>Blended rating: {blend_txt(c['blend'])}</b> goals saved per 100 shots ({c['blend_rk']} of {c['of']}). It mixes this season with seasons back to 2023-24 and
 pulls toward average, so a hot or cold dozen games doesn't take over.</p>
 <p>Facing {c['sog']} shots this season, an average goalie would have a {c['xsv']:.3f} save rate; he's at {c['sv']:.3f}.
 League close-in save rate (within 20 ft): {m['lg_close_sv']:.3f}.</p></div></div></label>"""
+
+
+def blend_txt(v):
+    """'+0.00' reads oddly to fans: say 'right at average' when it rounds to zero."""
+    return "0.00 (right at average)" if abs(v) < 0.005 else f"{v:+.2f}"
 
 
 def card_howto(m):
@@ -429,7 +434,8 @@ even over half a season. It adds this season's shots to half the weight of his s
 seasons (back to 2023-24), plus {m['shrink']} shots of league-average goaltending, so a dozen games can't swing it too far. As this season's shots
 pile up, they take over.</p>
 <p><b>The source:</b> the NHL's own play-by-play and our expected-goals model, the same one behind our Sabres stories. Cards marked
-<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>"""
+<b>small sample</b> have fewer than 300 shots this season. Not affiliated with the NHL or any team; card designs are our own.</p>
+<p><b>Updated daily.</b> Cards are rebuilt every morning from the latest games. The value of every shot is re-balanced each day so the league's chances add up to the goals actually scored this season, so a player's chance-based numbers can move by a tenth or so even on a day he didn't play.</p>"""
 
 
 POS_NAME = {"C": "CENTER", "L": "LEFT WING", "R": "RIGHT WING", "D": "DEFENSE"}
@@ -522,7 +528,8 @@ faceoffs (shown once he's taken 50), and hits, blocked shots, takeaways and give
 the ice." That's next.</p>
 <p><b>The source:</b> the NHL's own play-by-play and our model of each shot's chance of going in, the same one behind our Sabres stories. We checked every
 player's goal total against the league feed's own running count. Cards marked <b>small sample</b> have fewer than {m['min_gp']} games.
-Not affiliated with the NHL or any team; card designs are our own.</p>"""
+Not affiliated with the NHL or any team; card designs are our own.</p>
+<p><b>Updated daily.</b> Cards are rebuilt every morning from the latest games. The value of every shot is re-balanced each day so the league's chances add up to the goals actually scored this season, so a player's chance-based numbers can move by a tenth or so even on a day he didn't play.</p>"""
 
 
 def build_skater_cards(out, groups, slugs):
@@ -608,7 +615,7 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 <h2>This season</h2><ul class="rules">
 <li><b>Save rate {c['sv']:.3f}</b>; an average goalie facing his shots would be at {c['xsv']:.3f}. League: {m['lg_sv']:.3f}.</li>
 <li><b>Close-in save rate {c['close_sv']:.3f}</b>{close_n}. League: {m['lg_close_sv']:.3f}.</li>
-<li><b>Blended rating {c['blend']:+.2f}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
+<li><b>Blended rating {blend_txt(c['blend'])}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
 {'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}
 {'<li>He also played for another team this season. These numbers cover his whole season; the table on the back of the card splits it by team.</li>' if c.get('other_team') else ''}</ul>
 {card_howto(m)}"""

@@ -97,6 +97,14 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   season term and drifts (ran 3% hot in 2025-26): rescale per season so league xG = league goals before any G-xG or GSAx.
 - Penalty attribution via eventOwner is unverified. Don't publish penalty counts until checked.
 - "Departed" players come from game rosters; a player who hasn't dressed yet is not necessarily gone.
+- **Daily cards refresh** (`.github/workflows/cards-refresh.yml`): runs after each NHL ingest, rebuilds the league cards
+  (`reports/cards/*_league.json`) and the site, then publishes to `main` as `buffalo-quant-bot`. This is the one approved
+  exception to the never-push-to-main rule (approved by Charlie, Nov 2026), and it covers card data and the built site only. It refuses
+  to publish unless `scripts/validate_cards.py`, `tests/test_nhl.py`, `tests/test_cards.py` and `tests/test_review_gate.py` pass and
+  pinned story files are untouched. The xG model trains only on completed seasons, so reruns reproduce it exactly
+  (`config/xg_fingerprint.json`); this season's per-season rescale moves card numbers slightly each day by design. If the NHL edits
+  old play-by-play or a fetch drops a past game, the fingerprint check stops publishing: re-run the ingest, confirm the change is real,
+  then `PYTHONPATH=. python scripts/validate_cards.py --update-fingerprint` and commit the new fingerprint in a PR.
 
 ## Known gotchas
 
