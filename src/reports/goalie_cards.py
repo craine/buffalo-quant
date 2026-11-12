@@ -82,7 +82,8 @@ def main(as_of=AS_OF, league=False):
                 close_sog=int(g_close.on_goal.sum()),
                 blend=round(float(c.blend), 2), blend_rk=int(c.blend_rk),
                 spark=[round(float(v), 2) for v in pg.values], seasons=seasons,
-                small=bool(c.sog < 300)))
+                small=bool(c.sog < 300),
+                **({"other_team": bool(by[(by.season == SEASON) & (by.goalie_id == gid)].opp.nunique() > 1)} if league else {})))
     OUT.mkdir(parents=True, exist_ok=True)
     meta = dict(as_of=as_of, season=SEASON_LABEL(SEASON), lg_sv=round(float(lg_sv), 3), lg_close_sv=round(float(lg_close_sv), 3),
                 n_goalies=n_cur, shrink=SHRINK_SHOTS, past_weight=PAST_WEIGHT, teams=teams)
