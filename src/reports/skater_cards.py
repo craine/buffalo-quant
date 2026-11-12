@@ -197,6 +197,12 @@ def main(as_of=AS_OF, league=False):
         print("GOAL MISMATCHES:\n", mism.head(20))
 
 
+def latest_date():
+    """Date of the most recent completed game in the data (the league cards follow the data; Sabres files stay pinned)."""
+    return str(query("SELECT MAX(game_date) d FROM raw_nhl_games WHERE game_state IN ('OFF', 'FINAL')").d.iloc[0])
+
+
 if __name__ == "__main__":
     import sys
-    main(league="--league" in sys.argv)
+    league = "--league" in sys.argv
+    main(as_of=latest_date() if league and "--latest" in sys.argv else AS_OF, league=league)
