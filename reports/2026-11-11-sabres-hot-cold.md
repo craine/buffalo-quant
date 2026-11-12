@@ -2,8 +2,8 @@
 
 **Seventeen games in, Owen Power, Jack Quinn and Zach Benson are scoring well above what their track records say, and Ryan McLeod, Josh Doan and Josh Norris well below. Expect both groups to drift back toward normal.**
 
-*Numbers through November 10, the Sabres' first 17 games. Every number here is also on each player's
-[card](../cards/).*
+*Numbers through November 10, the Sabres' first 17 games. Each player's [card](../cards/) has his
+latest numbers, updated daily.*
 
 ![Pace vs. history](sabres-hotcold-pace.png)
 

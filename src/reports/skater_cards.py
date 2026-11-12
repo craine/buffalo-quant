@@ -180,7 +180,11 @@ def main(as_of=AS_OF, league=False):
             rem = c["remaining"]
             c.update(fin_ratio=round(float(r.fin_ratio), 3), rate_g82=round(float(r.g_pg * 82), 1), rate_p82=round(float(r.p_pg * 82), 1),
                      pace_p82=round(c["p"] / c["gp"] * 82, 1) if c["gp"] else None, pace_g82=round(c["g"] / c["gp"] * 82, 1) if c["gp"] else None,
-                     proj_g=round(c["g"] + float(r.g_pg) * rem, 1), proj_p=round(c["p"] + float(r.p_pg) * rem, 1))
+                     # season totals count every team he's played for this season (traded players included)
+                     proj_g=round(float(cur.loc[c["id"], "g"]) + float(r.g_pg) * rem, 1),
+                     proj_p=round(float(cur.loc[c["id"], "p"]) + float(r.p_pg) * rem, 1))
+            if c["other_team"]:
+                c.update(season_g=int(cur.loc[c["id"], "g"]), season_p=int(cur.loc[c["id"], "p"]))
         if not league:
             c.pop("team_gp"); c.pop("remaining")
     OUT.mkdir(parents=True, exist_ok=True)

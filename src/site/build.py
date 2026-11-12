@@ -545,7 +545,7 @@ Numbers through {asof}.</p>
 <li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {plural(c['ppg'], 'power-play goal')}.</li>
 {'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
 {expect_li(c, m)}
-{f'<li>He also played for another team this season; the card counts his {tname.title()} games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
+{f"<li>He also played for another team this season; the card counts his {tname.title()} games, and the rank and the season projection use his whole season ({plural(c['season_g'], 'goal')}, {plural(c['season_p'], 'point')} in all).</li>" if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,
                                                f"{c['name']}: {plural(c['g'], 'goal')}, {plural(c['a'], 'assist')}, {plural(c['p'], 'point')} this season."))
@@ -605,7 +605,8 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 <li><b>Save rate {c['sv']:.3f}</b>; an average goalie facing his shots would be at {c['xsv']:.3f}. League: {m['lg_sv']:.3f}.</li>
 <li><b>Close-in save rate {c['close_sv']:.3f}</b>{close_n}. League: {m['lg_close_sv']:.3f}.</li>
 <li><b>Blended rating {c['blend']:+.2f}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
-{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}</ul>
+{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}
+{'<li>He also played for another team this season. These numbers cover his whole season; the table on the back of the card splits it by team.</li>' if c.get('other_team') else ''}</ul>
 {card_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
                                                f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))

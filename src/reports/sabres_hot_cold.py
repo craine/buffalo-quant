@@ -128,8 +128,8 @@ def main():
 
 {lead}
 
-*Numbers through {pd.to_datetime(AS_OF):%B %-d}, the Sabres' first {m['team_gp']} games. Every number here is also on each player's
-[card](../cards/).*
+*Numbers through {pd.to_datetime(AS_OF):%B %-d}, the Sabres' first {m['team_gp']} games. Each player's [card](../cards/) has his
+latest numbers, updated daily.*
 
 ![Pace vs. history](sabres-hotcold-pace.png)
 

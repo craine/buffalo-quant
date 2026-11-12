@@ -105,7 +105,8 @@
      "gsax": -1.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478024,
@@ -173,7 +174,8 @@
      "gsax": -1.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476316,
@@ -223,7 +225,8 @@
      "gsax": 0.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8480280,
@@ -290,7 +293,8 @@
      "gsax": 9.8
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8480022,
@@ -333,7 +337,8 @@
      "gsax": 4.5
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8480045,
@@ -398,7 +403,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481551,
@@ -443,7 +449,8 @@
      "gsax": 1.6
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481611,
@@ -509,7 +516,8 @@
      "gsax": 8.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8483548,
@@ -554,7 +562,8 @@
      "gsax": -4.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8475660,
@@ -617,7 +626,8 @@
      "gsax": 4.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482982,
@@ -680,7 +690,8 @@
      "gsax": -0.7
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481692,
@@ -744,7 +755,8 @@
      "gsax": -7.1
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482445,
@@ -798,7 +810,8 @@
      "gsax": 2.7
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482949,
@@ -837,7 +850,8 @@
      "gsax": -1.1
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481519,
@@ -905,7 +919,8 @@
      "gsax": -2.4
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8482821,
@@ -964,7 +979,8 @@
      "gsax": -6.2
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478406,
@@ -1041,7 +1057,8 @@
      "gsax": 0.2
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8475809,
@@ -1108,7 +1125,8 @@
      "gsax": -5.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8479979,
@@ -1175,7 +1193,8 @@
      "gsax": 6.6
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8479193,
@@ -1233,7 +1252,8 @@
      "gsax": 0.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476434,
@@ -1299,7 +1319,8 @@
      "gsax": -5.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8480193,
@@ -1361,7 +1382,8 @@
      "gsax": 5.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8485545,
@@ -1393,7 +1415,8 @@
      "gsax": -0.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482221,
@@ -1448,7 +1471,8 @@
      "gsax": 1.6
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8477465,
@@ -1518,7 +1542,8 @@
      "gsax": -1.5
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8477035,
@@ -1558,7 +1583,8 @@
      "gsax": -0.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8474593,
@@ -1622,7 +1648,8 @@
      "gsax": 0.2
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481033,
@@ -1685,7 +1712,8 @@
      "gsax": 0.6
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8484900,
@@ -1716,7 +1744,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8475311,
@@ -1780,7 +1809,8 @@
      "gsax": -5.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476341,
@@ -1841,7 +1871,8 @@
      "gsax": -0.2
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482661,
@@ -1912,7 +1943,8 @@
      "gsax": 15.1
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8475717,
@@ -1969,7 +2001,8 @@
      "gsax": -2.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8484170,
@@ -2018,7 +2051,8 @@
      "gsax": 11.7
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8482487,
@@ -2071,7 +2105,8 @@
      "gsax": -7.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8474596,
@@ -2143,7 +2178,8 @@
      "gsax": -6.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476945,
@@ -2202,7 +2238,8 @@
      "gsax": 0.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8477424,
@@ -2269,7 +2306,8 @@
      "gsax": 8.0
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8481020,
@@ -2335,7 +2373,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8483575,
@@ -2374,7 +2413,8 @@
      "gsax": 0.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478009,
@@ -2440,7 +2480,8 @@
      "gsax": 6.0
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8473575,
@@ -2491,7 +2532,8 @@
      "gsax": 4.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482193,
@@ -2543,7 +2585,8 @@
      "gsax": 0.7
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8478048,
@@ -2602,7 +2645,8 @@
      "gsax": 4.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8473503,
@@ -2665,7 +2709,8 @@
      "gsax": -2.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8477484,
@@ -2728,7 +2773,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476914,
@@ -2783,7 +2829,8 @@
      "gsax": -0.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481035,
@@ -2847,7 +2894,8 @@
      "gsax": -3.1
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476999,
@@ -2909,7 +2957,8 @@
      "gsax": 8.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8477992,
@@ -2967,7 +3016,8 @@
      "gsax": -4.4
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478435,
@@ -3031,7 +3081,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8479361,
@@ -3095,7 +3146,8 @@
      "gsax": 4.6
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8481668,
@@ -3161,7 +3213,8 @@
      "gsax": -3.2
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8483703,
@@ -3205,7 +3258,8 @@
      "gsax": -2.5
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8475831,
@@ -3269,7 +3323,8 @@
      "gsax": -0.7
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478916,
@@ -3332,7 +3387,8 @@
      "gsax": -3.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482137,
@@ -3399,7 +3455,8 @@
      "gsax": 3.8
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8477968,
@@ -3460,7 +3517,8 @@
      "gsax": 5.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8480981,
@@ -3527,7 +3585,8 @@
      "gsax": 5.1
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8476412,
@@ -3586,7 +3645,8 @@
      "gsax": -6.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8476883,
@@ -3653,7 +3713,8 @@
      "gsax": -0.5
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8483710,
@@ -3703,7 +3764,8 @@
      "gsax": -1.0
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8475683,
@@ -3770,7 +3832,8 @@
      "gsax": -2.2
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8476932,
@@ -3831,7 +3894,8 @@
      "gsax": 1.7
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478872,
@@ -3898,7 +3962,8 @@
      "gsax": -8.0
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8482657,
@@ -3943,7 +4008,8 @@
      "gsax": -4.2
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482447,
@@ -4003,7 +4069,8 @@
      "gsax": -3.4
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8480947,
@@ -4066,7 +4133,8 @@
      "gsax": -15.9
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8479394,
@@ -4122,7 +4190,8 @@
      "gsax": 1.5
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8478499,
@@ -4185,7 +4254,8 @@
      "gsax": 0.8
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8479973,
@@ -4260,7 +4330,8 @@
      "gsax": -0.9
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8483532,
@@ -4311,7 +4382,8 @@
      "gsax": -2.3
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   },
   {
    "id": 8482076,
@@ -4380,7 +4452,8 @@
      "gsax": 0.7
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": true
   },
   {
    "id": 8480313,
@@ -4446,7 +4519,8 @@
      "gsax": 1.9
     }
    ],
-   "small": false
+   "small": false,
+   "other_team": false
   },
   {
    "id": 8479292,
@@ -4505,7 +4579,8 @@
      "gsax": -0.5
     }
    ],
-   "small": true
+   "small": true,
+   "other_team": false
   }
  ]
 }
