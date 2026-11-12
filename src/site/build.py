@@ -16,6 +16,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-hot-cold", "2026-11-11-sabres-hot-cold.md", "2026-11-11", "Sabres &middot; Players",
+     "Power, Quinn and Benson are running furthest ahead of their history; McLeod, Doan and Norris furthest behind. Our player rating, tested on last season, beat going by pace.",
+     "sabres-hotcold-pace.png"),
     ("sabres-lightning-pregame-nov-11", "2026-11-11-sabres-tbl-pregame.md", "2026-11-11", "Sabres &middot; Pregame",
      "Our model: Lightning 53%, Sabres 47%. Buffalo's second chances meet a Tampa Bay defense that's 3rd at keeping shots away from its net, and the Sabres allow the 6th-most chances in the league.",
      "sabres-tbl-chances.png"),
@@ -432,15 +435,48 @@ def skater_tile(c, m):
 <div class="gb"><h4>{html.escape(c['name'])}</h4><table><tr><th>Season</th><th>Team</th><th>GP</th><th>G</th><th>A</th><th>P</th><th>Chances</th></tr>{rows}</table>
 <p><b>This season:</b> {plural(c['ppg'], 'power-play goal')}, {c['sog']} shots on goal; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed).
 Chances created {c['ixg']:.1f}, or {c['ixg_pg']:.2f} a game{ixg_rk}. Faceoffs won: {fo}.</p>
-<p>{c['hits']} hits, {c['blocks']} blocked shots, {c['take']} takeaways, {c['give']} giveaways.</p></div></div></label>"""
+<p>{c['hits']} hits, {c['blocks']} blocked shots, {c['take']} takeaways, {c['give']} giveaways.</p>{expect_back(c, m)}</div></div></label>"""
 
 
 def plural(n, word):
     return f"{n} {word}" + ("" if n == 1 else "s")
 
 
+def expect_back(c, m):
+    if c.get("rate_p82") is None:
+        return ""
+    return (f"<p><b>Our rating:</b> about {round(c['rate_p82'])} points per 82 games ({round(c['rate_g82'])} goals). "
+            f"If he plays all {m['remaining']} remaining games: about {round(c['proj_g'])} goals, {round(c['proj_p'])} points.</p>")
+
+
+def expect_li(c, m):
+    if c.get("rate_p82") is None:
+        return ""
+    pace = f"This season he's on pace for {round(c['pace_p82'])} points per 82 games; " if c.get("pace_p82") is not None else ""
+    return (f"<li><b>What to expect:</b> {pace}our rating, built from every season since 2023-24, says about {round(c['rate_p82'])} "
+            f"({round(c['rate_g82'])} goals). If he plays all {m['remaining']} remaining games, that's about {round(c['proj_g'])} goals and "
+            f"{round(c['proj_p'])} points for the season.</li>")
+
+
 def ordn_txt(n):
     return f"{n}{'th' if 10 <= n % 100 <= 20 else {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th')}"
+
+
+def rating_howto(m):
+    import json
+    p = ROOT / "reports" / "cards" / "player_model_backtest.json"
+    if not p.exists():
+        return ""
+    bt = json.loads(p.read_text())
+    t17 = next(t for t in bt["tests"] if t["season"] == 20252026 and t["checkpoint_games"] == 17)
+    r = t17["results"]["p"]
+    return f"""<p><b>Our rating</b> is our best guess at how many points he'll score per game from here on. It blends this season with every
+season back to 2023-24, counting last season half as much as this one and the season before half as much again, and pulls a little toward the
+average forward or defenseman so a hot or cold month can't take over. Goals come from the chances he creates, adjusted slightly for how well he's
+finished them over the years. <b>How we checked it:</b> we set it up using 2024-25, then had it project every skater's rest of 2025-26 after 17
+games, using only what was known at the time ({t17['skaters']} skaters). Its projections missed a player's actual rest-of-season points by
+{r['model']['abs_err_rest']:.1f} on average. Going by each player's pace at that point missed by {r['pace']['abs_err_rest']:.1f}; going by last season,
+{r['last_season']['abs_err_rest']:.1f}. Projected season totals assume he plays every remaining game; injuries and lineup changes will move them.</p>"""
 
 
 def skater_howto(m):
@@ -455,6 +491,7 @@ based on where it came from and what kind of shot it was; add them up and you ge
 scored more than the chances were worth. Finishing bounces around much more than chances do. For forwards with 40+ games in back-to-back seasons
 ({m['carry']['pairs']} pairs, 2023-24 to 2025-26), on a scale where 1 means one season perfectly predicts the next and 0 means not at all, chances
 per game scored {m['carry']['chances']:.2f} and finishing {m['carry']['finishing']:.2f}. So a big plus or minus early on often fades.</p>
+{rating_howto(m)}
 <p><b>On the back:</b> power-play goals (scored while the other team was short-handed by a penalty), shots, close-in and rebound shots,
 faceoffs (shown once he's taken 50), and hits, blocked shots, takeaways and giveaways. Those last four are recorded by each rink's scorers.</p>
 <p><b>What's not here yet:</b> ice time. Our feed doesn't include shift data yet, so nothing on these cards is per minute or "while he's on
@@ -485,6 +522,7 @@ Numbers through {asof}.</p>
 <li><b>Chances created {c['ixg']:.1f}</b> ({c['ixg_pg']:.2f} a game): what his own shots at a goalie were worth in goals. He has {plural(c['g'], 'goal')}{(f", {c['en_g']} of them into an empty net" if c['en_g'] else "")}; finishing {c['fin']:+.1f}{(" (empty-net goals don't count toward it)" if c['en_g'] else "")}.</li>
 <li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {plural(c['ppg'], 'power-play goal')}.</li>
 {'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
+{expect_li(c, m)}
 {'<li>He also played for another team this season; the card counts his Sabres games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,

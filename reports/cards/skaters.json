@@ -1,5 +1,7 @@
 {
  "meta": {
+  "team_gp": 17,
+  "remaining": 65,
   "as_of": "2026-11-10",
   "season": "2026-27",
   "team": "BUF",
@@ -116,7 +118,13 @@
      "ixg": 7.7
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 38.6,
+   "rate_p82": 75.5,
+   "pace_p82": 91.6,
+   "pace_g82": 48.2,
+   "proj_g": 40.6,
+   "proj_p": 78.9
   },
   {
    "id": 8482097,
@@ -204,7 +212,13 @@
      "ixg": 6.1
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 22.7,
+   "rate_p82": 52.7,
+   "pace_p82": 77.2,
+   "pace_g82": 43.4,
+   "proj_g": 27.0,
+   "proj_p": 57.8
   },
   {
    "id": 8484145,
@@ -292,7 +306,13 @@
      "ixg": 6.2
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 17.0,
+   "rate_p82": 52.7,
+   "pace_p82": 72.4,
+   "pace_g82": 9.6,
+   "proj_g": 15.5,
+   "proj_p": 56.8
   },
   {
    "id": 8482671,
@@ -380,7 +400,13 @@
      "ixg": 1.5
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 7.5,
+   "rate_p82": 38.7,
+   "pace_p82": 67.5,
+   "pace_g82": 9.6,
+   "proj_g": 7.9,
+   "proj_p": 44.7
   },
   {
    "id": 8483500,
@@ -459,7 +485,13 @@
      "ixg": 5.2
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 15.6,
+   "rate_p82": 39.4,
+   "pace_p82": 48.2,
+   "pace_g82": 19.3,
+   "proj_g": 16.4,
+   "proj_p": 41.2
   },
   {
    "id": 8480839,
@@ -544,7 +576,13 @@
      "ixg": 2.5
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 16.8,
+   "rate_p82": 66.3,
+   "pace_p82": 58.6,
+   "pace_g82": 17.6,
+   "proj_g": 16.3,
+   "proj_p": 62.6
   },
   {
    "id": 8480807,
@@ -632,7 +670,13 @@
      "ixg": 1.4
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 6.4,
+   "rate_p82": 32.9,
+   "pace_p82": 48.2,
+   "pace_g82": 9.6,
+   "proj_g": 7.1,
+   "proj_p": 36.1
   },
   {
    "id": 8481522,
@@ -720,7 +764,13 @@
      "ixg": 1.8
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 9.1,
+   "rate_p82": 34.8,
+   "pace_p82": 43.4,
+   "pace_g82": 4.8,
+   "proj_g": 8.2,
+   "proj_p": 36.5
   },
   {
    "id": 8482803,
@@ -807,7 +857,13 @@
      "ixg": 1.7
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 8.8,
+   "rate_p82": 26.0,
+   "pace_p82": 30.8,
+   "pace_g82": 15.4,
+   "proj_g": 9.9,
+   "proj_p": 26.6
   },
   {
    "id": 8480064,
@@ -904,7 +960,13 @@
      "ixg": 3.7
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 21.8,
+   "rate_p82": 45.2,
+   "pace_p82": 24.1,
+   "pace_g82": 19.3,
+   "proj_g": 21.2,
+   "proj_p": 40.9
   },
   {
    "id": 8482659,
@@ -992,7 +1054,13 @@
      "ixg": 4.5
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 21.2,
+   "rate_p82": 42.2,
+   "pace_p82": 19.3,
+   "pace_g82": 14.5,
+   "proj_g": 19.8,
+   "proj_p": 37.5
   },
   {
    "id": 8479359,
@@ -1080,7 +1148,13 @@
      "ixg": 1.0
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 6.9,
+   "rate_p82": 17.0,
+   "pace_p82": 14.5,
+   "pace_g82": 4.8,
+   "proj_g": 6.5,
+   "proj_p": 16.5
   },
   {
    "id": 8480802,
@@ -1166,7 +1240,13 @@
      "ixg": 1.7
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 12.9,
+   "rate_p82": 43.4,
+   "pace_p82": 16.4,
+   "pace_g82": 5.5,
+   "proj_g": 11.2,
+   "proj_p": 37.4
   },
   {
    "id": 8484797,
@@ -1230,7 +1310,13 @@
      "ixg": 1.3
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 11.4,
+   "rate_p82": 32.5,
+   "pace_p82": 22.4,
+   "pace_g82": 7.5,
+   "proj_g": 10.0,
+   "proj_p": 28.8
   },
   {
    "id": 8483468,
@@ -1311,7 +1397,13 @@
      "ixg": 2.0
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 17.5,
+   "rate_p82": 33.9,
+   "pace_p82": 24.6,
+   "pace_g82": 8.2,
+   "proj_g": 14.8,
+   "proj_p": 29.8
   },
   {
    "id": 8482896,
@@ -1382,7 +1474,13 @@
      "ixg": 0.3
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 6.4,
+   "rate_p82": 17.8,
+   "pace_p82": 18.2,
+   "pace_g82": 9.1,
+   "proj_g": 6.1,
+   "proj_p": 16.1
   },
   {
    "id": 8478502,
@@ -1467,7 +1565,13 @@
      "ixg": 0.2
     }
    ],
-   "small": true
+   "small": true,
+   "rate_g82": 2.5,
+   "rate_p82": 20.0,
+   "pace_p82": 32.8,
+   "pace_g82": 16.4,
+   "proj_g": 3.0,
+   "proj_p": 17.9
   },
   {
    "id": 8484305,
@@ -1535,7 +1639,13 @@
      "ixg": 0.6
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 3.0,
+   "rate_p82": 14.9,
+   "pace_p82": 10.9,
+   "pace_g82": 0.0,
+   "proj_g": 2.4,
+   "proj_p": 13.8
   },
   {
    "id": 8475722,
@@ -1623,7 +1733,13 @@
      "ixg": 2.4
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 24.0,
+   "rate_p82": 49.8,
+   "pace_p82": 10.2,
+   "pace_g82": 10.2,
+   "proj_g": 20.1,
+   "proj_p": 40.5
   },
   {
    "id": 8481806,
@@ -1709,7 +1825,13 @@
      "ixg": 0.4
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 4.1,
+   "rate_p82": 18.7,
+   "pace_p82": 5.5,
+   "pace_g82": 0.0,
+   "proj_g": 3.2,
+   "proj_p": 15.8
   },
   {
    "id": 8475842,
@@ -1807,7 +1929,13 @@
      "ixg": 0.5
     }
    ],
-   "small": false
+   "small": false,
+   "rate_g82": 8.6,
+   "rate_p82": 20.0,
+   "pace_p82": 9.1,
+   "pace_g82": 0.0,
+   "proj_g": 6.8,
+   "proj_p": 16.8
   },
   {
    "id": 8479982,
@@ -1889,7 +2017,13 @@
      "ixg": 0.1
     }
    ],
-   "small": true
+   "small": true,
+   "rate_g82": 3.4,
+   "rate_p82": 22.3,
+   "pace_p82": 41.0,
+   "pace_g82": 0.0,
+   "proj_g": 2.7,
+   "proj_p": 18.7
   },
   {
    "id": 8479941,
@@ -1966,7 +2100,13 @@
      "ixg": 0.3
     }
    ],
-   "small": true
+   "small": true,
+   "rate_g82": 11.4,
+   "rate_p82": 27.1,
+   "pace_p82": 0.0,
+   "pace_g82": 0.0,
+   "proj_g": 9.0,
+   "proj_p": 21.5
   },
   {
    "id": 8476891,
@@ -2038,7 +2178,13 @@
      "ixg": 0.0
     }
    ],
-   "small": true
+   "small": true,
+   "rate_g82": 3.0,
+   "rate_p82": 24.8,
+   "pace_p82": 0.0,
+   "pace_g82": 0.0,
+   "proj_g": 2.4,
+   "proj_p": 19.7
   }
  ]
 }

@@ -157,8 +157,19 @@ def main(as_of=AS_OF):
             of=int(n_grp.get("F" if pos_of.get(pid) in FWD else "D", 0)),
             other_team=bool(c.gp > r.gp),
             spark=list(np.cumsum(gpts).astype(int).tolist()), seasons=seasons, small=bool(r.gp < MIN_GP)))
+    # ---- projections from multi-season history (src/metrics/nhl_player_ratings.py; tested on 2025-26, see player_model_backtest.json)
+    from src.metrics.nhl_player_ratings import player_games, project
+    pr = project(player_games(max_date=as_of), SEASON, as_of)
+    team_gp = int(gm[(gm.season == SEASON)].merge(query(f"SELECT game_id FROM raw_nhl_games WHERE home='{TEAM}' OR away='{TEAM}'"), on="game_id").game_id.nunique())
+    remaining = 82 - team_gp
+    for c in cards:
+        if c["id"] in pr.index:
+            r = pr.loc[c["id"]]
+            c.update(rate_g82=round(float(r.g_pg * 82), 1), rate_p82=round(float(r.p_pg * 82), 1),
+                     pace_p82=round(c["p"] / c["gp"] * 82, 1) if c["gp"] else None, pace_g82=round(c["g"] / c["gp"] * 82, 1) if c["gp"] else None,
+                     proj_g=round(c["g"] + float(r.g_pg) * remaining, 1), proj_p=round(c["p"] + float(r.p_pg) * remaining, 1))
     OUT.mkdir(parents=True, exist_ok=True)
-    meta = dict(as_of=as_of, season=SEASON_LABEL(SEASON), team=TEAM, min_gp=MIN_GP, n_groups=n_grp, lg=lg_rates,
+    meta = dict(team_gp=team_gp, remaining=remaining, as_of=as_of, season=SEASON_LABEL(SEASON), team=TEAM, min_gp=MIN_GP, n_groups=n_grp, lg=lg_rates,
                 goal_check=dict(players=int(len(chk)), mismatches=int(len(mism))), cal=round(float(cal.loc[SEASON]), 3), carry=carry)
     (OUT / "skaters.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
     for c in cards:

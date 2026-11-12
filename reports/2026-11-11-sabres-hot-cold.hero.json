@@ -1,0 +1,34 @@
+{
+ "label": "Sabres: hot and cold",
+ "big": [
+  [
+   92,
+   "Tage Thompson's pace (points per 82)"
+  ],
+  [
+   76,
+   "his rating, from every season since 2023-24"
+  ]
+ ],
+ "note": "Tested on last season, the rating missed a player's rest-of-season points by 6.4 on average; going by pace missed by 9.5.",
+ "explainer": {
+  "kicker": "How we checked",
+  "title": "Rest-of-season points, average miss (2025-26).",
+  "text": "Projected after 17 games with only what was known then:",
+  "fmt": "pts",
+  "bars": [
+   [
+    "Our rating",
+    6.43
+   ],
+   [
+    "Pace so far",
+    9.51
+   ],
+   [
+    "Last season",
+    7.28
+   ]
+  ]
+ }
+}
