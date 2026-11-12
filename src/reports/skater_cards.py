@@ -34,7 +34,7 @@ def team_map():
     return dict(zip(g.id, g.ab))
 
 
-def main(as_of=AS_OF):
+def main(as_of=AS_OF, league=False):
     gm = query(f"SELECT game_id, game_date, season FROM raw_nhl_games WHERE game_date <= '{as_of}'")
     ids = set(gm.game_id)
     tm = team_map()
@@ -127,26 +127,38 @@ def main(as_of=AS_OF):
     pair = pair[pair.player_id.map(pos_all).isin(FWD)]        # forwards only, so position differences don't inflate it
     carry = dict(chances=round(float(pair.c_pg.corr(pair.c_pg_prev)), 2), finishing=round(float(pair.f_pg.corr(pair.f_pg_prev)), 2), pairs=int(len(pair)))
 
-    # ---- cards: every skater who has dressed for the Sabres this season
-    buf = t[(t.season == SEASON) & (t.team == TEAM)].sort_values(["p", "g", "gp"], ascending=False)
+    # ---- cards. Sabres mode: every skater who has dressed for the Sabres this season (skaters.json, pinned for stories).
+    # League mode: every skater in the league, on the team he played for most recently (skaters_league.json).
     dates = dict(zip(gm.game_id, gm.game_date))
+    cur_games = set(gm[gm.season == SEASON].game_id)
+    gpt = pd.concat([goals[["game_id", c]].rename(columns={c: "player_id"}) for c in ("scorer", "a1", "a2")]).dropna()
+    gpt = gpt.assign(player_id=gpt.player_id.astype(int)).groupby(["game_id", "player_id"]).size()
+    tcur = t[t.season == SEASON]
+    if league:
+        last = pt[pt.game_id.isin(cur_games)].assign(d=lambda x: x.game_id.map(dates)).sort_values(["d", "game_id"])
+        now = last.groupby("player_id").team.last()
+        rows = tcur[tcur.team == tcur.player_id.map(now)]
+    else:
+        rows = tcur[tcur.team == TEAM]
+    rows = rows.sort_values(["team", "p", "g", "gp"], ascending=[True, False, False, False])
+    team_games = {}
+    for tm_ in rows.team.unique():
+        team_games[tm_] = int(query(f"SELECT game_id FROM raw_nhl_games WHERE (home='{tm_}' OR away='{tm_}') AND season={SEASON}")
+                              .game_id.isin(cur_games).sum())
+    num_mode = ros[ros.season == SEASON].dropna(subset=["number"]).groupby(["player_id", "team"]).number.agg(lambda n: n.mode().iloc[0])
     cards = []
-    for r in buf.itertuples():
-        pid = int(r.player_id)
+    for r in rows.itertuples():
+        pid, team = int(r.player_id), r.team
         c = cur.loc[pid]
         e = elig.loc[pid] if pid in elig.index else None
-        mine = pt[(pt.player_id == pid) & (pt.team == TEAM)].game_id
-        mine = sorted(set(mine) & set(gm[gm.season == SEASON].game_id), key=lambda g: dates[g])
-        gpts = []
-        for g in mine:
-            gg = goals[goals.game_id == g]
-            gpts.append(int((gg.scorer == pid).sum() + (gg.a1 == pid).sum() + (gg.a2 == pid).sum()))
-        num = ros[(ros.player_id == pid) & (ros.season == SEASON) & (ros.team == TEAM)].number.dropna()
+        mine = sorted(set(pt[(pt.player_id == pid) & (pt.team == team)].game_id) & cur_games, key=lambda g: dates[g])
+        gpts = [int(gpt.get((g, pid), 0)) for g in mine]
+        num = num_mode.get((pid, team))
         seasons = [dict(season=SEASON_LABEL(x.season), team=x.team, gp=int(x.gp), g=int(x.g), a=int(x.a), p=int(x.p),
                         ixg=round(float(x.ixg), 1)) for x in t[t.player_id == pid].sort_values(["season", "first_game"]).itertuples()]
         fo = int(r.fow + r.fol)
         cards.append(dict(
-            id=pid, name=name.get(pid, str(pid)), team=TEAM, number=int(num.mode().iloc[0]) if len(num) else None,
+            id=pid, name=name.get(pid, str(pid)), team=team, number=int(num) if num is not None and num == num else None,
             pos=pos_of.get(pid, ""), grp="F" if pos_of.get(pid) in FWD else "D",
             gp=int(r.gp), g=int(r.g), a=int(r.a), p=int(r.p), ppg=int(r.ppg), sog=int(r.sog),
             ixg=round(float(r.ixg), 1), ixg_pg=round(float(r.ixg / r.gp), 2), fin=round(float(r.ig_unb - r.ixg), 1), en_g=int(r.en_g),
@@ -155,24 +167,29 @@ def main(as_of=AS_OF):
             fo_pct=round(float(r.fow / fo), 3) if fo >= 50 else None, fo_n=fo,
             p_rk=int(e.p_rk) if e is not None else None, ixg_rk=int(e.ixg_rk) if e is not None else None,
             of=int(n_grp.get("F" if pos_of.get(pid) in FWD else "D", 0)),
-            other_team=bool(c.gp > r.gp),
+            other_team=bool(c.gp > r.gp), team_gp=team_games[team], remaining=82 - team_games[team],
             spark=list(np.cumsum(gpts).astype(int).tolist()), seasons=seasons, small=bool(r.gp < MIN_GP)))
     # ---- projections from multi-season history (src/metrics/nhl_player_ratings.py; tested on 2025-26, see player_model_backtest.json)
     from src.metrics.nhl_player_ratings import player_games, project
     pr = project(player_games(max_date=as_of), SEASON, as_of)
-    team_gp = int(gm[(gm.season == SEASON)].merge(query(f"SELECT game_id FROM raw_nhl_games WHERE home='{TEAM}' OR away='{TEAM}'"), on="game_id").game_id.nunique())
+    team_gp = team_games.get(TEAM, 0)
     remaining = 82 - team_gp
     for c in cards:
         if c["id"] in pr.index:
             r = pr.loc[c["id"]]
+            rem = c["remaining"]
             c.update(fin_ratio=round(float(r.fin_ratio), 3), rate_g82=round(float(r.g_pg * 82), 1), rate_p82=round(float(r.p_pg * 82), 1),
                      pace_p82=round(c["p"] / c["gp"] * 82, 1) if c["gp"] else None, pace_g82=round(c["g"] / c["gp"] * 82, 1) if c["gp"] else None,
-                     proj_g=round(c["g"] + float(r.g_pg) * remaining, 1), proj_p=round(c["p"] + float(r.p_pg) * remaining, 1))
+                     proj_g=round(c["g"] + float(r.g_pg) * rem, 1), proj_p=round(c["p"] + float(r.p_pg) * rem, 1))
+        if not league:
+            c.pop("team_gp"); c.pop("remaining")
     OUT.mkdir(parents=True, exist_ok=True)
     meta = dict(team_gp=team_gp, remaining=remaining, as_of=as_of, season=SEASON_LABEL(SEASON), team=TEAM, min_gp=MIN_GP, n_groups=n_grp, lg=lg_rates,
                 goal_check=dict(players=int(len(chk)), mismatches=int(len(mism))), cal=round(float(cal.loc[SEASON]), 3), carry=carry)
-    (OUT / "skaters.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
-    for c in cards:
+    if league:
+        meta.update(team=None, team_gp=None, remaining=None, teams=team_games)
+    (OUT / ("skaters_league.json" if league else "skaters.json")).write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
+    for c in (cards if not league else []):
         print(f"{c['number']!s:>3} {c['name']:<24} {c['pos']} GP {c['gp']:>2} {c['g']}-{c['a']}-{c['p']} PPG {c['ppg']} SOG {c['sog']} "
               f"ixG {c['ixg']} fin {c['fin']:+} FO {c['fo_pct']} rk P {c['p_rk']}/{c['of']} ixG {c['ixg_rk']}")
     print(meta)
@@ -181,4 +198,5 @@ def main(as_of=AS_OF):
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(league="--league" in sys.argv)
