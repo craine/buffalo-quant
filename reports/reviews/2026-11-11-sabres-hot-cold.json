@@ -1,0 +1,90 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "45143808ee210d783c6e8de5c809f61e38b5e623b4b8892214436d4baf1c72b4",
+   "at_utc": "2026-11-12T00:12:20Z",
+   "notes": "Self-check: every number generated from skaters.json + player_model_backtest.json; lead asserted against data; hot list now top 3 excl. Tage (Power, Quinn, Benson), Benson paragraph varied; jargon removed from body ('regression'); halfway comparison now cites both baselines; charts viewed (dumbbell sorted by gap, test bars). Open: Quant to re-derive ratings/backtest independently."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "4787b9dc87b7fd3f2807e942f7dca18faa99ea96d86f5f6fe9184c29089fd873",
+   "at_utc": "2026-11-12T00:19:28Z",
+   "notes": "Re-self-check after Quant fixes: lead split, 'should pick up' framing, Ledger claim removed, finishing % computed from fin_ratio, eighth weight added, stat-heads leakage caveat, card pace hidden under 10 GP."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "4787b9dc87b7fd3f2807e942f7dca18faa99ea96d86f5f6fe9184c29089fd873",
+   "at_utc": "2026-11-12T00:19:29Z",
+   "notes": "Independent Quant (own code, /tmp/qa): GP/G/A/P for all 24 skaters, ratings/projections (max diff 0.0), back-test numbers, fit-on-2024-25 settings, text claims all reproduce. Round 1 FAIL (Ledger promise; method text vs code; 'slightly'; leakage caveat; nits) -> all fixed; round 2 PASS. Leak-free re-run gave same 6.43 points error. Nit applied: 'only player stats known at that point'."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "4787b9dc87b7fd3f2807e942f7dca18faa99ea96d86f5f6fe9184c29089fd873",
+   "at_utc": "2026-11-12T00:19:39Z",
+   "notes": "Independent Quant, 2 rounds; FAIL->PASS; all 9 issues fixed; see report.",
+   "report": "2026-11-11-sabres-hot-cold-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8eb05e2837679954c616b99bfa4e3798dba1c92118d2477074d795c543b96e9a",
+   "at_utc": "2026-11-12T00:21:44Z",
+   "notes": "Editor round-1 edits applied: shorter lead, 'likely to heat up', computed worked examples (shot odds by distance; Power's rating built step by step, asserted equal to project()), legend + footer sample size, test text names all baselines."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "1b994e561206811b398150e2cf614a5c9bb82e77a59637b85d1f8efd2734ca55",
+   "at_utc": "2026-11-12T00:22:21Z",
+   "notes": "Editor round-2 edits applied (Power goals wording, Thompson paragraph, lead spelled out, shot wording, chart subtitle)."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "1b994e561206811b398150e2cf614a5c9bb82e77a59637b85d1f8efd2734ca55",
+   "at_utc": "2026-11-12T00:22:26Z",
+   "notes": "Editor 2 rounds; all must-fix and optional edits applied.",
+   "report": "2026-11-11-sabres-hot-cold-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "dfacf43e4c811216e18a8ed4ba960a07b90a7a266e78d826ff955c44e0aae958",
+   "at_utc": "2026-11-12T00:23:35Z",
+   "notes": "Final Quant on current text: all new numbers verified; 'odds' -> 'chance'; 'about 39'.",
+   "report": "2026-11-11-sabres-hot-cold-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "1b994e561206811b398150e2cf614a5c9bb82e77a59637b85d1f8efd2734ca55",
+  "at_utc": "2026-11-12T00:22:21Z",
+  "notes": "Editor round-2 edits applied (Power goals wording, Thompson paragraph, lead spelled out, shot wording, chart subtitle)."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "4787b9dc87b7fd3f2807e942f7dca18faa99ea96d86f5f6fe9184c29089fd873",
+  "at_utc": "2026-11-12T00:19:39Z",
+  "notes": "Independent Quant, 2 rounds; FAIL->PASS; all 9 issues fixed; see report.",
+  "report": "2026-11-11-sabres-hot-cold-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "1b994e561206811b398150e2cf614a5c9bb82e77a59637b85d1f8efd2734ca55",
+  "at_utc": "2026-11-12T00:22:26Z",
+  "notes": "Editor 2 rounds; all must-fix and optional edits applied.",
+  "report": "2026-11-11-sabres-hot-cold-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "dfacf43e4c811216e18a8ed4ba960a07b90a7a266e78d826ff955c44e0aae958",
+  "at_utc": "2026-11-12T00:23:35Z",
+  "notes": "Final Quant on current text: all new numbers verified; 'odds' -> 'chance'; 'about 39'.",
+  "report": "2026-11-11-sabres-hot-cold-final.md"
+ }
+}

@@ -17,7 +17,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("sabres-hot-cold", "2026-11-11-sabres-hot-cold.md", "2026-11-11", "Sabres &middot; Players",
-     "Power, Quinn and Benson are running furthest ahead of their history; McLeod, Doan and Norris furthest behind. Our player rating, tested on last season, beat going by pace.",
+     "Power, Quinn and Benson are running furthest ahead of their history; McLeod, Doan and Norris are likely to heat up. Our player rating, tested on last season, beat going by pace.",
      "sabres-hotcold-pace.png"),
     ("sabres-lightning-pregame-nov-11", "2026-11-11-sabres-tbl-pregame.md", "2026-11-11", "Sabres &middot; Pregame",
      "Our model: Lightning 53%, Sabres 47%. Buffalo's second chances meet a Tampa Bay defense that's 3rd at keeping shots away from its net, and the Sabres allow the 6th-most chances in the league.",
@@ -452,7 +452,12 @@ def expect_back(c, m):
 def expect_li(c, m):
     if c.get("rate_p82") is None:
         return ""
-    pace = f"This season he's on pace for {round(c['pace_p82'])} points per 82 games; " if c.get("pace_p82") is not None else ""
+    if c.get("pace_p82") is None:
+        pace = ""
+    elif c["gp"] < 10:
+        pace = f"He's played only {plural(c['gp'], 'game')} this season, too few for a pace to mean much; "
+    else:
+        pace = f"This season he's on pace for {round(c['pace_p82'])} points per 82 games; "
     return (f"<li><b>What to expect:</b> {pace}our rating, built from every season since 2023-24, says about {round(c['rate_p82'])} "
             f"({round(c['rate_g82'])} goals). If he plays all {m['remaining']} remaining games, that's about {round(c['proj_g'])} goals and "
             f"{round(c['proj_p'])} points for the season.</li>")
@@ -470,11 +475,12 @@ def rating_howto(m):
     bt = json.loads(p.read_text())
     t17 = next(t for t in bt["tests"] if t["season"] == 20252026 and t["checkpoint_games"] == 17)
     r = t17["results"]["p"]
-    return f"""<p><b>Our rating</b> is our best guess at how many points he'll score per game from here on. It blends this season with every
-season back to 2023-24, counting last season half as much as this one and the season before half as much again, and pulls a little toward the
-average forward or defenseman so a hot or cold month can't take over. Goals come from the chances he creates, adjusted slightly for how well he's
-finished them over the years. <b>How we checked it:</b> we set it up using 2024-25, then had it project every skater's rest of 2025-26 after 17
-games, using only what was known at the time ({t17['skaters']} skaters). Its projections missed a player's actual rest-of-season points by
+    return f"""<p><b>Our rating</b> is our best guess at how many points he'll score per game from here on. It blends his assists and the chances he
+creates this season with every season back to 2023-24, counting last season half as much as this one and each season before half as much again,
+and pulls a little toward the average forward or defenseman so a hot or cold month can't take over. Goals come from those chances, adjusted for
+how well he's finished over his career; that adjustment is pulled toward average, because finishing carries over from year to year much less
+than chances do. <b>How we checked it:</b> we set it up using 2024-25, then had it project every skater's rest of 2025-26 after 17
+games, using only player stats known at the time ({t17['skaters']} skaters). Its projections missed a player's actual rest-of-season points by
 {r['model']['abs_err_rest']:.1f} on average. Going by each player's pace at that point missed by {r['pace']['abs_err_rest']:.1f}; going by last season,
 {r['last_season']['abs_err_rest']:.1f}. Projected season totals assume he plays every remaining game; injuries and lineup changes will move them.</p>"""
 

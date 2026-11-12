@@ -165,7 +165,7 @@ def main(as_of=AS_OF):
     for c in cards:
         if c["id"] in pr.index:
             r = pr.loc[c["id"]]
-            c.update(rate_g82=round(float(r.g_pg * 82), 1), rate_p82=round(float(r.p_pg * 82), 1),
+            c.update(fin_ratio=round(float(r.fin_ratio), 3), rate_g82=round(float(r.g_pg * 82), 1), rate_p82=round(float(r.p_pg * 82), 1),
                      pace_p82=round(c["p"] / c["gp"] * 82, 1) if c["gp"] else None, pace_g82=round(c["g"] / c["gp"] * 82, 1) if c["gp"] else None,
                      proj_g=round(c["g"] + float(r.g_pg) * remaining, 1), proj_p=round(c["p"] + float(r.p_pg) * remaining, 1))
     OUT.mkdir(parents=True, exist_ok=True)
