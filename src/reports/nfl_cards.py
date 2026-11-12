@@ -22,6 +22,10 @@ from src.db import ROOT, query
 OUT = ROOT / "reports" / "cards"
 SEASON = 2026
 WEEK = 9              # cards pinned through this week; --latest uses the newest complete week
+ROSTER_WEEK = 10      # rosters as of this week (each player's latest entry up to it); --latest uses the newest
+ROSTERED = {"ACT": "Active roster", "INA": "Active roster (inactive for the latest game)", "RES": "Reserve list (injured reserve or similar)",
+            "DEV": "Practice squad"}
+MIN_FGA, MIN_PUNTS = 10, 15
 MIN_GP = 4            # games played, to be ranked
 MIN_DB = 100          # QB dropbacks, to be ranked
 EDGE_PRESS, EDGE_TACKLES = 1.0, 6.0   # per game: a linebacker who rushes the passer like an edge rusher
@@ -30,21 +34,26 @@ HIST_FROM = 2018
 # PFR snap-count position -> card group
 POS_GROUP = {"QB": "QB", "RB": "RB", "HB": "RB", "FB": "FB", "WR": "WR", "TE": "TE", "C": "OL", "G": "OL", "T": "OL", "OL": "OL",
              "DE": "DL", "DT": "DL", "NT": "DL", "DL": "DL", "LB": "LB", "ILB": "LB", "OLB": "LB", "MLB": "LB",
-             "CB": "CB", "S": "S", "FS": "S", "SS": "S", "SAF": "S"}
-GROUPS = ["QB", "RB", "FB", "WR", "TE", "OL", "DL", "LB", "CB", "S"]
+             "CB": "CB", "S": "S", "FS": "S", "SS": "S", "SAF": "S", "K": "K", "P": "P", "LS": "LS"}
+ROSTER_GROUP = {"QB": "QB", "RB": "RB", "FB": "FB", "WR": "WR", "TE": "TE", "OL": "OL", "DL": "DL", "LB": "LB", "K": "K", "P": "P", "LS": "LS"}
+GROUPS = ["QB", "RB", "FB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "K", "P", "LS", "ST"]
 POS_NAME = {"QB": "Quarterback", "RB": "Running back", "HB": "Running back", "FB": "Fullback", "WR": "Wide receiver",
             "TE": "Tight end", "C": "Center", "G": "Guard", "T": "Offensive tackle", "OT": "Offensive tackle", "OL": "Offensive lineman",
             "DE": "Defensive end", "DT": "Defensive tackle", "NT": "Nose tackle", "DL": "Defensive lineman", "LB": "Linebacker",
             "ILB": "Inside linebacker", "MLB": "Middle linebacker", "OLB": "Outside linebacker", "CB": "Cornerback", "S": "Safety",
-            "FS": "Safety", "SS": "Safety", "SAF": "Safety", "DB": "Defensive back"}
+            "FS": "Safety", "SS": "Safety", "SAF": "Safety", "DB": "Defensive back", "K": "Kicker", "P": "Punter", "LS": "Long snapper"}
 # group -> (headline column, headline label); group -> (rank column, rank wording); FB and OL are not ranked
 BIG = {"QB": ("pass_yds", "passing yards"), "RB": ("scrim", "yards from scrimmage"), "FB": ("scrim", "yards from scrimmage"),
        "WR": ("rec_yds", "receiving yards"), "TE": ("rec_yds", "receiving yards"), "OL": ("snaps", "snaps"),
-       "DL": ("pressures", "pressures"), "LB": ("tackles", "tackles"), "CB": ("pd", "passes defended"), "S": ("tackles", "tackles")}
+       "DL": ("pressures", "pressures"), "LB": ("tackles", "tackles"), "CB": ("pd", "passes defended"), "S": ("tackles", "tackles"),
+       "K": ("fg_made", "field goals"), "P": ("punts", "punts"), "LS": ("st_snaps", "special-teams snaps"),
+       "ST": ("st_snaps", "special-teams snaps")}
 RANK_ON = {"QB": ("epa_db", "points added per dropback"), "RB": ("scrim", "yards from scrimmage per game"),
            "WR": ("rec_yds", "receiving yards per game"), "TE": ("rec_yds", "receiving yards per game"),
            "DL": ("pressures", "pressures per game"), "LB": ("tackles", "tackles per game"),
-           "CB": ("pd", "passes defended per game"), "S": ("tackles", "tackles per game")}
+           "CB": ("pd", "passes defended per game"), "S": ("tackles", "tackles per game"),
+           "K": ("fg_pct", "field-goal percentage"), "P": ("net_avg", "net punting average")}
+NOT_PER_GAME = {"QB", "K", "P"}   # ranked on a rate, not a per-game total
 
 
 def norm(name):
@@ -68,8 +77,9 @@ def tackles(df):
     return df.def_tackles_solo + df.def_tackles_with_assist + df.def_tackle_assists
 
 
-def main(week=WEEK):
+def main(week=WEEK, roster_week=ROSTER_WEEK):
     week = week or latest_week()
+    roster_week = roster_week or int(query(f"SELECT MAX(week) w FROM raw_rosters_weekly WHERE season={SEASON}").w.iloc[0])
     pl = query("SELECT gsis_id, pfr_id, display_name, position, jersey_number, rookie_season, last_season FROM raw_players ORDER BY gsis_id")
     pl = pl.drop_duplicates("gsis_id")
     info = pl.set_index("gsis_id")
@@ -81,8 +91,6 @@ def main(week=WEEK):
         sn[c] = sn[c].fillna(0)
     sn = sn[sn.offense_snaps + sn.defense_snaps + sn.st_snaps > 0].copy()
     sn["od"] = sn.offense_snaps + sn.defense_snaps
-    keep = sn.groupby("pfr_player_id").od.sum()
-    sn = sn[sn.pfr_player_id.isin(keep[keep > 0].index)]
 
     # ---- link PFR id -> gsis id
     pw = query(f"SELECT * FROM raw_player_week WHERE season_type='REG' AND season BETWEEN {HIST_FROM} AND {SEASON} ORDER BY season, week, player_id")
@@ -110,7 +118,8 @@ def main(week=WEEK):
     sn["pct"] = np.where(sn.offense_snaps >= sn.defense_snaps, sn.offense_pct, sn.defense_pct)
     sn.loc[sn.od == 0, "pct"] = np.nan                     # special-teams-only games don't count toward snap share
     pos = sn[sn.od > 0].groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
-    games = sn.groupby("gsis").agg(snaps=("od", "sum"), pct=("pct", "mean"))
+    games = sn.groupby("gsis").agg(snaps=("od", "sum"), st_snaps=("st_snaps", "sum"), pct=("pct", "mean"))
+    pos_any = sn.groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
     gweeks = (pd.concat([sn[["gsis", "week"]], cur[cur.player_id.isin(games.index)][["player_id", "week"]].rename(columns={"player_id": "gsis"})])
               .drop_duplicates().groupby("gsis").week.apply(sorted))   # a snap row or a stat line: the snap file misses some games
     games["gp"] = gweeks.map(len)
@@ -121,8 +130,15 @@ def main(week=WEEK):
     team_last = tw.groupby("team").week.max()
     week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}").d.iloc[0]
 
+    # ---- rosters: each player's latest entry up to ROSTER_WEEK
+    ro = query(f"""SELECT week, team, gsis_id, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
+                   WHERE season={SEASON} AND game_type='REG' AND week<={roster_week} AND gsis_id IS NOT NULL ORDER BY week, team, gsis_id""")
+    ro = ro.sort_values(["week", "team"]).groupby("gsis_id").tail(1).set_index("gsis_id")
+    on_roster = ro[ro.status.isin(ROSTERED)]
+
     num = cur.select_dtypes("number").columns.drop(["season", "week"])
     tot = cur.groupby("player_id")[list(num)].sum()
+    tot["fg_long"] = cur.groupby("player_id").fg_long.max()     # a long is a max, not a sum
 
     # ---- QB points added per dropback (scrambles credit the QB as rusher; no two-point tries)
     db = query(f"""SELECT COALESCE(passer_player_id, rusher_player_id) AS qb, week, epa FROM raw_pbp
@@ -144,24 +160,45 @@ def main(week=WEEK):
     pft = pf.groupby("gsis")[["def_pressures", "def_missed_tackles", "def_targets", "def_completions_allowed", "def_yards_allowed"]].sum()
 
     rows = []
-    for gid, g in games.iterrows():
-        p = pos.get(gid)
-        if p == "DB" and gid in info.index:
-            p = "S" if info.loc[gid, "position"] in ("S", "FS", "SS", "SAF") else "CB"
-        grp = POS_GROUP.get(p)
+    roster_only = [g for g in on_roster.index if g not in games.index]
+    for gid in list(games.index) + roster_only:
+        played = gid in games.index
+        g = games.loc[gid] if played else None
+        if played:
+            p = pos.get(gid, pos_any.get(gid))
+            if p == "DB" and gid in info.index:
+                p = "S" if info.loc[gid, "position"] in ("S", "FS", "SS", "SAF") else "CB"
+            grp = POS_GROUP.get(p)
+            if grp is not None and g.snaps == 0 and grp not in ("K", "P", "LS"):
+                grp = "ST"              # played only on special teams
+        else:
+            r0 = ro.loc[gid]
+            p = r0.position
+            if p == "DB":
+                p = "S" if r0.depth_chart_position in ("S", "FS", "SS") else "CB"
+            grp = ROSTER_GROUP.get(p, POS_GROUP.get(p))
         if grp is None:
-            continue                    # specialists: not in the first cut
+            continue
         t = tot.loc[gid] if gid in tot.index else pd.Series(0, index=tot.columns)
         f = pft.loc[gid] if gid in pft.index else pd.Series(0, index=pft.columns)
         q = qb.loc[gid] if gid in qb.index else None
-        jn = info.loc[gid, "jersey_number"] if gid in info.index else None
-        name = info.loc[gid, "display_name"] if gid in info.index else last.loc[gid, "player"]
+        jn = ro.loc[gid, "jersey_number"] if gid in ro.index and ro.loc[gid, "jersey_number"] == ro.loc[gid, "jersey_number"] else (
+            info.loc[gid, "jersey_number"] if gid in info.index else None)
+        name = info.loc[gid, "display_name"] if gid in info.index else (last.loc[gid, "player"] if played else gid)
+        played_team = last.loc[gid, "team"] if played else None
+        last_wk = int(last.loc[gid, "week"]) if played else 0
+        # current team: the roster's, when the roster entry is at least as new as his last game; else the team he last played for
+        rteam = ro.loc[gid, "team"] if gid in on_roster.index and ro.loc[gid, "week"] >= last_wk else None
+        team = rteam or played_team
         rows.append(dict(
-            id=gid, name=name, team=last.loc[gid, "team"], last_week=int(last.loc[gid, "week"]),
-            team_last_week=int(team_last.get(last.loc[gid, "team"], week)), grp=grp, pos=p,
+            id=gid, name=name, team=team, last_week=last_wk, played_team=played_team,
+            team_last_week=int(team_last.get(played_team, week)) if played else 0,
+            status=ro.loc[gid, "status"] if gid in on_roster.index else None, grp=grp, pos=p,
             number=int(jn) if jn is not None and jn == jn else None,
-            gp=int(g.gp), gp_pfr=int(g.gp_pfr), snaps=int(g.snaps), snap_pct=float(g.pct) if g.pct == g.pct else None,
-            other_teams=[x for x in teams_played.loc[gid] if x != last.loc[gid, "team"]],
+            gp=int(g.gp) if played else 0, gp_pfr=int(g.gp_pfr) if played else 0, snaps=int(g.snaps) if played else 0,
+            st_snaps=int(g.st_snaps) if played else 0,
+            snap_pct=float(g.pct) if played and g.pct == g.pct else None,
+            other_teams=[x for x in teams_played.loc[gid] if x != team] if played else [],
             cmp=int(t.completions), att=int(t.attempts), pass_yds=int(t.passing_yards), pass_td=int(t.passing_tds),
             ints=int(t.passing_interceptions), sacked=int(t.sacks_suffered),
             car=int(t.carries), rush_yds=int(t.rushing_yards), rush_td=int(t.rushing_tds),
@@ -171,13 +208,26 @@ def main(week=WEEK):
             def_int=int(t.def_interceptions), pd=int(t.def_pass_defended), ff=int(t.def_fumbles_forced), def_td=int(t.def_tds),
             pressures=int(f.def_pressures), missed_tk=int(f.def_missed_tackles), cov_tgt=int(f.def_targets),
             cov_cmp=int(f.def_completions_allowed), cov_yds=int(f.def_yards_allowed), penalties=int(t.penalties),
-            n_db=int(q.n_db) if q is not None else 0, epa_db=float(q.epa / q.n_db) if q is not None and q.n_db else None))
+            n_db=int(q.n_db) if q is not None else 0, epa_db=float(q.epa / q.n_db) if q is not None and q.n_db else None,
+            fg_made=int(t.fg_made), fg_att=int(t.fg_att), fg_long=int(t.fg_long) if t.fg_long == t.fg_long else 0,
+            fg_u40=[int(t.fg_made_0_19 + t.fg_made_20_29 + t.fg_made_30_39), int(t.fg_made_0_19 + t.fg_made_20_29 + t.fg_made_30_39
+                     + t.fg_missed_0_19 + t.fg_missed_20_29 + t.fg_missed_30_39)],
+            fg_40=[int(t.fg_made_40_49), int(t.fg_made_40_49 + t.fg_missed_40_49)],
+            fg_50=[int(t.fg_made_50_59 + t.fg_made_60_), int(t.fg_made_50_59 + t.fg_made_60_ + t.fg_missed_50_59 + t.fg_missed_60_)],
+            pat_made=int(t.pat_made), pat_att=int(t.pat_att),
+            punts=int(t.pt_att), punt_yds=int(t.pt_yards), punt_net=int(t.pt_net_yards), punt_i20=int(t.pt_inside_20), punt_tb=int(t.pt_touchback),
+            pr=int(t.punt_returns), pr_yds=int(t.punt_return_yards), kr=int(t.kickoff_returns), kr_yds=int(t.kickoff_return_yards),
+            st_td=int(t.special_teams_tds)))
     c = pd.DataFrame(rows)
     c["scrim"] = c.rush_yds + c.rec_yds
+    c["fg_pct"] = (c.fg_made / c.fg_att).where(c.fg_att > 0)
+    c["net_avg"] = (c.punt_net / c.punts).where(c.punts > 0)
     # edge rushers are listed as linebackers: card them with the pass rushers when they play like one
     per_press = c.pressures / c.gp_pfr.clip(lower=1)
     c["edge"] = (c.grp == "LB") & (per_press >= EDGE_PRESS) & (c.tackles / c.gp < EDGE_TACKLES)
     c.loc[c.edge, "grp"] = "DL"
+
+    qualified = {"QB": lambda d: d.n_db >= MIN_DB, "K": lambda d: d.fg_att >= MIN_FGA, "P": lambda d: d.punts >= MIN_PUNTS}
 
     def per_game(df, col):
         return df[col] / (df.gp_pfr.clip(lower=1) if col == "pressures" else df.gp)
@@ -185,16 +235,20 @@ def main(week=WEEK):
     c["rk"], c["of"] = None, None
     lg = {"QB_all": float(db.epa.sum() / len(db))}
     for grp, (col, _) in RANK_ON.items():
-        m = (c.grp == grp) & ((c.n_db >= MIN_DB) if grp == "QB" else (c.gp >= MIN_GP))
-        val = c.loc[m, col] if grp == "QB" else per_game(c[m], col)
+        m = (c.grp == grp) & (qualified[grp](c) if grp in qualified else (c.gp >= MIN_GP))
+        val = c.loc[m, col] if grp in NOT_PER_GAME else per_game(c[m], col)
         c.loc[m, "rk"] = val.rank(ascending=False, method="min").astype(int)
         c.loc[m, "of"] = int(m.sum())
-        lg[grp] = float(val.mean()) if grp != "QB" else lg["QB_all"]
+        lg[grp] = lg["QB_all"] if grp == "QB" else (
+            float(c[c.grp == grp].fg_made.sum() / c[c.grp == grp].fg_att.sum()) if grp == "K" else
+            float(c[c.grp == grp].punt_net.sum() / c[c.grp == grp].punts.sum()) if grp == "P" else float(val.mean()))
 
     # ---- week-by-week running totals for the sparkline
     wk = cur.assign(scrim=cur.rushing_yards + cur.receiving_yards, tackles=tackles(cur)).rename(
         columns={"passing_yards": "pass_yds", "receiving_yards": "rec_yds", "def_pass_defended": "pd"})
-    by_week = {col: wk.groupby(["player_id", "week"])[col].sum() for col in ("pass_yds", "scrim", "rec_yds", "tackles", "pd")}
+    wk = wk.rename(columns={"pt_att": "punts"})
+    by_week = {col: wk.groupby(["player_id", "week"])[col].sum() for col in ("pass_yds", "scrim", "rec_yds", "tackles", "pd", "fg_made", "punts")}
+    by_week["st_snaps"] = sn.groupby(["gsis", "week"]).st_snaps.sum()
     by_week["pressures"] = pf.groupby(["gsis", "week"]).def_pressures.sum()
     by_week["snaps"] = sn.groupby(["gsis", "week"]).od.sum()
 
@@ -213,14 +267,15 @@ def main(week=WEEK):
         pass_yds=("passing_yards", "sum"), pass_td=("passing_tds", "sum"), ints=("passing_interceptions", "sum"),
         rush_yds=("rushing_yards", "sum"), rush_td=("rushing_tds", "sum"), rec=("receptions", "sum"), rec_yds=("receiving_yards", "sum"),
         rec_td=("receiving_tds", "sum"), tackles=("tk", "sum"), sacks=("def_sacks", "sum"), def_int=("def_interceptions", "sum"),
-        pd=("def_pass_defended", "sum"))
+        pd=("def_pass_defended", "sum"), fg_made=("fg_made", "sum"), fg_att=("fg_att", "sum"), punts=("pt_att", "sum"),
+        punt_yds=("pt_yards", "sum"))
     hist = hg.join(hp).fillna(0).reset_index()
     hist_by = {pid: g for pid, g in hist.groupby("player_id")}
 
     cards = []
     for r in c.to_dict("records"):
         col, label = BIG[r["grp"]]
-        weeks = gweeks.loc[r["id"]]
+        weeks = gweeks.loc[r["id"]] if r["gp"] else []
         s = by_week[col]
         r["spark"] = np.cumsum([int(s.get((r["id"], w), 0)) for w in weeks]).tolist()
         r["big"], r["big_label"] = r[col], label
@@ -229,8 +284,11 @@ def main(week=WEEK):
         r["seasons"] = [dict(season=int(x.season), team=x.team, gp=int(x.gp), pass_yds=int(x.pass_yds), pass_td=int(x.pass_td),
                              ints=int(x.ints), rush_yds=int(x.rush_yds), rush_td=int(x.rush_td), rec=int(x.rec),
                              rec_yds=int(x.rec_yds), rec_td=int(x.rec_td), tackles=int(x.tackles), sacks=float(x.sacks),
-                             def_int=int(x.def_int), pd=int(x.pd)) for x in h.itertuples()]
-        r["small"] = bool(r["n_db"] < MIN_DB if r["grp"] == "QB" else r["gp"] < MIN_GP)
+                             def_int=int(x.def_int), pd=int(x.pd), fg_made=int(x.fg_made), fg_att=int(x.fg_att), punts=int(x.punts),
+                             punt_yds=int(x.punt_yds)) for x in h.itertuples()]
+        if not r["gp"]:              # on a roster, hasn't played this season: headline is his NFL games since 2018
+            r["big"], r["big_label"] = sum(s["gp"] for s in r["seasons"]), "NFL games since 2018"
+        r["small"] = bool(r["gp"] > 0 and (r["n_db"] < MIN_DB if r["grp"] == "QB" else r["gp"] < MIN_GP))
         r["number"] = None if r["number"] is None or r["number"] != r["number"] else int(r["number"])
         for k, v in list(r.items()):
             if isinstance(v, (bool, np.bool_)):
@@ -241,7 +299,7 @@ def main(week=WEEK):
                 r[k] = None if np.isnan(v) else float(v)
         cards.append(r)
 
-    meta = dict(season=SEASON, week=week, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
+    meta = dict(season=SEASON, week=week, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
                 linked_by_name=fallback, unlinked=unlinked)
     OUT.mkdir(parents=True, exist_ok=True)
@@ -253,4 +311,4 @@ def main(week=WEEK):
 
 
 if __name__ == "__main__":
-    main(None if "--latest" in sys.argv else WEEK)
+    main(*((None, None) if "--latest" in sys.argv else (WEEK, ROSTER_WEEK)))

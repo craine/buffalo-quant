@@ -20,10 +20,12 @@ NFL_COLORS = {  # card colors are our own approximations of each club's palette
     "SF": ("#AA0000", "#B3995D", "49ERS"), "SEA": ("#002244", "#69BE28", "SEAHAWKS"),
 }
 GROUP_NAME = {"QB": "quarterbacks", "RB": "running backs", "FB": "fullbacks", "WR": "wide receivers", "TE": "tight ends",
-              "OL": "offensive linemen", "DL": "pass rushers", "LB": "linebackers", "CB": "cornerbacks", "S": "safeties"}
-GROUP_ORDER = ["QB", "RB", "FB", "WR", "TE", "OL", "DL", "LB", "CB", "S"]
+              "OL": "offensive linemen", "DL": "pass rushers", "LB": "linebackers", "CB": "cornerbacks", "S": "safeties",
+              "K": "kickers", "P": "punters", "LS": "long snappers", "ST": "special-teams players"}
+GROUP_ORDER = ["QB", "RB", "FB", "WR", "TE", "OL", "DL", "LB", "CB", "S", "K", "P", "LS", "ST"]
 SINGULAR = {"passing yards": "passing yard", "yards from scrimmage": "yard from scrimmage", "receiving yards": "receiving yard",
-            "snaps": "snap", "pressures": "pressure", "tackles": "tackle", "passes defended": "pass defended"}
+            "snaps": "snap", "pressures": "pressure", "tackles": "tackle", "passes defended": "pass defended",
+            "field goals": "field goal", "punts": "punt", "special-teams snaps": "special-teams snap", "NFL games since 2018": "NFL game since 2018"}
 
 
 def num(n):
@@ -72,8 +74,33 @@ def pos_label(c):
     return "Edge rusher" if c.get("edge") else POS_NAME.get(c["pos"], c["pos"])
 
 
+def returns_line(c):
+    parts = []
+    if c["kr"]:
+        parts.append(f"{pl(c['kr'], 'kickoff return', 'kickoff returns')} for {pl(c['kr_yds'], 'yard', 'yards')}")
+    if c["pr"]:
+        parts.append(f"{pl(c['pr'], 'punt return', 'punt returns')} for {pl(c['pr_yds'], 'yard', 'yards')}")
+    if c["st_td"]:
+        parts.append(pl(c["st_td"], "special-teams touchdown", "special-teams touchdowns"))
+    return (" Returns: " + ", ".join(parts) + ".") if parts else ""
+
+
+def status_txt(c, m):
+    return m["rostered"].get(c["status"], "") if c["status"] else ""
+
+
 def small_stats(c):
     g, games = c["grp"], (c["gp"], "Game" if c["gp"] == 1 else "Games")
+    if not c["gp"]:
+        last = c["seasons"][-1] if c["seasons"] else None
+        return [(0, "Games this season"), (last["season"] if last else "&ndash;", "Last season played"),
+                (last["gp"] if last else 0, "Games that season")]
+    if g == "K":
+        return [games, (f"{c['fg_made']}/{c['fg_att']}", "Field goals"), (c["fg_long"] or "&ndash;", "Long")]
+    if g == "P":
+        return [games, (f"{c['punt_yds'] / c['punts']:.1f}" if c["punts"] else "&ndash;", "Gross average"), (c["punt_i20"], "Inside the 20")]
+    if g in ("LS", "ST"):
+        return [games, (c["tackles"], "Tackle" if c["tackles"] == 1 else "Tackles"), (num(c["kr_yds"] + c["pr_yds"]), "Return yards")]
     if g == "QB":
         pa = f"{c['epa_db']:+.2f}" if c["epa_db"] is not None else "&ndash;"
         return [games, (f"{c['pass_td']}-{c['ints']}", "TD-INT"), (num(c["rush_yds"]), "Rushing yards")]
@@ -102,8 +129,12 @@ def history(c, m):
         head, f = ["Season", "Team", "G", "Rush yds", "Rec yds", "TD"], lambda r: [num(r["rush_yds"]), num(r["rec_yds"]), r["rush_td"] + r["rec_td"]]
     elif g in ("WR", "TE"):
         head, f = ["Season", "Team", "G", "Catches", "Yds", "TD"], lambda r: [r["rec"], num(r["rec_yds"]), r["rec_td"]]
-    elif g == "OL":
+    elif g in ("OL", "LS"):
         head, f = ["Season", "Team", "Games"], lambda r: []
+    elif g == "K":
+        head, f = ["Season", "Team", "G", "FGM", "FGA"], lambda r: [r["fg_made"], r["fg_att"]]
+    elif g == "P":
+        head, f = ["Season", "Team", "G", "Punts", "Avg"], lambda r: [r["punts"], f"{r['punt_yds'] / r['punts']:.1f}" if r["punts"] else "&ndash;"]
     else:
         head, f = ["Season", "Team", "G", "Tkl", "Sacks", "INT"], lambda r: [r["tackles"], num(r["sacks"]), r["def_int"]]
     body = "".join("<tr>" + "".join(f"<td>{v}</td>" for v in [r["season"], r["team"], r["gp"], *f(r)]) + "</tr>" for r in rows)
@@ -111,8 +142,24 @@ def history(c, m):
     return "<table><tr>" + "".join(f"<th>{h}</th>" for h in head) + f"</tr>{body}</table>{note}"
 
 
-def season_line(c):
+def season_line(c, m):
     g = c["grp"]
+    if not c["gp"]:
+        st = status_txt(c, m)
+        return (f"Hasn't played a game this season." + (f" Roster status as of Week {m['roster_week']}: {st.lower()}." if st else ""))
+    if g == "K":
+        rng = lambda a, lbl: f"{a[0]} of {a[1]} {lbl}" if a[1] else None
+        bits = [x for x in (rng(c["fg_u40"], "under 40 yards"), rng(c["fg_40"], "from 40-49"), rng(c["fg_50"], "from 50 or longer")) if x]
+        return (f"{c['fg_made']} of {pl(c['fg_att'], 'field goal', 'field goals')}" + (f" (long {c['fg_long']})" if c["fg_long"] else "")
+                + (": " + ", ".join(bits) if bits else "") + f". {c['pat_made']} of {pl(c['pat_att'], 'extra point', 'extra points')}.")
+    if g == "P":
+        if not c["punts"]:
+            return f"Played {pl(c['gp'], 'game', 'games')} but hasn't punted this season."
+        return (f"{pl(c['punts'], 'punt', 'punts')} for {pl(c['punt_yds'], 'yard', 'yards')} ({c['punt_yds'] / c['punts']:.1f} average, "
+                f"{c['punt_net'] / c['punts']:.1f} net after returns and touchbacks); {c['punt_i20']} inside the 20, {pl(c['punt_tb'], 'touchback', 'touchbacks')}.")
+    if g in ("LS", "ST"):
+        return (f"{pl(c['st_snaps'], 'special-teams snap', 'special-teams snaps')} in {pl(c['gp'], 'game', 'games')}; "
+                f"{pl(c['tackles'], 'tackle', 'tackles')}.{returns_line(c)}")
     yd = lambda n: pl(n, "yard", "yards")
     car = pl(c["car"], "carry", "carries")
     td = lambda n: pl(n, "touchdown", "touchdowns")
@@ -125,12 +172,12 @@ def season_line(c):
     off = ""
     if g in ("RB", "FB", "WR", "TE"):
         if not (c["car"] or c["tgt"]):
-            return f"Played {pl(c['gp'], 'game', 'games')} but hasn't had a carry or a target this season."
+            return f"Played {pl(c['gp'], 'game', 'games')} but hasn't had a carry or a target this season.{returns_line(c)}"
         run = f"{car} for {yd(c['rush_yds'])} and {td(c['rush_td'])}; " if c["car"] else ""
         dfn = (f" On defense: {pl(c['tackles'], 'tackle', 'tackles')}, {pl(c['def_int'], 'interception', 'interceptions')}, "
                f"{pl(c['pd'], 'pass defended', 'passes defended')}." if c["def_int"] or c["pd"] or c["tackles"] >= 3 else "")
         return (f"{run}{pl(c['rec'], 'catch', 'catches')} on {pl(c['tgt'], 'target', 'targets')} for {yd(c['rec_yds'])}"
-                f"{' and ' + td(c['rec_td']) if c['rec_td'] or not c['car'] else ''}. {pl(c['fum_lost'], 'fumble', 'fumbles')} lost.{dfn}")
+                f"{' and ' + td(c['rec_td']) if c['rec_td'] or not c['car'] else ''}. {pl(c['fum_lost'], 'fumble', 'fumbles')} lost.{dfn}{returns_line(c)}")
     if g == "OL":
         share = f" ({c['snap_pct']:.0%} of his team's plays in the games he played)" if c["snap_pct"] is not None else ""
         return f"{pl(c['snaps'], 'snap', 'snaps')}{share}; {pl(c['penalties'], 'penalty', 'penalties')} called on him."
@@ -142,18 +189,27 @@ def season_line(c):
     return (f"{pl(c['tackles'], 'tackle', 'tackles')} ({c['tfl']} for a loss), {pl(c['sacks'], 'sack', 'sacks')}, "
             f"{pl(c['def_int'], 'interception', 'interceptions')}, {pl(c['pd'], 'pass defended', 'passes defended')} (interceptions included), "
             f"{pl(c['ff'], 'forced fumble', 'forced fumbles')}{dtd}. From game charting: {pl(c['pressures'], 'pressure', 'pressures')} on the "
-            f"quarterback and {pl(c['missed_tk'], 'missed tackle', 'missed tackles')}.{cov}{off}")
+            f"quarterback and {pl(c['missed_tk'], 'missed tackle', 'missed tackles')}.{cov}{off}{returns_line(c)}")
 
 
 def rank_text(c, m):
+    if not c["gp"]:
+        return status_txt(c, m) or "hasn't played this season"
     if c["rk"] is None:
+        if c["grp"] in ("LS", "ST"):
+            return f"{GROUP_NAME[c['grp']]} aren't ranked"
+        if c["grp"] == "K":
+            return f"not ranked: fewer than {m['min_fga']} field-goal tries"
+        if c["grp"] == "P":
+            return f"not ranked: fewer than {m['min_punts']} punts"
         if c["grp"] == "OL":
             return "no ranking for linemen"
         if c["grp"] == "FB":
             return "fullbacks aren't ranked"
         need = f"{m['min_db']} dropbacks" if c["grp"] == "QB" else f"{m['min_gp']} games played"
         return f"not ranked: fewer than {need}"
-    val = f" ({c['epa_db']:+.2f})" if c["grp"] == "QB" else ""
+    val = (f" ({c['epa_db']:+.2f})" if c["grp"] == "QB" else f" ({c['fg_made'] / c['fg_att']:.0%})" if c["grp"] == "K"
+           else f" ({c['punt_net'] / c['punts']:.1f})" if c["grp"] == "P" else "")
     return f"<b>{ordn_txt(c['rk'])} of {c['of']}</b> {GROUP_NAME[c['grp']]} in {c['rank_what']}{val}"
 
 
@@ -163,6 +219,10 @@ def league_line(c, m):
         return ""
     if g == "QB":
         return f"He's at {c['epa_db']:+.2f} points added per dropback; the average across the league is {m['lg']['QB_all']:+.2f}."
+    if g == "K":
+        return f"He's made {c['fg_made'] / c['fg_att']:.1%} of his field goals; kickers league-wide have made {m['lg']['K']:.1%}."
+    if g == "P":
+        return f"His net average is {c['punt_net'] / c['punts']:.1f} yards; league-wide it's {m['lg']['P']:.1f}."
     per = c["big"] / (c["gp_pfr"] if g == "DL" else c["gp"]) if c["gp"] else 0
     return (f"He averages {per:,.1f} {c['rank_what'].replace(' per game', '')} a game; the average for ranked {GROUP_NAME[g]} is "
             f"{m['lg'][g]:,.1f}.")
@@ -198,8 +258,13 @@ than {m['edge_tackles']:g} tackles a game. <b>Pressures</b> (sacks, hits and hur
 game charting{pfr_note}. Sacks and tackles are the official counts, so they can differ a little from the charting.</p>
 <p><b>Offensive linemen</b> get playing time and penalties only: the public data doesn't credit individual linemen for blocks or sacks
 allowed. Fullbacks aren't ranked.</p>
+<p><b>Kickers</b> are ranked on the share of field goals made (at least {m['min_fga']} tries); <b>punters</b> on net average, the yards a
+punt gains after the return and touchbacks (at least {m['min_punts']} punts). <b>Long snappers</b> and players who have played only on
+special teams get playing time, tackles and returns, and aren't ranked.</p>
+<p><b>Players who haven't played this season</b> get a card if they're on a roster: the active roster, the practice squad or the reserve
+list (injured reserve and similar), as of Week {m['roster_week']}. Their big number is their NFL games since 2018.</p>
 <p><b>The source:</b> nflverse's weekly player stats, snap counts and play-by-play, and Pro Football Reference charting, regular season only.
-Numbers are season totals. The team shown is the one he last played for; it doesn't track trades or releases after his last game.
+Numbers are season totals. The team shown is his roster team as of Week {m['roster_week']}, or the team he last played for if he's not on a roster.
 Cards marked <b>small sample</b> have fewer than {m['min_gp']} games (or {m['min_db']} dropbacks for a quarterback). Not affiliated with
 the NFL or any team; card designs are our own.</p>"""
 
@@ -225,9 +290,9 @@ def build_nfl_cards():
             notes.append(f"He hasn't played since Week {c['last_week']}.")
         ll = league_line(c, m)
         body = f"""<div class="kicker"><a href="index.html">NFL player cards</a> &middot; {tn}</div><h1>{html.escape(c['name'])}</h1>
-<p class="dek">{pos_label(c)}, {tn}. {big_txt(c)} in {pl(c['gp'], 'game', 'games')}. Numbers through {through}.</p>
+<p class="dek">{pos_label(c)}, {tn}. {(big_txt(c) + ' in ' + pl(c['gp'], 'game', 'games')) if c['gp'] else "Hasn't played this season (" + big_txt(c) + ")"}. Numbers through {through}.</p>
 <div class="cards one">{tile(c, m)}</div>
-<h2>This season</h2><p>{season_line(c)}</p>
+<h2>This season</h2><p>{season_line(c, m)}</p>
 {f'<p>{ll}</p>' if ll else ''}
 {''.join(f'<p>{n}</p>' for n in notes)}
 {'<p><b>Small sample.</b> These numbers can move a lot.</p>' if c['small'] else ''}
@@ -254,7 +319,8 @@ def build_nfl_cards():
               'document.querySelectorAll(".plist").forEach(function(l){var v=[].some.call(l.children,function(a){return a.style.display!=="none"});'
               'l.style.display=v?"":"none";l.previousElementSibling.style.display=v?"":"none"})});</script>')
     missing = len(m["unlinked"])
-    cover = f"One card for every NFL player who has taken an offensive or defensive snap this season ({len(cards):,} of them)"
+    cover = (f"One card for every NFL player who has played this season or is on a roster ({len(cards):,} of them, rosters as of "
+             f"Week {m['roster_week']})")
     foot = (f'<p class="small">{missing} player{"s" if missing > 1 else ""} with snaps couldn\'t be matched to the league\'s stats and '
             f'{"don\'t" if missing > 1 else "doesn\'t"} have a card yet.</p>' if missing else "")
     body = f"""<div class="kicker"><a href="../index.html">Player cards</a> &middot; NFL</div><h1>NFL player cards</h1>

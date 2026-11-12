@@ -74,6 +74,7 @@ All confirmed live for 2026 on 2026-09-20.
 | PFR advanced passing | `pfr_advstats/advstats_week_pass_{year}.parquet` | 2018+ (hard floor) |
 | PFR advanced defense | `pfr_advstats/advstats_week_def_{year}.parquet` | 2018+ |
 | Snap counts | `snap_counts/snap_counts_{year}.parquet` | 2012+ (loaded 2018+); verified 2026-11-10; carries `pfr_player_id` |
+| Weekly rosters | `weekly_rosters/roster_weekly_{year}.parquet` | 2026 loaded; verified 2026-11-12; status (ACT, DEV practice squad, RES reserve, INA) and team by week |
 | Players (one file) | `players/players.parquet` | all; verified 2026-11-12; links `gsis_id` to `pfr_id` (snap counts, PFR charting) |
 
 Current-season files update as games finish. Ingest must be idempotent: re-running replaces

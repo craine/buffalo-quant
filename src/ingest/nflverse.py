@@ -21,6 +21,7 @@ SOURCES = {  # config key -> (table, path template)
     "ftn": ("raw_ftn", "ftn_charting/ftn_charting_{y}.parquet"),
     "participation": ("raw_participation", "pbp_participation/pbp_participation_{y}.parquet"),
     "snap_counts": ("raw_snap_counts", "snap_counts/snap_counts_{y}.parquet"),
+    "rosters_weekly": ("raw_rosters_weekly", "weekly_rosters/roster_weekly_{y}.parquet"),   # verified 2026-11-12
 }
 SINGLE_FILE = {"raw_schedules": "schedules/games.parquet",
                "raw_ngs_passing": "nextgen_stats/ngs_passing.parquet",
