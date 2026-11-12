@@ -1,0 +1,4586 @@
+{
+ "meta": {
+  "as_of": "2026-11-10",
+  "season": "2026-27",
+  "lg_sv": 0.891,
+  "lg_close_sv": 0.815,
+  "n_goalies": 75,
+  "shrink": 600,
+  "past_weight": 0.5,
+  "teams": [
+   "ANA",
+   "BOS",
+   "BUF",
+   "CAR",
+   "CBJ",
+   "CGY",
+   "CHI",
+   "COL",
+   "DAL",
+   "DET",
+   "EDM",
+   "FLA",
+   "LAK",
+   "MIN",
+   "MTL",
+   "NJD",
+   "NSH",
+   "NYI",
+   "NYR",
+   "OTT",
+   "PHI",
+   "PIT",
+   "SEA",
+   "SJS",
+   "STL",
+   "TBL",
+   "TOR",
+   "UTA",
+   "VAN",
+   "VGK",
+   "WPG",
+   "WSH"
+  ]
+ },
+ "cards": [
+  {
+   "id": 8480843,
+   "name": "Lukas Dostal",
+   "team": "ANA",
+   "number": 1,
+   "gp": 10,
+   "sog": 253,
+   "sv": 0.866,
+   "xsv": 0.873,
+   "gsax": -1.8,
+   "rk": 51,
+   "of": 75,
+   "close_sv": 0.783,
+   "close_sog": 83,
+   "blend": 0.1,
+   "blend_rk": 30,
+   "spark": [
+    0.45,
+    2.09,
+    -0.7,
+    0.39,
+    0.84,
+    0.3,
+    2.4,
+    1.2,
+    -0.2,
+    -1.82
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "ANA",
+     "gp": 44,
+     "sog": 1310,
+     "sv": 0.902,
+     "gsax": -1.3
+    },
+    {
+     "season": "2024-25",
+     "team": "ANA",
+     "gp": 54,
+     "sog": 1625,
+     "sv": 0.903,
+     "gsax": 15.6
+    },
+    {
+     "season": "2025-26",
+     "team": "ANA",
+     "gp": 56,
+     "sog": 1513,
+     "sv": 0.888,
+     "gsax": -4.3
+    },
+    {
+     "season": "2026-27",
+     "team": "ANA",
+     "gp": 10,
+     "sog": 253,
+     "sv": 0.866,
+     "gsax": -1.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478024,
+   "name": "Ville Husso",
+   "team": "ANA",
+   "number": 33,
+   "gp": 6,
+   "sog": 129,
+   "sv": 0.868,
+   "xsv": 0.883,
+   "gsax": -1.9,
+   "rk": 52,
+   "of": 75,
+   "close_sv": 0.745,
+   "close_sog": 55,
+   "blend": -0.69,
+   "blend_rk": 67,
+   "spark": [
+    0.45,
+    1.45,
+    0.92,
+    0.73,
+    -2.89,
+    -1.85
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "DET",
+     "gp": 19,
+     "sog": 556,
+     "sv": 0.892,
+     "gsax": -4.3
+    },
+    {
+     "season": "2024-25",
+     "team": "ANA",
+     "gp": 4,
+     "sog": 134,
+     "sv": 0.925,
+     "gsax": 3.1
+    },
+    {
+     "season": "2024-25",
+     "team": "DET",
+     "gp": 9,
+     "sog": 202,
+     "sv": 0.866,
+     "gsax": -10.6
+    },
+    {
+     "season": "2025-26",
+     "team": "ANA",
+     "gp": 20,
+     "sog": 534,
+     "sv": 0.884,
+     "gsax": -4.5
+    },
+    {
+     "season": "2026-27",
+     "team": "ANA",
+     "gp": 6,
+     "sog": 129,
+     "sv": 0.868,
+     "gsax": -1.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476316,
+   "name": "Laurent Brossoit",
+   "team": "ANA",
+   "number": 31,
+   "gp": 4,
+   "sog": 106,
+   "sv": 0.877,
+   "xsv": 0.874,
+   "gsax": 0.3,
+   "rk": 30,
+   "of": 75,
+   "close_sv": 0.75,
+   "close_sog": 40,
+   "blend": 0.38,
+   "blend_rk": 20,
+   "spark": [
+    0.0,
+    -1.44,
+    -1.85,
+    0.33
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "WPG",
+     "gp": 23,
+     "sog": 620,
+     "sv": 0.927,
+     "gsax": 9.8
+    },
+    {
+     "season": "2025-26",
+     "team": "SJS",
+     "gp": 1,
+     "sog": 24,
+     "sv": 0.75,
+     "gsax": -2.7
+    },
+    {
+     "season": "2026-27",
+     "team": "ANA",
+     "gp": 4,
+     "sog": 106,
+     "sv": 0.877,
+     "gsax": 0.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8480280,
+   "name": "Jeremy Swayman",
+   "team": "BOS",
+   "number": 1,
+   "gp": 13,
+   "sog": 362,
+   "sv": 0.92,
+   "xsv": 0.893,
+   "gsax": 9.8,
+   "rk": 3,
+   "of": 75,
+   "close_sv": 0.873,
+   "close_sog": 126,
+   "blend": 0.71,
+   "blend_rk": 8,
+   "spark": [
+    2.07,
+    2.68,
+    1.26,
+    4.83,
+    5.08,
+    5.29,
+    6.73,
+    7.7,
+    6.0,
+    7.92,
+    6.31,
+    6.84,
+    9.81
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "BOS",
+     "gp": 44,
+     "sog": 1287,
+     "sv": 0.916,
+     "gsax": 14.4
+    },
+    {
+     "season": "2024-25",
+     "team": "BOS",
+     "gp": 58,
+     "sog": 1632,
+     "sv": 0.892,
+     "gsax": -14.1
+    },
+    {
+     "season": "2025-26",
+     "team": "BOS",
+     "gp": 55,
+     "sog": 1572,
+     "sv": 0.907,
+     "gsax": 25.4
+    },
+    {
+     "season": "2026-27",
+     "team": "BOS",
+     "gp": 13,
+     "sog": 362,
+     "sv": 0.92,
+     "gsax": 9.8
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8480022,
+   "name": "Michael DiPietro",
+   "team": "BOS",
+   "number": 30,
+   "gp": 5,
+   "sog": 146,
+   "sv": 0.925,
+   "xsv": 0.894,
+   "gsax": 4.5,
+   "rk": 15,
+   "of": 75,
+   "close_sv": 0.898,
+   "close_sog": 49,
+   "blend": 0.62,
+   "blend_rk": 11,
+   "spark": [
+    -0.72,
+    1.24,
+    4.65,
+    4.05,
+    4.54
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "BOS",
+     "gp": 1,
+     "sog": 2,
+     "sv": 1.0,
+     "gsax": 0.2
+    },
+    {
+     "season": "2026-27",
+     "team": "BOS",
+     "gp": 5,
+     "sog": 146,
+     "sv": 0.925,
+     "gsax": 4.5
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8480045,
+   "name": "Ukko-Pekka Luukkonen",
+   "team": "BUF",
+   "number": 1,
+   "gp": 11,
+   "sog": 287,
+   "sv": 0.878,
+   "xsv": 0.881,
+   "gsax": -1.0,
+   "rk": 44,
+   "of": 75,
+   "close_sv": 0.794,
+   "close_sog": 102,
+   "blend": 0.09,
+   "blend_rk": 32,
+   "spark": [
+    -2.87,
+    -3.6,
+    -5.49,
+    -4.58,
+    -4.05,
+    -5.14,
+    -4.78,
+    -4.13,
+    -4.09,
+    -2.28,
+    -0.96
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "BUF",
+     "gp": 54,
+     "sog": 1470,
+     "sv": 0.91,
+     "gsax": 10.9
+    },
+    {
+     "season": "2024-25",
+     "team": "BUF",
+     "gp": 55,
+     "sog": 1490,
+     "sv": 0.887,
+     "gsax": -12.7
+    },
+    {
+     "season": "2025-26",
+     "team": "BUF",
+     "gp": 35,
+     "sog": 931,
+     "sv": 0.909,
+     "gsax": 9.1
+    },
+    {
+     "season": "2026-27",
+     "team": "BUF",
+     "gp": 11,
+     "sog": 287,
+     "sv": 0.878,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481551,
+   "name": "Colten Ellis",
+   "team": "BUF",
+   "number": 92,
+   "gp": 7,
+   "sog": 173,
+   "sv": 0.884,
+   "xsv": 0.875,
+   "gsax": 1.6,
+   "rk": 21,
+   "of": 75,
+   "close_sv": 0.736,
+   "close_sog": 53,
+   "blend": 0.13,
+   "blend_rk": 28,
+   "spark": [
+    0.06,
+    0.41,
+    0.02,
+    2.96,
+    0.94,
+    2.01,
+    1.63
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "BUF",
+     "gp": 16,
+     "sog": 455,
+     "sv": 0.903,
+     "gsax": -0.6
+    },
+    {
+     "season": "2026-27",
+     "team": "BUF",
+     "gp": 7,
+     "sog": 173,
+     "sv": 0.884,
+     "gsax": 1.6
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481611,
+   "name": "Pyotr Kochetkov",
+   "team": "CAR",
+   "number": 52,
+   "gp": 12,
+   "sog": 250,
+   "sv": 0.92,
+   "xsv": 0.887,
+   "gsax": 8.3,
+   "rk": 5,
+   "of": 75,
+   "close_sv": 0.833,
+   "close_sog": 84,
+   "blend": 0.49,
+   "blend_rk": 17,
+   "spark": [
+    0.68,
+    0.84,
+    1.55,
+    2.27,
+    3.11,
+    2.04,
+    4.24,
+    5.1,
+    5.71,
+    8.71,
+    8.4,
+    8.26
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CAR",
+     "gp": 42,
+     "sog": 1031,
+     "sv": 0.911,
+     "gsax": 3.9
+    },
+    {
+     "season": "2024-25",
+     "team": "CAR",
+     "gp": 47,
+     "sog": 1173,
+     "sv": 0.897,
+     "gsax": 0.4
+    },
+    {
+     "season": "2025-26",
+     "team": "CAR",
+     "gp": 8,
+     "sog": 189,
+     "sv": 0.899,
+     "gsax": -0.9
+    },
+    {
+     "season": "2026-27",
+     "team": "CAR",
+     "gp": 12,
+     "sog": 250,
+     "sv": 0.92,
+     "gsax": 8.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8483548,
+   "name": "Brandon Bussi",
+   "team": "CAR",
+   "number": 32,
+   "gp": 7,
+   "sog": 175,
+   "sv": 0.869,
+   "xsv": 0.893,
+   "gsax": -4.3,
+   "rk": 64,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 65,
+   "blend": -0.31,
+   "blend_rk": 61,
+   "spark": [
+    1.23,
+    -0.57,
+    -2.42,
+    -2.17,
+    -2.49,
+    -4.73,
+    -4.26
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "CAR",
+     "gp": 39,
+     "sog": 913,
+     "sv": 0.894,
+     "gsax": 0.8
+    },
+    {
+     "season": "2026-27",
+     "team": "CAR",
+     "gp": 7,
+     "sog": 175,
+     "sv": 0.869,
+     "gsax": -4.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8475660,
+   "name": "Cam Talbot",
+   "team": "CBJ",
+   "number": 33,
+   "gp": 9,
+   "sog": 231,
+   "sv": 0.909,
+   "xsv": 0.888,
+   "gsax": 4.9,
+   "rk": 12,
+   "of": 75,
+   "close_sv": 0.802,
+   "close_sog": 81,
+   "blend": 0.2,
+   "blend_rk": 24,
+   "spark": [
+    1.11,
+    -2.22,
+    -0.43,
+    -1.16,
+    0.85,
+    1.68,
+    3.25,
+    5.03,
+    4.86
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "LAK",
+     "gp": 54,
+     "sog": 1491,
+     "sv": 0.913,
+     "gsax": 8.1
+    },
+    {
+     "season": "2024-25",
+     "team": "DET",
+     "gp": 47,
+     "sog": 1296,
+     "sv": 0.9,
+     "gsax": 1.9
+    },
+    {
+     "season": "2025-26",
+     "team": "DET",
+     "gp": 34,
+     "sog": 797,
+     "sv": 0.883,
+     "gsax": -9.1
+    },
+    {
+     "season": "2026-27",
+     "team": "CBJ",
+     "gp": 9,
+     "sog": 231,
+     "sv": 0.909,
+     "gsax": 4.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482982,
+   "name": "Jet Greaves",
+   "team": "CBJ",
+   "number": 73,
+   "gp": 9,
+   "sog": 216,
+   "sv": 0.88,
+   "xsv": 0.883,
+   "gsax": -0.7,
+   "rk": 39,
+   "of": 75,
+   "close_sv": 0.841,
+   "close_sog": 69,
+   "blend": 0.74,
+   "blend_rk": 7,
+   "spark": [
+    -0.39,
+    -1.49,
+    -2.57,
+    -1.49,
+    2.37,
+    -0.02,
+    -0.28,
+    -0.1,
+    -0.67
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CBJ",
+     "gp": 9,
+     "sog": 327,
+     "sv": 0.908,
+     "gsax": 0.8
+    },
+    {
+     "season": "2024-25",
+     "team": "CBJ",
+     "gp": 11,
+     "sog": 339,
+     "sv": 0.938,
+     "gsax": 14.4
+    },
+    {
+     "season": "2025-26",
+     "team": "CBJ",
+     "gp": 55,
+     "sog": 1539,
+     "sv": 0.908,
+     "gsax": 14.4
+    },
+    {
+     "season": "2026-27",
+     "team": "CBJ",
+     "gp": 9,
+     "sog": 216,
+     "sv": 0.88,
+     "gsax": -0.7
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481692,
+   "name": "Dustin Wolf",
+   "team": "CGY",
+   "number": 32,
+   "gp": 10,
+   "sog": 274,
+   "sv": 0.869,
+   "xsv": 0.895,
+   "gsax": -7.1,
+   "rk": 72,
+   "of": 75,
+   "close_sv": 0.77,
+   "close_sog": 87,
+   "blend": -0.3,
+   "blend_rk": 60,
+   "spark": [
+    -1.99,
+    -5.43,
+    -7.2,
+    -6.4,
+    -8.24,
+    -8.77,
+    -8.58,
+    -6.71,
+    -5.97,
+    -7.11
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CGY",
+     "gp": 17,
+     "sog": 467,
+     "sv": 0.893,
+     "gsax": -12.4
+    },
+    {
+     "season": "2024-25",
+     "team": "CGY",
+     "gp": 53,
+     "sog": 1549,
+     "sv": 0.91,
+     "gsax": 13.8
+    },
+    {
+     "season": "2025-26",
+     "team": "CGY",
+     "gp": 57,
+     "sog": 1559,
+     "sv": 0.899,
+     "gsax": -3.0
+    },
+    {
+     "season": "2026-27",
+     "team": "CGY",
+     "gp": 10,
+     "sog": 274,
+     "sv": 0.869,
+     "gsax": -7.1
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482445,
+   "name": "Devin Cooley",
+   "team": "CGY",
+   "number": 1,
+   "gp": 8,
+   "sog": 232,
+   "sv": 0.914,
+   "xsv": 0.902,
+   "gsax": 2.7,
+   "rk": 18,
+   "of": 75,
+   "close_sv": 0.846,
+   "close_sog": 65,
+   "blend": 0.5,
+   "blend_rk": 16,
+   "spark": [
+    0.08,
+    -4.04,
+    -2.24,
+    0.1,
+    2.19,
+    2.64,
+    2.39,
+    2.73
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "SJS",
+     "gp": 6,
+     "sog": 192,
+     "sv": 0.87,
+     "gsax": -5.7
+    },
+    {
+     "season": "2025-26",
+     "team": "CGY",
+     "gp": 31,
+     "sog": 847,
+     "sv": 0.909,
+     "gsax": 13.7
+    },
+    {
+     "season": "2026-27",
+     "team": "CGY",
+     "gp": 8,
+     "sog": 232,
+     "sv": 0.914,
+     "gsax": 2.7
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482949,
+   "name": "Arsenii Sergeev",
+   "team": "CGY",
+   "number": 35,
+   "gp": 1,
+   "sog": 34,
+   "sv": 0.853,
+   "xsv": 0.884,
+   "gsax": -1.1,
+   "rk": 48,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 10,
+   "blend": 0.01,
+   "blend_rk": 38,
+   "spark": [
+    -1.05
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "CGY",
+     "gp": 1,
+     "sog": 28,
+     "sv": 0.964,
+     "gsax": 2.2
+    },
+    {
+     "season": "2026-27",
+     "team": "CGY",
+     "gp": 1,
+     "sog": 34,
+     "sv": 0.853,
+     "gsax": -1.1
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481519,
+   "name": "Spencer Knight",
+   "team": "CHI",
+   "number": 30,
+   "gp": 14,
+   "sog": 413,
+   "sv": 0.881,
+   "xsv": 0.887,
+   "gsax": -2.4,
+   "rk": 56,
+   "of": 75,
+   "close_sv": 0.853,
+   "close_sog": 163,
+   "blend": 0.14,
+   "blend_rk": 27,
+   "spark": [
+    -0.7,
+    -0.48,
+    0.44,
+    -0.92,
+    -0.35,
+    -0.01,
+    -0.79,
+    -1.28,
+    -0.88,
+    0.91,
+    2.89,
+    1.87,
+    1.31,
+    -2.36
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "CHI",
+     "gp": 15,
+     "sog": 452,
+     "sv": 0.894,
+     "gsax": -1.0
+    },
+    {
+     "season": "2024-25",
+     "team": "FLA",
+     "gp": 23,
+     "sog": 560,
+     "sv": 0.907,
+     "gsax": 3.5
+    },
+    {
+     "season": "2025-26",
+     "team": "CHI",
+     "gp": 55,
+     "sog": 1583,
+     "sv": 0.902,
+     "gsax": 8.7
+    },
+    {
+     "season": "2026-27",
+     "team": "CHI",
+     "gp": 14,
+     "sog": 413,
+     "sv": 0.881,
+     "gsax": -2.4
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8482821,
+   "name": "Arvid Soderblom",
+   "team": "CHI",
+   "number": 40,
+   "gp": 5,
+   "sog": 133,
+   "sv": 0.842,
+   "xsv": 0.889,
+   "gsax": -6.2,
+   "rk": 69,
+   "of": 75,
+   "close_sv": 0.73,
+   "close_sog": 37,
+   "blend": -0.96,
+   "blend_rk": 72,
+   "spark": [
+    -2.1,
+    -2.78,
+    -4.03,
+    -5.12,
+    -6.18
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CHI",
+     "gp": 32,
+     "sog": 943,
+     "sv": 0.879,
+     "gsax": -20.5
+    },
+    {
+     "season": "2024-25",
+     "team": "CHI",
+     "gp": 36,
+     "sog": 1087,
+     "sv": 0.898,
+     "gsax": 2.2
+    },
+    {
+     "season": "2025-26",
+     "team": "CHI",
+     "gp": 26,
+     "sog": 774,
+     "sv": 0.88,
+     "gsax": -10.4
+    },
+    {
+     "season": "2026-27",
+     "team": "CHI",
+     "gp": 5,
+     "sog": 133,
+     "sv": 0.842,
+     "gsax": -6.2
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478406,
+   "name": "Mackenzie Blackwood",
+   "team": "COL",
+   "number": 39,
+   "gp": 15,
+   "sog": 384,
+   "sv": 0.901,
+   "xsv": 0.9,
+   "gsax": 0.2,
+   "rk": 31,
+   "of": 75,
+   "close_sv": 0.852,
+   "close_sog": 135,
+   "blend": 0.39,
+   "blend_rk": 19,
+   "spark": [
+    -1.38,
+    -0.58,
+    -1.63,
+    -4.54,
+    -3.82,
+    -2.64,
+    -2.76,
+    -2.0,
+    -1.69,
+    -1.53,
+    -1.2,
+    -1.91,
+    -1.51,
+    0.73,
+    0.22
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "SJS",
+     "gp": 44,
+     "sog": 1383,
+     "sv": 0.899,
+     "gsax": 2.0
+    },
+    {
+     "season": "2024-25",
+     "team": "COL",
+     "gp": 37,
+     "sog": 966,
+     "sv": 0.913,
+     "gsax": 14.5
+    },
+    {
+     "season": "2024-25",
+     "team": "SJS",
+     "gp": 19,
+     "sog": 584,
+     "sv": 0.909,
+     "gsax": 1.9
+    },
+    {
+     "season": "2025-26",
+     "team": "COL",
+     "gp": 38,
+     "sog": 933,
+     "sv": 0.904,
+     "gsax": 3.9
+    },
+    {
+     "season": "2026-27",
+     "team": "COL",
+     "gp": 15,
+     "sog": 384,
+     "sv": 0.901,
+     "gsax": 0.2
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8475809,
+   "name": "Scott Wedgewood",
+   "team": "COL",
+   "number": 41,
+   "gp": 5,
+   "sog": 135,
+   "sv": 0.867,
+   "xsv": 0.907,
+   "gsax": -5.4,
+   "rk": 67,
+   "of": 75,
+   "close_sv": 0.744,
+   "close_sog": 39,
+   "blend": 0.11,
+   "blend_rk": 29,
+   "spark": [
+    -0.44,
+    -0.59,
+    -0.16,
+    -2.81,
+    -5.42
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "DAL",
+     "gp": 32,
+     "sog": 844,
+     "sv": 0.899,
+     "gsax": -7.6
+    },
+    {
+     "season": "2024-25",
+     "team": "COL",
+     "gp": 19,
+     "sog": 447,
+     "sv": 0.917,
+     "gsax": 6.0
+    },
+    {
+     "season": "2024-25",
+     "team": "NSH",
+     "gp": 5,
+     "sog": 131,
+     "sv": 0.878,
+     "gsax": -3.9
+    },
+    {
+     "season": "2025-26",
+     "team": "COL",
+     "gp": 45,
+     "sog": 1093,
+     "sv": 0.921,
+     "gsax": 20.7
+    },
+    {
+     "season": "2026-27",
+     "team": "COL",
+     "gp": 5,
+     "sog": 135,
+     "sv": 0.867,
+     "gsax": -5.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8479979,
+   "name": "Jake Oettinger",
+   "team": "DAL",
+   "number": 29,
+   "gp": 13,
+   "sog": 277,
+   "sv": 0.906,
+   "xsv": 0.882,
+   "gsax": 6.6,
+   "rk": 7,
+   "of": 75,
+   "close_sv": 0.828,
+   "close_sog": 87,
+   "blend": 0.6,
+   "blend_rk": 13,
+   "spark": [
+    0.36,
+    2.05,
+    4.61,
+    6.6,
+    6.65,
+    9.19,
+    9.32,
+    10.08,
+    9.09,
+    7.66,
+    8.92,
+    6.59,
+    6.59
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "DAL",
+     "gp": 54,
+     "sog": 1476,
+     "sv": 0.905,
+     "gsax": 3.0
+    },
+    {
+     "season": "2024-25",
+     "team": "DAL",
+     "gp": 58,
+     "sog": 1611,
+     "sv": 0.909,
+     "gsax": 17.7
+    },
+    {
+     "season": "2025-26",
+     "team": "DAL",
+     "gp": 54,
+     "sog": 1372,
+     "sv": 0.899,
+     "gsax": 3.4
+    },
+    {
+     "season": "2026-27",
+     "team": "DAL",
+     "gp": 13,
+     "sog": 277,
+     "sv": 0.906,
+     "gsax": 6.6
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8479193,
+   "name": "Casey DeSmith",
+   "team": "DAL",
+   "number": 1,
+   "gp": 4,
+   "sog": 110,
+   "sv": 0.909,
+   "xsv": 0.901,
+   "gsax": 0.9,
+   "rk": 25,
+   "of": 75,
+   "close_sv": 0.889,
+   "close_sog": 36,
+   "blend": 0.48,
+   "blend_rk": 18,
+   "spark": [
+    0.01,
+    0.73,
+    -1.45,
+    0.87
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "VAN",
+     "gp": 29,
+     "sog": 760,
+     "sv": 0.895,
+     "gsax": -6.1
+    },
+    {
+     "season": "2024-25",
+     "team": "DAL",
+     "gp": 27,
+     "sog": 761,
+     "sv": 0.915,
+     "gsax": 14.3
+    },
+    {
+     "season": "2025-26",
+     "team": "DAL",
+     "gp": 30,
+     "sog": 760,
+     "sv": 0.907,
+     "gsax": 7.9
+    },
+    {
+     "season": "2026-27",
+     "team": "DAL",
+     "gp": 4,
+     "sog": 110,
+     "sv": 0.909,
+     "gsax": 0.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476434,
+   "name": "John Gibson",
+   "team": "DET",
+   "number": 36,
+   "gp": 12,
+   "sog": 268,
+   "sv": 0.866,
+   "xsv": 0.886,
+   "gsax": -5.3,
+   "rk": 66,
+   "of": 75,
+   "close_sv": 0.788,
+   "close_sog": 85,
+   "blend": 0.02,
+   "blend_rk": 37,
+   "spark": [
+    1.09,
+    0.73,
+    0.46,
+    -2.16,
+    -2.51,
+    -1.14,
+    -1.34,
+    -3.85,
+    -3.39,
+    -5.81,
+    -5.85,
+    -5.34
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "ANA",
+     "gp": 46,
+     "sog": 1343,
+     "sv": 0.888,
+     "gsax": -10.7
+    },
+    {
+     "season": "2024-25",
+     "team": "ANA",
+     "gp": 29,
+     "sog": 812,
+     "sv": 0.911,
+     "gsax": 11.4
+    },
+    {
+     "season": "2025-26",
+     "team": "DET",
+     "gp": 57,
+     "sog": 1461,
+     "sv": 0.901,
+     "gsax": 11.1
+    },
+    {
+     "season": "2026-27",
+     "team": "DET",
+     "gp": 12,
+     "sog": 268,
+     "sv": 0.866,
+     "gsax": -5.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8480193,
+   "name": "Daniil Tarasov",
+   "team": "DET",
+   "number": 80,
+   "gp": 8,
+   "sog": 185,
+   "sv": 0.919,
+   "xsv": 0.887,
+   "gsax": 5.8,
+   "rk": 9,
+   "of": 75,
+   "close_sv": 0.86,
+   "close_sog": 43,
+   "blend": -0.04,
+   "blend_rk": 42,
+   "spark": [
+    0.35,
+    3.99,
+    5.0,
+    4.58,
+    4.88,
+    5.9,
+    6.5,
+    5.82
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CBJ",
+     "gp": 24,
+     "sog": 796,
+     "sv": 0.908,
+     "gsax": -1.8
+    },
+    {
+     "season": "2024-25",
+     "team": "CBJ",
+     "gp": 20,
+     "sog": 544,
+     "sv": 0.881,
+     "gsax": -7.0
+    },
+    {
+     "season": "2025-26",
+     "team": "FLA",
+     "gp": 33,
+     "sog": 925,
+     "sv": 0.895,
+     "gsax": -4.4
+    },
+    {
+     "season": "2026-27",
+     "team": "DET",
+     "gp": 8,
+     "sog": 185,
+     "sv": 0.919,
+     "gsax": 5.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8485545,
+   "name": "Michal Postava",
+   "team": "DET",
+   "number": 35,
+   "gp": 2,
+   "sog": 35,
+   "sv": 0.886,
+   "xsv": 0.897,
+   "gsax": -0.4,
+   "rk": 36,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 10,
+   "blend": -0.06,
+   "blend_rk": 46,
+   "spark": [
+    -0.12,
+    -0.41
+   ],
+   "seasons": [
+    {
+     "season": "2026-27",
+     "team": "DET",
+     "gp": 2,
+     "sog": 35,
+     "sv": 0.886,
+     "gsax": -0.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482221,
+   "name": "Devon Levi",
+   "team": "EDM",
+   "number": 27,
+   "gp": 9,
+   "sog": 248,
+   "sv": 0.899,
+   "xsv": 0.893,
+   "gsax": 1.6,
+   "rk": 22,
+   "of": 75,
+   "close_sv": 0.788,
+   "close_sog": 85,
+   "blend": -0.08,
+   "blend_rk": 48,
+   "spark": [
+    -4.03,
+    -3.31,
+    -2.04,
+    -0.05,
+    -0.25,
+    0.94,
+    -1.01,
+    -0.94,
+    1.55
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "BUF",
+     "gp": 23,
+     "sog": 666,
+     "sv": 0.899,
+     "gsax": 3.4
+    },
+    {
+     "season": "2024-25",
+     "team": "BUF",
+     "gp": 9,
+     "sog": 258,
+     "sv": 0.872,
+     "gsax": -8.6
+    },
+    {
+     "season": "2026-27",
+     "team": "EDM",
+     "gp": 9,
+     "sog": 248,
+     "sv": 0.899,
+     "gsax": 1.6
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8477465,
+   "name": "Tristan Jarry",
+   "team": "EDM",
+   "number": 35,
+   "gp": 8,
+   "sog": 206,
+   "sv": 0.898,
+   "xsv": 0.905,
+   "gsax": -1.5,
+   "rk": 49,
+   "of": 75,
+   "close_sv": 0.796,
+   "close_sog": 54,
+   "blend": -0.28,
+   "blend_rk": 59,
+   "spark": [
+    -3.87,
+    -3.31,
+    -2.54,
+    -5.93,
+    -5.92,
+    -3.85,
+    -1.87,
+    -1.5
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "PIT",
+     "gp": 51,
+     "sog": 1369,
+     "sv": 0.903,
+     "gsax": 6.2
+    },
+    {
+     "season": "2024-25",
+     "team": "PIT",
+     "gp": 36,
+     "sog": 972,
+     "sv": 0.892,
+     "gsax": -10.8
+    },
+    {
+     "season": "2025-26",
+     "team": "EDM",
+     "gp": 19,
+     "sog": 436,
+     "sv": 0.858,
+     "gsax": -11.3
+    },
+    {
+     "season": "2025-26",
+     "team": "PIT",
+     "gp": 14,
+     "sog": 396,
+     "sv": 0.909,
+     "gsax": 5.4
+    },
+    {
+     "season": "2026-27",
+     "team": "EDM",
+     "gp": 8,
+     "sog": 206,
+     "sv": 0.898,
+     "gsax": -1.5
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8477035,
+   "name": "Matt Tomkins",
+   "team": "EDM",
+   "number": 90,
+   "gp": 2,
+   "sog": 50,
+   "sv": 0.88,
+   "xsv": 0.885,
+   "gsax": -0.3,
+   "rk": 34,
+   "of": 75,
+   "close_sv": 0.765,
+   "close_sog": 17,
+   "blend": -0.19,
+   "blend_rk": 55,
+   "spark": [
+    1.36,
+    -0.25
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "TBL",
+     "gp": 6,
+     "sog": 185,
+     "sv": 0.892,
+     "gsax": -2.3
+    },
+    {
+     "season": "2026-27",
+     "team": "EDM",
+     "gp": 2,
+     "sog": 50,
+     "sv": 0.88,
+     "gsax": -0.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8474593,
+   "name": "Jacob Markstrom",
+   "team": "FLA",
+   "number": 25,
+   "gp": 10,
+   "sog": 241,
+   "sv": 0.9,
+   "xsv": 0.9,
+   "gsax": 0.2,
+   "rk": 32,
+   "of": 75,
+   "close_sv": 0.873,
+   "close_sog": 71,
+   "blend": 0.04,
+   "blend_rk": 34,
+   "spark": [
+    2.37,
+    1.79,
+    2.77,
+    2.69,
+    2.2,
+    0.87,
+    -0.32,
+    -1.38,
+    -1.57,
+    0.18
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CGY",
+     "gp": 48,
+     "sog": 1379,
+     "sv": 0.905,
+     "gsax": 15.3
+    },
+    {
+     "season": "2024-25",
+     "team": "NJD",
+     "gp": 49,
+     "sog": 1214,
+     "sv": 0.9,
+     "gsax": 1.5
+    },
+    {
+     "season": "2025-26",
+     "team": "NJD",
+     "gp": 44,
+     "sog": 1113,
+     "sv": 0.883,
+     "gsax": -15.0
+    },
+    {
+     "season": "2026-27",
+     "team": "FLA",
+     "gp": 10,
+     "sog": 241,
+     "sv": 0.9,
+     "gsax": 0.2
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481033,
+   "name": "Akira Schmid",
+   "team": "FLA",
+   "number": 40,
+   "gp": 9,
+   "sog": 229,
+   "sv": 0.886,
+   "xsv": 0.884,
+   "gsax": 0.6,
+   "rk": 29,
+   "of": 75,
+   "close_sv": 0.817,
+   "close_sog": 71,
+   "blend": -0.16,
+   "blend_rk": 53,
+   "spark": [
+    -0.59,
+    -1.71,
+    -1.09,
+    -0.63,
+    -3.08,
+    -1.98,
+    -0.16,
+    0.41,
+    0.61
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NJD",
+     "gp": 19,
+     "sog": 457,
+     "sv": 0.895,
+     "gsax": -3.8
+    },
+    {
+     "season": "2024-25",
+     "team": "VGK",
+     "gp": 5,
+     "sog": 90,
+     "sv": 0.944,
+     "gsax": 4.3
+    },
+    {
+     "season": "2025-26",
+     "team": "VGK",
+     "gp": 34,
+     "sog": 791,
+     "sv": 0.893,
+     "gsax": -6.5
+    },
+    {
+     "season": "2026-27",
+     "team": "FLA",
+     "gp": 9,
+     "sog": 229,
+     "sv": 0.886,
+     "gsax": 0.6
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8484900,
+   "name": "Cooper Black",
+   "team": "FLA",
+   "number": 31,
+   "gp": 1,
+   "sog": 21,
+   "sv": 0.857,
+   "xsv": 0.904,
+   "gsax": -1.0,
+   "rk": 45,
+   "of": 75,
+   "close_sv": 0.714,
+   "close_sog": 7,
+   "blend": -0.16,
+   "blend_rk": 52,
+   "spark": [
+    -0.98
+   ],
+   "seasons": [
+    {
+     "season": "2026-27",
+     "team": "FLA",
+     "gp": 1,
+     "sog": 21,
+     "sv": 0.857,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8475311,
+   "name": "Darcy Kuemper",
+   "team": "LAK",
+   "number": 35,
+   "gp": 10,
+   "sog": 271,
+   "sv": 0.878,
+   "xsv": 0.9,
+   "gsax": -5.8,
+   "rk": 68,
+   "of": 75,
+   "close_sv": 0.818,
+   "close_sog": 88,
+   "blend": -0.05,
+   "blend_rk": 45,
+   "spark": [
+    -4.86,
+    -4.18,
+    -3.46,
+    -5.66,
+    -2.76,
+    -1.64,
+    -1.86,
+    -4.16,
+    -3.87,
+    -5.77
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "WSH",
+     "gp": 33,
+     "sog": 940,
+     "sv": 0.89,
+     "gsax": -11.1
+    },
+    {
+     "season": "2024-25",
+     "team": "LAK",
+     "gp": 50,
+     "sog": 1268,
+     "sv": 0.921,
+     "gsax": 26.5
+    },
+    {
+     "season": "2025-26",
+     "team": "LAK",
+     "gp": 50,
+     "sog": 1234,
+     "sv": 0.891,
+     "gsax": -6.7
+    },
+    {
+     "season": "2026-27",
+     "team": "LAK",
+     "gp": 10,
+     "sog": 271,
+     "sv": 0.878,
+     "gsax": -5.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476341,
+   "name": "Anton Forsberg",
+   "team": "LAK",
+   "number": 31,
+   "gp": 7,
+   "sog": 172,
+   "sv": 0.907,
+   "xsv": 0.908,
+   "gsax": -0.2,
+   "rk": 33,
+   "of": 75,
+   "close_sv": 0.891,
+   "close_sog": 46,
+   "blend": -0.13,
+   "blend_rk": 51,
+   "spark": [
+    -3.25,
+    -2.4,
+    -2.09,
+    -1.27,
+    0.26,
+    -0.74,
+    -0.19
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "OTT",
+     "gp": 30,
+     "sog": 765,
+     "sv": 0.89,
+     "gsax": -8.1
+    },
+    {
+     "season": "2024-25",
+     "team": "OTT",
+     "gp": 30,
+     "sog": 768,
+     "sv": 0.901,
+     "gsax": -2.1
+    },
+    {
+     "season": "2025-26",
+     "team": "LAK",
+     "gp": 36,
+     "sog": 953,
+     "sv": 0.909,
+     "gsax": 5.1
+    },
+    {
+     "season": "2026-27",
+     "team": "LAK",
+     "gp": 7,
+     "sog": 172,
+     "sv": 0.907,
+     "gsax": -0.2
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482661,
+   "name": "Jesper Wallstedt",
+   "team": "MIN",
+   "number": 30,
+   "gp": 17,
+   "sog": 439,
+   "sv": 0.925,
+   "xsv": 0.891,
+   "gsax": 15.1,
+   "rk": 1,
+   "of": 75,
+   "close_sv": 0.89,
+   "close_sog": 136,
+   "blend": 1.11,
+   "blend_rk": 2,
+   "spark": [
+    0.7,
+    2.42,
+    3.44,
+    3.7,
+    5.75,
+    6.47,
+    5.68,
+    5.97,
+    6.47,
+    6.64,
+    7.67,
+    9.78,
+    8.46,
+    10.7,
+    11.52,
+    12.6,
+    15.06
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "MIN",
+     "gp": 3,
+     "sog": 87,
+     "sv": 0.897,
+     "gsax": -2.3
+    },
+    {
+     "season": "2024-25",
+     "team": "MIN",
+     "gp": 2,
+     "sog": 51,
+     "sv": 0.843,
+     "gsax": -3.4
+    },
+    {
+     "season": "2025-26",
+     "team": "MIN",
+     "gp": 35,
+     "sog": 1021,
+     "sv": 0.915,
+     "gsax": 11.3
+    },
+    {
+     "season": "2026-27",
+     "team": "MIN",
+     "gp": 17,
+     "sog": 439,
+     "sv": 0.925,
+     "gsax": 15.1
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8475717,
+   "name": "Calvin Pickard",
+   "team": "MIN",
+   "number": 31,
+   "gp": 3,
+   "sog": 76,
+   "sv": 0.855,
+   "xsv": 0.893,
+   "gsax": -2.9,
+   "rk": 58,
+   "of": 75,
+   "close_sv": 0.812,
+   "close_sog": 16,
+   "blend": -0.5,
+   "blend_rk": 64,
+   "spark": [
+    -2.32,
+    -2.73,
+    -2.86
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "EDM",
+     "gp": 23,
+     "sog": 581,
+     "sv": 0.909,
+     "gsax": 1.4
+    },
+    {
+     "season": "2024-25",
+     "team": "EDM",
+     "gp": 35,
+     "sog": 849,
+     "sv": 0.9,
+     "gsax": -6.6
+    },
+    {
+     "season": "2025-26",
+     "team": "EDM",
+     "gp": 16,
+     "sog": 410,
+     "sv": 0.871,
+     "gsax": -4.9
+    },
+    {
+     "season": "2026-27",
+     "team": "MIN",
+     "gp": 3,
+     "sog": 76,
+     "sv": 0.855,
+     "gsax": -2.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8484170,
+   "name": "Jacob Fowler",
+   "team": "MTL",
+   "number": 32,
+   "gp": 11,
+   "sog": 319,
+   "sv": 0.925,
+   "xsv": 0.888,
+   "gsax": 11.7,
+   "rk": 2,
+   "of": 75,
+   "close_sv": 0.892,
+   "close_sog": 102,
+   "blend": 1.4,
+   "blend_rk": 1,
+   "spark": [
+    -1.12,
+    2.25,
+    1.32,
+    1.93,
+    2.97,
+    5.73,
+    9.6,
+    9.02,
+    9.12,
+    10.53,
+    11.67
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "MTL",
+     "gp": 17,
+     "sog": 448,
+     "sv": 0.908,
+     "gsax": 8.8
+    },
+    {
+     "season": "2026-27",
+     "team": "MTL",
+     "gp": 11,
+     "sog": 319,
+     "sv": 0.925,
+     "gsax": 11.7
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8482487,
+   "name": "Jakub Dobes",
+   "team": "MTL",
+   "number": 75,
+   "gp": 7,
+   "sog": 183,
+   "sv": 0.847,
+   "xsv": 0.888,
+   "gsax": -7.4,
+   "rk": 73,
+   "of": 75,
+   "close_sv": 0.769,
+   "close_sog": 65,
+   "blend": 0.15,
+   "blend_rk": 26,
+   "spark": [
+    0.7,
+    -2.64,
+    -4.12,
+    -5.76,
+    -6.78,
+    -6.88,
+    -7.42
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "MTL",
+     "gp": 16,
+     "sog": 440,
+     "sv": 0.909,
+     "gsax": 6.6
+    },
+    {
+     "season": "2025-26",
+     "team": "MTL",
+     "gp": 43,
+     "sog": 1187,
+     "sv": 0.901,
+     "gsax": 13.0
+    },
+    {
+     "season": "2026-27",
+     "team": "MTL",
+     "gp": 7,
+     "sog": 183,
+     "sv": 0.847,
+     "gsax": -7.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8474596,
+   "name": "Jake Allen",
+   "team": "NJD",
+   "number": 34,
+   "gp": 10,
+   "sog": 268,
+   "sv": 0.881,
+   "xsv": 0.905,
+   "gsax": -6.4,
+   "rk": 70,
+   "of": 75,
+   "close_sv": 0.775,
+   "close_sog": 80,
+   "blend": -0.13,
+   "blend_rk": 49,
+   "spark": [
+    -0.14,
+    -1.28,
+    0.07,
+    -1.66,
+    -3.23,
+    -3.96,
+    -3.92,
+    -4.74,
+    -5.74,
+    -6.45
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "MTL",
+     "gp": 21,
+     "sog": 686,
+     "sv": 0.892,
+     "gsax": -5.2
+    },
+    {
+     "season": "2023-24",
+     "team": "NJD",
+     "gp": 13,
+     "sog": 401,
+     "sv": 0.9,
+     "gsax": -3.4
+    },
+    {
+     "season": "2024-25",
+     "team": "NJD",
+     "gp": 31,
+     "sog": 821,
+     "sv": 0.906,
+     "gsax": 6.9
+    },
+    {
+     "season": "2025-26",
+     "team": "NJD",
+     "gp": 37,
+     "sog": 1032,
+     "sv": 0.903,
+     "gsax": 8.7
+    },
+    {
+     "season": "2026-27",
+     "team": "NJD",
+     "gp": 10,
+     "sog": 268,
+     "sv": 0.881,
+     "gsax": -6.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476945,
+   "name": "Connor Hellebuyck",
+   "team": "NJD",
+   "number": 37,
+   "gp": 5,
+   "sog": 115,
+   "sv": 0.913,
+   "xsv": 0.906,
+   "gsax": 0.8,
+   "rk": 27,
+   "of": 75,
+   "close_sv": 0.854,
+   "close_sog": 41,
+   "blend": 0.86,
+   "blend_rk": 5,
+   "spark": [
+    0.86,
+    0.76,
+    -0.35,
+    -1.15,
+    0.77
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "WPG",
+     "gp": 60,
+     "sog": 1798,
+     "sv": 0.921,
+     "gsax": 21.5
+    },
+    {
+     "season": "2024-25",
+     "team": "WPG",
+     "gp": 63,
+     "sog": 1664,
+     "sv": 0.925,
+     "gsax": 32.8
+    },
+    {
+     "season": "2025-26",
+     "team": "WPG",
+     "gp": 57,
+     "sog": 1547,
+     "sv": 0.895,
+     "gsax": -0.3
+    },
+    {
+     "season": "2026-27",
+     "team": "NJD",
+     "gp": 5,
+     "sog": 115,
+     "sv": 0.913,
+     "gsax": 0.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8477424,
+   "name": "Juuse Saros",
+   "team": "NSH",
+   "number": 74,
+   "gp": 13,
+   "sog": 391,
+   "sv": 0.918,
+   "xsv": 0.898,
+   "gsax": 8.0,
+   "rk": 6,
+   "of": 75,
+   "close_sv": 0.864,
+   "close_sog": 110,
+   "blend": -0.07,
+   "blend_rk": 47,
+   "spark": [
+    -0.18,
+    0.97,
+    0.22,
+    1.81,
+    -1.21,
+    0.13,
+    0.25,
+    1.43,
+    2.21,
+    1.35,
+    4.02,
+    5.14,
+    7.96
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NSH",
+     "gp": 64,
+     "sog": 1845,
+     "sv": 0.906,
+     "gsax": -4.7
+    },
+    {
+     "season": "2024-25",
+     "team": "NSH",
+     "gp": 58,
+     "sog": 1593,
+     "sv": 0.895,
+     "gsax": -10.6
+    },
+    {
+     "season": "2025-26",
+     "team": "NSH",
+     "gp": 59,
+     "sog": 1700,
+     "sv": 0.894,
+     "gsax": -5.8
+    },
+    {
+     "season": "2026-27",
+     "team": "NSH",
+     "gp": 13,
+     "sog": 391,
+     "sv": 0.918,
+     "gsax": 8.0
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8481020,
+   "name": "Justus Annunen",
+   "team": "NSH",
+   "number": 29,
+   "gp": 4,
+   "sog": 111,
+   "sv": 0.874,
+   "xsv": 0.883,
+   "gsax": -1.0,
+   "rk": 46,
+   "of": 75,
+   "close_sv": 0.784,
+   "close_sog": 37,
+   "blend": 0.1,
+   "blend_rk": 31,
+   "spark": [
+    -1.38,
+    -1.11,
+    -2.17,
+    -1.04
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "COL",
+     "gp": 14,
+     "sog": 414,
+     "sv": 0.928,
+     "gsax": 8.7
+    },
+    {
+     "season": "2024-25",
+     "team": "COL",
+     "gp": 11,
+     "sog": 218,
+     "sv": 0.872,
+     "gsax": -5.9
+    },
+    {
+     "season": "2024-25",
+     "team": "NSH",
+     "gp": 23,
+     "sog": 596,
+     "sv": 0.888,
+     "gsax": -7.2
+    },
+    {
+     "season": "2025-26",
+     "team": "NSH",
+     "gp": 28,
+     "sog": 712,
+     "sv": 0.906,
+     "gsax": 9.7
+    },
+    {
+     "season": "2026-27",
+     "team": "NSH",
+     "gp": 4,
+     "sog": 111,
+     "sv": 0.874,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8483575,
+   "name": "Matt Murray",
+   "team": "NSH",
+   "number": 32,
+   "gp": 1,
+   "sog": 20,
+   "sv": 0.9,
+   "xsv": 0.854,
+   "gsax": 0.9,
+   "rk": 24,
+   "of": 75,
+   "close_sv": 0.778,
+   "close_sog": 9,
+   "blend": 0.27,
+   "blend_rk": 23,
+   "spark": [
+    0.92
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "DAL",
+     "gp": 1,
+     "sog": 23,
+     "sv": 1.0,
+     "gsax": 1.6
+    },
+    {
+     "season": "2026-27",
+     "team": "NSH",
+     "gp": 1,
+     "sog": 20,
+     "sv": 0.9,
+     "gsax": 0.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478009,
+   "name": "Ilya Sorokin",
+   "team": "NYI",
+   "number": 30,
+   "gp": 12,
+   "sog": 362,
+   "sv": 0.914,
+   "xsv": 0.898,
+   "gsax": 6.0,
+   "rk": 8,
+   "of": 75,
+   "close_sv": 0.868,
+   "close_sog": 106,
+   "blend": 0.6,
+   "blend_rk": 12,
+   "spark": [
+    0.36,
+    3.83,
+    5.28,
+    3.66,
+    4.67,
+    7.19,
+    7.19,
+    5.3,
+    4.53,
+    3.98,
+    3.9,
+    6.0
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NYI",
+     "gp": 56,
+     "sog": 1822,
+     "sv": 0.908,
+     "gsax": -2.5
+    },
+    {
+     "season": "2024-25",
+     "team": "NYI",
+     "gp": 61,
+     "sog": 1696,
+     "sv": 0.907,
+     "gsax": 9.4
+    },
+    {
+     "season": "2025-26",
+     "team": "NYI",
+     "gp": 55,
+     "sog": 1530,
+     "sv": 0.906,
+     "gsax": 22.9
+    },
+    {
+     "season": "2026-27",
+     "team": "NYI",
+     "gp": 12,
+     "sog": 362,
+     "sv": 0.914,
+     "gsax": 6.0
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8473575,
+   "name": "Semyon Varlamov",
+   "team": "NYI",
+   "number": 40,
+   "gp": 5,
+   "sog": 130,
+   "sv": 0.892,
+   "xsv": 0.859,
+   "gsax": 4.4,
+   "rk": 16,
+   "of": 75,
+   "close_sv": 0.846,
+   "close_sog": 52,
+   "blend": 0.68,
+   "blend_rk": 10,
+   "spark": [
+    0.6,
+    2.85,
+    3.48,
+    5.03,
+    4.35
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NYI",
+     "gp": 28,
+     "sog": 837,
+     "sv": 0.918,
+     "gsax": 10.7
+    },
+    {
+     "season": "2024-25",
+     "team": "NYI",
+     "gp": 10,
+     "sog": 262,
+     "sv": 0.889,
+     "gsax": -2.1
+    },
+    {
+     "season": "2026-27",
+     "team": "NYI",
+     "gp": 5,
+     "sog": 130,
+     "sv": 0.892,
+     "gsax": 4.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482193,
+   "name": "Dylan Garand",
+   "team": "NYR",
+   "number": 33,
+   "gp": 14,
+   "sog": 328,
+   "sv": 0.905,
+   "xsv": 0.903,
+   "gsax": 0.7,
+   "rk": 28,
+   "of": 75,
+   "close_sv": 0.854,
+   "close_sog": 96,
+   "blend": 0.34,
+   "blend_rk": 22,
+   "spark": [
+    1.59,
+    2.03,
+    1.8,
+    3.36,
+    0.56,
+    2.46,
+    3.42,
+    1.66,
+    -0.46,
+    -0.87,
+    -1.2,
+    0.53,
+    1.22,
+    0.72
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "NYR",
+     "gp": 3,
+     "sog": 96,
+     "sv": 0.948,
+     "gsax": 5.1
+    },
+    {
+     "season": "2026-27",
+     "team": "NYR",
+     "gp": 14,
+     "sog": 328,
+     "sv": 0.905,
+     "gsax": 0.7
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8478048,
+   "name": "Igor Shesterkin",
+   "team": "NYR",
+   "number": 31,
+   "gp": 5,
+   "sog": 109,
+   "sv": 0.927,
+   "xsv": 0.882,
+   "gsax": 4.9,
+   "rk": 13,
+   "of": 75,
+   "close_sv": 0.892,
+   "close_sog": 37,
+   "blend": 0.84,
+   "blend_rk": 6,
+   "spark": [
+    0.74,
+    2.06,
+    3.48,
+    3.86,
+    4.85
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NYR",
+     "gp": 55,
+     "sog": 1607,
+     "sv": 0.912,
+     "gsax": 7.1
+    },
+    {
+     "season": "2024-25",
+     "team": "NYR",
+     "gp": 61,
+     "sog": 1751,
+     "sv": 0.905,
+     "gsax": 16.1
+    },
+    {
+     "season": "2025-26",
+     "team": "NYR",
+     "gp": 51,
+     "sog": 1425,
+     "sv": 0.912,
+     "gsax": 19.4
+    },
+    {
+     "season": "2026-27",
+     "team": "NYR",
+     "gp": 5,
+     "sog": 109,
+     "sv": 0.927,
+     "gsax": 4.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8473503,
+   "name": "James Reimer",
+   "team": "NYR",
+   "number": 47,
+   "gp": 1,
+   "sog": 8,
+   "sv": 0.625,
+   "xsv": 0.873,
+   "gsax": -2.0,
+   "rk": 53,
+   "of": 75,
+   "close_sv": 0.333,
+   "close_sog": 3,
+   "blend": 0.02,
+   "blend_rk": 36,
+   "spark": [
+    -1.99
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "DET",
+     "gp": 25,
+     "sog": 727,
+     "sv": 0.904,
+     "gsax": 3.0
+    },
+    {
+     "season": "2024-25",
+     "team": "ANA",
+     "gp": 2,
+     "sog": 66,
+     "sv": 0.864,
+     "gsax": -0.4
+    },
+    {
+     "season": "2024-25",
+     "team": "BUF",
+     "gp": 22,
+     "sog": 597,
+     "sv": 0.899,
+     "gsax": 3.1
+    },
+    {
+     "season": "2025-26",
+     "team": "OTT",
+     "gp": 14,
+     "sog": 289,
+     "sv": 0.886,
+     "gsax": -1.0
+    },
+    {
+     "season": "2026-27",
+     "team": "NYR",
+     "gp": 1,
+     "sog": 8,
+     "sv": 0.625,
+     "gsax": -2.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8477484,
+   "name": "Spencer Martin",
+   "team": "NYR",
+   "number": 41,
+   "gp": 1,
+   "sog": 18,
+   "sv": 0.833,
+   "xsv": 0.887,
+   "gsax": -1.0,
+   "rk": 43,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 5,
+   "blend": -0.85,
+   "blend_rk": 69,
+   "spark": [
+    -0.96
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CAR",
+     "gp": 6,
+     "sog": 154,
+     "sv": 0.896,
+     "gsax": 1.1
+    },
+    {
+     "season": "2023-24",
+     "team": "CBJ",
+     "gp": 13,
+     "sog": 379,
+     "sv": 0.887,
+     "gsax": -4.8
+    },
+    {
+     "season": "2024-25",
+     "team": "CAR",
+     "gp": 9,
+     "sog": 175,
+     "sv": 0.846,
+     "gsax": -6.7
+    },
+    {
+     "season": "2025-26",
+     "team": "NYR",
+     "gp": 6,
+     "sog": 147,
+     "sv": 0.864,
+     "gsax": -5.4
+    },
+    {
+     "season": "2026-27",
+     "team": "NYR",
+     "gp": 1,
+     "sog": 18,
+     "sv": 0.833,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476914,
+   "name": "Joonas Korpisalo",
+   "team": "NYR",
+   "number": 70,
+   "gp": 1,
+   "sog": 28,
+   "sv": 0.893,
+   "xsv": 0.903,
+   "gsax": -0.3,
+   "rk": 35,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 10,
+   "blend": -0.87,
+   "blend_rk": 70,
+   "spark": [
+    -0.28
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "OTT",
+     "gp": 55,
+     "sog": 1522,
+     "sv": 0.89,
+     "gsax": -23.4
+    },
+    {
+     "season": "2024-25",
+     "team": "BOS",
+     "gp": 27,
+     "sog": 693,
+     "sv": 0.893,
+     "gsax": -7.7
+    },
+    {
+     "season": "2025-26",
+     "team": "BOS",
+     "gp": 31,
+     "sog": 851,
+     "sv": 0.894,
+     "gsax": -6.1
+    },
+    {
+     "season": "2026-27",
+     "team": "NYR",
+     "gp": 1,
+     "sog": 28,
+     "sv": 0.893,
+     "gsax": -0.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481035,
+   "name": "Samuel Ersson",
+   "team": "OTT",
+   "number": 30,
+   "gp": 10,
+   "sog": 217,
+   "sv": 0.885,
+   "xsv": 0.899,
+   "gsax": -3.1,
+   "rk": 59,
+   "of": 75,
+   "close_sv": 0.789,
+   "close_sog": 57,
+   "blend": -1.07,
+   "blend_rk": 75,
+   "spark": [
+    -0.2,
+    -0.79,
+    -4.46,
+    -4.43,
+    -5.88,
+    -5.11,
+    -3.85,
+    -2.86,
+    -2.05,
+    -3.15
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "PHI",
+     "gp": 51,
+     "sog": 1204,
+     "sv": 0.89,
+     "gsax": -7.3
+    },
+    {
+     "season": "2024-25",
+     "team": "PHI",
+     "gp": 47,
+     "sog": 1162,
+     "sv": 0.883,
+     "gsax": -23.2
+    },
+    {
+     "season": "2025-26",
+     "team": "PHI",
+     "gp": 33,
+     "sog": 744,
+     "sv": 0.87,
+     "gsax": -14.0
+    },
+    {
+     "season": "2026-27",
+     "team": "OTT",
+     "gp": 10,
+     "sog": 217,
+     "sv": 0.885,
+     "gsax": -3.1
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476999,
+   "name": "Linus Ullmark",
+   "team": "OTT",
+   "number": 35,
+   "gp": 8,
+   "sog": 182,
+   "sv": 0.945,
+   "xsv": 0.9,
+   "gsax": 8.3,
+   "rk": 4,
+   "of": 75,
+   "close_sv": 0.86,
+   "close_sog": 57,
+   "blend": 0.52,
+   "blend_rk": 14,
+   "spark": [
+    1.31,
+    2.85,
+    5.54,
+    5.27,
+    6.81,
+    7.61,
+    7.62,
+    8.26
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "BOS",
+     "gp": 40,
+     "sog": 1208,
+     "sv": 0.915,
+     "gsax": 13.5
+    },
+    {
+     "season": "2024-25",
+     "team": "OTT",
+     "gp": 44,
+     "sog": 1230,
+     "sv": 0.909,
+     "gsax": 4.8
+    },
+    {
+     "season": "2025-26",
+     "team": "OTT",
+     "gp": 49,
+     "sog": 1198,
+     "sv": 0.891,
+     "gsax": -7.9
+    },
+    {
+     "season": "2026-27",
+     "team": "OTT",
+     "gp": 8,
+     "sog": 182,
+     "sv": 0.945,
+     "gsax": 8.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8477992,
+   "name": "Jonas Johansson",
+   "team": "OTT",
+   "number": 31,
+   "gp": 4,
+   "sog": 105,
+   "sv": 0.848,
+   "xsv": 0.889,
+   "gsax": -4.4,
+   "rk": 65,
+   "of": 75,
+   "close_sv": 0.762,
+   "close_sog": 42,
+   "blend": -1.0,
+   "blend_rk": 74,
+   "spark": [
+    -0.44,
+    0.51,
+    -1.08,
+    -4.35
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "TBL",
+     "gp": 26,
+     "sog": 752,
+     "sv": 0.89,
+     "gsax": -12.0
+    },
+    {
+     "season": "2024-25",
+     "team": "TBL",
+     "gp": 19,
+     "sog": 554,
+     "sv": 0.895,
+     "gsax": -1.8
+    },
+    {
+     "season": "2025-26",
+     "team": "TBL",
+     "gp": 25,
+     "sog": 670,
+     "sv": 0.884,
+     "gsax": -11.5
+    },
+    {
+     "season": "2026-27",
+     "team": "OTT",
+     "gp": 4,
+     "sog": 105,
+     "sv": 0.848,
+     "gsax": -4.4
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478435,
+   "name": "Dan Vladar",
+   "team": "PHI",
+   "number": 80,
+   "gp": 10,
+   "sog": 274,
+   "sv": 0.88,
+   "xsv": 0.883,
+   "gsax": -1.0,
+   "rk": 47,
+   "of": 75,
+   "close_sv": 0.795,
+   "close_sog": 88,
+   "blend": -0.18,
+   "blend_rk": 54,
+   "spark": [
+    -2.5,
+    -1.42,
+    -3.09,
+    -1.86,
+    -0.49,
+    1.95,
+    -0.15,
+    0.07,
+    -0.56,
+    -1.04
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "CGY",
+     "gp": 20,
+     "sog": 574,
+     "sv": 0.882,
+     "gsax": -11.4
+    },
+    {
+     "season": "2024-25",
+     "team": "CGY",
+     "gp": 30,
+     "sog": 810,
+     "sv": 0.898,
+     "gsax": -3.7
+    },
+    {
+     "season": "2025-26",
+     "team": "PHI",
+     "gp": 52,
+     "sog": 1283,
+     "sv": 0.906,
+     "gsax": 9.0
+    },
+    {
+     "season": "2026-27",
+     "team": "PHI",
+     "gp": 10,
+     "sog": 274,
+     "sv": 0.88,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8479361,
+   "name": "Joseph Woll",
+   "team": "PHI",
+   "number": 53,
+   "gp": 10,
+   "sog": 295,
+   "sv": 0.902,
+   "xsv": 0.886,
+   "gsax": 4.6,
+   "rk": 14,
+   "of": 75,
+   "close_sv": 0.886,
+   "close_sog": 88,
+   "blend": 0.34,
+   "blend_rk": 21,
+   "spark": [
+    1.22,
+    2.83,
+    3.27,
+    2.42,
+    3.95,
+    4.14,
+    4.11,
+    3.49,
+    3.51,
+    4.65
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "TOR",
+     "gp": 25,
+     "sog": 772,
+     "sv": 0.907,
+     "gsax": 4.7
+    },
+    {
+     "season": "2024-25",
+     "team": "TOR",
+     "gp": 42,
+     "sog": 1216,
+     "sv": 0.909,
+     "gsax": 7.4
+    },
+    {
+     "season": "2025-26",
+     "team": "TOR",
+     "gp": 39,
+     "sog": 1221,
+     "sv": 0.898,
+     "gsax": -4.5
+    },
+    {
+     "season": "2026-27",
+     "team": "PHI",
+     "gp": 10,
+     "sog": 295,
+     "sv": 0.902,
+     "gsax": 4.6
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8481668,
+   "name": "Arturs Silovs",
+   "team": "PIT",
+   "number": 37,
+   "gp": 12,
+   "sog": 315,
+   "sv": 0.873,
+   "xsv": 0.883,
+   "gsax": -3.2,
+   "rk": 60,
+   "of": 75,
+   "close_sv": 0.725,
+   "close_sog": 102,
+   "blend": -0.8,
+   "blend_rk": 68,
+   "spark": [
+    1.48,
+    -0.57,
+    -1.58,
+    -0.1,
+    -0.32,
+    -1.37,
+    0.83,
+    1.28,
+    2.0,
+    1.37,
+    -2.01,
+    -3.15
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "VAN",
+     "gp": 4,
+     "sog": 84,
+     "sv": 0.881,
+     "gsax": -1.3
+    },
+    {
+     "season": "2024-25",
+     "team": "VAN",
+     "gp": 10,
+     "sog": 238,
+     "sv": 0.861,
+     "gsax": -9.3
+    },
+    {
+     "season": "2025-26",
+     "team": "PIT",
+     "gp": 39,
+     "sog": 1021,
+     "sv": 0.887,
+     "gsax": -8.4
+    },
+    {
+     "season": "2026-27",
+     "team": "PIT",
+     "gp": 12,
+     "sog": 315,
+     "sv": 0.873,
+     "gsax": -3.2
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8483703,
+   "name": "Sergei Murashov",
+   "team": "PIT",
+   "number": 1,
+   "gp": 6,
+   "sog": 175,
+   "sv": 0.88,
+   "xsv": 0.894,
+   "gsax": -2.5,
+   "rk": 57,
+   "of": 75,
+   "close_sv": 0.839,
+   "close_sog": 56,
+   "blend": -0.35,
+   "blend_rk": 62,
+   "spark": [
+    -0.32,
+    3.04,
+    0.75,
+    -2.13,
+    -4.22,
+    -2.48
+   ],
+   "seasons": [
+    {
+     "season": "2025-26",
+     "team": "PIT",
+     "gp": 5,
+     "sog": 116,
+     "sv": 0.897,
+     "gsax": -0.9
+    },
+    {
+     "season": "2026-27",
+     "team": "PIT",
+     "gp": 6,
+     "sog": 175,
+     "sv": 0.88,
+     "gsax": -2.5
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8475831,
+   "name": "Philipp Grubauer",
+   "team": "SEA",
+   "number": 31,
+   "gp": 10,
+   "sog": 245,
+   "sv": 0.89,
+   "xsv": 0.893,
+   "gsax": -0.7,
+   "rk": 40,
+   "of": 75,
+   "close_sv": 0.767,
+   "close_sog": 60,
+   "blend": -0.37,
+   "blend_rk": 63,
+   "spark": [
+    1.58,
+    2.08,
+    2.97,
+    4.03,
+    4.11,
+    3.79,
+    3.4,
+    1.31,
+    -1.5,
+    -0.7
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "SEA",
+     "gp": 36,
+     "sog": 941,
+     "sv": 0.899,
+     "gsax": -4.6
+    },
+    {
+     "season": "2024-25",
+     "team": "SEA",
+     "gp": 26,
+     "sog": 681,
+     "sv": 0.875,
+     "gsax": -17.8
+    },
+    {
+     "season": "2025-26",
+     "team": "SEA",
+     "gp": 32,
+     "sog": 866,
+     "sv": 0.909,
+     "gsax": 8.5
+    },
+    {
+     "season": "2026-27",
+     "team": "SEA",
+     "gp": 10,
+     "sog": 245,
+     "sv": 0.89,
+     "gsax": -0.7
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478916,
+   "name": "Joey Daccord",
+   "team": "SEA",
+   "number": 35,
+   "gp": 9,
+   "sog": 236,
+   "sv": 0.881,
+   "xsv": 0.898,
+   "gsax": -3.9,
+   "rk": 62,
+   "of": 75,
+   "close_sv": 0.806,
+   "close_sog": 72,
+   "blend": -0.05,
+   "blend_rk": 44,
+   "spark": [
+    1.44,
+    2.76,
+    0.06,
+    0.39,
+    -3.28,
+    -2.77,
+    -3.83,
+    -2.67,
+    -3.86
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "SEA",
+     "gp": 50,
+     "sog": 1374,
+     "sv": 0.916,
+     "gsax": 6.7
+    },
+    {
+     "season": "2024-25",
+     "team": "SEA",
+     "gp": 57,
+     "sog": 1600,
+     "sv": 0.906,
+     "gsax": 2.4
+    },
+    {
+     "season": "2025-26",
+     "team": "SEA",
+     "gp": 47,
+     "sog": 1309,
+     "sv": 0.896,
+     "gsax": -4.5
+    },
+    {
+     "season": "2026-27",
+     "team": "SEA",
+     "gp": 9,
+     "sog": 236,
+     "sv": 0.881,
+     "gsax": -3.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482137,
+   "name": "Yaroslav Askarov",
+   "team": "SJS",
+   "number": 30,
+   "gp": 13,
+   "sog": 379,
+   "sv": 0.889,
+   "xsv": 0.879,
+   "gsax": 3.8,
+   "rk": 17,
+   "of": 75,
+   "close_sv": 0.836,
+   "close_sog": 128,
+   "blend": -0.26,
+   "blend_rk": 58,
+   "spark": [
+    1.21,
+    1.04,
+    0.17,
+    -0.26,
+    -1.95,
+    -0.11,
+    2.44,
+    4.95,
+    5.81,
+    6.11,
+    3.11,
+    2.49,
+    3.79
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NSH",
+     "gp": 2,
+     "sog": 35,
+     "sv": 0.943,
+     "gsax": 1.9
+    },
+    {
+     "season": "2024-25",
+     "team": "SJS",
+     "gp": 13,
+     "sog": 357,
+     "sv": 0.896,
+     "gsax": 2.5
+    },
+    {
+     "season": "2025-26",
+     "team": "SJS",
+     "gp": 47,
+     "sog": 1342,
+     "sv": 0.883,
+     "gsax": -21.5
+    },
+    {
+     "season": "2026-27",
+     "team": "SJS",
+     "gp": 13,
+     "sog": 379,
+     "sv": 0.889,
+     "gsax": 3.8
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8477968,
+   "name": "Alex Nedeljkovic",
+   "team": "SJS",
+   "number": 33,
+   "gp": 7,
+   "sog": 220,
+   "sv": 0.895,
+   "xsv": 0.873,
+   "gsax": 5.0,
+   "rk": 11,
+   "of": 75,
+   "close_sv": 0.797,
+   "close_sog": 74,
+   "blend": -0.01,
+   "blend_rk": 39,
+   "spark": [
+    1.59,
+    3.75,
+    3.88,
+    4.11,
+    3.92,
+    4.63,
+    4.99
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "PIT",
+     "gp": 38,
+     "sog": 1039,
+     "sv": 0.902,
+     "gsax": 1.6
+    },
+    {
+     "season": "2024-25",
+     "team": "PIT",
+     "gp": 38,
+     "sog": 1054,
+     "sv": 0.894,
+     "gsax": -10.1
+    },
+    {
+     "season": "2025-26",
+     "team": "SJS",
+     "gp": 40,
+     "sog": 1049,
+     "sv": 0.896,
+     "gsax": -1.9
+    },
+    {
+     "season": "2026-27",
+     "team": "SJS",
+     "gp": 7,
+     "sog": 220,
+     "sv": 0.895,
+     "gsax": 5.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8480981,
+   "name": "Joel Hofer",
+   "team": "STL",
+   "number": 30,
+   "gp": 13,
+   "sog": 376,
+   "sv": 0.92,
+   "xsv": 0.907,
+   "gsax": 5.1,
+   "rk": 10,
+   "of": 75,
+   "close_sv": 0.838,
+   "close_sog": 117,
+   "blend": 0.71,
+   "blend_rk": 9,
+   "spark": [
+    2.93,
+    2.67,
+    2.19,
+    2.04,
+    0.8,
+    2.23,
+    2.78,
+    2.5,
+    4.04,
+    2.09,
+    3.92,
+    4.39,
+    5.15
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "STL",
+     "gp": 30,
+     "sog": 831,
+     "sv": 0.913,
+     "gsax": 12.5
+    },
+    {
+     "season": "2024-25",
+     "team": "STL",
+     "gp": 31,
+     "sog": 767,
+     "sv": 0.904,
+     "gsax": -4.3
+    },
+    {
+     "season": "2025-26",
+     "team": "STL",
+     "gp": 46,
+     "sog": 1251,
+     "sv": 0.909,
+     "gsax": 15.4
+    },
+    {
+     "season": "2026-27",
+     "team": "STL",
+     "gp": 13,
+     "sog": 376,
+     "sv": 0.92,
+     "gsax": 5.1
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8476412,
+   "name": "Jordan Binnington",
+   "team": "STL",
+   "number": 50,
+   "gp": 5,
+   "sog": 141,
+   "sv": 0.851,
+   "xsv": 0.899,
+   "gsax": -6.8,
+   "rk": 71,
+   "of": 75,
+   "close_sv": 0.712,
+   "close_sog": 52,
+   "blend": -0.6,
+   "blend_rk": 66,
+   "spark": [
+    -2.47,
+    -3.85,
+    -5.78,
+    -5.63,
+    -6.82
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "STL",
+     "gp": 57,
+     "sog": 1786,
+     "sv": 0.913,
+     "gsax": 13.9
+    },
+    {
+     "season": "2024-25",
+     "team": "STL",
+     "gp": 56,
+     "sog": 1457,
+     "sv": 0.9,
+     "gsax": -5.6
+    },
+    {
+     "season": "2025-26",
+     "team": "STL",
+     "gp": 41,
+     "sog": 1010,
+     "sv": 0.873,
+     "gsax": -28.8
+    },
+    {
+     "season": "2026-27",
+     "team": "STL",
+     "gp": 5,
+     "sog": 141,
+     "sv": 0.851,
+     "gsax": -6.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8476883,
+   "name": "Andrei Vasilevskiy",
+   "team": "TBL",
+   "number": 88,
+   "gp": 13,
+   "sog": 317,
+   "sv": 0.883,
+   "xsv": 0.885,
+   "gsax": -0.5,
+   "rk": 37,
+   "of": 75,
+   "close_sv": 0.788,
+   "close_sog": 104,
+   "blend": 0.5,
+   "blend_rk": 15,
+   "spark": [
+    -1.27,
+    0.04,
+    0.75,
+    -0.02,
+    -0.57,
+    -0.68,
+    1.47,
+    -1.23,
+    -2.97,
+    -2.73,
+    -1.41,
+    -0.35,
+    -0.47
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "TBL",
+     "gp": 52,
+     "sog": 1477,
+     "sv": 0.9,
+     "gsax": -10.7
+    },
+    {
+     "season": "2024-25",
+     "team": "TBL",
+     "gp": 63,
+     "sog": 1717,
+     "sv": 0.921,
+     "gsax": 23.4
+    },
+    {
+     "season": "2025-26",
+     "team": "TBL",
+     "gp": 58,
+     "sog": 1485,
+     "sv": 0.911,
+     "gsax": 20.9
+    },
+    {
+     "season": "2026-27",
+     "team": "TBL",
+     "gp": 13,
+     "sog": 317,
+     "sv": 0.883,
+     "gsax": -0.5
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8483710,
+   "name": "Dennis Hildeby",
+   "team": "TBL",
+   "number": 35,
+   "gp": 4,
+   "sog": 100,
+   "sv": 0.88,
+   "xsv": 0.89,
+   "gsax": -1.0,
+   "rk": 42,
+   "of": 75,
+   "close_sv": 0.818,
+   "close_sog": 33,
+   "blend": 0.09,
+   "blend_rk": 33,
+   "spark": [
+    1.08,
+    0.69,
+    -0.07,
+    -0.95
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "TOR",
+     "gp": 6,
+     "sog": 157,
+     "sv": 0.873,
+     "gsax": -5.1
+    },
+    {
+     "season": "2025-26",
+     "team": "TOR",
+     "gp": 20,
+     "sog": 549,
+     "sv": 0.913,
+     "gsax": 8.8
+    },
+    {
+     "season": "2026-27",
+     "team": "TBL",
+     "gp": 4,
+     "sog": 100,
+     "sv": 0.88,
+     "gsax": -1.0
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8475683,
+   "name": "Sergei Bobrovsky",
+   "team": "TOR",
+   "number": 72,
+   "gp": 13,
+   "sog": 379,
+   "sv": 0.881,
+   "xsv": 0.887,
+   "gsax": -2.2,
+   "rk": 54,
+   "of": 75,
+   "close_sv": 0.808,
+   "close_sog": 120,
+   "blend": -0.24,
+   "blend_rk": 57,
+   "spark": [
+    -0.64,
+    0.94,
+    2.65,
+    4.1,
+    2.14,
+    1.33,
+    4.16,
+    2.21,
+    2.15,
+    -0.28,
+    0.83,
+    -0.52,
+    -2.23
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "FLA",
+     "gp": 58,
+     "sog": 1584,
+     "sv": 0.915,
+     "gsax": 11.8
+    },
+    {
+     "season": "2024-25",
+     "team": "FLA",
+     "gp": 54,
+     "sog": 1377,
+     "sv": 0.906,
+     "gsax": -1.5
+    },
+    {
+     "season": "2025-26",
+     "team": "FLA",
+     "gp": 52,
+     "sog": 1250,
+     "sv": 0.877,
+     "gsax": -20.8
+    },
+    {
+     "season": "2026-27",
+     "team": "TOR",
+     "gp": 13,
+     "sog": 379,
+     "sv": 0.881,
+     "gsax": -2.2
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8476932,
+   "name": "Anthony Stolarz",
+   "team": "TOR",
+   "number": 41,
+   "gp": 7,
+   "sog": 206,
+   "sv": 0.908,
+   "xsv": 0.899,
+   "gsax": 1.7,
+   "rk": 20,
+   "of": 75,
+   "close_sv": 0.787,
+   "close_sog": 61,
+   "blend": 0.94,
+   "blend_rk": 3,
+   "spark": [
+    1.71,
+    1.61,
+    -0.99,
+    0.23,
+    1.54,
+    2.43,
+    1.71
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "FLA",
+     "gp": 27,
+     "sog": 684,
+     "sv": 0.925,
+     "gsax": 14.4
+    },
+    {
+     "season": "2024-25",
+     "team": "TOR",
+     "gp": 34,
+     "sog": 955,
+     "sv": 0.926,
+     "gsax": 23.3
+    },
+    {
+     "season": "2025-26",
+     "team": "TOR",
+     "gp": 26,
+     "sog": 708,
+     "sv": 0.893,
+     "gsax": -4.1
+    },
+    {
+     "season": "2026-27",
+     "team": "TOR",
+     "gp": 7,
+     "sog": 206,
+     "sv": 0.908,
+     "gsax": 1.7
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478872,
+   "name": "Karel Vejmelka",
+   "team": "UTA",
+   "number": 70,
+   "gp": 13,
+   "sog": 302,
+   "sv": 0.868,
+   "xsv": 0.894,
+   "gsax": -8.0,
+   "rk": 74,
+   "of": 75,
+   "close_sv": 0.789,
+   "close_sog": 95,
+   "blend": -0.05,
+   "blend_rk": 43,
+   "spark": [
+    1.77,
+    2.16,
+    2.0,
+    0.58,
+    2.16,
+    1.23,
+    1.11,
+    -1.74,
+    -3.88,
+    -4.33,
+    -4.65,
+    -7.59,
+    -7.98
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "ARI",
+     "gp": 37,
+     "sog": 1091,
+     "sv": 0.896,
+     "gsax": -6.9
+    },
+    {
+     "season": "2024-25",
+     "team": "UTA",
+     "gp": 58,
+     "sog": 1509,
+     "sv": 0.904,
+     "gsax": 13.2
+    },
+    {
+     "season": "2025-26",
+     "team": "UTA",
+     "gp": 64,
+     "sog": 1627,
+     "sv": 0.896,
+     "gsax": 6.8
+    },
+    {
+     "season": "2026-27",
+     "team": "UTA",
+     "gp": 13,
+     "sog": 302,
+     "sv": 0.868,
+     "gsax": -8.0
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8482657,
+   "name": "Sebastian Cossa",
+   "team": "UTA",
+   "number": 33,
+   "gp": 7,
+   "sog": 147,
+   "sv": 0.871,
+   "xsv": 0.899,
+   "gsax": -4.2,
+   "rk": 63,
+   "of": 75,
+   "close_sv": 0.789,
+   "close_sog": 38,
+   "blend": -0.57,
+   "blend_rk": 65,
+   "spark": [
+    1.76,
+    -0.57,
+    -0.98,
+    -2.86,
+    -3.1,
+    -3.4,
+    -4.17
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "DET",
+     "gp": 1,
+     "sog": 14,
+     "sv": 0.857,
+     "gsax": -0.3
+    },
+    {
+     "season": "2026-27",
+     "team": "UTA",
+     "gp": 7,
+     "sog": 147,
+     "sv": 0.871,
+     "gsax": -4.2
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482447,
+   "name": "Leevi Meril\u00e4inen",
+   "team": "VAN",
+   "number": 31,
+   "gp": 14,
+   "sog": 386,
+   "sv": 0.889,
+   "xsv": 0.897,
+   "gsax": -3.4,
+   "rk": 61,
+   "of": 75,
+   "close_sv": 0.816,
+   "close_sog": 136,
+   "blend": -0.91,
+   "blend_rk": 71,
+   "spark": [
+    0.02,
+    0.89,
+    1.55,
+    1.66,
+    1.73,
+    2.58,
+    1.82,
+    2.64,
+    0.06,
+    -0.62,
+    -0.58,
+    -3.03,
+    -3.83,
+    -3.43
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "OTT",
+     "gp": 12,
+     "sog": 295,
+     "sv": 0.925,
+     "gsax": 2.6
+    },
+    {
+     "season": "2025-26",
+     "team": "OTT",
+     "gp": 20,
+     "sog": 457,
+     "sv": 0.86,
+     "gsax": -20.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VAN",
+     "gp": 14,
+     "sog": 386,
+     "sv": 0.889,
+     "gsax": -3.4
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8480947,
+   "name": "Kevin Lankinen",
+   "team": "VAN",
+   "number": 32,
+   "gp": 9,
+   "sog": 220,
+   "sv": 0.805,
+   "xsv": 0.877,
+   "gsax": -15.9,
+   "rk": 75,
+   "of": 75,
+   "close_sv": 0.675,
+   "close_sog": 80,
+   "blend": -0.98,
+   "blend_rk": 73,
+   "spark": [
+    -1.37,
+    -7.0,
+    -5.65,
+    -8.58,
+    -8.99,
+    -11.5,
+    -11.77,
+    -12.97,
+    -15.91
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NSH",
+     "gp": 24,
+     "sog": 610,
+     "sv": 0.908,
+     "gsax": 3.1
+    },
+    {
+     "season": "2024-25",
+     "team": "VAN",
+     "gp": 51,
+     "sog": 1345,
+     "sv": 0.902,
+     "gsax": 1.4
+    },
+    {
+     "season": "2025-26",
+     "team": "VAN",
+     "gp": 47,
+     "sog": 1285,
+     "sv": 0.875,
+     "gsax": -20.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VAN",
+     "gp": 9,
+     "sog": 220,
+     "sv": 0.805,
+     "gsax": -15.9
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8479394,
+   "name": "Carter Hart",
+   "team": "VGK",
+   "number": 79,
+   "gp": 10,
+   "sog": 251,
+   "sv": 0.9,
+   "xsv": 0.895,
+   "gsax": 1.5,
+   "rk": 23,
+   "of": 75,
+   "close_sv": 0.803,
+   "close_sog": 71,
+   "blend": -0.04,
+   "blend_rk": 41,
+   "spark": [
+    0.06,
+    -1.38,
+    -0.74,
+    0.38,
+    0.92,
+    1.95,
+    -1.44,
+    -1.3,
+    -0.43,
+    1.48
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "PHI",
+     "gp": 26,
+     "sog": 727,
+     "sv": 0.906,
+     "gsax": -1.5
+    },
+    {
+     "season": "2025-26",
+     "team": "VGK",
+     "gp": 18,
+     "sog": 422,
+     "sv": 0.891,
+     "gsax": -2.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VGK",
+     "gp": 10,
+     "sog": 251,
+     "sv": 0.9,
+     "gsax": 1.5
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8478499,
+   "name": "Adin Hill",
+   "team": "VGK",
+   "number": 33,
+   "gp": 9,
+   "sog": 238,
+   "sv": 0.903,
+   "xsv": 0.9,
+   "gsax": 0.8,
+   "rk": 26,
+   "of": 75,
+   "close_sv": 0.797,
+   "close_sog": 79,
+   "blend": -0.13,
+   "blend_rk": 50,
+   "spark": [
+    -0.48,
+    -0.91,
+    -0.59,
+    0.59,
+    -2.77,
+    -1.26,
+    -3.0,
+    -2.04,
+    0.83
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "VGK",
+     "gp": 35,
+     "sog": 979,
+     "sv": 0.909,
+     "gsax": -0.7
+    },
+    {
+     "season": "2024-25",
+     "team": "VGK",
+     "gp": 50,
+     "sog": 1293,
+     "sv": 0.906,
+     "gsax": 7.8
+    },
+    {
+     "season": "2025-26",
+     "team": "VGK",
+     "gp": 27,
+     "sog": 587,
+     "sv": 0.871,
+     "gsax": -14.5
+    },
+    {
+     "season": "2026-27",
+     "team": "VGK",
+     "gp": 9,
+     "sog": 238,
+     "sv": 0.903,
+     "gsax": 0.8
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8479973,
+   "name": "Stuart Skinner",
+   "team": "WPG",
+   "number": 74,
+   "gp": 13,
+   "sog": 343,
+   "sv": 0.883,
+   "xsv": 0.886,
+   "gsax": -0.9,
+   "rk": 41,
+   "of": 75,
+   "close_sv": 0.821,
+   "close_sog": 123,
+   "blend": 0.18,
+   "blend_rk": 25,
+   "spark": [
+    -1.05,
+    1.49,
+    2.35,
+    2.84,
+    2.42,
+    3.27,
+    4.66,
+    5.75,
+    3.81,
+    1.88,
+    0.79,
+    0.29,
+    -0.86
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "EDM",
+     "gp": 58,
+     "sog": 1553,
+     "sv": 0.905,
+     "gsax": 8.9
+    },
+    {
+     "season": "2024-25",
+     "team": "EDM",
+     "gp": 51,
+     "sog": 1325,
+     "sv": 0.896,
+     "gsax": -2.0
+    },
+    {
+     "season": "2025-26",
+     "team": "EDM",
+     "gp": 23,
+     "sog": 570,
+     "sv": 0.891,
+     "gsax": 2.0
+    },
+    {
+     "season": "2025-26",
+     "team": "PIT",
+     "gp": 27,
+     "sog": 697,
+     "sv": 0.885,
+     "gsax": 3.8
+    },
+    {
+     "season": "2026-27",
+     "team": "WPG",
+     "gp": 13,
+     "sog": 343,
+     "sv": 0.883,
+     "gsax": -0.9
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8483532,
+   "name": "Clay Stevenson",
+   "team": "WPG",
+   "number": 33,
+   "gp": 5,
+   "sog": 123,
+   "sv": 0.87,
+   "xsv": 0.888,
+   "gsax": -2.3,
+   "rk": 55,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 45,
+   "blend": -0.21,
+   "blend_rk": 56,
+   "spark": [
+    0.73,
+    -0.7,
+    -0.37,
+    -2.23,
+    -2.27
+   ],
+   "seasons": [
+    {
+     "season": "2024-25",
+     "team": "WSH",
+     "gp": 1,
+     "sog": 38,
+     "sv": 0.868,
+     "gsax": -1.6
+    },
+    {
+     "season": "2025-26",
+     "team": "WSH",
+     "gp": 4,
+     "sog": 101,
+     "sv": 0.921,
+     "gsax": 2.8
+    },
+    {
+     "season": "2026-27",
+     "team": "WPG",
+     "gp": 5,
+     "sog": 123,
+     "sv": 0.87,
+     "gsax": -2.3
+    }
+   ],
+   "small": true,
+   "other_team": false
+  },
+  {
+   "id": 8482076,
+   "name": "Nico Daws",
+   "team": "WPG",
+   "number": 50,
+   "gp": 7,
+   "sog": 153,
+   "sv": 0.889,
+   "xsv": 0.899,
+   "gsax": -1.5,
+   "rk": 50,
+   "of": 75,
+   "close_sv": 0.711,
+   "close_sog": 45,
+   "blend": -0.03,
+   "blend_rk": 40,
+   "spark": [
+    -2.26,
+    -3.08,
+    -2.51,
+    -2.24,
+    -1.25,
+    -1.79,
+    -1.52
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "NJD",
+     "gp": 21,
+     "sog": 568,
+     "sv": 0.894,
+     "gsax": -2.8
+    },
+    {
+     "season": "2024-25",
+     "team": "NJD",
+     "gp": 5,
+     "sog": 114,
+     "sv": 0.939,
+     "gsax": 4.6
+    },
+    {
+     "season": "2025-26",
+     "team": "NJD",
+     "gp": 3,
+     "sog": 87,
+     "sv": 0.908,
+     "gsax": 0.7
+    },
+    {
+     "season": "2026-27",
+     "team": "NJD",
+     "gp": 4,
+     "sog": 86,
+     "sv": 0.872,
+     "gsax": -2.2
+    },
+    {
+     "season": "2026-27",
+     "team": "WPG",
+     "gp": 3,
+     "sog": 67,
+     "sv": 0.91,
+     "gsax": 0.7
+    }
+   ],
+   "small": true,
+   "other_team": true
+  },
+  {
+   "id": 8480313,
+   "name": "Logan Thompson",
+   "team": "WSH",
+   "number": 48,
+   "gp": 12,
+   "sog": 321,
+   "sv": 0.891,
+   "xsv": 0.885,
+   "gsax": 1.9,
+   "rk": 19,
+   "of": 75,
+   "close_sv": 0.8,
+   "close_sog": 100,
+   "blend": 0.89,
+   "blend_rk": 4,
+   "spark": [
+    2.11,
+    2.62,
+    4.34,
+    2.8,
+    3.08,
+    5.15,
+    3.96,
+    4.32,
+    2.95,
+    0.14,
+    0.69,
+    1.86
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "VGK",
+     "gp": 46,
+     "sog": 1298,
+     "sv": 0.908,
+     "gsax": -3.1
+    },
+    {
+     "season": "2024-25",
+     "team": "WSH",
+     "gp": 43,
+     "sog": 1172,
+     "sv": 0.91,
+     "gsax": 19.3
+    },
+    {
+     "season": "2025-26",
+     "team": "WSH",
+     "gp": 58,
+     "sog": 1587,
+     "sv": 0.912,
+     "gsax": 32.3
+    },
+    {
+     "season": "2026-27",
+     "team": "WSH",
+     "gp": 12,
+     "sog": 321,
+     "sv": 0.891,
+     "gsax": 1.9
+    }
+   ],
+   "small": false,
+   "other_team": false
+  },
+  {
+   "id": 8479292,
+   "name": "Charlie Lindgren",
+   "team": "WSH",
+   "number": 79,
+   "gp": 5,
+   "sog": 118,
+   "sv": 0.881,
+   "xsv": 0.886,
+   "gsax": -0.5,
+   "rk": 38,
+   "of": 75,
+   "close_sv": 0.824,
+   "close_sog": 34,
+   "blend": 0.04,
+   "blend_rk": 35,
+   "spark": [
+    1.37,
+    0.49,
+    -0.36,
+    -0.46,
+    -0.53
+   ],
+   "seasons": [
+    {
+     "season": "2023-24",
+     "team": "WSH",
+     "gp": 50,
+     "sog": 1431,
+     "sv": 0.911,
+     "gsax": 7.3
+    },
+    {
+     "season": "2024-25",
+     "team": "WSH",
+     "gp": 39,
+     "sog": 987,
+     "sv": 0.895,
+     "gsax": 1.8
+    },
+    {
+     "season": "2025-26",
+     "team": "WSH",
+     "gp": 21,
+     "sog": 602,
+     "sv": 0.879,
+     "gsax": -6.4
+    },
+    {
+     "season": "2026-27",
+     "team": "WSH",
+     "gp": 5,
+     "sog": 118,
+     "sv": 0.881,
+     "gsax": -0.5
+    }
+   ],
+   "small": true,
+   "other_team": false
+  }
+ ]
+}

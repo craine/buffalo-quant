@@ -356,7 +356,19 @@ keep score in public.</p>
     (SITE / "about.html").write_text(page("About | Buffalo Quant Desk", body, "About"))
 
 
-TEAM_COLORS = {"BUF": ("#003087", "#FFB81C", "SABRES"), "VGK": ("#333F42", "#B4975A", "GOLDEN KNIGHTS")}
+TEAM_COLORS = {  # card colors are our own approximations of each club's palette
+    "BUF": ("#003087", "#FFB81C", "SABRES"), "VGK": ("#333F42", "#B4975A", "GOLDEN KNIGHTS"),
+    "ANA": ("#F47A38", "#B9975B", "DUCKS"), "BOS": ("#111111", "#FFB81C", "BRUINS"), "CAR": ("#CE1126", "#111111", "HURRICANES"),
+    "CBJ": ("#002654", "#CE1126", "BLUE JACKETS"), "CGY": ("#C8102E", "#F1BE48", "FLAMES"), "CHI": ("#CF0A2C", "#111111", "BLACKHAWKS"),
+    "COL": ("#6F263D", "#236192", "AVALANCHE"), "DAL": ("#006847", "#8F8F8C", "STARS"), "DET": ("#CE1126", "#1F1F1F", "RED WINGS"),
+    "EDM": ("#041E42", "#FF4C00", "OILERS"), "FLA": ("#041E42", "#C8102E", "PANTHERS"), "LAK": ("#111111", "#A2AAAD", "KINGS"),
+    "MIN": ("#154734", "#A6192E", "WILD"), "MTL": ("#AF1E2D", "#192168", "CANADIENS"), "NJD": ("#CE1126", "#111111", "DEVILS"),
+    "NSH": ("#041E42", "#FFB81C", "PREDATORS"), "NYI": ("#00539B", "#F47D30", "ISLANDERS"), "NYR": ("#0038A8", "#CE1126", "RANGERS"),
+    "OTT": ("#111111", "#DA1A32", "SENATORS"), "PHI": ("#F74902", "#111111", "FLYERS"), "PIT": ("#111111", "#FCB514", "PENGUINS"),
+    "SEA": ("#001628", "#99D9D9", "KRAKEN"), "SJS": ("#006D75", "#EA7200", "SHARKS"), "STL": ("#002F87", "#FCB514", "BLUES"),
+    "TBL": ("#002868", "#8E9090", "LIGHTNING"), "TOR": ("#00205B", "#A2AAAD", "MAPLE LEAFS"), "UTA": ("#111111", "#6CACE4", "MAMMOTH"),
+    "VAN": ("#00205B", "#00843D", "CANUCKS"), "WPG": ("#041E42", "#AC162C", "JETS"), "WSH": ("#041E42", "#C8102E", "CAPITALS"),
+}
 
 
 def spark_svg(vals, color, label="Goals saved vs average, running total"):
@@ -376,6 +388,8 @@ def spark_svg(vals, color, label="Goals saved vs average, running total"):
 
 
 def card_slug(name):
+    import unicodedata
+    name = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()   # Sörum -> Sorum
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
@@ -446,7 +460,7 @@ def expect_back(c, m):
     if c.get("rate_p82") is None:
         return ""
     return (f"<p><b>Our rating:</b> about {round(c['rate_p82'])} points per 82 games ({round(c['rate_g82'])} goals). "
-            f"If he plays all {m['remaining']} remaining games: about {round(c['proj_g'])} goals, {round(c['proj_p'])} points.</p>")
+            f"If he plays all {c.get('remaining', m['remaining'])} remaining games: about {round(c['proj_g'])} goals, {round(c['proj_p'])} points.</p>")
 
 
 def expect_li(c, m):
@@ -459,7 +473,7 @@ def expect_li(c, m):
     else:
         pace = f"This season he's on pace for {round(c['pace_p82'])} points per 82 games; "
     return (f"<li><b>What to expect:</b> {pace}our rating, built from every season since 2023-24, says about {round(c['rate_p82'])} "
-            f"({round(c['rate_g82'])} goals). If he plays all {m['remaining']} remaining games, that's about {round(c['proj_g'])} goals and "
+            f"({round(c['rate_g82'])} goals). If he plays all {c.get('remaining', m['remaining'])} remaining games, that's about {round(c['proj_g'])} goals and "
             f"{round(c['proj_p'])} points for the season.</li>")
 
 
@@ -507,16 +521,18 @@ player's goal total against the league feed's own running count. Cards marked <b
 Not affiliated with the NHL or any team; card designs are our own.</p>"""
 
 
-def build_skater_cards(out, groups):
+def build_skater_cards(out, groups, slugs):
     import json
-    src = ROOT / "reports" / "cards" / "skaters.json"
+    src = ROOT / "reports" / "cards" / "skaters_league.json"
+    if not src.exists():
+        src = ROOT / "reports" / "cards" / "skaters.json"
     if not src.exists():
         return None
     d = json.loads(src.read_text())
     m = d["meta"]
     asof = datetime.strptime(m["as_of"], "%Y-%m-%d").strftime("%B %-d, %Y")
     for c in d["cards"]:
-        slug = card_slug(c["name"])
+        slug = slugs[("S", c["id"])]
         tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
         grp = "forwards" if c["grp"] == "F" else "defensemen"
         rk = f", {ordn_txt(c['p_rk'])} of {c['of']} {grp} in points per game" if c["p_rk"] else ""
@@ -529,7 +545,7 @@ Numbers through {asof}.</p>
 <li><b>{c['sog']} shots on goal</b>; {c['close']} shots from within 20 feet and {c['reb']} rebound shots (on goal or missed). {plural(c['ppg'], 'power-play goal')}.</li>
 {'<li><b>Small sample.</b> Fewer than ' + str(m['min_gp']) + ' games; these numbers can move a lot.</li>' if c['small'] else ''}
 {expect_li(c, m)}
-{'<li>He also played for another team this season; the card counts his Sabres games, and the rank uses his whole season.</li>' if c.get('other_team') else ''}</ul>
+{f"<li>He also played for another team this season; the card counts his {tname.title()} games, and the rank and the season projection use his whole season ({plural(c['season_g'], 'goal')}, {plural(c['season_p'], 'point')} in all).</li>" if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,
                                                f"{c['name']}: {plural(c['g'], 'goal')}, {plural(c['a'], 'assist')}, {plural(c['p'], 'point')} this season."))
@@ -539,19 +555,46 @@ Numbers through {asof}.</p>
     return asof
 
 
+def card_slugs():
+    """One URL per player. Name slugs (existing Sabres URLs stay put); a name shared by two players gets the team added for non-Sabres."""
+    import json
+    cards = ROOT / "reports" / "cards"
+    pick = lambda a, b: cards / a if (cards / a).exists() else cards / b
+    people = [("G", c["id"], c["name"], c["team"], "g") for c in json.loads(pick("goalies_league.json", "goalies.json").read_text())["cards"]]
+    if pick("skaters_league.json", "skaters.json").exists():
+        people += [("S", c["id"], c["name"], c["team"], "d" if c["grp"] == "D" else "f")
+                   for c in json.loads(pick("skaters_league.json", "skaters.json").read_text())["cards"]]
+    base = {}
+    for k, i, n, tm, ps in people:
+        base.setdefault(card_slug(n), []).append((k, i, tm, ps))
+    out = {}
+    for s, who in base.items():
+        same_team = len({tm for _, _, tm, _ in who}) < len(who)
+        for k, i, tm, ps in who:
+            if len(who) == 1 or (tm == "BUF" and not same_team):
+                out[(k, i)] = s
+            else:   # e.g. two Elias Petterssons in Vancouver: elias-pettersson-van-f, elias-pettersson-van-d
+                out[(k, i)] = f"{s}-{tm.lower()}" + (f"-{ps}" if same_team else "")
+    assert len(set(out.values())) == len(out), "card URL collision"
+    return out
+
+
 def build_cards():
     import json
-    src = ROOT / "reports" / "cards" / "goalies.json"
+    src = ROOT / "reports" / "cards" / "goalies_league.json"
+    if not src.exists():
+        src = ROOT / "reports" / "cards" / "goalies.json"
     out = SITE / "cards"
     out.mkdir(exist_ok=True)
     if not src.exists():
         return
+    slugs = card_slugs()
     d = json.loads(src.read_text())
     m = d["meta"]
     asof = datetime.strptime(m["as_of"], "%Y-%m-%d").strftime("%B %-d, %Y")
     groups = {}
     for c in d["cards"]:
-        slug = card_slug(c["name"])
+        slug = slugs[("G", c["id"])]
         tc, ta, tname = TEAM_COLORS.get(c["team"], ("#00338D", "#C60C30", c["team"]))
         close_n = f" on {c['close_sog']} close-in shots" if c["close_sog"] else ""
         body = f"""<div class="kicker"><a href="index.html">Player cards</a> &middot; {tname.title()}</div><h1>{html.escape(c['name'])}</h1>
@@ -562,19 +605,40 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 <li><b>Save rate {c['sv']:.3f}</b>; an average goalie facing his shots would be at {c['xsv']:.3f}. League: {m['lg_sv']:.3f}.</li>
 <li><b>Close-in save rate {c['close_sv']:.3f}</b>{close_n}. League: {m['lg_close_sv']:.3f}.</li>
 <li><b>Blended rating {c['blend']:+.2f}</b> goals saved per 100 shots, {c['blend_rk']} of {c['of']}.</li>
-{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}</ul>
+{'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}
+{'<li>He also played for another team this season. These numbers cover his whole season; the table on the back of the card splits it by team.</li>' if c.get('other_team') else ''}</ul>
 {card_howto(m)}"""
         (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
                                                f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))
         groups.setdefault(tname.title() + " goalies", []).append(
             f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
             f'<span class="pm"><b>{html.escape(c["name"])}</b><br>Goalie &middot; {sign_txt(c["gsax"])} goals saved vs. average</span></a>')
-    sk_asof = build_skater_cards(out, groups)
-    order = sorted(groups, key=lambda k: (0 if k.startswith("Sabres") else 1, 0 if k.endswith("skaters") else 1, k))
-    lists = "".join(f'<h2>{team}</h2><div class="plist">{"".join(groups[team])}</div>' for team in order)
+    sk_asof = build_skater_cards(out, groups, slugs)
+    order = sorted(groups, key=lambda k: (0 if k.startswith("Sabres") else 1, k.rsplit(" ", 1)[0], 0 if k.endswith("skaters") else 1))
+    teams = []
+    for k in order:
+        tn = k.rsplit(" ", 1)[0]
+        if tn not in teams:
+            teams.append(tn)
+    anchor = lambda tn: card_slug(tn)
+    nav = " &middot; ".join(f'<a href="#{anchor(tn)}">{tn}</a>' for tn in teams)
+    lists, seen = "", set()
+    for k in order:
+        tn = k.rsplit(" ", 1)[0]
+        idattr = f' id="{anchor(tn)}"' if tn not in seen else ""
+        seen.add(tn)
+        lists += f'<h2{idattr} class="tgrp">{k}</h2><div class="plist">{"".join(groups[k])}</div>'
+    search = ('<p><input id="cardq" type="search" placeholder="Find a player" aria-label="Find a player" '
+              'style="width:100%;max-width:420px;padding:10px 12px;font-size:16px;border:1px solid #C9CDD4;border-radius:8px"></p>'
+              '<script>document.getElementById("cardq").addEventListener("input",function(e){var q=e.target.value.toLowerCase();'
+              'document.querySelectorAll(".pcard").forEach(function(a){a.style.display=a.textContent.toLowerCase().indexOf(q)>-1?"":"none"});'
+              'document.querySelectorAll(".plist").forEach(function(l){var v=[].some.call(l.children,function(a){return a.style.display!=="none"});'
+              'l.style.display=v?"":"none";l.previousElementSibling.style.display=v?"":"none"})});</script>')
+    n_cards = sum(len(v) for v in groups.values())
     body = f"""<div class="kicker">Player cards</div><h1>Player cards</h1>
-<p class="dek">One card per player, built from the NHL's play-by-play and updated as the season goes: every Sabres skater, plus the goalies.
-The Bills are next. Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>{lists}"""
+<p class="dek">One card for every NHL player this season ({n_cards} of them), built from the league's play-by-play: points, chances, a rating
+from every season since 2023-24, and a projection. Sabres first. The Bills are next. Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>
+{search}<p class="small">{nav}</p>{lists}"""
     (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
 
 

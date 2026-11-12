@@ -58,6 +58,14 @@
    "at_utc": "2026-11-12T00:23:35Z",
    "notes": "Final Quant on current text: all new numbers verified; 'odds' -> 'chance'; 'about 39'.",
    "report": "2026-11-11-sabres-hot-cold-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "86f6961ae0f3d40d8fe882f01660f22c4f036422e18286270f1218fb9914550e",
+   "at_utc": "2026-11-12T02:09:19Z",
+   "notes": "Wording-only change after card QA: cards are live, so the line no longer claims every story number is on the card. No numbers changed.",
+   "report": "2026-11-11-sabres-hot-cold-final.md"
   }
  ],
  "self": {
@@ -82,9 +90,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "dfacf43e4c811216e18a8ed4ba960a07b90a7a266e78d826ff955c44e0aae958",
-  "at_utc": "2026-11-12T00:23:35Z",
-  "notes": "Final Quant on current text: all new numbers verified; 'odds' -> 'chance'; 'about 39'.",
+  "sha256": "86f6961ae0f3d40d8fe882f01660f22c4f036422e18286270f1218fb9914550e",
+  "at_utc": "2026-11-12T02:09:19Z",
+  "notes": "Wording-only change after card QA: cards are live, so the line no longer claims every story number is on the card. No numbers changed.",
   "report": "2026-11-11-sabres-hot-cold-final.md"
  }
 }

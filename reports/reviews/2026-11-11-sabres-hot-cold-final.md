@@ -19,3 +19,5 @@ Checked again and unchanged:
 Must-fix: "odds" is banned betting language. Changed to "chance of going in".
 Nit: "about 39" applied.
 The Quant said that after fix 1 it is a PASS with no new number to check. A grep of the final text finds no odds/bet/spread/pick.
+
+Addendum (card QA, Nov 11): the cards will refresh daily, so the line "Every number here is also on each player's card" would become false. Reworded to "Each player's card has his latest numbers, updated daily." No numbers changed; flagged by the independent card QA review.
