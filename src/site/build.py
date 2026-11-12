@@ -640,7 +640,7 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
     n_cards = sum(len(v) for v in groups.values())
     body = f"""<div class="kicker">Player cards</div><h1>Player cards</h1>
 <p class="dek">One card for every NHL player this season ({n_cards} of them), built from the league's play-by-play: points, chances, a rating
-from every season since 2023-24, and a projection. Sabres first. The Bills are next. Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>
+from every season since 2023-24, and a projection. Sabres first. <a href="nfl/index.html"><b>NFL cards, Bills first, are here.</b></a> Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>
 {search}<p class="small">{nav}</p>{lists}"""
     (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
 
@@ -661,6 +661,8 @@ def main():
     build_ledger()
     build_about()
     build_cards()
+    from src.site.nfl_cards import build_nfl_cards
+    build_nfl_cards()
     shutil.copy(ROOT / "assets" / "charlie.jpg", SITE / "charlie.jpg")
     (SITE / "ledger").mkdir(exist_ok=True)
     for f in (PRED_CSV, GRADE_CSV):

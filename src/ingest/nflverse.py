@@ -23,7 +23,8 @@ SOURCES = {  # config key -> (table, path template)
     "snap_counts": ("raw_snap_counts", "snap_counts/snap_counts_{y}.parquet"),
 }
 SINGLE_FILE = {"raw_schedules": "schedules/games.parquet",
-               "raw_ngs_passing": "nextgen_stats/ngs_passing.parquet"}
+               "raw_ngs_passing": "nextgen_stats/ngs_passing.parquet",
+               "raw_players": "players/players.parquet"}   # master list: gsis_id <-> pfr_id; verified 200 on 2026-11-12
 
 
 def fetch(path):
