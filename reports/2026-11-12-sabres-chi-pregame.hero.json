@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Chicago, 8 p.m.: the matchup",
+ "big": [
+  [
+   "57%",
+   "Buffalo's chance to win, our model (Chicago 43%)"
+  ],
+  [
+   "38%",
+   "How often tired road teams won when our model gave them 46%"
+  ]
+ ],
+ "note": "Chicago creates the fewest chances in the NHL. But Buffalo played last night, and the model doesn't count that: road teams on the second night of a back-to-back have won 38% since 2023-24, against 47% when rested.",
+ "explainer": {
+  "kicker": "How we know",
+  "title": "Every shot has a chance of going in.",
+  "text": "A shot from within 10 feet went in 13.8% of the time over the last three seasons; from 60 feet or more, 0.8%. Add up those chances on every shot and you get what a team's chances were worth in goals.",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Tired road teams",
+    0.383
+   ],
+   [
+    "Rested road teams",
+    0.468
+   ]
+  ]
+ }
+}

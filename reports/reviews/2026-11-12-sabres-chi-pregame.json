@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
+   "at_utc": "2026-11-12T22:52:20Z",
+   "notes": "Numbers dumped and checked; back-to-back effect checked a second way (raw win rates and chance share, all 4 seasons, consistent every season) besides the out-of-sample model check; goalie explanation tested and reported as small rather than assumed; betting words scanned ('pick' removed); logged number is the tested model's, rest caveat stated separately without an unlogged second number."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "1be1f564609306d03b1192a40a4b4274587e2f2252079c747dcd9043c547f4f8",
+  "at_utc": "2026-11-12T22:52:20Z",
+  "notes": "Numbers dumped and checked; back-to-back effect checked a second way (raw win rates and chance share, all 4 seasons, consistent every season) besides the out-of-sample model check; goalie explanation tested and reported as small rather than assumed; betting words scanned ('pick' removed); logged number is the tested model's, rest caveat stated separately without an unlogged second number."
+ }
+}
