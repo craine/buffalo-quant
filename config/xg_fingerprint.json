@@ -1,0 +1,17 @@
+{
+ "note": "Raw (unscaled) xG totals for completed seasons. The model trains only on these seasons, so a rerun must reproduce them; a change means the data or a library changed the model.",
+ "seasons": {
+  "20232024": {
+   "xg_sum": 7469.241811,
+   "n": 114059
+  },
+  "20242025": {
+   "xg_sum": 7301.361765,
+   "n": 111304
+  },
+  "20252026": {
+   "xg_sum": 7801.996166,
+   "n": 111099
+  }
+ }
+}
