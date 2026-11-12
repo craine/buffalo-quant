@@ -76,7 +76,7 @@ def small_stats(c):
     g, games = c["grp"], (c["gp"], "Game" if c["gp"] == 1 else "Games")
     if g == "QB":
         pa = f"{c['epa_db']:+.2f}" if c["epa_db"] is not None else "&ndash;"
-        return [games, (f"{c['pass_td']}-{c['ints']}", "TD-INT"), (pa, "Points added per dropback")]
+        return [games, (f"{c['pass_td']}-{c['ints']}", "TD-INT"), (num(c["rush_yds"]), "Rushing yards")]
     if g in ("RB", "FB"):
         td = c["rush_td"] + c["rec_td"]
         return [games, (f"{c['rush_yds'] / c['car']:.1f}" if c["car"] else "&ndash;", "Yards per carry"), (td, "Touchdown" if td == 1 else "Touchdowns")]
@@ -97,7 +97,7 @@ def small_stats(c):
 def history(c, m):
     g, rows = c["grp"], c["seasons"]
     if g == "QB":
-        head, f = ["Season", "Team", "G", "Pass yds", "TD", "INT"], lambda r: [num(r["pass_yds"]), r["pass_td"], r["ints"]]
+        head, f = ["Season", "Team", "G", "Pass yds", "TD", "INT", "Rush yds", "Rush TD"], lambda r: [num(r["pass_yds"]), r["pass_td"], r["ints"], num(r["rush_yds"]), r["rush_td"]]
     elif g in ("RB", "FB"):
         head, f = ["Season", "Team", "G", "Rush yds", "Rec yds", "TD"], lambda r: [num(r["rush_yds"]), num(r["rec_yds"]), r["rush_td"] + r["rec_td"]]
     elif g in ("WR", "TE"):
@@ -162,7 +162,7 @@ def league_line(c, m):
     if g not in m["lg"] or c["rk"] is None:
         return ""
     if g == "QB":
-        return f"League average: {m['lg']['QB_all']:+.2f} points added per dropback."
+        return f"He's at {c['epa_db']:+.2f} points added per dropback; the average across the league is {m['lg']['QB_all']:+.2f}."
     per = c["big"] / (c["gp_pfr"] if g == "DL" else c["gp"]) if c["gp"] else 0
     return (f"He averages {per:,.1f} {c['rank_what'].replace(' per game', '')} a game; the average for ranked {GROUP_NAME[g]} is "
             f"{m['lg'][g]:,.1f}.")
@@ -221,8 +221,8 @@ def build_nfl_cards():
         notes = []
         if c["other_teams"]:
             notes.append(f"He also played for the {', '.join(team_name(t) for t in c['other_teams'])} this season; the card counts his whole season.")
-        if c["last_week"] < m["week"]:
-            notes.append(f"His last game was Week {c['last_week']}, for the {tn}.")
+        if c["last_week"] < c["team_last_week"]:    # his team has played since his last game (not just a bye)
+            notes.append(f"He hasn't played since Week {c['last_week']}.")
         ll = league_line(c, m)
         body = f"""<div class="kicker"><a href="index.html">NFL player cards</a> &middot; {tn}</div><h1>{html.escape(c['name'])}</h1>
 <p class="dek">{pos_label(c)}, {tn}. {big_txt(c)} in {pl(c['gp'], 'game', 'games')}. Numbers through {through}.</p>
@@ -254,10 +254,11 @@ def build_nfl_cards():
               'document.querySelectorAll(".plist").forEach(function(l){var v=[].some.call(l.children,function(a){return a.style.display!=="none"});'
               'l.style.display=v?"":"none";l.previousElementSibling.style.display=v?"":"none"})});</script>')
     missing = len(m["unlinked"])
-    cover = (f"One card for every NFL player who has taken an offensive or defensive snap this season ({len(cards):,} of them"
-             + (f"; {missing} more we couldn't match to the league's stats" if missing else "") + ")")
+    cover = f"One card for every NFL player who has taken an offensive or defensive snap this season ({len(cards):,} of them)"
+    foot = (f'<p class="small">{missing} player{"s" if missing > 1 else ""} with snaps couldn\'t be matched to the league\'s stats and '
+            f'{"don\'t" if missing > 1 else "doesn\'t"} have a card yet.</p>' if missing else "")
     body = f"""<div class="kicker"><a href="../index.html">Player cards</a> &middot; NFL</div><h1>NFL player cards</h1>
-<p class="dek">{cover}, through {through}. Bills first. <a href="../index.html">NHL cards are here.</a></p>{search}<p class="small">{nav}</p>{lists}"""
+<p class="dek">{cover}, through {through}. Bills first. <a href="../index.html">NHL cards are here.</a></p>{search}<p class="small">{nav}</p>{lists}{foot}"""
     (out / "index.html").write_text(page("NFL player cards | Buffalo Quant Desk", body, "Cards", 2,
                                          "A card for every NFL player this season: the stat that matters for his position, his rank, and his history."))
     return m["week"]

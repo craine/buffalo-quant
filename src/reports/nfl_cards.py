@@ -114,6 +114,9 @@ def main(week=WEEK):
     games["gp"] = gweeks.map(len)
     last = sn.sort_values(["week", "team"]).groupby("gsis").tail(1).set_index("gsis")
     teams_played = sn.sort_values("week").groupby("gsis").team.agg(lambda x: list(dict.fromkeys(x)))
+    tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}
+                   UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
+    team_last = tw.groupby("team").week.max()
     week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}").d.iloc[0]
 
     num = cur.select_dtypes("number").columns.drop(["season", "week"])
@@ -152,7 +155,8 @@ def main(week=WEEK):
         jn = info.loc[gid, "jersey_number"] if gid in info.index else None
         name = info.loc[gid, "display_name"] if gid in info.index else last.loc[gid, "player"]
         rows.append(dict(
-            id=gid, name=name, team=last.loc[gid, "team"], last_week=int(last.loc[gid, "week"]), grp=grp, pos=p,
+            id=gid, name=name, team=last.loc[gid, "team"], last_week=int(last.loc[gid, "week"]),
+            team_last_week=int(team_last.get(last.loc[gid, "team"], week)), grp=grp, pos=p,
             number=int(jn) if jn is not None and jn == jn else None,
             gp=int(g.gp), gp_pfr=int(g.gp_pfr), snaps=int(g.snaps), snap_pct=float(g.pct) if g.pct == g.pct else None,
             other_teams=[x for x in teams_played.loc[gid] if x != last.loc[gid, "team"]],
