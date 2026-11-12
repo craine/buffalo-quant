@@ -268,6 +268,8 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     lg = {"QB_all": float(db.epa.sum() / len(db))}
     for grp, (col, _) in RANK_ON.items():
         m = (c.grp == grp) & (qualified[grp](c) if grp in qualified else (c.gp >= MIN_GP))
+        if col == "pressures":
+            m &= c.snap_data            # no charting data: not ranked on it
         val = c.loc[m, col] if grp in NOT_PER_GAME else per_game(c[m], col)
         c.loc[m, "rk"] = val.rank(ascending=False, method="min").astype(int)
         c.loc[m, "of"] = int(m.sum())
@@ -310,6 +312,8 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
         col, label = BIG[r["grp"]]
         if r["grp"] == "ST" and r["kr"] + r["pr"] > 0:
             col, label = "ret_yds", "return yards"
+        if not r["snap_data"] and col in ("pressures", "snaps", "st_snaps"):     # never show a number we couldn't compute
+            col, label = ("tackles", "tackles") if r["grp"] in ("DL", "LB", "CB", "S", "LS", "ST") else ("gp", "games")
         weeks = gweeks.loc[r["id"]] if r["gp"] else []
         s = by_week[col]
         r["spark"] = np.cumsum([int(s.get((r["id"], w), 0)) for w in weeks]).tolist()

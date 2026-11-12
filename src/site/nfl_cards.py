@@ -106,7 +106,8 @@ def small_stats(c):
     if g == "P":
         return [games, (f"{c['punt_yds'] / c['punts']:.1f}" if c["punts"] else "&ndash;", "Gross average"), (c["punt_i20"], "Inside the 20")]
     if g in ("LS", "ST"):
-        return [games, (c["tackles"], "Tackle" if c["tackles"] == 1 else "Tackles"), (num(c["kr_yds"] + c["pr_yds"]), "Return yards")]
+        third = (c["kr"] + c["pr"], "Returns") if c["big_label"] == "return yards" else (num(c["kr_yds"] + c["pr_yds"]), "Return yards")
+        return [games, (c["tackles"], "Tackle" if c["tackles"] == 1 else "Tackles"), third]
     if g == "QB":
         pa = f"{c['epa_db']:+.2f}" if c["epa_db"] is not None else "&ndash;"
         return [games, (f"{c['pass_td']}-{c['ints']}", "TD-INT"), (num(c["rush_yds"]), "Rushing yards")]
@@ -146,6 +147,8 @@ def history(c, m):
         head, f = ["Season", "Team", "G", "Punts", "Avg"], lambda r: [r["punts"], f"{r['punt_yds'] / r['punts']:.1f}" if r["punts"] else "&ndash;"]
     else:
         head, f = ["Season", "Team", "G", "Tkl", "Sacks", "INT"], lambda r: [r["tackles"], num(r["sacks"]), r["def_int"]]
+    if not rows:
+        return f"<p>No NFL regular-season games yet.</p><p class=\"small\">NFL seasons from {m['hist_from']} on.</p>"
     body = "".join("<tr>" + "".join(f"<td>{v}</td>" for v in [r["season"], r["team"], r["gp"], *f(r)]) + "</tr>" for r in rows)
     note = f"<p class=\"small\">NFL seasons from {m['hist_from']} on; {m['season']} through Week {m['week']}.</p>"
     return "<table><tr>" + "".join(f"<th>{h}</th>" for h in head) + f"</tr>{body}</table>{note}"
@@ -155,7 +158,7 @@ def season_line(c, m):
     g = c["grp"]
     if not c["gp"]:
         st = status_txt(c, m)
-        return (f"Hasn't played a game this season." + (f" Roster status as of Week {m['roster_week']}: {st.lower()}." if st else ""))
+        return f"Roster status as of Week {m['roster_week']}: {st.lower()}." if st else "Hasn't played a game this season."
     if g == "K":
         rng = lambda a, lbl: f"{a[0]} of {a[1]} {lbl}" if a[1] else None
         bits = [x for x in (rng(c["fg_u40"], "under 40 yards"), rng(c["fg_40"], "from 40-49"), rng(c["fg_50"], "from 50 or longer")) if x]
@@ -197,8 +200,10 @@ def season_line(c, m):
     dtd = f", {pl(c['def_td'], 'defensive touchdown', 'defensive touchdowns')}" if c["def_td"] else ""
     return (f"{pl(c['tackles'], 'tackle', 'tackles')} ({c['tfl']} for a loss), {pl(c['sacks'], 'sack', 'sacks')}, "
             f"{pl(c['def_int'], 'interception', 'interceptions')}, {pl(c['pd'], 'pass defended', 'passes defended')} (interceptions included), "
-            f"{pl(c['ff'], 'forced fumble', 'forced fumbles')}{dtd}. From game charting: {pl(c['pressures'], 'pressure', 'pressures')} on the "
-            f"quarterback and {pl(c['missed_tk'], 'missed tackle', 'missed tackles')}.{cov}{off}{returns_line(c)}")
+            f"{pl(c['ff'], 'forced fumble', 'forced fumbles')}{dtd}."
+            + (f" From game charting: {pl(c['pressures'], 'pressure', 'pressures')} on the quarterback and "
+               f"{pl(c['missed_tk'], 'missed tackle', 'missed tackles')}.{cov}" if c.get("snap_data", True) else "")
+            + f"{off}{returns_line(c)}")
 
 
 def rank_text(c, m):
@@ -212,6 +217,8 @@ def rank_text(c, m):
             return f"not ranked: fewer than {m['min_fga']} field-goal tries"
         if c["grp"] == "P":
             return f"not ranked: fewer than {m['min_punts']} punts"
+        if not c.get("snap_data", True) and c["grp"] in ("DL", "OL", "LS", "ST"):
+            return "not ranked: game-charting data missing"
         if c["grp"] == "OL":
             return "no ranking for linemen"
         if c["grp"] == "FB":
@@ -225,7 +232,7 @@ def rank_text(c, m):
 
 def league_line(c, m):
     g = c["grp"]
-    if g not in m["lg"] or c["rk"] is None:
+    if g not in m["lg"] or c["rk"] is None or not c.get("snap_data", True):
         return ""
     if g == "QB":
         return f"He's at {c['epa_db']:+.2f} points added per dropback; the average across the league is {m['lg']['QB_all']:+.2f}."
@@ -274,7 +281,7 @@ allowed. Fullbacks aren't ranked.</p>
 punt gains after the return and touchbacks (at least {m['min_punts']} punts). <b>Long snappers</b> and players who play mostly on special teams
 aren't ranked; their big number is special-teams snaps, or return yards for returners.</p>
 <p><b>Players who haven't played this season</b> get a card if they're on a roster: the active roster, the practice squad or the reserve
-list (injured reserve and similar), as of Week {m['roster_week']}. Their big number is their NFL games since 2018.</p>
+list (injured reserve and similar), as of Week {m['roster_week']}. Their big number is their NFL games since 2018, or a dash if they haven't played an NFL regular-season game yet.</p>
 <p><b>The source:</b> nflverse's weekly player stats, snap counts and play-by-play, and Pro Football Reference charting, regular season only.
 Numbers are season totals. The team shown is his team on its latest roster (as of Week {m['roster_week']}), or the team he last played for if he's
 no longer on a roster.
