@@ -22,7 +22,7 @@ OUT = ROOT / "reports" / "cards"
 SEASON_LABEL = lambda s: f"{str(s)[:4]}-{str(s)[6:]}"
 
 
-def main(as_of=AS_OF):
+def main(as_of=AS_OF, league=False):
     s = shots()
     gm = query(f"SELECT game_id, game_date FROM raw_nhl_games WHERE game_date <= '{as_of}'")
     s = s[s.game_id.isin(set(gm.game_id))].copy()
@@ -55,8 +55,13 @@ def main(as_of=AS_OF):
     cur["blend_rk"] = cur.blend.rank(ascending=False, method="min").astype(int)
 
     cards = []
-    for team in TEAMS:
+    cu = u[u.season == SEASON]
+    latest = cu.sort_values(["game_date", "game_id"]).groupby("goalie_id").opp.last()     # team he played for most recently
+    teams = sorted(cu.opp.unique()) if league else TEAMS
+    for team in teams:
         ids = by[(by.season == SEASON) & (by.opp == team)].sort_values("gp", ascending=False).goalie_id.unique()
+        if league:
+            ids = [g for g in ids if latest.get(g) == team]
         for gid in ids:
             gid = int(gid)
             c = cur.loc[gid]
@@ -80,12 +85,13 @@ def main(as_of=AS_OF):
                 small=bool(c.sog < 300)))
     OUT.mkdir(parents=True, exist_ok=True)
     meta = dict(as_of=as_of, season=SEASON_LABEL(SEASON), lg_sv=round(float(lg_sv), 3), lg_close_sv=round(float(lg_close_sv), 3),
-                n_goalies=n_cur, shrink=SHRINK_SHOTS, past_weight=PAST_WEIGHT, teams=TEAMS)
-    (OUT / "goalies.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
-    for c in cards:
+                n_goalies=n_cur, shrink=SHRINK_SHOTS, past_weight=PAST_WEIGHT, teams=teams)
+    (OUT / ("goalies_league.json" if league else "goalies.json")).write_text(json.dumps(dict(meta=meta, cards=cards), indent=1))
+    for c in (cards if not league else []):
         print(c["team"], c["name"], c["number"], c["gp"], c["sog"], c["sv"], c["gsax"], c["rk"], "blend", c["blend"], c["blend_rk"], c["close_sv"])
     print(meta)
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(league="--league" in sys.argv)
