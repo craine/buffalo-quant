@@ -51,7 +51,7 @@ buffaloquant.com/analysis/sabres-blackhawks-pregame-nov-12.html
 
 (273 characters with the link counted at 23.)
 
-### Instagram (image: social/ig/sabres-chi-b2b-45.png, 4:5)
+### Instagram (image: social/ig/sabres-chi-b2b-ig.png, landscape 1.91:1, full width in the feed)
 
 Sabres at Blackhawks, 8 p.m.
 
