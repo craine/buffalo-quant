@@ -47,14 +47,31 @@ def load_season(con, table, df, season):
     write(df, table, con)
 
 
-def main():
+def main(argv=None):
+    """make ingest: everything in config/seasons.yaml. Subsets for scheduled jobs:
+    --only player_week,snap_counts   sources (config keys) to load; single-file tables load only if named too (e.g. raw_schedules)
+    --from 2026                      first season to load (default: the config's)"""
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", default="")
+    ap.add_argument("--from", dest="start", type=int)
+    a = ap.parse_args(argv)
+    only = {x for x in a.only.split(",") if x}
+    unknown = only - set(SOURCES) - set(SINGLE_FILE)
+    if unknown:
+        ap.error(f"unknown --only name(s): {sorted(unknown)}; use {sorted(SOURCES)} or {sorted(SINGLE_FILE)}")
     cfg = yaml.safe_load(open(ROOT / "config" / "seasons.yaml"))
     con = connect()
     for table, path in SINGLE_FILE.items():
+        if only and table not in only:
+            continue
         write(fetch(path), table, con, if_exists="replace")
         print(table, "ok", flush=True)
     for key, (table, tmpl) in SOURCES.items():
+        if only and key not in only:
+            continue
         lo, hi = cfg[key]
+        lo = max(lo, a.start) if a.start else lo
         for y in range(lo, hi + 1):
             try:
                 df = fetch(tmpl.format(y=y))

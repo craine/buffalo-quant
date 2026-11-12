@@ -1,6 +1,7 @@
 """NFL player card pages: site/cards/nfl/<slug>.html and site/cards/nfl/index.html, from reports/cards/nfl_players.json."""
 import html
 import json
+import os
 from datetime import datetime
 
 from src.db import ROOT
@@ -289,9 +290,27 @@ Cards marked <b>small sample</b> have fewer than {m['min_gp']} games (or {m['min
 the NFL or any team; card designs are our own.</p>"""
 
 
+
+def postponed_note(games):
+    """Postponed games (ids like 2026_10_BUF_MIA, away team then home team) the cards don't include yet."""
+    if not games:
+        return ""
+    def one(g):
+        _, wk, away, home = g.split("_")
+        return f"the {team_name(away)} at {team_name(home)} game from Week {int(wk)}"
+    names = [one(g) for g in games]
+    lst = names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+    verb = "was" if len(names) == 1 else "were"
+    return (f'<p class="small">{lst[0].upper() + lst[1:]} {verb} postponed. It isn\'t in these numbers yet; '
+            f'the cards add it after it\'s played.</p>' if len(names) == 1 else
+            f'<p class="small">{lst[0].upper() + lst[1:]} {verb} postponed. They aren\'t in these numbers yet; '
+            f'the cards add them after they\'re played.</p>')
+
 def build_nfl_cards():
     src = ROOT / "reports" / "cards" / "nfl_players.json"
     if not src.exists():
+        if os.environ.get("CF_PAGES"):
+            raise FileNotFoundError(f"{src} is missing; the NFL cards would be left off the site")
         return None
     d = json.loads(src.read_text())
     m, cards = d["meta"], d["cards"]
@@ -357,6 +376,7 @@ def build_nfl_cards():
              f"Week {m['roster_week']})")
     foot = (f'<p class="small">{missing} player{"s" if missing > 1 else ""} with snaps couldn\'t be matched to the league\'s stats and '
             f'{"don\'t" if missing > 1 else "doesn\'t"} have a card yet.</p>' if missing else "")
+    foot += postponed_note(m.get("postponed", []))
     body = f"""<div class="kicker"><a href="../index.html">Player cards</a> &middot; NFL</div><h1>NFL player cards</h1>
 <p class="dek">{cover}, through {through}. Bills first. <a href="../index.html">NHL cards are here.</a></p>{search}
 <p class="small">Search by name, team or position (try "kicker").</p><p class="small">{nav}</p>{lists}{foot}"""

@@ -63,14 +63,90 @@ def norm(name):
     return re.sub(r"[^a-z]", "", name)
 
 
-def latest_week(season=SEASON):
-    """Newest week whose games are all final and whose player stats are loaded."""
-    sch = query(f"SELECT week, SUM(home_score IS NULL) open FROM raw_schedules WHERE season={season} AND game_type='REG' GROUP BY week ORDER BY week")
-    first_open = sch[sch.open > 0].week.min()
-    done = (first_open - 1) if pd.notna(first_open) else sch.week.max()
-    have = query(f"SELECT MAX(week) w FROM raw_player_week WHERE season={season} AND season_type='REG'").w.iloc[0]
-    return int(min(done, have))
+def week_status(season=SEASON):
+    """For each regular-season week: complete or not, and any postponed games. A week's window runs from its first scheduled game
+    through five days later (Thursday through Tuesday). The week is complete when every game scheduled in that window is final. A game
+    moved past the window is postponed: it doesn't hold the week open, and it's listed until it's played."""
+    return weeks_from_schedule(query(f"SELECT week, game_id, gameday, home_score FROM raw_schedules WHERE season={season} "
+                                     "AND game_type='REG' ORDER BY week, gameday"))
 
+
+def weeks_from_schedule(sch):
+    """week_status on a schedule frame (week, game_id, gameday, home_score). Each week also gets `ends` (last day of its window)
+    and `open`, the games inside the window that aren't final."""
+    sch = sch.copy()
+    sch["gameday"] = pd.to_datetime(sch.gameday)
+    out = {}
+    for w, g in sch.groupby("week"):
+        end = g.gameday.min() + pd.Timedelta(days=5)
+        inside, late = g[g.gameday <= end], g[g.gameday > end]
+        out[int(w)] = dict(complete=bool(inside.home_score.notna().all()), ends=end.date(), last=inside.gameday.max().date(),
+                           open=sorted(inside[inside.home_score.isna()].game_id),
+                           final=sorted(inside[inside.home_score.notna()].game_id), late=sorted(late.game_id),
+                           postponed=sorted(late[late.home_score.isna()].game_id))
+    return out
+
+
+def loaded_games(season=SEASON):
+    """Games whose box scores, snap counts and play-by-play have all loaded."""
+    ids = [set(query(f"SELECT DISTINCT game_id FROM {t} WHERE season={season} AND game_id IS NOT NULL").game_id)
+           for t in ("raw_player_week", "raw_snap_counts", "raw_pbp")]
+    return set.intersection(*ids)
+
+
+def ready_week(st, loaded):
+    """Newest week such that it and every week before it is complete and every one of their games has loaded. A game that is final
+    on the schedule but whose stats haven't posted yet holds the week, so the cards never go out "through Week N" missing a game."""
+    done = 0
+    for w in sorted(st):
+        if not st[w]["complete"] or not set(st[w]["final"]) <= loaded:
+            break
+        done = w
+    return done
+
+
+def schedule_week(st):
+    """Newest week such that it and every week before it is complete on the schedule (stats loaded or not)."""
+    done = 0
+    for w in sorted(st):
+        if not st[w]["complete"]:
+            break
+        done = w
+    return done
+
+
+def skipped_games(st, loaded, week):
+    """Postponed games the cards leave out: moved past their week's window and not yet played and loaded."""
+    return [g for w in sorted(st) if w <= week for g in st[w]["late"] if g not in loaded]
+
+
+
+def stall_check(st, card_week, today, loaded):
+    """Message if the cards are behind a week that is final on the schedule, two or more days after its last game (Wednesday for a
+    Monday night game, so the Tuesday run never trips it); None otherwise."""
+    if schedule_week(st) <= card_week:
+        return None
+    behind = card_week + 1
+    if (today - st[behind]["last"]).days < 2:
+        return None
+    missing = sorted(set(st[behind]["final"]) - loaded)
+    return (f"Week {behind}'s last game was {st[behind]['last']} and its games are final, but the cards are still through Week {card_week}: "
+            f"nflverse hasn't posted the box score, snap counts and play-by-play for {missing}. Re-run once it has; "
+            "if a game never gets them, see the NFL weeks note in CLAUDE.md")
+
+def latest_week(season=SEASON):
+    return ready_week(week_status(season), loaded_games(season))
+
+
+def rounded(x, places=6):
+    """Round floats so a rebuild on another machine doesn't change last-digit noise (and make a refresh commit for nothing)."""
+    if isinstance(x, float):
+        return round(x, places)
+    if isinstance(x, dict):
+        return {k: rounded(v, places) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [rounded(v, places) for v in x]
+    return x
 
 def tackles(df):
     # solo + the tackler credited on a shared tackle + assists: matches ESPN's and PFR's combined tackles
@@ -79,6 +155,9 @@ def tackles(df):
 
 def main(week=WEEK, roster_week=ROSTER_WEEK):
     week = week or latest_week()
+    st, loaded = week_status(), loaded_games()
+    skip = skipped_games(st, loaded, week)
+    notin = (" AND game_id NOT IN (" + ",".join(f"'{g}'" for g in skip) + ")") if skip else ""   # ids come from the schedule
     roster_week = roster_week or int(query(f"SELECT MAX(week) w FROM raw_rosters_weekly WHERE season={SEASON}").w.iloc[0])
     pl = query("SELECT gsis_id, pfr_id, display_name, position, jersey_number, rookie_season, last_season FROM raw_players ORDER BY gsis_id")
     pl = pl.drop_duplicates("gsis_id")
@@ -86,7 +165,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
 
     # ---- snaps: every game he played (special teams included); a card needs offensive or defensive snaps this season
     sn = query(f"""SELECT week, team, player, pfr_player_id, position, offense_snaps, offense_pct, defense_snaps, defense_pct, st_snaps
-                   FROM raw_snap_counts WHERE season={SEASON} AND game_type='REG' AND week<={week} ORDER BY week, team, pfr_player_id""")
+                   FROM raw_snap_counts WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin} ORDER BY week, team, pfr_player_id""")
     for c in ("offense_snaps", "defense_snaps", "st_snaps"):
         sn[c] = sn[c].fillna(0)
     sn = sn[sn.offense_snaps + sn.defense_snaps + sn.st_snaps > 0].copy()
@@ -94,7 +173,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
 
     # ---- link PFR id -> gsis id
     pw = query(f"SELECT * FROM raw_player_week WHERE season_type='REG' AND season BETWEEN {HIST_FROM} AND {SEASON} ORDER BY season, week, player_id")
-    cur = pw[(pw.season == SEASON) & (pw.week <= week)]
+    cur = pw[(pw.season == SEASON) & (pw.week <= week) & ~pw.game_id.isin(skip)]     # skipped postponed games stay out of every stat
     direct = pl.dropna(subset=["pfr_id"]).drop_duplicates("pfr_id", keep=False)
     direct = direct[direct.last_season.fillna(SEASON) >= SEASON - 1].set_index("pfr_id").gsis_id     # active in this era only
     link = {p: direct[p] for p in sn.pfr_player_id.unique() if p in direct.index}
@@ -131,10 +210,10 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     games["gp"] = gweeks.reindex(games.index).map(len)
     last = played_rows.sort_values(["week", "team"]).groupby("gsis").tail(1).set_index("gsis")
     teams_played = played_rows.sort_values("week").groupby("gsis").team.agg(lambda x: list(dict.fromkeys(x)))
-    tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}
-                   UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
+    tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin}
+                   UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin}""")
     team_last = tw.groupby("team").week.max()
-    week_date = query(f"SELECT MAX(gameday) d FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week={week}").d.iloc[0]
+    week_date = st[week]["last"]     # last game inside the week's window; a postponed game played later doesn't push it ahead
 
     # ---- rosters: each player's latest entry up to ROSTER_WEEK
     ro = query(f"""SELECT week, team, gsis_id, full_name, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
@@ -158,19 +237,19 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
 
     # ---- QB points added per dropback (scrambles credit the QB as rusher; no two-point tries)
     db = query(f"""SELECT COALESCE(passer_player_id, rusher_player_id) AS qb, week, epa FROM raw_pbp
-                   WHERE season={SEASON} AND season_type='REG' AND week<={week} AND qb_dropback=1 AND epa IS NOT NULL
+                   WHERE season={SEASON} AND season_type='REG' AND week<={week}{notin} AND qb_dropback=1 AND epa IS NOT NULL
                    AND two_point_attempt=0 ORDER BY game_id, play_id""")
     qb = db.groupby("qb").agg(n_db=("epa", "size"), epa=("epa", "sum"))
 
     # ---- PFR charting, through the last week with every game charted (and no gaps before it)
-    sch_n = query(f"SELECT week, COUNT(*) n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week ORDER BY week")
-    pf_n = query(f"SELECT week, COUNT(DISTINCT game_id) n FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week} GROUP BY week")
+    sch_n = query(f"SELECT week, COUNT(*) n FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin} GROUP BY week ORDER BY week")
+    pf_n = query(f"SELECT week, COUNT(DISTINCT game_id) n FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={week}{notin} GROUP BY week")
     full = sch_n.merge(pf_n, on="week", how="left", suffixes=("", "_pf")).fillna(0)
     gap = full[full.n_pf < full.n].week.min()
     pfr_week = int(gap - 1) if pd.notna(gap) else week
     games["gp_pfr"] = gweeks.map(lambda w: sum(x <= pfr_week for x in w))
     pf = query(f"""SELECT week, pfr_player_id, def_pressures, def_missed_tackles, def_targets, def_completions_allowed, def_yards_allowed
-                   FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={pfr_week} ORDER BY week, pfr_player_id""")
+                   FROM raw_pfr_def WHERE season={SEASON} AND game_type='REG' AND week<={pfr_week}{notin} ORDER BY week, pfr_player_id""")
     pf["gsis"] = pf.pfr_player_id.map(link)
     pf = pf.dropna(subset=["gsis"])
     pft = pf.groupby("gsis")[["def_pressures", "def_missed_tackles", "def_targets", "def_completions_allowed", "def_yards_allowed"]].sum()
@@ -338,11 +417,11 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
                 r[k] = None if np.isnan(v) else float(v)
         cards.append(r)
 
-    meta = dict(season=SEASON, week=week, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
+    meta = dict(season=SEASON, week=week, postponed=skip, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
                 linked_by_name=fallback, unlinked=unlinked, dropped=dropped)
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "nfl_players.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1, allow_nan=False))
+    (OUT / "nfl_players.json").write_text(json.dumps(rounded(dict(meta=meta, cards=cards)), indent=1, allow_nan=False))
     print(f"NFL cards through week {week} (charting through {pfr_week}): {len(cards)} players; "
           f"{fallback} linked by team/name/weeks; unlinked {unlinked}")
     print(c.groupby("grp").size().to_dict())
