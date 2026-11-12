@@ -259,7 +259,8 @@ def howto(m):
 <p><b>The big number</b> is the stat that matters most for the position: passing yards for quarterbacks, yards from scrimmage (rushing plus
 receiving) for running backs, receiving yards for receivers and tight ends, pressures on the quarterback for pass rushers, tackles for
 linebackers and safeties, passes defended (interceptions included) for cornerbacks, field goals for kickers and punts for punters. The rank compares him per game with everyone at his
-position who has played at least {m['min_gp']} games. Games include games he played only on special teams.</p>
+position who has played at least {m['min_gp']} games (quarterbacks, kickers and punters are ranked on rates instead; see below). Games
+include games he played only on special teams.</p>
 <p><b>Quarterbacks are ranked on points added per dropback.</b> Every play changes how many points a team can expect to score on that drive,
 based on down, distance and field position. A 15-yard completion on 3rd and 10 adds a lot; a sack loses some. Add that up over every
 dropback (passes, sacks and scrambles) and divide: across every dropback in the league this season it's {lg['QB_all']:+.2f}. Quarterbacks
@@ -270,12 +271,13 @@ game charting{pfr_note}. Sacks and tackles are the official counts, so they can 
 <p><b>Offensive linemen</b> get playing time and penalties only: the public data doesn't credit individual linemen for blocks or sacks
 allowed. Fullbacks aren't ranked.</p>
 <p><b>Kickers</b> are ranked on the share of field goals made (at least {m['min_fga']} tries); <b>punters</b> on net average, the yards a
-punt gains after the return and touchbacks (at least {m['min_punts']} punts). <b>Long snappers</b> and special-teams-only players aren't ranked;
-their big number is special-teams snaps, or return yards for returners.</p>
+punt gains after the return and touchbacks (at least {m['min_punts']} punts). <b>Long snappers</b> and players who play mostly on special teams
+aren't ranked; their big number is special-teams snaps, or return yards for returners.</p>
 <p><b>Players who haven't played this season</b> get a card if they're on a roster: the active roster, the practice squad or the reserve
 list (injured reserve and similar), as of Week {m['roster_week']}. Their big number is their NFL games since 2018.</p>
 <p><b>The source:</b> nflverse's weekly player stats, snap counts and play-by-play, and Pro Football Reference charting, regular season only.
-Numbers are season totals. The team shown is his roster team as of Week {m['roster_week']}, or the team he last played for if he's not on a roster.
+Numbers are season totals. The team shown is his team on its latest roster (as of Week {m['roster_week']}), or the team he last played for if he's
+no longer on a roster.
 Cards marked <b>small sample</b> have fewer than {m['min_gp']} games (or {m['min_db']} dropbacks for a quarterback). Not affiliated with
 the NFL or any team; card designs are our own.</p>"""
 
@@ -300,6 +302,15 @@ def build_nfl_cards():
             n = "His only game" if c["gp"] == 1 else f"All {c['gp']} of his games"
             notes.append(f"{n} this season {'was' if c['gp'] == 1 else 'were'} with the {team_name(c['played_team'])}. He's on the {tn} roster as of "
                          f"Week {m['roster_week']}, so every number here is from his time with the {team_name(c['played_team'])}.")
+        if c.get("off_roster") is not None:
+            o = c["off_roster"]
+            how = {"CUT": "released", "RET": "retired"}.get(o.get("status"), "")
+            notes.append(f"Not on an NFL roster as of Week {m['roster_week']}" + (
+                f"; his last roster entry was with the {team_name(o['team'])} in Week {o['week']}" + (f" ({how})" if how else "") if o else "") + ".")
+        if not c.get("snap_data", True):
+            notes.append("We couldn't match him to the snap-count and game-charting data, so his snaps and charting stats (like pressures) are missing.")
+        if all_elsewhere:
+            pass
         elif c["other_teams"]:
             notes.append(f"He also played for the {', '.join(team_name(t) for t in c['other_teams'])} this season; the card counts his whole season.")
         if c["last_week"] < c["team_last_week"]:    # his team has played since his last game (not just a bye)

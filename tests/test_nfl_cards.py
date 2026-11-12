@@ -38,7 +38,7 @@ def test_numbers_hang_together():
         if c["gp"] == 0:     # on a roster, hasn't played: headline is NFL games since 2018
             assert c["status"] in meta["rostered"] and c["big"] == sum(s["gp"] for s in c["seasons"]), c["name"]
             continue
-        assert c["snaps"] + c["st_snaps"] >= 1, c["name"]
+        assert c["snaps"] + c["st_snaps"] >= 1 or not c["snap_data"], c["name"]   # box-score-only players have no snap rows
         assert len(c["spark"]) == c["gp"] and c["spark"][-1] == c["big"], c["name"]
         assert c["fg_made"] <= c["fg_att"] and c["fg_long"] <= 70 and c["pat_made"] <= c["pat_att"], c["name"]
         assert sum(x[0] for x in (c["fg_u40"], c["fg_40"], c["fg_50"])) == c["fg_made"], c["name"]

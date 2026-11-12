@@ -117,14 +117,20 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     # ---- per-player season basics
     sn["pct"] = np.where(sn.offense_snaps >= sn.defense_snaps, sn.offense_pct, sn.defense_pct)
     sn.loc[sn.od == 0, "pct"] = np.nan                     # special-teams-only games don't count toward snap share
-    pos = sn[sn.od > 0].groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
+    named = sn[sn.position.fillna("").str.strip() != ""]          # a few snap rows have a blank position
+    pos = named[named.od > 0].groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
+    pos_any = named.groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
     games = sn.groupby("gsis").agg(snaps=("od", "sum"), st_snaps=("st_snaps", "sum"), pct=("pct", "mean"))
-    pos_any = sn.groupby("gsis").position.agg(lambda x: x.mode().iloc[0])
-    gweeks = (pd.concat([sn[["gsis", "week"]], cur[cur.player_id.isin(games.index)][["player_id", "week"]].rename(columns={"player_id": "gsis"})])
-              .drop_duplicates().groupby("gsis").week.apply(sorted))   # a snap row or a stat line: the snap file misses some games
-    games["gp"] = gweeks.map(len)
-    last = sn.sort_values(["week", "team"]).groupby("gsis").tail(1).set_index("gsis")
-    teams_played = sn.sort_values("week").groupby("gsis").team.agg(lambda x: list(dict.fromkeys(x)))
+    games["snap_data"] = True
+    # players with a box-score line but no linkable snap row (e.g. an unlinked PFR id) still played: count them from their stat lines
+    box_only = sorted(set(cur.player_id.dropna()) - set(games.index))
+    games = pd.concat([games, pd.DataFrame(index=box_only, data=dict(snaps=0, st_snaps=0, pct=np.nan, snap_data=False))])
+    played_rows = pd.concat([sn[["gsis", "week", "team"]], cur[["player_id", "week", "team"]].rename(columns={"player_id": "gsis"})])
+    played_rows = played_rows[played_rows.gsis.isin(games.index)].drop_duplicates(["gsis", "week"])
+    gweeks = played_rows.groupby("gsis").week.apply(sorted)        # a snap row or a stat line: the snap file misses some games
+    games["gp"] = gweeks.reindex(games.index).map(len)
+    last = played_rows.sort_values(["week", "team"]).groupby("gsis").tail(1).set_index("gsis")
+    teams_played = played_rows.sort_values("week").groupby("gsis").team.agg(lambda x: list(dict.fromkeys(x)))
     tw = query(f"""SELECT home_team AS team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}
                    UNION SELECT away_team, week FROM raw_schedules WHERE season={SEASON} AND game_type='REG' AND week<={week}""")
     team_last = tw.groupby("team").week.max()
@@ -133,12 +139,22 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     # ---- rosters: each player's latest entry up to ROSTER_WEEK
     ro = query(f"""SELECT week, team, gsis_id, full_name, status, position, depth_chart_position, jersey_number FROM raw_rosters_weekly
                    WHERE season={SEASON} AND game_type='REG' AND week<={roster_week} AND gsis_id IS NOT NULL ORDER BY week, team, gsis_id""")
+    team_ro_week = ro.groupby("team").week.max()                   # each team's newest roster (byes skip a week)
     ro = ro.sort_values(["week", "team"]).groupby("gsis_id").tail(1).set_index("gsis_id")
-    on_roster = ro[ro.status.isin(ROSTERED)]
+    # on a roster now = his latest entry is on his team's newest roster, with a rostered status; reserve players are listed every week
+    current = (ro.week == ro.team.map(team_ro_week)) & ro.status.isin(ROSTERED)
+    on_roster = ro[current]
 
     num = cur.select_dtypes("number").columns.drop(["season", "week"])
     tot = cur.groupby("player_id")[list(num)].sum()
     tot["fg_long"] = cur.groupby("player_id").fg_long.max()     # a long is a max, not a sum
+    # blocked field goals count as attempts; put them in their distance range (fg_blocked_list holds the distances)
+    blk = cur[cur.fg_blocked > 0][["player_id", "fg_blocked_list"]].copy()
+    blk = blk.assign(d=blk.fg_blocked_list.astype(str).str.split(r"[;,]")).explode("d")
+    blk["d"] = pd.to_numeric(blk.d.str.strip(), errors="coerce")
+    assert blk.d.notna().all(), "unparsed blocked field goal distance"
+    blk_rng = pd.crosstab(blk.player_id, pd.cut(blk.d, [0, 39, 49, 100], labels=["u40", "40", "50"]))
+    assert int(blk_rng.values.sum()) == int(cur.fg_blocked.sum()), "blocked field goals don't add up"
 
     # ---- QB points added per dropback (scrambles credit the QB as rusher; no two-point tries)
     db = query(f"""SELECT COALESCE(passer_player_id, rusher_player_id) AS qb, week, epa FROM raw_pbp
@@ -159,17 +175,19 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
     pf = pf.dropna(subset=["gsis"])
     pft = pf.groupby("gsis")[["def_pressures", "def_missed_tackles", "def_targets", "def_completions_allowed", "def_yards_allowed"]].sum()
 
-    rows = []
+    rows, dropped = [], []
     roster_only = [g for g in on_roster.index if g not in games.index]
     for gid in list(games.index) + roster_only:
         played = gid in games.index
         g = games.loc[gid] if played else None
         if played:
             p = pos.get(gid, pos_any.get(gid))
+            if p is None:                 # no snap position: use the roster's, then the players file
+                p = ro.loc[gid, "position"] if gid in ro.index else (info.loc[gid, "position"] if gid in info.index else None)
             if p == "DB" and gid in info.index:
                 p = "S" if info.loc[gid, "position"] in ("S", "FS", "SS", "SAF") else "CB"
             grp = POS_GROUP.get(p)
-            if grp is not None and g.snaps == 0 and grp not in ("K", "P", "LS"):
+            if grp is not None and g.snap_data and g.snaps == 0 and grp not in ("K", "P", "LS"):
                 grp = "ST"              # played only on special teams
         else:
             r0 = ro.loc[gid]
@@ -178,8 +196,10 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
                 p = "S" if r0.depth_chart_position in ("S", "FS", "SS") else "CB"
             grp = ROSTER_GROUP.get(p, POS_GROUP.get(p))
         if grp is None:
+            dropped.append((gid, "no position"))
             continue
         t = tot.loc[gid] if gid in tot.index else pd.Series(0, index=tot.columns)
+        b = {k: int(blk_rng.loc[gid, k]) if gid in blk_rng.index and k in blk_rng.columns else 0 for k in ("u40", "40", "50")}
         f = pft.loc[gid] if gid in pft.index else pd.Series(0, index=pft.columns)
         q = qb.loc[gid] if gid in qb.index else None
         jn = ro.loc[gid, "jersey_number"] if gid in ro.index and ro.loc[gid, "jersey_number"] == ro.loc[gid, "jersey_number"] else (
@@ -187,6 +207,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
         name = (info.loc[gid, "display_name"] if gid in info.index else ro.loc[gid, "full_name"] if gid in ro.index
                 else last.loc[gid, "player"] if played else None)
         if not isinstance(name, str) or not name.strip():
+            dropped.append((gid, "no name"))
             continue                    # never publish a card without a name
         played_team = last.loc[gid, "team"] if played else None
         last_wk = int(last.loc[gid, "week"]) if played else 0
@@ -197,9 +218,13 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
             id=gid, name=name, team=team, last_week=last_wk, played_team=played_team,
             team_last_week=int(team_last.get(played_team, week)) if played else 0,
             status=ro.loc[gid, "status"] if gid in on_roster.index else None, grp=grp, pos=p,
+            # for players who played but aren't on a roster now: his latest roster entry (released, cut, or simply gone)
+            off_roster=(None if gid in on_roster.index or not played else
+                        dict(team=ro.loc[gid, "team"], week=int(ro.loc[gid, "week"]), status=ro.loc[gid, "status"]) if gid in ro.index else {}),
             number=int(jn) if jn is not None and jn == jn else None,
             gp=int(g.gp) if played else 0, gp_pfr=int(g.gp_pfr) if played else 0, snaps=int(g.snaps) if played else 0,
             st_snaps=int(g.st_snaps) if played else 0,
+            snap_data=bool(g.snap_data) if played else True,
             snap_pct=float(g.pct) if played and g.pct == g.pct else None,
             other_teams=[x for x in teams_played.loc[gid] if x != team] if played else [],
             cmp=int(t.completions), att=int(t.attempts), pass_yds=int(t.passing_yards), pass_td=int(t.passing_tds),
@@ -214,9 +239,9 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
             n_db=int(q.n_db) if q is not None else 0, epa_db=float(q.epa / q.n_db) if q is not None and q.n_db else None,
             fg_made=int(t.fg_made), fg_att=int(t.fg_att), fg_long=int(t.fg_long) if t.fg_long == t.fg_long else 0,
             fg_u40=[int(t.fg_made_0_19 + t.fg_made_20_29 + t.fg_made_30_39), int(t.fg_made_0_19 + t.fg_made_20_29 + t.fg_made_30_39
-                     + t.fg_missed_0_19 + t.fg_missed_20_29 + t.fg_missed_30_39)],
-            fg_40=[int(t.fg_made_40_49), int(t.fg_made_40_49 + t.fg_missed_40_49)],
-            fg_50=[int(t.fg_made_50_59 + t.fg_made_60_), int(t.fg_made_50_59 + t.fg_made_60_ + t.fg_missed_50_59 + t.fg_missed_60_)],
+                     + t.fg_missed_0_19 + t.fg_missed_20_29 + t.fg_missed_30_39) + b["u40"]],
+            fg_40=[int(t.fg_made_40_49), int(t.fg_made_40_49 + t.fg_missed_40_49) + b["40"]],
+            fg_50=[int(t.fg_made_50_59 + t.fg_made_60_), int(t.fg_made_50_59 + t.fg_made_60_ + t.fg_missed_50_59 + t.fg_missed_60_) + b["50"]],
             pat_made=int(t.pat_made), pat_att=int(t.pat_att),
             punts=int(t.pt_att), punt_yds=int(t.pt_yards), punt_net=int(t.pt_net_yards), punt_i20=int(t.pt_inside_20), punt_tb=int(t.pt_touchback),
             pr=int(t.punt_returns), pr_yds=int(t.punt_return_yards), kr=int(t.kickoff_returns), kr_yds=int(t.kickoff_return_yards),
@@ -311,7 +336,7 @@ def main(week=WEEK, roster_week=ROSTER_WEEK):
 
     meta = dict(season=SEASON, week=week, roster_week=roster_week, rostered=ROSTERED, min_fga=MIN_FGA, min_punts=MIN_PUNTS, week_date=str(week_date), pfr_week=pfr_week, min_gp=MIN_GP, min_db=MIN_DB,
                 edge_press=EDGE_PRESS, edge_tackles=EDGE_TACKLES, hist_from=HIST_FROM, lg=lg, n=len(cards),
-                linked_by_name=fallback, unlinked=unlinked)
+                linked_by_name=fallback, unlinked=unlinked, dropped=dropped)
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "nfl_players.json").write_text(json.dumps(dict(meta=meta, cards=cards), indent=1, allow_nan=False))
     print(f"NFL cards through week {week} (charting through {pfr_week}): {len(cards)} players; "
