@@ -1,0 +1,30 @@
+{
+ "label": "Chances in regulation, in goals",
+ "big": [
+  [
+   2.1,
+   "Sabres"
+  ],
+  [
+   1.9,
+   "Blackhawks"
+  ]
+ ],
+ "note": "Final: Blackhawks 3, Sabres 2 in overtime. Buffalo had more of the chances over 60 minutes and still lost.",
+ "explainer": {
+  "kicker": "The back-to-back",
+  "title": "Tired road teams lose more often than their chances say.",
+  "text": "How often road teams won since 2023-24, from our pregame story:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Played the night before",
+    0.383
+   ],
+   [
+    "Rested",
+    0.468
+   ]
+  ]
+ }
+}

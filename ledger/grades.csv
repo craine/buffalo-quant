@@ -8,3 +8,4 @@ P0006,2026-11-11T03:43:43Z,0,MIN EPA/dropback -0.795,0.4225,"game_values(2026, m
 P0007,2026-11-11T03:43:43Z,1,BUF EPA/rush -0.086,0.1369,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_09_BUF_MIN"
 P0008,2026-11-11T03:43:43Z,1,MIN EPA/rush -0.144,0.0361,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_09_BUF_MIN"
 P0009,2026-11-12T12:43:16Z,0,"TBL 8, BUF 3 (REG)",0.2209,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020293"
+P0010,2026-11-13T13:11:44Z,0,"BUF 2, CHI 3 (OT)",0.3249,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020305"
