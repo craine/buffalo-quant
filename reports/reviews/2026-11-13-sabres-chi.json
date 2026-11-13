@@ -52,6 +52,22 @@
    "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
    "at_utc": "2026-11-13T13:27:36Z",
    "notes": "Applied Editor round-2 and Quant round-2 fixes: headline 'for 60 minutes', regulation totals in chances section and chart, 'fits the pattern', '2,319 teams in that spot', OT clarity."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+   "at_utc": "2026-11-13T13:28:24Z",
+   "notes": "Re-review f62d7b30: all required fixes in; headline/chances section/flow chart now consistent on 60-minute vs OT chances; 'fits the pattern' hedged. Nit: flow subtitle could restore 'black = Chicago's' (optional).",
+   "report": "2026-11-13-sabres-chi-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+   "at_utc": "2026-11-13T13:28:29Z",
+   "notes": "Re-check 3: headline '60 minutes' true (2.115 vs 1.886 reg); OT 0.370->0.4, full-game 2.256->2.3 consistent; '2,319 teams in that spot' correct (2,250 games); 2-2 after 60 correct; flow chart title/subtitle verified by viewing. Nit: subtitle no longer labels black dots as Chicago goals.",
+   "report": "2026-11-13-sabres-chi-quant.md"
   }
  ],
  "self": {
@@ -61,17 +77,17 @@
   "notes": "Applied Editor round-2 and Quant round-2 fixes: headline 'for 60 minutes', regulation totals in chances section and chart, 'fits the pattern', '2,319 teams in that spot', OT clarity."
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
-  "at_utc": "2026-11-13T13:25:30Z",
-  "notes": "Re-review a9ede8f1: prior fixes in. Remaining: headline 'more of the chances' true only for regulation but chances section and flow-chart subtitle show 2.3 vs 2.1 -> add '60 minutes'/'overtime included'; lead 'That's the pattern' -> 'That fits the pattern'.",
+  "verdict": "pass",
+  "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+  "at_utc": "2026-11-13T13:28:24Z",
+  "notes": "Re-review f62d7b30: all required fixes in; headline/chances section/flow chart now consistent on 60-minute vs OT chances; 'fits the pattern' hedged. Nit: flow subtitle could restore 'black = Chicago's' (optional).",
   "report": "2026-11-13-sabres-chi-editor.md"
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
-  "at_utc": "2026-11-13T13:27:03Z",
-  "notes": "Re-check: all stage-2 fixes landed and reproduce (0.467, 31.5%/2,319, 38% PP/4v4, 60-min model comparison, tired ranges). New errors: headline 'had more of the chances and still lost' is false for full game (CHI 2.26 vs 2.11 incl OT; contradicts flow chart subtitle and 'How we measure') -> add 'in regulation'; body '(2,319 games)' is 2,319 leaders in 2,250 games.",
+  "verdict": "pass",
+  "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+  "at_utc": "2026-11-13T13:28:29Z",
+  "notes": "Re-check 3: headline '60 minutes' true (2.115 vs 1.886 reg); OT 0.370->0.4, full-game 2.256->2.3 consistent; '2,319 teams in that spot' correct (2,250 games); 2-2 after 60 correct; flow chart title/subtitle verified by viewing. Nit: subtitle no longer labels black dots as Chicago goals.",
   "report": "2026-11-13-sabres-chi-quant.md"
  }
 }

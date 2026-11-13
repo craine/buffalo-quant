@@ -171,7 +171,7 @@ def main(as_of=AS_OF):
     ax.set_xlabel("Game minute"); ax.set_ylabel("Goals the chances were worth (running total)")
     ax.legend(frameon=False, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Buffalo led the chances for 60 minutes; Chicago had all of overtime",
-           f"Chances {reg_f:.1f} to {reg_a:.1f} Buffalo after 60 minutes; {f.xg.sum():.1f} to {a.xg.sum():.1f} with overtime. Chicago won {them_sc}-{us_sc} in OT. Blue dots = Sabres goals.",
+           f"Chances {reg_f:.1f} to {reg_a:.1f} Buffalo after 60 minutes; {f.xg.sum():.1f} to {a.xg.sum():.1f} with overtime. Chicago won {them_sc}-{us_sc} in OT. Blue dots = Sabres goals, black = Chicago's.",
            f"Unblocked shots, empty net excluded. Sabres {len(f)} unblocked shots, Blackhawks {len(a)}. Nov. 12, 2026, in Chicago.")
     fig.savefig(OUT / "sabres-chi-post-flow.png"); plt.close(fig)
 
