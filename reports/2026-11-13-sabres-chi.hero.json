@@ -1,29 +1,29 @@
 {
- "label": "Chances through two periods, in goals",
+ "label": "Chances in regulation, in goals",
  "big": [
   [
-   1.5,
+   2.1,
    "Sabres"
   ],
   [
-   0.8,
+   1.9,
    "Blackhawks"
   ]
  ],
- "note": "Final: Blackhawks 3, Sabres 2 in overtime. With a 2-1 lead in the third, Buffalo got 25% of the chances.",
+ "note": "Final: Blackhawks 3, Sabres 2 in overtime. Buffalo had more of the chances over 60 minutes and still lost.",
  "explainer": {
-  "kicker": "Not the legs",
-  "title": "Tired road teams trail most early, not late.",
-  "text": "Road team's share of the chances in the first period, since 2023-24:",
+  "kicker": "The back-to-back",
+  "title": "Tired road teams lose more often than their chances say.",
+  "text": "How often road teams won since 2023-24, from our pregame story:",
   "fmt": "pct",
   "bars": [
    [
-    "Tired road teams",
-    0.457
+    "Played the night before",
+    0.383
    ],
    [
-    "Rested road teams",
-    0.478
+    "Rested",
+    0.468
    ]
   ]
  }
