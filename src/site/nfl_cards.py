@@ -350,7 +350,7 @@ def build_nfl_cards():
 {''.join(f'<p>{n}</p>' for n in notes)}
 {'<p><b>Small sample.</b> These numbers can move a lot.</p>' if c['small'] else ''}
 {howto(m)}"""
-        (out / f"{slugs[c['id']]}.html").write_text(page(f"{c['name']} | NFL player card | Buffalo Quant Desk", body, "Cards", 2,
+        (out / f"{slugs[c['id']]}.html").write_text(page(f"{c['name']} | NFL player card | Buffalo Quant Desk", body, "NFL", 2,
                                                        f"{c['name']}, {pos_label(c)}, {tn}: {big_txt(c)} this season."))
         key = ("0" if c["team"] == "BUF" else "1" + tn, GROUP_ORDER.index(c["grp"]))
         groups.setdefault(key, (tn, c["grp"], []))[2].append(
@@ -380,6 +380,6 @@ def build_nfl_cards():
     body = f"""<div class="kicker"><a href="../index.html">Player cards</a> &middot; NFL</div><h1>NFL player cards</h1>
 <p class="dek">{cover}, through {through}. Bills first. <a href="../index.html">NHL cards are here.</a></p>{search}
 <p class="small">Search by name, team or position (try "kicker").</p><p class="small">{nav}</p>{lists}{foot}"""
-    (out / "index.html").write_text(page("NFL player cards | Buffalo Quant Desk", body, "Cards", 2,
+    (out / "index.html").write_text(page("NFL player cards | Buffalo Quant Desk", body, "NFL", 2,
                                          "A card for every NFL player this season: the stat that matters for his position, his rank, and his history."))
     return m["week"]

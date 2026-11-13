@@ -75,8 +75,14 @@ header.site{background:#0B1B3F}
 header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
 .mark{font-weight:900;letter-spacing:.16em;font-size:15px;text-decoration:none;color:#fff;white-space:nowrap}
 .mark b{color:#FF5A6E}
-nav a{margin-left:22px;text-decoration:none;font-weight:600;font-size:15px;color:#fff}
-nav a.on{color:#FFB3BD}nav a:hover{color:#FFB3BD}
+nav{display:flex;align-items:center}
+nav a,nav summary{margin-left:22px;text-decoration:none;font-weight:600;font-size:15px;color:#fff;cursor:pointer}
+nav a.on,nav summary.on,nav a:hover,nav summary:hover,nav details[open] summary{color:#FFB3BD}
+nav details{position:relative}nav summary{list-style:none;white-space:nowrap}nav summary::-webkit-details-marker{display:none}
+nav summary::after{content:"";display:inline-block;margin-left:6px;border:4px solid transparent;border-top:5px solid currentColor;transform:translateY(2px)}
+nav .menu{position:absolute;right:0;top:calc(100% + 12px);background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 30px rgba(11,27,63,.22);min-width:230px;padding:6px;z-index:50}
+nav .menu a{display:block;margin:0;padding:10px 12px;color:var(--ink);border-radius:6px;font-weight:600}
+nav .menu a:hover{background:#F1F3F7;color:var(--navy)}nav .menu a small{display:block;font-weight:400;font-size:13px;color:#5A6170}
 .kicker{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin:44px 0 8px}
 h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,5vw,48px);line-height:1.1;margin:0 0 14px;letter-spacing:-.01em}
 h2{font-family:Georgia,serif;font-size:26px;margin:40px 0 10px}
@@ -131,7 +137,7 @@ header.site .wrap,footer .wrap{max-width:1160px}
 @media(max-width:600px){.lcard.wide{grid-column:auto}.hgrid{padding-top:36px;padding-bottom:40px}}
 .bio{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px;margin:28px 0}
 .bio img{width:180px;height:180px;object-fit:cover;border-radius:50%;border:4px solid var(--navy)}.bio>div{flex:1 1 380px;min-width:0}.bio h2{margin:0 0 8px}.bio .btn{margin-top:4px}
-@media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a{margin:0 16px 0 0;font-size:14px}.mark{font-size:14px}}
+@media(max-width:600px){header.site .wrap{flex-direction:column;align-items:flex-start;justify-content:center;height:auto;padding-top:12px;padding-bottom:10px;gap:6px}nav a,nav summary{margin:0 16px 0 0;font-size:14px}nav .menu{left:0;right:auto}.mark{font-size:14px}}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:26px;margin:28px 0}
 .gc{perspective:1200px;height:440px;cursor:pointer}
@@ -165,12 +171,24 @@ header.site .wrap,footer .wrap{max-width:1160px}
 import hashlib
 CSS_V = hashlib.sha1(CSS.encode()).hexdigest()[:8]  # changes whenever the CSS changes, so browsers refetch it
 
-NAV = [("index.html", "Home"), ("analysis/", "Analysis"), ("cards/", "Cards"), ("ledger.html", "Ledger"), ("about.html", "About")]
+NAV = [("index.html", "Home", None),
+       (None, "NHL", [("analysis/sabres.html", "Sabres stories", "Previews, post-games and deep dives"),
+                      ("cards/index.html", "NHL player cards", "Every skater and goalie, all 32 teams")]),
+       (None, "NFL", [("analysis/bills.html", "Bills stories", "Previews, post-games and deep dives"),
+                      ("cards/nfl/index.html", "NFL player cards", "Every player, all 32 teams")]),
+       ("ledger.html", "Ledger", None), ("about.html", "About", None)]
+NAV_JS = ("<script>document.addEventListener('click',e=>{document.querySelectorAll('nav details[open]')"
+          ".forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')})});</script>")   # one menu open at a time
 
 
 def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics with receipts.", og="allen-seasons.png", full=False):
     up = "../" * depth
-    links = "".join(f'<a href="{up}{h}" class="{"on" if n == active else ""}">{n}</a>' for h, n in NAV)
+    def item(h, n, sub):
+        if sub is None:
+            return f'<a href="{up}{h}" class="{"on" if n == active else ""}">{n}</a>'
+        menu = "".join(f'<a href="{up}{sh}">{sn}<small>{sd}</small></a>' for sh, sn, sd in sub)
+        return f'<details><summary class="{"on" if n == active else ""}">{n}</summary><div class="menu">{menu}</div></details>'
+    links = "".join(item(*x) for x in NAV)
     t = html.escape(title)
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -178,7 +196,7 @@ def page(title, body, active, depth=0, desc="Buffalo Bills and Sabres analytics 
 <meta property="og:title" content="{t}"><meta property="og:description" content="{html.escape(desc)}">
 <meta property="og:image" content="{DOMAIN}/analysis/{og}"><meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="{up}favicon.svg"><link rel="stylesheet" href="{up}style.css?v={CSS_V}"></head><body>
-<header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>
+<header class="site"><div class="wrap"><a class="mark" href="{up}index.html">BUFFALO <b>QUANT</b> DESK</a><nav>{links}</nav></div></header>{NAV_JS}
 <main class="{"home" if full else "wrap"}">{body}</main>
 <footer><div class="wrap">Buffalo Quant Desk. Every number is computed from public play-by-play
 (NFL data via nflverse; NHL data from the league's public game feed). Analysis, not wagering advice. Not affiliated with the Buffalo Bills,
@@ -244,6 +262,15 @@ LEGACY = {"bills-offense-vs-vikings-defense", "wentz-vs-bills-defense", "sabres-
           "sabres-50-win-mirage", "josh-allen-2018-to-now", "bills-defense-fixed"}
 
 
+def league_of(kicker):
+    """Stories are Sabres (NHL) or Bills (NFL); the kicker starts with the team."""
+    if kicker.startswith("Sabres"):
+        return "NHL"
+    if kicker.startswith("Bills"):
+        return "NFL"
+    raise ValueError(f"story kicker must start with Sabres or Bills: {kicker!r}")
+
+
 def check_reviews(articles=None):
     from src.site.review_gate import problems
     bad = {s: problems(ROOT / "reports" / src) for s, src, *_ in (articles or ARTICLES) if s not in LEGACY}
@@ -267,10 +294,16 @@ def build_articles():
         body = (f'<div class="kicker">{kicker}</div><h1>{html.escape(title)}</h1>'
                 f'<p class="dek">{html.escape(dek)}</p><div class="meta">{when} &middot; Buffalo Quant Desk</div>'
                 + md_to_html(text))
-        (out / f"{slug}.html").write_text(page(f"{title} | Buffalo Quant Desk", body, "Analysis", 1, dek, hero))
-        cards.append(f'<div class="card"><h3>{when}</h3><a href="{slug}.html"><b>{html.escape(title)}</b></a><br>{html.escape(dek)}</div>')
-    idx = '<div class="kicker">Analysis</div><h1>The work</h1>' + "".join(cards)
-    (out / "index.html").write_text(page("Analysis | Buffalo Quant Desk", idx, "Analysis", 1))
+        league = league_of(kicker)
+        (out / f"{slug}.html").write_text(page(f"{title} | Buffalo Quant Desk", body, league, 1, dek, hero))
+        cards.append((league, f'<div class="card"><h3>{when}</h3><a href="{slug}.html"><b>{html.escape(title)}</b></a><br>{html.escape(dek)}</div>'))
+    idx = '<div class="kicker">Analysis</div><h1>The work</h1>' + "".join(c for _, c in cards)
+    (out / "index.html").write_text(page("Analysis | Buffalo Quant Desk", idx, "", 1))
+    for league, team, fname, other in (("NHL", "Sabres", "sabres.html", "bills.html"), ("NFL", "Bills", "bills.html", "sabres.html")):
+        mine = "".join(c for lg, c in cards if lg == league)
+        body = (f'<div class="kicker">{league} &middot; {team}</div><h1>{team} stories</h1>' + mine +
+                f'<p class="small"><a href="{other}">{"Bills" if team == "Sabres" else "Sabres"} stories</a> &middot; <a href="index.html">All stories</a></p>')
+        (out / fname).write_text(page(f"{team} stories | Buffalo Quant Desk", body, league, 1))
     return ARTICLES, {a[0]: (ROOT / "reports" / a[1]).read_text() for a in ARTICLES}
 
 
@@ -562,7 +595,7 @@ Numbers through {asof}.</p>
 {expect_li(c, m)}
 {f"<li>He also played for another team this season; the card counts his {tname.title()} games, and the rank and the season projection use his whole season ({plural(c['season_g'], 'goal')}, {plural(c['season_p'], 'point')} in all).</li>" if c.get('other_team') else ''}</ul>
 {skater_howto(m)}"""
-        (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "Cards", 1,
+        (out / f"{slug}.html").write_text(page(f"{c['name']} | Player card | Buffalo Quant Desk", body, "NHL", 1,
                                                f"{c['name']}: {plural(c['g'], 'goal')}, {plural(c['a'], 'assist')}, {plural(c['p'], 'point')} this season."))
         groups.setdefault(tname.title() + " skaters", []).append(
             f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
@@ -623,7 +656,7 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 {'<li><b>Small sample.</b> Fewer than 300 shots this season; these numbers can move a lot.</li>' if c['small'] else ''}
 {'<li>He also played for another team this season. These numbers cover his whole season; the table on the back of the card splits it by team.</li>' if c.get('other_team') else ''}</ul>
 {card_howto(m)}"""
-        (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "Cards", 1,
+        (out / f"{slug}.html").write_text(page(f"{c['name']} | Goalie card | Buffalo Quant Desk", body, "NHL", 1,
                                                f"{c['name']}: {sign_txt(c['gsax'])} goals saved vs. an average goalie this season."))
         groups.setdefault(tname.title() + " goalies", []).append(
             f'<a class="pcard" href="{slug}.html" style="--tc:{tc};--ta:{ta}"><span class="pn">{c["number"] or ""}</span>'
@@ -654,7 +687,7 @@ goalies, over {c['gp']} games and {c['sog']} shots on goal. Numbers through {aso
 <p class="dek">One card for every NHL player this season ({n_cards} of them), built from the league's play-by-play: points, chances, a rating
 from every season since 2023-24, and a projection. Sabres first. <a href="nfl/index.html"><b>NFL cards, Bills first, are here.</b></a> Skater cards through {sk_asof or asof}; goalie cards through {asof}.</p>
 {search}<p class="small">{nav}</p>{lists}"""
-    (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "Cards", 1, "Player cards with receipts."))
+    (out / "index.html").write_text(page("Player cards | Buffalo Quant Desk", body, "NHL", 1, "Player cards with receipts."))
 
 
 def sign_txt(v):
