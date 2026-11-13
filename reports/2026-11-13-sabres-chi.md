@@ -1,7 +1,7 @@
-# Blackhawks 3, Sabres 2 (OT): Buffalo had more of the chances and still lost
+# Blackhawks 3, Sabres 2 (OT): Buffalo had more of the chances for 60 minutes and still lost
 
 **Finding: Over 60 minutes, the Sabres' chances were worth 2.1 goals to Chicago's 1.9, and they led 2-1 into the third. Chicago tied it with
-11:38 left and won 3:12 into overtime. That's the pattern from our pregame story: road teams on the second night of a back-to-back lose more
+11:38 left and won 3:12 into overtime. That fits the pattern from our pregame story: road teams on the second night of a back-to-back lose more
 often than their chances say. One game can't prove it. Our 57% call for a Buffalo win is a miss.**
 
 *One game, Nov. 12, in Chicago, the second night of a back-to-back for Buffalo. [Our pregame story](sabres-blackhawks-pregame-nov-12.html).*
@@ -29,14 +29,15 @@ Shots counted here are the ones that weren't blocked, not counting empty nets.
 
 Our pregame story said to watch the first period, because tired road teams usually start a little behind. Buffalo didn't: it had 67% of the chances in
 the first and 62% in the second. In regulation the chances came out 2.1 to 1.9 Buffalo. Replay those 60 minutes over and over, with each shot going
-in or missing at its own chance, and Buffalo wins 44% of the time and Chicago 35%; the other 21%, it's tied after 60. It was tied, and overtime
+in or missing at its own chance, and Buffalo wins 44% of the time and Chicago 35%; the other 21%, it's tied after 60. That's what happened: 2-2 after 60, and overtime
 belonged to Chicago: 3 shots to none.
 
 ## How we measure "chances"
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Frank Nazar's first goal, from 5 feet, had a
 23% chance; Tage Thompson's power-play goal from 29 feet, about 7%. Add those chances up over a game and you get what a team's chances
-were worth in goals: all 31 of Chicago's shots were worth 2.3, and Chicago scored 3. The shot locations come from the NHL's own play-by-play. (The full
+were worth in goals: all 31 of Chicago's shots, overtime included, were worth 2.3, and Chicago scored 3. In regulation alone it was 2.1 for Buffalo,
+1.9 for Chicago; Chicago's last 0.4 came in overtime. The shot locations come from the NHL's own play-by-play. (The full
 explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
 
 ## The third period
@@ -46,12 +47,12 @@ that weren't blocked, worth 0.2 goals, and Chicago had 8, worth 0.7: **25% of th
 usually gets about 47%, since the trailing team pushes. About 38% of Chicago's chances in that stretch came on a power play or at 4-on-4.
 
 It's 11 shots in about eight minutes, and stretches like that swing a lot: across the NHL since 2023-24, about 32% of teams up a goal in the same
-part of the third got 25% of the chances or less (2,319 games). After the tie, the chances were even until overtime.
+part of the third got 25% of the chances or less (2,319 teams in that spot). After the tie, the chances were even until overtime.
 
 ## The back-to-back
 
 Our pregame story found that road teams playing the second night in a row, against a rested home team, win less often, without falling far behind in the chances.
-Thursday looked like that: Buffalo had more of the chances in regulation and still lost. One game doesn't confirm it, and we still don't know why it happens.
+Thursday fit that: Buffalo had more of the chances in regulation and still lost. One game doesn't confirm it, and we still don't know why it happens.
 
 It's not that tired teams fade late. Split their chances by period (644 games since 2023-24, not counting Thursday's), and they're a little behind all game,
 not more in the third:

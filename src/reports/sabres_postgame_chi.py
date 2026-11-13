@@ -170,8 +170,8 @@ def main(as_of=AS_OF):
     ax.set_xticks([0, 20, 40, 60], ["0", "20", "40", "60"])
     ax.set_xlabel("Game minute"); ax.set_ylabel("Goals the chances were worth (running total)")
     ax.legend(frameon=False, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Buffalo led the chances for two periods; Chicago took the third",
-           f"Running total of each team's chances. Final chances {f.xg.sum():.1f} to {a.xg.sum():.1f}, score {them_sc}-{us_sc} Chicago (OT). Blue dots = Sabres goals, black = Chicago's.",
+    finish(fig, "Buffalo led the chances for 60 minutes; Chicago had all of overtime",
+           f"Chances {reg_f:.1f} to {reg_a:.1f} Buffalo after 60 minutes; {f.xg.sum():.1f} to {a.xg.sum():.1f} with overtime. Chicago won {them_sc}-{us_sc} in OT. Blue dots = Sabres goals.",
            f"Unblocked shots, empty net excluded. Sabres {len(f)} unblocked shots, Blackhawks {len(a)}. Nov. 12, 2026, in Chicago.")
     fig.savefig(OUT / "sabres-chi-post-flow.png"); plt.close(fig)
 
@@ -199,10 +199,10 @@ def main(as_of=AS_OF):
         f"{', rebound' if r.rebound else ''}{', power play' if r.strength in ('5v4', '5v3', '4v3') else ''}{', 3-on-3' if r.strength == '3v3' else ''} | {r.xg:.0%} | "
         f"{int(r.us_g + (r.team == US))}-{int(r.them_g + (r.team == THEM))} |" for r in gl.itertuples())
     tie_left = 1200 - int(tie_goal.t) % 1200
-    md = f"""# Blackhawks {them_sc}, Sabres {us_sc} (OT): Buffalo had more of the chances and still lost
+    md = f"""# Blackhawks {them_sc}, Sabres {us_sc} (OT): Buffalo had more of the chances for 60 minutes and still lost
 
 **Finding: Over 60 minutes, the Sabres' chances were worth {reg_f:.1f} goals to Chicago's {reg_a:.1f}, and they led 2-1 into the third. Chicago tied it with
-{clock(tie_left)} left and won {clock(ot_goal.t)} into overtime. That's the pattern from our pregame story: road teams on the second night of a back-to-back lose more
+{clock(tie_left)} left and won {clock(ot_goal.t)} into overtime. That fits the pattern from our pregame story: road teams on the second night of a back-to-back lose more
 often than their chances say. One game can't prove it. Our {PRED_P:.0%} call for a Buffalo win is a miss.**
 
 *One game, Nov. 12, in Chicago, the second night of a back-to-back for Buffalo. [Our pregame story](sabres-blackhawks-pregame-nov-12.html).*
@@ -226,14 +226,15 @@ Shots counted here are the ones that weren't blocked, not counting empty nets.
 
 Our pregame story said to watch the first period, because tired road teams usually start a little behind. Buffalo didn't: it had {buf_share[1]:.0%} of the chances in
 the first and {buf_share[2]:.0%} in the second. In regulation the chances came out {reg_f:.1f} to {reg_a:.1f} Buffalo. Replay those 60 minutes over and over, with each shot going
-in or missing at its own chance, and Buffalo wins {p_win:.0%} of the time and Chicago {p_loss:.0%}; the other {p_tie:.0%}, it's tied after 60. It was tied, and overtime
+in or missing at its own chance, and Buffalo wins {p_win:.0%} of the time and Chicago {p_loss:.0%}; the other {p_tie:.0%}, it's tied after 60. That's what happened: 2-2 after 60, and overtime
 belonged to Chicago: {nper.loc[4, THEM]} shots to none.
 
 ## How we measure "chances"
 
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Frank Nazar's first goal, from {gl.iloc[1].dist:.0f} feet, had a
 {gl.iloc[1].xg:.0%} chance; Tage Thompson's power-play goal from {gl.iloc[2].dist:.0f} feet, about {gl.iloc[2].xg:.0%}. Add those chances up over a game and you get what a team's chances
-were worth in goals: all {len(a)} of Chicago's shots were worth {a.xg.sum():.1f}, and Chicago scored {them_sc}. The shot locations come from the NHL's own play-by-play. (The full
+were worth in goals: all {len(a)} of Chicago's shots, overtime included, were worth {a.xg.sum():.1f}, and Chicago scored {them_sc}. In regulation alone it was {reg_f:.1f} for Buffalo,
+{reg_a:.1f} for Chicago; Chicago's last {per.loc[4, THEM]:.1f} came in overtime. The shot locations come from the NHL's own play-by-play. (The full
 explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).)
 
 ## The third period
@@ -243,12 +244,12 @@ that weren't blocked, worth {u1f:.1f} goals, and Chicago had {n_u1a}, worth {u1a
 usually gets about {lead1_share:.0%}, since the trailing team pushes. About {st_xg / u1a:.0%} of Chicago's chances in that stretch came on a power play or at 4-on-4.
 
 It's {n_u1f + n_u1a} shots in about eight minutes, and stretches like that swing a lot: across the NHL since 2023-24, about {low_frac:.0%} of teams up a goal in the same
-part of the third got {u1f / (u1f + u1a):.0%} of the chances or less ({n_lead1:,} games). After the tie, the chances were even until overtime.
+part of the third got {u1f / (u1f + u1a):.0%} of the chances or less ({n_lead1:,} teams in that spot). After the tie, the chances were even until overtime.
 
 ## The back-to-back
 
 Our pregame story found that road teams playing the second night in a row, against a rested home team, win less often, without falling far behind in the chances.
-Thursday looked like that: Buffalo had more of the chances in regulation and still lost. One game doesn't confirm it, and we still don't know why it happens.
+Thursday fit that: Buffalo had more of the chances in regulation and still lost. One game doesn't confirm it, and we still don't know why it happens.
 
 It's not that tired teams fade late. Split their chances by period ({ngames['tired']} games since 2023-24, not counting Thursday's), and they're a little behind all game,
 not more in the third:

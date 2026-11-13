@@ -29,26 +29,49 @@
    "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
    "at_utc": "2026-11-13T13:23:05Z",
    "notes": "Rewritten after Quant and Editor fails: like-for-like league window (47%), power-play share, one-stretch frequency (32%); regulation chances 2.1-1.9 as the lead; tired-legs claims cut to what holds (no late fade; periods within noise, ranges in stat-heads); goalie line matches pregame figures; hero numbers computed; colors swapped; Dallas line removed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
+   "at_utc": "2026-11-13T13:25:30Z",
+   "notes": "Re-review a9ede8f1: prior fixes in. Remaining: headline 'more of the chances' true only for regulation but chances section and flow-chart subtitle show 2.3 vs 2.1 -> add '60 minutes'/'overtime included'; lead 'That's the pattern' -> 'That fits the pattern'.",
+   "report": "2026-11-13-sabres-chi-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
+   "at_utc": "2026-11-13T13:27:03Z",
+   "notes": "Re-check: all stage-2 fixes landed and reproduce (0.467, 31.5%/2,319, 38% PP/4v4, 60-min model comparison, tired ranges). New errors: headline 'had more of the chances and still lost' is false for full game (CHI 2.26 vs 2.11 incl OT; contradicts flow chart subtitle and 'How we measure') -> add 'in regulation'; body '(2,319 games)' is 2,319 leaders in 2,250 games.",
+   "report": "2026-11-13-sabres-chi-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+   "at_utc": "2026-11-13T13:27:36Z",
+   "notes": "Applied Editor round-2 and Quant round-2 fixes: headline 'for 60 minutes', regulation totals in chances section and chart, 'fits the pattern', '2,319 teams in that spot', OT clarity."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
-  "at_utc": "2026-11-13T13:23:05Z",
-  "notes": "Rewritten after Quant and Editor fails: like-for-like league window (47%), power-play share, one-stretch frequency (32%); regulation chances 2.1-1.9 as the lead; tired-legs claims cut to what holds (no late fade; periods within noise, ranges in stat-heads); goalie line matches pregame figures; hero numbers computed; colors swapped; Dallas line removed."
+  "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+  "at_utc": "2026-11-13T13:27:36Z",
+  "notes": "Applied Editor round-2 and Quant round-2 fixes: headline 'for 60 minutes', regulation totals in chances section and chart, 'fits the pattern', '2,319 teams in that spot', OT clarity."
  },
  "editor": {
   "verdict": "fail",
-  "sha256": "77b5f61acb28d69bb7975bbff29ba603f9ef35fb9e987b09bdfe823bc1a2dd2f",
-  "at_utc": "2026-11-13T13:17:23Z",
-  "notes": "Needs edits: add how-we-measure-chances section; back-to-back follow-up overclaims 'not the legs' and misses goalie link (body, dek, hero); whole-game para contradicts replays (OT chances); 'did what numbers said' conflicts with model 3.45 vs 2.1. Chart dot colors.",
+  "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
+  "at_utc": "2026-11-13T13:25:30Z",
+  "notes": "Re-review a9ede8f1: prior fixes in. Remaining: headline 'more of the chances' true only for regulation but chances section and flow-chart subtitle show 2.3 vs 2.1 -> add '60 minutes'/'overtime included'; lead 'That's the pattern' -> 'That fits the pattern'.",
   "report": "2026-11-13-sabres-chi-editor.md"
  },
  "quant": {
   "verdict": "fail",
-  "sha256": "77b5f61acb28d69bb7975bbff29ba603f9ef35fb9e987b09bdfe823bc1a2dd2f",
-  "at_utc": "2026-11-13T13:19:27Z",
-  "notes": "Numbers reproduce. Fix: 42% league comparison includes 6v5 pulled-goalie time (like-for-like first 8:22 of 3rd = 47%); 'sat back' overclaim (CHI PP/4v4 in stretch, 5v5 share 35%, 30% of leaders get <=25%); tired 'nearly caught up' is score effect, 'furthest behind in first' is noise (P1 vs P2), 'score explains better' unsupported; 3.45/2.97 are predicted goals vs realized xG incl OT; Dallas untraceable.",
+  "sha256": "a9ede8f1580aceeeaf99a7830ad46a3c6da786ea22dc484e0b258fd986a14aae",
+  "at_utc": "2026-11-13T13:27:03Z",
+  "notes": "Re-check: all stage-2 fixes landed and reproduce (0.467, 31.5%/2,319, 38% PP/4v4, 60-min model comparison, tired ranges). New errors: headline 'had more of the chances and still lost' is false for full game (CHI 2.26 vs 2.11 incl OT; contradicts flow chart subtitle and 'How we measure') -> add 'in regulation'; body '(2,319 games)' is 2,319 leaders in 2,250 games.",
   "report": "2026-11-13-sabres-chi-quant.md"
  }
 }
