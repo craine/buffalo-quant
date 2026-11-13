@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "77b5f61acb28d69bb7975bbff29ba603f9ef35fb9e987b09bdfe823bc1a2dd2f",
+   "at_utc": "2026-11-13T13:15:40Z",
+   "notes": "Game facts asserted in code (score, OT, goal order, Lyon's first game); third-period claim compared with the league score effect (42%, 2,841 games) and labeled one stretch; tired-legs narrative tested on 644 games and reported as not supported; Ledger P0010 graded before writing; timestamp and overclaim fixes applied; no betting words."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "77b5f61acb28d69bb7975bbff29ba603f9ef35fb9e987b09bdfe823bc1a2dd2f",
+  "at_utc": "2026-11-13T13:15:40Z",
+  "notes": "Game facts asserted in code (score, OT, goal order, Lyon's first game); third-period claim compared with the league score effect (42%, 2,841 games) and labeled one stretch; tired-legs narrative tested on 644 games and reported as not supported; Ledger P0010 graded before writing; timestamp and overclaim fixes applied; no betting words."
+ }
+}

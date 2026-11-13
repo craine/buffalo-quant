@@ -1,0 +1,30 @@
+{
+ "label": "Chances through two periods, in goals",
+ "big": [
+  [
+   1.5,
+   "Sabres"
+  ],
+  [
+   0.8,
+   "Blackhawks"
+  ]
+ ],
+ "note": "Final: Blackhawks 3, Sabres 2 in overtime. With a 2-1 lead in the third, Buffalo got 25% of the chances.",
+ "explainer": {
+  "kicker": "Not the legs",
+  "title": "Tired road teams trail most early, not late.",
+  "text": "Road team's share of the chances in the first period, since 2023-24:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Tired road teams",
+    0.457
+   ],
+   [
+    "Rested road teams",
+    0.478
+   ]
+  ]
+ }
+}
