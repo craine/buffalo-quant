@@ -68,6 +68,14 @@
    "at_utc": "2026-11-13T13:28:29Z",
    "notes": "Re-check 3: headline '60 minutes' true (2.115 vs 1.886 reg); OT 0.370->0.4, full-game 2.256->2.3 consistent; '2,319 teams in that spot' correct (2,250 games); 2-2 after 60 correct; flow chart title/subtitle verified by viewing. Nit: subtitle no longer labels black dots as Chicago goals.",
    "report": "2026-11-13-sabres-chi-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+   "at_utc": "2026-11-13T13:31:10Z",
+   "notes": "Final check f62d7b30: all numbers re-derived independently (reg 2.115/1.887, OT 0.370, period+goal tables, stretch 25%/0.467/38%/31.5% of 2,319, tired/rested 644/3,107 shares+ranges, replays 44/21/35, Lyon -0.74, Knight 21/23 +0.11, 37%/0.06, Brier 0.3249, 7/10, hero 0.383/0.468); both charts viewed (black-dot label restored); brand rules OK. No fixes.",
+   "report": "2026-11-13-sabres-chi-final.md"
   }
  ],
  "self": {
@@ -89,5 +97,12 @@
   "at_utc": "2026-11-13T13:28:29Z",
   "notes": "Re-check 3: headline '60 minutes' true (2.115 vs 1.886 reg); OT 0.370->0.4, full-game 2.256->2.3 consistent; '2,319 teams in that spot' correct (2,250 games); 2-2 after 60 correct; flow chart title/subtitle verified by viewing. Nit: subtitle no longer labels black dots as Chicago goals.",
   "report": "2026-11-13-sabres-chi-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "f62d7b303111654c255a0c212c88821d8903020da88a42c95d7ac6b6c69bdf85",
+  "at_utc": "2026-11-13T13:31:10Z",
+  "notes": "Final check f62d7b30: all numbers re-derived independently (reg 2.115/1.887, OT 0.370, period+goal tables, stretch 25%/0.467/38%/31.5% of 2,319, tired/rested 644/3,107 shares+ranges, replays 44/21/35, Lyon -0.74, Knight 21/23 +0.11, 37%/0.06, Brier 0.3249, 7/10, hero 0.383/0.468); both charts viewed (black-dot label restored); brand rules OK. No fixes.",
+  "report": "2026-11-13-sabres-chi-final.md"
  }
 }
