@@ -1,8 +1,8 @@
 # Sabres at Stars: forget the bounce-back game. Dallas is the better team anyway
 
 **Our model gives Dallas a 62% chance to win at home Saturday (Sabres 38%). The Stars allow the 4th-fewest chances in the NHL;
-the Sabres allow the 6th-most. Both teams lost 8-3 this week, and Dallas's came Thursday, so you'll hear about a bounce-back game. The
-numbers say there's no such thing: since 2023-24, teams coming off a loss by four or more won 46% of their next game, about the same as everyone else.**
+the Sabres allow the 6th-most. Dallas got blown out 8-3 at home Thursday, so you'll hear about a bounce-back game. The numbers say there's no such
+thing: since 2023-24, teams coming off a loss by four or more won 46% of their next game, a little less often than everyone else (50%).**
 
 *Buffalo at Dallas, Saturday, Nov. 14, 8 p.m. ET. Neither team has played since Thursday: Buffalo lost 3-2 in overtime at Chicago, Dallas lost 8-3 at home to
 Winnipeg. Numbers are 2026-27 through November 12: Sabres 8-7-4 in 19 games, Stars 10-6-2 in 18. Early-season ranks can move a lot.*
@@ -29,13 +29,18 @@ Ranks are among 32 teams; 1st is best (most created, fewest allowed). Actual goa
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Over the last three seasons (336,462 shots that weren't
 blocked, not counting empty nets), a shot from within 10 feet went in 13.8% of the time; one from 60 feet or more, 0.8%. Add up those chances on
 every shot and you get what a team's chances were worth in goals. **The source:** the NHL's own play-by-play feed, which records where every shot came from.
-**How we checked it:** the full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).
+**The math:** each shot's chance comes from our model, built on past seasons and tested on a season it hadn't seen; we nudge each season's totals so the
+league's chances add up to the league's real goals. **How we checked it:** the full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).
+
+Here's what that looks like for Buffalo: the chances the Sabres have allowed were worth 3.25 goals a game, and they've actually allowed 3.58.
+Much of that gap is in goal: Buffalo's goalies have allowed about 0.23 goals a game more than an average goalie would have on the same shots.
 
 ## What makes Dallas hard to play
 
 The Stars don't let teams near the net. They allow 11.1 shots a game from within 20 feet (2nd-fewest) and 2.1 rebound shots
 (fewest), the two kinds of shots most likely to go in. Buffalo is in the middle of the league at creating chances (13th) and near
-the bottom at preventing them. When the teams met in Buffalo on Oct. 8, Dallas won 4-0, with chances worth 2.1 goals to Buffalo's 2.6.
+the bottom at preventing them. One caution: when the teams met in Buffalo on Oct. 8, the Sabres actually got the better chances (worth 2.6 goals to Dallas's 2.1) and
+still lost 0-4. One game is a small sample, and our prediction goes by the full season.
 
 ## The bounce-back game
 
@@ -43,12 +48,15 @@ the bottom at preventing them. When the teams met in Buffalo on Oct. 8, Dallas w
 
 Dallas lost 8-3 at home Thursday. Buffalo lost 8-3 at home to Tampa Bay on Wednesday. It's natural to think a team comes out angry after a game like that.
 We checked every NHL game since 2023-24. Teams coming off a loss by four goals or more won **46%** of their next game (697 games). After any
-other result, teams won 50%. A blowout doesn't make a team play better next time; if anything, they win a little less. Part of that is that teams that get blown
-out tend to be a little weaker to begin with: our model, which ignores the last score, already expected them to win less often, as below.
+other result, teams won 50%. A blowout doesn't make a team play better next time; if anything, they win a little less. Part of the reason is simple: teams that get
+blown out tend to be a little weaker to begin with.
 
-**Does our model miss it?** It doesn't look at the last score at all, only at the chances teams create and allow. On games it never saw while it was being
-built (last season and this one), it gave teams coming off a blowout loss 49% on average, and they won 46% (261 games). That gap is small enough to be
-chance. So for Saturday, Dallas's 8-3 loss counts for exactly what its chances were worth, and nothing more.
+**Does our model miss it?** Our model never looks at the last score, only at the chances teams create and allow. On games it never saw while it was
+being built (last season and this one), it gave teams coming off a blowout loss 49% on average, against 50% for everyone else, because those teams
+were a little weaker. They won 46% (261 games). That gap is small enough to be chance.
+
+That's the opposite of what we found Thursday. Before the [Chicago game](sabres-blackhawks-pregame-nov-12.html), we showed that road teams playing a second night
+in a row lose more often than our model says. Being tired is something the model misses; a bad last game isn't. So for Saturday, Dallas's 8-3 loss counts for exactly what its chances were worth, and nothing more.
 
 ## In goal
 
@@ -63,17 +71,18 @@ Goals saved compared with an average goalie facing the same shots. Positive is g
 | Stars | [Casey DeSmith](../cards/casey-desmith.html) | 5 | 89.4% | -0.3 (37th of 76) |
 
 Ranks are among all 76 goalies who have played this season. We hadn't seen confirmed starters when we published. A goalie's numbers over a dozen
-games can swing a lot, and they don't carry over well (see below), which is why our prediction doesn't use them.
+games can swing a lot. We tested adding each game's starting goalie to our prediction and it made it no better: a goalie's goals saved in the first
+half of a season tells you little about his second half.
 
 ## Our prediction: Stars 62%, Sabres 38%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-14 00:05:13 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **3.5 goals for Dallas and 2.8 for Buffalo**, and gives about a 16% chance the game is tied after 60 minutes.
 
 **Where the number comes from.** The chances numbers above. Buffalo creates chances worth 3.09 goals a game; Dallas allows 2.63. Early in a season we
 blend in last season's numbers and pull everything toward the league average, which makes Buffalo's attack worth 3.07 a game and Dallas's defense
-2.73, against a league average of 2.99 on the model's own scale. We do the same the other way for Dallas. Home ice adds about 0.27 of a goal for the Stars.
+2.73. (After that blending, an average team comes out at 2.99, slightly different from the 2.97 in the table above.) We do the same the other way for Dallas. Home ice adds about 0.27 of a goal for the Stars.
 Then we play the game out on paper many times; ties after 60 minutes go the way they have for home teams in past overtimes and shootouts (55% home wins).
 
 ![Model test](sabres-dal-model-test.png)
@@ -81,12 +90,12 @@ Then we play the game out on paper many times; ties after 60 minutes go the way 
 **How we checked it.** We built the model on the 2023-24 and 2024-25 seasons, then had it call every 2025-26 game using only what was known before each game.
 It called the winner 55% of the time; choosing the home team every time would have been right 52%. This season so far (309 games) it has called
 61% right; home teams have won 55%. When it gave a team 60-65% in 2025-26, as it gives Dallas Saturday, that team won 62% of the
-time (231 games). We tested adding each game's starting goalie and it made the predictions no better.
+time (231 games).
 
 ## What to watch
 
-- **Getting to the net.** Dallas allows the 2nd-fewest shots from close in. If Buffalo's chances come from the point and the outside, expect a
-  low-scoring night for the Sabres.
+- **Second chances.** Dallas allows the fewest rebound shots in the NHL and the 2nd-fewest from close in. If Buffalo's
+  chances come from the point and the outside, expect a low-scoring night for the Sabres.
 - **Buffalo's own end.** The Sabres allow chances worth 3.25 goals a game, 6th-most in the league. That's the bigger reason our model has Dallas ahead.
 
 ## For the stat-heads

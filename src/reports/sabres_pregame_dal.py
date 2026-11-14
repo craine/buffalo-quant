@@ -204,6 +204,7 @@ def main(as_of=AS_OF):
     ob = oos[oos.bucket == "Lost by 4+"]
     ob_n, ob_said, ob_won = len(ob), ob.p.mean(), ob.won.mean()
     ob_se = (ob_won * (1 - ob_won) / ob_n) ** 0.5
+    oth_said = oos[oos.bucket != "Lost by 4+"].p.mean()
     dal_last = lng[(lng.team == THEM)].sort_values("game_date").iloc[-1]
     buf_last2 = lng[(lng.team == US)].sort_values("game_date").iloc[-2:]
     assert dal_last.margin == -5 and pd.Timestamp(dal_last.game_date) == pd.Timestamp(last_date)
@@ -250,13 +251,14 @@ def main(as_of=AS_OF):
     m1_sc_them = int(m1.away_score if m1.home == US else m1.home_score)
     assert (m1_sc_us, m1_sc_them) == (0, 4)
     dal_a = rk("xga_pg", THEM, False)
+    buf_gsax_pg = -bg.gsax.sum() / b.gp           # goals a game Buffalo's goalies have allowed beyond an average goalie
     fewest = lambda r_: "fewest" if r_ == 1 else f"{ordn(r_)}-fewest"
     buf_a = 33 - rk("xga_pg", US, False)
     md = f"""# Sabres at Stars: forget the bounce-back game. Dallas is the better team anyway
 
 **Our model gives Dallas a {1 - p_b:.0%} chance to win at home Saturday (Sabres {p_b:.0%}). The Stars allow the {ordn(dal_a)}-fewest chances in the NHL;
-the Sabres allow the {ordn(buf_a)}-most. Both teams lost 8-3 this week, and Dallas's came Thursday, so you'll hear about a bounce-back game. The
-numbers say there's no such thing: since 2023-24, teams coming off a loss by four or more won {w_blow:.0%} of their next game, about the same as everyone else.**
+the Sabres allow the {ordn(buf_a)}-most. Dallas got blown out 8-3 at home Thursday, so you'll hear about a bounce-back game. The numbers say there's no such
+thing: since 2023-24, teams coming off a loss by four or more won {w_blow:.0%} of their next game, a little less often than everyone else ({w_other:.0%}).**
 
 *Buffalo at Dallas, Saturday, Nov. 14, 8 p.m. ET. Neither team has played since Thursday: Buffalo lost 3-2 in overtime at Chicago, Dallas lost 8-3 at home to
 Winnipeg. Numbers are 2026-27 through {pd.to_datetime(last_date):%B %-d}: Sabres {recd(US)} in {int(b.gp)} games, Stars {recd(THEM)} in {int(v.gp)}. Early-season ranks can move a lot.*
@@ -283,13 +285,18 @@ Ranks are among 32 teams; 1st is best (most created, fewest allowed). Actual goa
 Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Over the last three seasons ({n_pri:,} shots that weren't
 blocked, not counting empty nets), a shot from within 10 feet went in {close10:.1%} of the time; one from 60 feet or more, {far60:.1%}. Add up those chances on
 every shot and you get what a team's chances were worth in goals. **The source:** the NHL's own play-by-play feed, which records where every shot came from.
-**How we checked it:** the full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).
+**The math:** each shot's chance comes from our model, built on past seasons and tested on a season it hadn't seen; we nudge each season's totals so the
+league's chances add up to the league's real goals. **How we checked it:** the full explanation is in our story on [last year's 50-win season](sabres-50-win-mirage.html).
+
+Here's what that looks like for Buffalo: the chances the Sabres have allowed were worth {b.xga_pg:.2f} goals a game, and they've actually allowed {gfa.loc[US].GA / b.gp:.2f}.
+Much of that gap is in goal: Buffalo's goalies have allowed about {buf_gsax_pg:.2f} goals a game more than an average goalie would have on the same shots.
 
 ## What makes Dallas hard to play
 
 The Stars don't let teams near the net. They allow {v.close_a_pg:.1f} shots a game from within 20 feet ({fewest(rk('close_a_pg', THEM, False))}) and {v.reb_a_pg:.1f} rebound shots
 ({fewest(rk('reb_a_pg', THEM, False))}), the two kinds of shots most likely to go in. Buffalo is in the middle of the league at creating chances ({ordn(rk('xgf_pg', US))}) and near
-the bottom at preventing them. When the teams met in Buffalo on Oct. 8, Dallas won {m1_sc_them}-{m1_sc_us}, with chances worth {m1_them:.1f} goals to Buffalo's {m1_us:.1f}.
+the bottom at preventing them. One caution: when the teams met in Buffalo on Oct. 8, the Sabres actually got the better chances (worth {m1_us:.1f} goals to Dallas's {m1_them:.1f}) and
+still lost {m1_sc_us}-{m1_sc_them}. One game is a small sample, and our prediction goes by the full season.
 
 ## The bounce-back game
 
@@ -297,12 +304,15 @@ the bottom at preventing them. When the teams met in Buffalo on Oct. 8, Dallas w
 
 Dallas lost 8-3 at home Thursday. Buffalo lost 8-3 at home to Tampa Bay on Wednesday. It's natural to think a team comes out angry after a game like that.
 We checked every NHL game since 2023-24. Teams coming off a loss by four goals or more won **{w_blow:.0%}** of their next game ({n_blow} games). After any
-other result, teams won {w_other:.0%}. A blowout doesn't make a team play better next time; if anything, they win a little less. Part of that is that teams that get blown
-out tend to be a little weaker to begin with: our model, which ignores the last score, already expected them to win less often, as below.
+other result, teams won {w_other:.0%}. A blowout doesn't make a team play better next time; if anything, they win a little less. Part of the reason is simple: teams that get
+blown out tend to be a little weaker to begin with.
 
-**Does our model miss it?** It doesn't look at the last score at all, only at the chances teams create and allow. On games it never saw while it was being
-built (last season and this one), it gave teams coming off a blowout loss {ob_said:.0%} on average, and they won {ob_won:.0%} ({ob_n} games). That gap is small enough to be
-chance. So for Saturday, Dallas's 8-3 loss counts for exactly what its chances were worth, and nothing more.
+**Does our model miss it?** Our model never looks at the last score, only at the chances teams create and allow. On games it never saw while it was
+being built (last season and this one), it gave teams coming off a blowout loss {ob_said:.0%} on average, against {oth_said:.0%} for everyone else, because those teams
+were a little weaker. They won {ob_won:.0%} ({ob_n} games). That gap is small enough to be chance.
+
+That's the opposite of what we found Thursday. Before the [Chicago game](sabres-blackhawks-pregame-nov-12.html), we showed that road teams playing a second night
+in a row lose more often than our model says. Being tired is something the model misses; a bad last game isn't. So for Saturday, Dallas's 8-3 loss counts for exactly what its chances were worth, and nothing more.
 
 ## In goal
 
@@ -313,7 +323,8 @@ Goals saved compared with an average goalie facing the same shots. Positive is g
 {gk_rows}
 
 Ranks are among all {n_gk} goalies who have played this season. We hadn't seen confirmed starters when we published. A goalie's numbers over a dozen
-games can swing a lot, and they don't carry over well (see below), which is why our prediction doesn't use them.
+games can swing a lot. We tested adding each game's starting goalie to our prediction and it made it no better: a goalie's goals saved in the first
+half of a season tells you little about his second half.
 
 ## Our prediction: Stars {1 - p_b:.0%}, Sabres {p_b:.0%}
 
@@ -323,7 +334,7 @@ Our model expects about **{mu_v:.1f} goals for Dallas and {mu_b:.1f} for Buffalo
 
 **Where the number comes from.** The chances numbers above. Buffalo creates chances worth {b.xgf_pg:.2f} goals a game; Dallas allows {v.xga_pg:.2f}. Early in a season we
 blend in last season's numbers and pull everything toward the league average, which makes Buffalo's attack worth {off_r[US]:.2f} a game and Dallas's defense
-{def_r[THEM]:.2f}, against a league average of {lg_r:.2f} on the model's own scale. We do the same the other way for Dallas. Home ice adds about {coef[2]:.2f} of a goal for the Stars.
+{def_r[THEM]:.2f}. (After that blending, an average team comes out at {lg_r:.2f}, slightly different from the {lg.xgf_pg:.2f} in the table above.) We do the same the other way for Dallas. Home ice adds about {coef[2]:.2f} of a goal for the Stars.
 Then we play the game out on paper many times; ties after 60 minutes go the way they have for home teams in past overtimes and shootouts ({p_ot:.0%} home wins).
 
 ![Model test](sabres-dal-model-test.png)
@@ -331,12 +342,12 @@ Then we play the game out on paper many times; ties after 60 minutes go the way 
 **How we checked it.** We built the model on the 2023-24 and 2024-25 seasons, then had it call every 2025-26 game using only what was known before each game.
 It called the winner {bt[20252026]['right']:.0%} of the time; choosing the home team every time would have been right {bt[20252026]['home_obs']:.0%}. This season so far ({bt[SEASON]['n']} games) it has called
 {bt[SEASON]['right']:.0%} right; home teams have won {bt[SEASON]['home_obs']:.0%}. When it gave a team {calb[bin_i][0]} in 2025-26, as it gives Dallas Saturday, that team won {calb[bin_i][2]:.0%} of the
-time ({calb[bin_i][3]} games). We tested adding each game's starting goalie and it made the predictions no better.
+time ({calb[bin_i][3]} games).
 
 ## What to watch
 
-- **Getting to the net.** Dallas allows the {ordn(rk('close_a_pg', THEM, False))}-fewest shots from close in. If Buffalo's chances come from the point and the outside, expect a
-  low-scoring night for the Sabres.
+- **Second chances.** Dallas allows the {fewest(rk('reb_a_pg', THEM, False))} rebound shots in the NHL and the {fewest(rk('close_a_pg', THEM, False))} from close in. If Buffalo's
+  chances come from the point and the outside, expect a low-scoring night for the Sabres.
 - **Buffalo's own end.** The Sabres allow chances worth {b.xga_pg:.2f} goals a game, {ordn(buf_a)}-most in the league. That's the bigger reason our model has Dallas ahead.
 
 ## For the stat-heads

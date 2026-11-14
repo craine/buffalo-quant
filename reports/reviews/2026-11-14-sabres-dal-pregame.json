@@ -6,12 +6,49 @@
    "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
    "at_utc": "2026-11-14T00:01:17Z",
    "notes": "All numbers generated; bounce-back checked two ways (raw next-game win rates, 4 seasons; out-of-sample model check, gap within noise); 'weaker to begin with' grounded in the model's lower expectation; ratings pinned to games through Nov 12 so re-runs reproduce; first meeting asserted 4-0; betting words scanned ('leans', 'picking' removed); bounce chart credits final scores."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
+   "at_utc": "2026-11-14T00:02:57Z",
+   "notes": "Needs edits: lead conflates both 8-3 losses and says 'about the same' vs body 'a little less'; Oct 8 meeting (Buffalo better chances, lost 4-0) undercuts 'hard to play' section; 'The math' + tie-back missing from chances box; clumsy 'as below' repetition; 'on the model's own scale' jargon/second league average; 'getting to the net' repeats TBL angle.",
+   "report": "2026-11-14-sabres-dal-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
+   "at_utc": "2026-11-14T00:04:31Z",
+   "notes": "All numbers re-derived and match (62/38, logger 0.38, table, ranks, bounce-back 697/3486/3482/697, OOS 261 49 vs 46, cal bin 231 62%). Fix: lead 'about the same as everyone else' -> 'a little less often (50%)' (gap -4.0 pts, z -2.0); drop dangling '(see below)' on goalie carry-over; show model's 50% comparison for 'weaker to begin with'.",
+   "report": "2026-11-14-sabres-dal-pregame-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "5b40732dce486f4d77e3ae909f5c8f7d439c6eda85cb335573e2304b6c2cc8e7",
+   "at_utc": "2026-11-14T00:06:18Z",
+   "notes": "Applied Editor fixes 1-6 and suggestions (Chicago contrast, goalie note, logged timestamp) and Quant fixes 1-3 (lead 'a little less often (50%)', '(see below)' replaced with reviewed wording, model's 49% vs 50% shown). New numbers: Buffalo goalies 0.23 goals/game below average (from the goalie table), model 50% for other teams."
   }
  ],
  "self": {
   "verdict": "pass",
+  "sha256": "5b40732dce486f4d77e3ae909f5c8f7d439c6eda85cb335573e2304b6c2cc8e7",
+  "at_utc": "2026-11-14T00:06:18Z",
+  "notes": "Applied Editor fixes 1-6 and suggestions (Chicago contrast, goalie note, logged timestamp) and Quant fixes 1-3 (lead 'a little less often (50%)', '(see below)' replaced with reviewed wording, model's 49% vs 50% shown). New numbers: Buffalo goalies 0.23 goals/game below average (from the goalie table), model 50% for other teams."
+ },
+ "editor": {
+  "verdict": "fail",
   "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
-  "at_utc": "2026-11-14T00:01:17Z",
-  "notes": "All numbers generated; bounce-back checked two ways (raw next-game win rates, 4 seasons; out-of-sample model check, gap within noise); 'weaker to begin with' grounded in the model's lower expectation; ratings pinned to games through Nov 12 so re-runs reproduce; first meeting asserted 4-0; betting words scanned ('leans', 'picking' removed); bounce chart credits final scores."
+  "at_utc": "2026-11-14T00:02:57Z",
+  "notes": "Needs edits: lead conflates both 8-3 losses and says 'about the same' vs body 'a little less'; Oct 8 meeting (Buffalo better chances, lost 4-0) undercuts 'hard to play' section; 'The math' + tie-back missing from chances box; clumsy 'as below' repetition; 'on the model's own scale' jargon/second league average; 'getting to the net' repeats TBL angle.",
+  "report": "2026-11-14-sabres-dal-pregame-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
+  "at_utc": "2026-11-14T00:04:31Z",
+  "notes": "All numbers re-derived and match (62/38, logger 0.38, table, ranks, bounce-back 697/3486/3482/697, OOS 261 49 vs 46, cal bin 231 62%). Fix: lead 'about the same as everyone else' -> 'a little less often (50%)' (gap -4.0 pts, z -2.0); drop dangling '(see below)' on goalie carry-over; show model's 50% comparison for 'weaker to begin with'.",
+  "report": "2026-11-14-sabres-dal-pregame-quant.md"
  }
 }
