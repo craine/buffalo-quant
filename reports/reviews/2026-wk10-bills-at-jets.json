@@ -128,6 +128,30 @@
    "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
    "at_utc": "2026-11-14T13:01:59Z",
    "notes": "Run labels say '(designed runs)' in table and chart; chart subtitle: QB scrambles count as pass plays; hero title narrowed to pass calls. No numbers changed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+   "at_utc": "2026-11-14T13:02:27Z",
+   "notes": "Both fixes applied: run labels say designed runs in table and chart, chart subtitle says QB scrambles count as pass plays, hero title scoped to pass calls. No numbers changed; labels match P0012-P0016 and the model.",
+   "report": "2026-wk10-bills-at-jets-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+   "at_utc": "2026-11-14T13:02:29Z",
+   "notes": "Round 3 on a909c93f: run rows '(designed runs)' and chart subtitle 'QB scrambles count as pass plays' satisfy the new rule; longer labels fit and read well; hero 'pass calls' title matches evidence. All check 7 items pass. Optional: one-line scramble note under the table. Ledger P0013-16 wording unchanged by rule.",
+   "report": "2026-wk10-bills-at-jets-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+   "at_utc": "2026-11-14T13:04:50Z",
+   "notes": "Stage 4: plain-English calls stand alone, no betting language, P0012-P0016 match story/charts, SQL spot-checks match, clarification accurate, logged before kickoff",
+   "report": "2026-wk10-bills-at-jets-final.md"
   }
  ],
  "self": {
@@ -137,24 +161,24 @@
   "notes": "Run labels say '(designed runs)' in table and chart; chart subtitle: QB scrambles count as pass plays; hero title narrowed to pass calls. No numbers changed."
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
-  "at_utc": "2026-11-14T13:00:50Z",
-  "notes": "Round 2 on 57801bec: all 8 prior fixes and Quant's 2 verified; hero, chart subtitle, note, explainer pass check 7. One fix: run-call table rows and chart lack the designed-runs/scrambles note the new CLAUDE.md rule requires next to any run call (chart is the card image).",
+  "verdict": "pass",
+  "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+  "at_utc": "2026-11-14T13:02:29Z",
+  "notes": "Round 3 on a909c93f: run rows '(designed runs)' and chart subtitle 'QB scrambles count as pass plays' satisfy the new rule; longer labels fit and read well; hero 'pass calls' title matches evidence. All check 7 items pass. Optional: one-line scramble note under the table. Ledger P0013-16 wording unchanged by rule.",
   "report": "2026-wk10-bills-at-jets-editor.md"
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
-  "at_utc": "2026-11-14T13:01:10Z",
-  "notes": "No numbers changed; reworded lines match computed/logged values. Fix 1: run-call table rows/chart labels must say designed runs and that QB scrambles count as pass plays (CLAUDE.md rule; chart travels alone). Fix 2: hero title 'Our most confident calls have held up' -> 'Our most confident pass calls have held up' (evidence shown is pass calls only).",
+  "verdict": "pass",
+  "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+  "at_utc": "2026-11-14T13:02:27Z",
+  "notes": "Both fixes applied: run labels say designed runs in table and chart, chart subtitle says QB scrambles count as pass plays, hero title scoped to pass calls. No numbers changed; labels match P0012-P0016 and the model.",
   "report": "2026-wk10-bills-at-jets-quant.md"
  },
  "final": {
   "verdict": "pass",
-  "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
-  "at_utc": "2026-11-14T00:58:34Z",
-  "notes": "Final check on a9078ec040c0: all numbers re-derived read-only (29.9/22.1/75%, ladder 16 cells, 0.26/273 rank 4 excl 2-pt, NYJ 0.16/312 7th-most, lg 0.05, 0.27/0.19/0.05->0.233, plays +3.775/-1.755, 134 games 75->78, 632 games 63%/52% (same under either tie rule), 70%+ 75/74 n=102, ladder mid 50->55 n=1744, 5 of 7). Ledger P0012-P0016 0.75/0.80/0.55/0.66/0.75 at 00:54:53Z = 7:54 pm ET Nov 13, before 18:00Z kickoff. Hero, dek, 3 charts consistent. No betting language or body jargon. P0012 wording paraphrase non-blocking.",
+  "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+  "at_utc": "2026-11-14T13:04:50Z",
+  "notes": "Stage 4: plain-English calls stand alone, no betting language, P0012-P0016 match story/charts, SQL spot-checks match, clarification accurate, logged before kickoff",
   "report": "2026-wk10-bills-at-jets-final.md"
  }
 }
