@@ -1,19 +1,19 @@
-# Editor re-review, round 3: Bills at Jets, week 10 (text sha256 a9078ec040c0...)
+# Editor re-review, round 3: Bills at Jets, week 10 (text sha256 a909c93f1252)
 
-## One-sentence version
-"We give the Bills a 75% chance to win at MetLife, about 30 to 22, and the place they win it is through the air against the Jets' 7th-worst pass defense." The lead still says this.
+**One-sentence version:** The Bills should beat the Jets about three times in four, and their passing game against one of the NFL's leakiest pass defenses is our surest call of the week.
 
-## Verdict: ready (PASS)
+**Verdict: ready (PASS).**
 
-I checked the text and the diff against HEAD~1. All of the round-2 fixes are in:
-- **Ladder note:** reads "still in the ladder above but aren't logged. The whole middle of the ladder has the same issue". The false "flagged" is gone.
-- **Duplicate scoreboard disclaimer:** cut. The line now opens "A team's runs 'lose points' if ...".
-- **Opening:** "We grade every play in points, though not scoreboard points: ...". The real Allen example to Ty Johnson follows it.
-- **The 0.26 vs 0.27 shift:** now explained ("counts every game equally instead of every play").
-- **Tie footnote:** removed.
-- **Ledger line:** "Logged ... on Nov. 13 at 7:54 p.m. ET, before kickoff. All 5 calls ...". This matches ledger/ P0012-P0016, created 2026-11-14T00:54:53Z (7:54 p.m. EST, Nov. 13). There are five calls, all before the 2026-11-15 18:00Z kickoff, and the probabilities match the table (75/80/55/66/75).
+## Checked
+- **Calls table:** the run rows now read "Bills'/Jets' running game (designed runs) hurts more than it helps". Each reads on its own as a plain sentence. Pass.
+- **Chart wk10-calls.png:** the longer run labels still read well. Nothing is clipped, the bars and percentages stay legible, and the 50/50 line is clear. The subtitle names the game and says "QB scrambles count as pass plays". Seen alone, the chart now explains both kinds of call. Pass.
+- **Hero title:** "Our most confident pass calls have held up." reads on its own and matches the evidence shown, which covers pass calls only. That's better than my wording. Pass.
+- **The rest:** unchanged from round 2 and still passing. That covers the dek, the hero numbers and note, the hero explainer text, the clarification note, the explainer paragraph, the matchup lines and the header.
 
-## Notes for the Quant / final check (not editor blockers)
-- **Ties.** With the footnote gone, the 63% (a tie counts as a miss) and the chart footer ("Ties count as half a win") are no longer contrasted in the text. Line 100 still states the half-win rule for the 74%. This is fine for a fan; the Quant can confirm the 63% still reads correctly on its own.
-- **P0012 wording.** The Ledger claim reads "Bills beat the Jets (any result; a tie counts as a miss)". The story's table says "Bills win (overtime counts; a tie counts as a miss)". The meaning is the same, but the self-check asks for exact wording, so the final check should decide.
-- **Line wrap.** Line 14-15 wraps awkwardly in the markdown ("into\npoints. Last week at Minnesota,\nJosh"). It renders as one paragraph, so it's cosmetic only.
+## Optional, not blocking
+- The table rows say "(designed runs)" but don't mention scrambles themselves. The chart subtitle and the paragraph right below the table both do. If Charlie wants the table to stand alone even more strictly, add this line under the table: `QB scrambles count as pass plays.`
+
+## Ledger P0012-P0016 (unchanged, for Charlie)
+- The logged wording still doesn't stand alone for a fan: "pass plays add points overall", "designed runs lose points overall", and "any result" in P0012.
+- The rows can't be edited, and the story's clarification quotes them honestly.
+- Option: show a plain-English line next to the logged wording on the Ledger page. Don't add correction rows.

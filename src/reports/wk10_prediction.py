@@ -151,10 +151,10 @@ def main():
     wt, mae = P["wt"], P["mae"]
     calls = [  # (plain-English call, our chance, which model, test key)
         ("Bills win (overtime counts; a tie counts as a miss)", P["p_buf"], "Points model, win chance", "win"),
-        ("Bills' pass plays gain points overall", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
-        ("Jets' pass plays gain points overall", C["opp_db"]["p"], "Matchup model", "dropback_epa"),
-        ("Bills' runs lose points overall", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
-        ("Jets' runs lose points overall", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Bills' passing game helps more than it hurts", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
+        ("Jets' passing game helps more than it hurts", C["opp_db"]["p"], "Matchup model", "dropback_epa"),
+        ("Bills' running game (designed runs) hurts more than it helps", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Jets' running game (designed runs) hurts more than it helps", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
     ]
     db, db_cal = T["dropback_epa"]; ru, ru_cal = T["rush_epa"]
     db_hi = db_cal.iloc[-1]                     # the model's most confident pass calls (70%+)
@@ -198,8 +198,8 @@ def main():
     ax.set_yticks(ys, [c[0] for c in calls], fontsize=10)
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"Our surest call: the Bills' passing game gains ground ({C['buf_db']['p']:.0%})",
-           "Our chance that each one happens. Each comes from a kind of model we tested on past games before trusting it.",
+    finish(fig, f"Our surest call: the Bills' passing game helps more than it hurts ({C['buf_db']['p']:.0%})",
+           "Bills at Jets, Sunday, Nov. 15: our chance that each one happens. QB scrambles count as pass plays. Every model was tested on past games first.",
            f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Matchup calls tested on {db['n']} past team games; win chance on {wt['n']}.")
     fig.savefig(OUT / "wk10-calls.png"); plt.close(fig)
 
@@ -231,14 +231,18 @@ def main():
 
     table = "\n".join(f"| {lab} | **{pr:.0%}** | {m} |" for lab, pr, m, _ in calls)
     ladder_rows = "\n".join(f"| {t} or more | **{lad[t][0]:.0%}** | {lad[t][1]:.0%} |" for t in LADDER)
-    md = f"""# Bills at Jets: our prediction. Buffalo's passing game gets one of the NFL's leakiest pass defenses
+    md = f"""# Bills at Jets: our prediction. Buffalo's passing game faces one of the NFL's leakiest pass defenses
 
 **Finding: We project the Bills for {pb:.1f} points and the Jets for {pj:.1f}, which gives Buffalo a {P['p_buf']:.0%} chance to win. The biggest mismatch on
 the field: the Bills' passing game, {ordn_(R['buf_off_rk'])}-best in the NFL, against a Jets pass defense that's {ordn_(R['opp_def_most'])}-worst. Our matchup model gives an
-{C['buf_db']['p']:.0%} chance the Bills' pass plays gain ground Sunday, our most confident pass call yet, and the model's confident calls have held up.**
+{C['buf_db']['p']:.0%} chance the Bills' passing game helps more than it hurts on Sunday, our most confident pass call yet, and the model's confident calls have held up.**
 
 *Bills at Jets, Sunday, Nov. 15, 1 p.m. ET, MetLife Stadium. Numbers are 2026 through week {THRU}. [Last week's prediction](bills-vikings-prediction.html)
 and [how it went](bills-vikings-postgame.html): {w9_hits} of 7 calls hit.*
+
+*Clarification, Nov. 14: the old wording of our four pass and run calls read like scoreboard points, which isn't what they meant. We reworded those
+calls and the lead in plain English (for example, "the Bills' passing game helps more than it hurts"). No numbers changed. The Ledger entries, logged
+Nov. 13 before kickoff, keep the wording they were logged with (for example, "Bills' pass plays add points overall"), because Ledger entries are never edited.*
 
 ![Chance each team reaches each scoreline](wk10-ladder.png)
 
@@ -255,11 +259,11 @@ scrambles count). The Jets' pass defense has given up {R['opp_def']:.2f} a play,
 Our matchup model counts every game equally instead of every play, so the numbers shift a little. In a typical game the Bills' passing gains about {C['buf_db']['off_mean']:.2f} a play, the Jets' pass defense
 allows about {C['buf_db']['def_mean']:.2f}, and an average game is {C['buf_db']['league']:.2f}. Start from average, add half of how far above average the Bills are and half
 of how far the Jets' defense is, and you get about **{C['buf_db']['expected']:.2f} points a play** for Buffalo on Sunday. Games swing a lot, so that's not a
-promise; the model says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
+promise; the model says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing game helps more than it hurts.
 
 **Is {C['buf_db']['p']:.0%} too bold?** It's the most confident pass call we've made, so we checked the model's record at that level. We tested it on {db['n']}
 past team games from 2023-2025 that it had never seen. In the {int(db_hi.n)} where it gave a passing game 70% or more, it said {db_hi.said:.0%} on average, and the
-passing game came out ahead {db_hi.happened:.0%} of the time.
+passing game helped more than it hurt {db_hi.happened:.0%} of the time.
 
 The rest of the game is closer to even. The Jets score {P['raw']['opp_off']:.2f} points per drive ({ordn_(P['rk']['opp_off_rank'])} of {P['rk']['n']}); the Bills' defense allows
 {P['raw']['buf_def']:.2f} ({ordn_(P['rk']['buf_def_rank'])}).
@@ -290,7 +294,7 @@ The Jets go through the same steps from the other direction. After mixing in las
 defense at {P['def_b']:.2f}, plus the home bump.
 That's **{pj:.1f}**.
 
-## How a 30-point projection becomes {P['p_buf']:.0%}
+## How a 30-point projection becomes a {P['p_buf']:.0%} win chance
 
 Nobody scores exactly what we project. We looked at {len(res):,} past team scores from 2019-2023 and asked how far off we were. Half the time, a team landed
 within about {miss50:.0f} points of our number; eight times in ten, within about {miss80:.0f}. (On games the model had never seen, our average miss was {mae['model']:.1f} points.)
@@ -307,8 +311,9 @@ to Sunday's projections, and checked who came out ahead: Buffalo, {P['p_buf']:.0
 
 ![The calls](wk10-calls.png)
 
-A team's runs "lose points" if, all told, its running plays left it worse off
-than before. That's normal: in {ru['n']} past team games, runs lost points overall {1 - ru['rate']:.0%} of the time.
+What these mean: take the points every pass play was worth in the game (sacks and quarterback scrambles count as pass plays), or every designed run,
+and add them up, good plays and bad. If the total is above zero, that part of the offense helped more than it hurt. Running games usually hurt more than
+they help: in {1 - ru['rate']:.0%} of {ru['n']} past team games, a team's designed runs added up to less than zero.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
 those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a
@@ -357,9 +362,9 @@ It beat the guess on pass calls and edged it on run calls.
         "note": (f"Bills win {P['p_buf']:.0%} of the time. The key matchup: Buffalo's passing game ({ordn_(R['buf_off_rk'])} in the NFL) against a Jets pass "
                  f"defense that's {ordn_(R['opp_def_most'])}-worst."),
         "explainer": {
-            "kicker": "How we checked it", "title": "Its confident calls have held up.",
-            "text": (f"When our matchup model gave a passing game 70% or more on {int(db_hi.n)} past games it hadn't seen, "
-                     "it said this, and this is how often it happened:"),
+            "kicker": "How we checked it", "title": "Our most confident pass calls have held up.",
+            "text": (f"In {int(db_hi.n)} past games the model hadn't seen, it gave a team's passing game a 70% or better chance to help more "
+                     "than it hurt. Here's the chance it gave, on average, and how often it happened:"),
             "fmt": "pct", "bars": [["What it said", round(float(db_hi.said), 3)], ["What happened", round(float(db_hi.happened), 3)]]},
     }, indent=1))
     print(md)

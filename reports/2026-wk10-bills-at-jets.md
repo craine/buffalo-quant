@@ -1,11 +1,15 @@
-# Bills at Jets: our prediction. Buffalo's passing game gets one of the NFL's leakiest pass defenses
+# Bills at Jets: our prediction. Buffalo's passing game faces one of the NFL's leakiest pass defenses
 
 **Finding: We project the Bills for 29.9 points and the Jets for 22.1, which gives Buffalo a 75% chance to win. The biggest mismatch on
 the field: the Bills' passing game, 4th-best in the NFL, against a Jets pass defense that's 7th-worst. Our matchup model gives an
-80% chance the Bills' pass plays gain ground Sunday, our most confident pass call yet, and the model's confident calls have held up.**
+80% chance the Bills' passing game helps more than it hurts on Sunday, our most confident pass call yet, and the model's confident calls have held up.**
 
 *Bills at Jets, Sunday, Nov. 15, 1 p.m. ET, MetLife Stadium. Numbers are 2026 through week 9. [Last week's prediction](bills-vikings-prediction.html)
 and [how it went](bills-vikings-postgame.html): 5 of 7 calls hit.*
+
+*Clarification, Nov. 14: the old wording of our four pass and run calls read like scoreboard points, which isn't what they meant. We reworded those
+calls and the lead in plain English (for example, "the Bills' passing game helps more than it hurts"). No numbers changed. The Ledger entries, logged
+Nov. 13 before kickoff, keep the wording they were logged with (for example, "Bills' pass plays add points overall"), because Ledger entries are never edited.*
 
 ![Chance each team reaches each scoreline](wk10-ladder.png)
 
@@ -22,11 +26,11 @@ scrambles count). The Jets' pass defense has given up 0.16 a play, 7th-most of 3
 Our matchup model counts every game equally instead of every play, so the numbers shift a little. In a typical game the Bills' passing gains about 0.27 a play, the Jets' pass defense
 allows about 0.19, and an average game is 0.05. Start from average, add half of how far above average the Bills are and half
 of how far the Jets' defense is, and you get about **0.23 points a play** for Buffalo on Sunday. Games swing a lot, so that's not a
-promise; the model says there's an **80%** chance that, all told, the Bills' passing plays leave them better off than they started.
+promise; the model says there's an **80%** chance that, all told, the Bills' passing game helps more than it hurts.
 
 **Is 80% too bold?** It's the most confident pass call we've made, so we checked the model's record at that level. We tested it on 990
 past team games from 2023-2025 that it had never seen. In the 134 where it gave a passing game 70% or more, it said 75% on average, and the
-passing game came out ahead 78% of the time.
+passing game helped more than it hurt 78% of the time.
 
 The rest of the game is closer to even. The Jets score 1.92 points per drive (19th of 32); the Bills' defense allows
 2.10 (16th).
@@ -64,7 +68,7 @@ The Jets go through the same steps from the other direction. After mixing in las
 defense at 2.08, plus the home bump.
 That's **22.1**.
 
-## How a 30-point projection becomes 75%
+## How a 30-point projection becomes a 75% win chance
 
 Nobody scores exactly what we project. We looked at 2,494 past team scores from 2019-2023 and asked how far off we were. Half the time, a team landed
 within about 6 points of our number; eight times in ten, within about 12. (On games the model had never seen, our average miss was 7.5 points.)
@@ -78,15 +82,16 @@ to Sunday's projections, and checked who came out ahead: Buffalo, 75% of the tim
 | Call | Our chance | Where it comes from |
 |---|---|---|
 | Bills win (overtime counts; a tie counts as a miss) | **75%** | Points model, win chance |
-| Bills' pass plays gain points overall | **80%** | Matchup model |
-| Jets' pass plays gain points overall | **55%** | Matchup model |
-| Bills' runs lose points overall | **66%** | Matchup model |
-| Jets' runs lose points overall | **75%** | Matchup model |
+| Bills' passing game helps more than it hurts | **80%** | Matchup model |
+| Jets' passing game helps more than it hurts | **55%** | Matchup model |
+| Bills' running game (designed runs) hurts more than it helps | **66%** | Matchup model |
+| Jets' running game (designed runs) hurts more than it helps | **75%** | Matchup model |
 
 ![The calls](wk10-calls.png)
 
-A team's runs "lose points" if, all told, its running plays left it worse off
-than before. That's normal: in 990 past team games, runs lost points overall 64% of the time.
+What these mean: take the points every pass play was worth in the game (sacks and quarterback scrambles count as pass plays), or every designed run,
+and add them up, good plays and bad. If the total is above zero, that part of the offense helped more than it hurt. Running games usually hurt more than
+they help: in 64% of 990 past team games, a team's designed runs added up to less than zero.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
 those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a
