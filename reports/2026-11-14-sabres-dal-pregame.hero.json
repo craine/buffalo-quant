@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Dallas, Saturday 8 p.m.",
+ "big": [
+  [
+   "62%",
+   "Dallas's chance to win, our model (Sabres 38%)"
+  ],
+  [
+   "46%",
+   "How often teams won right after losing by 4+"
+  ]
+ ],
+ "note": "Dallas allows the 4th-fewest chances in the NHL; Buffalo allows the 6th-most. And no, Dallas's 8-3 loss Thursday doesn't make a bounce-back more likely.",
+ "explainer": {
+  "kicker": "Bounce-back games",
+  "title": "A blowout loss doesn't fire a team up.",
+  "text": "How often teams won their next game since 2023-24, by how the last one went:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "After losing by 4+",
+    0.463
+   ],
+   [
+    "After any other result",
+    0.504
+   ]
+  ]
+ }
+}

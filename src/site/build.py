@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-stars-pregame-nov-14", "2026-11-14-sabres-dal-pregame.md", "2026-11-14", "Sabres &middot; Pregame",
+     "Our model: Stars 62%, Sabres 38%. Dallas allows the 4th-fewest chances in the NHL. And Dallas's 8-3 loss Thursday doesn't make a bounce-back more likely: teams coming off a blowout won 46% of their next game, a little less than usual.",
+     "sabres-dal-bounce.png"),
     ("sabres-blackhawks-postgame-nov-12", "2026-11-13-sabres-chi.md", "2026-11-13", "Sabres &middot; Post-game",
      "Buffalo had more of the chances over 60 minutes and led 2-1 into the third. Chicago tied it and won in overtime, the pattern our pregame flagged for tired road teams.",
      "sabres-chi-post-flow.png"),
