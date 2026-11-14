@@ -52,6 +52,22 @@
    "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
    "at_utc": "2026-11-14T00:08:07Z",
    "notes": "Score order 4-0; 2.99 vs 2.97 explanation corrected to the season adjustment (Quant wording)."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+   "at_utc": "2026-11-14T00:08:25Z",
+   "notes": "Round 3: score order fixed (4-0); Quant's 2.99 vs 2.97 parenthetical is plain English. All earlier fixes intact. Ready. Optional: 'small nudge described above' for consistency with The math box.",
+   "report": "2026-11-14-sabres-dal-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+   "at_utc": "2026-11-14T00:08:28Z",
+   "notes": "Re-check of 07a7794d: only the 2 changed lines differ (Oct 8 'lost 4-0' matches raw 0-4 at BUF; 2.99 vs 2.97 now correctly attributed to the pre-rescale scale, 2.971/0.9922=2.994). Generator template matches. All other numbers as verified previously; P0011 0.38 matches.",
+   "report": "2026-11-14-sabres-dal-pregame-quant.md"
   }
  ],
  "self": {
@@ -61,17 +77,17 @@
   "notes": "Score order 4-0; 2.99 vs 2.97 explanation corrected to the season adjustment (Quant wording)."
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "5b40732dce486f4d77e3ae909f5c8f7d439c6eda85cb335573e2304b6c2cc8e7",
-  "at_utc": "2026-11-14T00:06:52Z",
-  "notes": "Round 2: all 6 required fixes and 4 suggestions applied and read well. One remaining fix: Oct. 8 score rendered 'still lost 0-4'; should be '4-0' (swap f-string order at generator line 299). Otherwise ready.",
+  "verdict": "pass",
+  "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+  "at_utc": "2026-11-14T00:08:25Z",
+  "notes": "Round 3: score order fixed (4-0); Quant's 2.99 vs 2.97 parenthetical is plain English. All earlier fixes intact. Ready. Optional: 'small nudge described above' for consistency with The math box.",
   "report": "2026-11-14-sabres-dal-pregame-editor.md"
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "5b40732dce486f4d77e3ae909f5c8f7d439c6eda85cb335573e2304b6c2cc8e7",
-  "at_utc": "2026-11-14T00:07:21Z",
-  "notes": "Re-check of 5b40732d: one fix. '(After that blending, an average team comes out at 2.99...)' gives the wrong reason: 2.99 vs 2.97 is unrescaled vs rescaled xG (2.971/0.9922=2.994), not blending. Everything else verified: lead 46 vs 50; OOS 0.487 vs 0.501 (n 261/2917); GA gap 0.33/g, goalies 0.228/g (~68%), rest = 1 EN + 1 SO goal, 'much of' fair; Oct 8 2.6 vs 2.1, 0-4; rebounds 1st, close 2nd; CHI contrast accurate; P0011 0.38 matches.",
+  "verdict": "pass",
+  "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+  "at_utc": "2026-11-14T00:08:28Z",
+  "notes": "Re-check of 07a7794d: only the 2 changed lines differ (Oct 8 'lost 4-0' matches raw 0-4 at BUF; 2.99 vs 2.97 now correctly attributed to the pre-rescale scale, 2.971/0.9922=2.994). Generator template matches. All other numbers as verified previously; P0011 0.38 matches.",
   "report": "2026-11-14-sabres-dal-pregame-quant.md"
  }
 }
