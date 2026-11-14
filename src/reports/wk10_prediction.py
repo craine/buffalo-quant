@@ -151,10 +151,10 @@ def main():
     wt, mae = P["wt"], P["mae"]
     calls = [  # (plain-English call, our chance, which model, test key)
         ("Bills win (overtime counts; a tie counts as a miss)", P["p_buf"], "Points model, win chance", "win"),
-        ("Bills' pass plays gain points overall", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
-        ("Jets' pass plays gain points overall", C["opp_db"]["p"], "Matchup model", "dropback_epa"),
-        ("Bills' runs lose points overall", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
-        ("Jets' runs lose points overall", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Bills' passing game helps more than it hurts", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
+        ("Jets' passing game helps more than it hurts", C["opp_db"]["p"], "Matchup model", "dropback_epa"),
+        ("Bills' running game hurts more than it helps", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Jets' running game hurts more than it helps", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
     ]
     db, db_cal = T["dropback_epa"]; ru, ru_cal = T["rush_epa"]
     db_hi = db_cal.iloc[-1]                     # the model's most confident pass calls (70%+)
@@ -198,7 +198,7 @@ def main():
     ax.set_yticks(ys, [c[0] for c in calls], fontsize=10)
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"Our surest call: the Bills' passing game gains ground ({C['buf_db']['p']:.0%})",
+    finish(fig, f"Our surest call: the Bills' passing game helps more than it hurts ({C['buf_db']['p']:.0%})",
            "Our chance that each one happens. Each comes from a kind of model we tested on past games before trusting it.",
            f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Matchup calls tested on {db['n']} past team games; win chance on {wt['n']}.")
     fig.savefig(OUT / "wk10-calls.png"); plt.close(fig)
@@ -235,10 +235,13 @@ def main():
 
 **Finding: We project the Bills for {pb:.1f} points and the Jets for {pj:.1f}, which gives Buffalo a {P['p_buf']:.0%} chance to win. The biggest mismatch on
 the field: the Bills' passing game, {ordn_(R['buf_off_rk'])}-best in the NFL, against a Jets pass defense that's {ordn_(R['opp_def_most'])}-worst. Our matchup model gives an
-{C['buf_db']['p']:.0%} chance the Bills' pass plays gain ground Sunday, our most confident pass call yet, and the model's confident calls have held up.**
+{C['buf_db']['p']:.0%} chance the Bills' passing game helps more than it hurts on Sunday, our most confident pass call yet, and the model's confident calls have held up.**
 
 *Bills at Jets, Sunday, Nov. 15, 1 p.m. ET, MetLife Stadium. Numbers are 2026 through week {THRU}. [Last week's prediction](bills-vikings-prediction.html)
 and [how it went](bills-vikings-postgame.html): {w9_hits} of 7 calls hit.*
+
+*Clarification, Nov. 14: we reworded the four pass and run calls into plain English (for example, "the Bills' passing game helps more than it hurts" instead
+of "pass plays gain points overall"). No numbers changed. The Ledger keeps the original wording, logged Nov. 13.*
 
 ![Chance each team reaches each scoreline](wk10-ladder.png)
 
@@ -307,8 +310,8 @@ to Sunday's projections, and checked who came out ahead: Buffalo, {P['p_buf']:.0
 
 ![The calls](wk10-calls.png)
 
-A team's runs "lose points" if, all told, its running plays left it worse off
-than before. That's normal: in {ru['n']} past team games, runs lost points overall {1 - ru['rate']:.0%} of the time.
+What these mean: add up the value of every pass play (or every run) in the game, the good ones and the bad ones. If the total is above zero, that part
+of the offense helped more than it hurt. Running games usually hurt more than they help: in {ru['n']} past team games, that happened {1 - ru['rate']:.0%} of the time.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
 those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a

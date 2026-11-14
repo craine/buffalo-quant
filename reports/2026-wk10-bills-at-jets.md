@@ -2,10 +2,13 @@
 
 **Finding: We project the Bills for 29.9 points and the Jets for 22.1, which gives Buffalo a 75% chance to win. The biggest mismatch on
 the field: the Bills' passing game, 4th-best in the NFL, against a Jets pass defense that's 7th-worst. Our matchup model gives an
-80% chance the Bills' pass plays gain ground Sunday, our most confident pass call yet, and the model's confident calls have held up.**
+80% chance the Bills' passing game helps more than it hurts on Sunday, our most confident pass call yet, and the model's confident calls have held up.**
 
 *Bills at Jets, Sunday, Nov. 15, 1 p.m. ET, MetLife Stadium. Numbers are 2026 through week 9. [Last week's prediction](bills-vikings-prediction.html)
 and [how it went](bills-vikings-postgame.html): 5 of 7 calls hit.*
+
+*Clarification, Nov. 14: we reworded the four pass and run calls into plain English (for example, "the Bills' passing game helps more than it hurts" instead
+of "pass plays gain points overall"). No numbers changed. The Ledger keeps the original wording, logged Nov. 13.*
 
 ![Chance each team reaches each scoreline](wk10-ladder.png)
 
@@ -78,15 +81,15 @@ to Sunday's projections, and checked who came out ahead: Buffalo, 75% of the tim
 | Call | Our chance | Where it comes from |
 |---|---|---|
 | Bills win (overtime counts; a tie counts as a miss) | **75%** | Points model, win chance |
-| Bills' pass plays gain points overall | **80%** | Matchup model |
-| Jets' pass plays gain points overall | **55%** | Matchup model |
-| Bills' runs lose points overall | **66%** | Matchup model |
-| Jets' runs lose points overall | **75%** | Matchup model |
+| Bills' passing game helps more than it hurts | **80%** | Matchup model |
+| Jets' passing game helps more than it hurts | **55%** | Matchup model |
+| Bills' running game hurts more than it helps | **66%** | Matchup model |
+| Jets' running game hurts more than it helps | **75%** | Matchup model |
 
 ![The calls](wk10-calls.png)
 
-A team's runs "lose points" if, all told, its running plays left it worse off
-than before. That's normal: in 990 past team games, runs lost points overall 64% of the time.
+What these mean: add up the value of every pass play (or every run) in the game, the good ones and the bad ones. If the total is above zero, that part
+of the offense helped more than it hurt. Running games usually hurt more than they help: in 990 past team games, that happened 64% of the time.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
 those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a

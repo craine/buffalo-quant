@@ -21,6 +21,11 @@ Read only the story body (ignore "For the stat-heads"), then:
    follows. Check that the explanation is right-sized: enough to trust it, not a methods paper.
 5. **Flow and length.** Headers that tell the story, short paragraphs, no repeated points.
 6. **Charts.** Can a fan read each chart in five seconds? Is the title the takeaway?
+7. **Every line stands alone.** Read every Ledger call, table row, chart label, chart title, hero line and dek by itself, as a fan
+   who sees only that line (a chart screenshot, the calls table, the Ledger page). If it doesn't make sense without the
+   paragraph around it, flag it. "Bills' pass plays gain points overall" fails: a fan reads it as scoreboard points. Write
+   it as a plain sentence: "Bills' passing game helps more than it hurts." Check this even when the wording was used in
+   an earlier story; earlier stories can be wrong too.
 
 Don't change any number or factual claim. If a rewrite needs a new number, say so and the writer computes it.
 Don't edit files. Report: your one-sentence version of the story, a verdict (ready / needs edits / needs a rewrite),

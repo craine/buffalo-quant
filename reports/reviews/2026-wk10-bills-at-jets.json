@@ -75,13 +75,20 @@
    "at_utc": "2026-11-14T00:58:34Z",
    "notes": "Final check on a9078ec040c0: all numbers re-derived read-only (29.9/22.1/75%, ladder 16 cells, 0.26/273 rank 4 excl 2-pt, NYJ 0.16/312 7th-most, lg 0.05, 0.27/0.19/0.05->0.233, plays +3.775/-1.755, 134 games 75->78, 632 games 63%/52% (same under either tie rule), 70%+ 75/74 n=102, ladder mid 50->55 n=1744, 5 of 7). Ledger P0012-P0016 0.75/0.80/0.55/0.66/0.75 at 00:54:53Z = 7:54 pm ET Nov 13, before 18:00Z kickoff. Hero, dek, 3 charts consistent. No betting language or body jargon. P0012 wording paraphrase non-blocking.",
    "report": "2026-wk10-bills-at-jets-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+   "at_utc": "2026-11-14T12:57:19Z",
+   "notes": "Wording-only change: four pass/run call labels rewritten as plain standalone sentences in table, chart, lead and explainer; dated clarification note added; no numbers changed (diff shows text only); Ledger wording left as logged and the note says so."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
-  "at_utc": "2026-11-14T00:55:33Z",
-  "notes": "Editor round-2 fixes applied (no 'flagged', single scoreboard disclaimer, opening reworded, receiver full name from raw_players by gsis id, game-by-game note, footnote removed); Week 10 calls logged P0012-P0016 at 00:54:53Z Nov 14; story shows logged time."
+  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+  "at_utc": "2026-11-14T12:57:19Z",
+  "notes": "Wording-only change: four pass/run call labels rewritten as plain standalone sentences in table, chart, lead and explainer; dated clarification note added; no numbers changed (diff shows text only); Ledger wording left as logged and the note says so."
  },
  "editor": {
   "verdict": "pass",

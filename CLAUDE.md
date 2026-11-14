@@ -162,6 +162,10 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   the source data, the reasoning (with real computed examples, e.g. "shots from within 10 feet go in 13.8% of
   the time"), the math in one plain paragraph, and how we checked it. Include the chart that shows it.
 - Tie the explanation back to the headline number ("their chances were worth 237 goals; they scored 256").
+- **Every call and label reads on its own.** Ledger calls, table rows, chart labels and titles travel without the story
+  (screenshots, the Ledger page), so each must make sense alone. Pass and run calls are written as "the Bills' passing game
+  helps more than it hurts" / "the Jets' running game hurts more than it helps", never "pass plays gain points overall" or
+  "runs lose points". Write the Ledger `claim_text` the same way, with the stat definition in parentheses at the end.
 - **Published stories never change silently.** Every generator pins its data with an `AS_OF` date (games through that
   date). Re-running it reproduces the published numbers. Updated numbers mean a new, clearly dated story or note.
 
