@@ -1,0 +1,30 @@
+{
+ "label": "Our projection for Sunday",
+ "big": [
+  [
+   30,
+   "Bills, projected points"
+  ],
+  [
+   22,
+   "Jets, projected points"
+  ]
+ ],
+ "note": "Bills win 75% of the time. The key matchup: Buffalo's passing game (4th in the NFL) against a Jets pass defense that's 7th-worst.",
+ "explainer": {
+  "kicker": "How we checked it",
+  "title": "Its confident calls have held up.",
+  "text": "When our matchup model gave a passing game 70% or more on 134 past games it hadn't seen, it said this, and this is how often it happened:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "What it said",
+    0.754
+   ],
+   [
+    "What happened",
+    0.776
+   ]
+  ]
+ }
+}
