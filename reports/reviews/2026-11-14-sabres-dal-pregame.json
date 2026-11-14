@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
+   "at_utc": "2026-11-14T00:01:17Z",
+   "notes": "All numbers generated; bounce-back checked two ways (raw next-game win rates, 4 seasons; out-of-sample model check, gap within noise); 'weaker to begin with' grounded in the model's lower expectation; ratings pinned to games through Nov 12 so re-runs reproduce; first meeting asserted 4-0; betting words scanned ('leans', 'picking' removed); bounce chart credits final scores."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "3151bf010eff3eb701632479d1a9785321e85889d231f1f3c4cb2d07aa235b06",
+  "at_utc": "2026-11-14T00:01:17Z",
+  "notes": "All numbers generated; bounce-back checked two ways (raw next-game win rates, 4 seasons; out-of-sample model check, gap within noise); 'weaker to begin with' grounded in the model's lower expectation; ratings pinned to games through Nov 12 so re-runs reproduce; first meeting asserted 4-0; betting words scanned ('leans', 'picking' removed); bounce chart credits final scores."
+ }
+}
