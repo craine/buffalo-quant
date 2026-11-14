@@ -40,7 +40,7 @@ Much of that gap is in goal: Buffalo's goalies have allowed about 0.23 goals a g
 The Stars don't let teams near the net. They allow 11.1 shots a game from within 20 feet (2nd-fewest) and 2.1 rebound shots
 (fewest), the two kinds of shots most likely to go in. Buffalo is in the middle of the league at creating chances (13th) and near
 the bottom at preventing them. One caution: when the teams met in Buffalo on Oct. 8, the Sabres actually got the better chances (worth 2.6 goals to Dallas's 2.1) and
-still lost 0-4. One game is a small sample, and our prediction goes by the full season.
+still lost 4-0. One game is a small sample, and our prediction goes by the full season.
 
 ## The bounce-back game
 
@@ -82,7 +82,7 @@ Our model expects about **3.5 goals for Dallas and 2.8 for Buffalo**, and gives 
 
 **Where the number comes from.** The chances numbers above. Buffalo creates chances worth 3.09 goals a game; Dallas allows 2.63. Early in a season we
 blend in last season's numbers and pull everything toward the league average, which makes Buffalo's attack worth 3.07 a game and Dallas's defense
-2.73. (After that blending, an average team comes out at 2.99, slightly different from the 2.97 in the table above.) We do the same the other way for Dallas. Home ice adds about 0.27 of a goal for the Stars.
+2.73. (The model works with the chances before our small season adjustment, so an average team is 2.99 there, against 2.97 in the table.) We do the same the other way for Dallas. Home ice adds about 0.27 of a goal for the Stars.
 Then we play the game out on paper many times; ties after 60 minutes go the way they have for home teams in past overtimes and shootouts (55% home wins).
 
 ![Model test](sabres-dal-model-test.png)

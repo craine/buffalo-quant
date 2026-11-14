@@ -296,7 +296,7 @@ Much of that gap is in goal: Buffalo's goalies have allowed about {buf_gsax_pg:.
 The Stars don't let teams near the net. They allow {v.close_a_pg:.1f} shots a game from within 20 feet ({fewest(rk('close_a_pg', THEM, False))}) and {v.reb_a_pg:.1f} rebound shots
 ({fewest(rk('reb_a_pg', THEM, False))}), the two kinds of shots most likely to go in. Buffalo is in the middle of the league at creating chances ({ordn(rk('xgf_pg', US))}) and near
 the bottom at preventing them. One caution: when the teams met in Buffalo on Oct. 8, the Sabres actually got the better chances (worth {m1_us:.1f} goals to Dallas's {m1_them:.1f}) and
-still lost {m1_sc_us}-{m1_sc_them}. One game is a small sample, and our prediction goes by the full season.
+still lost {m1_sc_them}-{m1_sc_us}. One game is a small sample, and our prediction goes by the full season.
 
 ## The bounce-back game
 
@@ -334,7 +334,7 @@ Our model expects about **{mu_v:.1f} goals for Dallas and {mu_b:.1f} for Buffalo
 
 **Where the number comes from.** The chances numbers above. Buffalo creates chances worth {b.xgf_pg:.2f} goals a game; Dallas allows {v.xga_pg:.2f}. Early in a season we
 blend in last season's numbers and pull everything toward the league average, which makes Buffalo's attack worth {off_r[US]:.2f} a game and Dallas's defense
-{def_r[THEM]:.2f}. (After that blending, an average team comes out at {lg_r:.2f}, slightly different from the {lg.xgf_pg:.2f} in the table above.) We do the same the other way for Dallas. Home ice adds about {coef[2]:.2f} of a goal for the Stars.
+{def_r[THEM]:.2f}. (The model works with the chances before our small season adjustment, so an average team is {lg_r:.2f} there, against {lg.xgf_pg:.2f} in the table.) We do the same the other way for Dallas. Home ice adds about {coef[2]:.2f} of a goal for the Stars.
 Then we play the game out on paper many times; ties after 60 minutes go the way they have for home teams in past overtimes and shootouts ({p_ot:.0%} home wins).
 
 ![Model test](sabres-dal-model-test.png)
