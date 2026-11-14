@@ -104,10 +104,20 @@ def matchup_calls():
     return c, tests
 
 
+def example_plays():
+    """Two real Bills plays from week 9 at Minnesota, to show what a play's points mean."""
+    q = query(f"""SELECT qtr, down, ydstogo, yards_gained, sack, complete_pass, epa, desc FROM raw_pbp
+                  WHERE season={SEASON} AND game_id='2026_09_BUF_MIN' AND posteam='BUF' AND qb_dropback=1 AND epa IS NOT NULL""")
+    gain = q[(q.complete_pass == 1) & (q.down == 3) & (q.yards_gained == 36)]
+    loss = q[(q.sack == 1) & (q.down == 3) & (q.ydstogo == 14)]
+    assert len(gain) == 1 and len(loss) == 1 and "T.Johnson" in gain.iloc[0].desc
+    return dict(gain=gain.iloc[0].epa, gain_dist=int(gain.iloc[0].ydstogo), loss=loss.iloc[0].epa, loss_yds=-int(loss.iloc[0].yards_gained))
+
+
 def pass_ranks():
     """Dropback EPA per play this season: Bills offense and Jets defense, with ranks."""
     q = query(f"""SELECT posteam, defteam, epa FROM raw_pbp WHERE season={SEASON} AND week<={THRU} AND season_type='REG'
-                  AND qb_dropback=1 AND epa IS NOT NULL""")
+                  AND qb_dropback=1 AND epa IS NOT NULL AND COALESCE(two_point_attempt, 0) = 0""")
     off = q.groupby("posteam").epa.mean().sort_values(ascending=False)
     de = q.groupby("defteam").epa.mean().sort_values()
     return dict(buf_off=off["BUF"], buf_off_rk=list(off.index).index("BUF") + 1, opp_def=de[OPP], opp_def_rk=list(de.index).index(OPP) + 1,
@@ -135,6 +145,7 @@ def main():
     P = points_block()
     C, T = matchup_calls()
     R = pass_ranks()
+    X = example_plays()
     pb, pj = P["proj"]["BUF"], P["proj"][OPP]
     wt, mae = P["wt"], P["mae"]
     calls = [  # (plain-English call, our chance, which model, test key)
@@ -188,25 +199,25 @@ def main():
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"Our surest call: the Bills' passing game gains ground ({C['buf_db']['p']:.0%})",
            "Our chance that each one happens. Each comes from a kind of model we tested on past games before trusting it.",
-           f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Logged on the Ledger before kickoff.")
+           f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Matchup calls tested on {db['n']} past team games; win chance on {wt['n']}.")
     fig.savefig(OUT / "wk10-calls.png"); plt.close(fig)
 
     # ---- win-chance test
     cal = wt["cal"]
     fig, ax = plt.subplots(figsize=(9.5, 4.6), dpi=200)
     x = np.arange(len(cal)); w = 0.36
-    ax.bar(x - w / 2, cal.said, w, color=GRAY, label="Chance we gave the team we leaned to", zorder=2)
+    ax.bar(x - w / 2, cal.said, w, color=GRAY, label="Chance we gave the likelier team", zorder=2)
     ax.bar(x + w / 2, cal.happened, w, color=BLUE, label="How often that team won", zorder=2)
     for i, r in enumerate(cal.itertuples()):
         ax.text(i - w / 2, r.said + 0.015, f"{r.said:.0%}", ha="center", fontsize=9.5, color=MUTED)
         ax.text(i + w / 2, r.happened + 0.015, f"{r.happened:.0%}", ha="center", fontsize=9.5, color=INK)
-    labs = ["Close calls\n(50-60%)", "Leans\n(60-70%)", "Strong leans\n(70%+)"]
+    labs = ["Close calls\n(50-60%)", "Likely\n(60-70%)", "Very likely\n(70%+)"]
     ax.set_xticks(x, [f"{l}\n{int(n)} games" for l, n in zip(labs, cal.n)], fontsize=9.5)
     ax.set_ylim(0, 1.05); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.legend(frameon=False, fontsize=9, loc="upper left")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"When we gave a team 70% or more, we said {cal.said.iloc[2]:.0%} and it won {cal.happened.iloc[2]:.0%}",
-           f"Win chances on {wt['n']} games from 2024-26 the model never saw, grouped by how strongly it leaned.",
+           f"Win chances on {wt['n']} games from 2024-26 the model never saw, grouped by how big a chance it gave.",
            f"Model built on 2019-23 games. 2026 games through week {THRU}. Ties count as half a win.")
     fig.savefig(OUT / "wk10-win-test.png"); plt.close(fig)
 
@@ -219,7 +230,7 @@ def main():
 
     table = "\n".join(f"| {lab} | **{pr:.0%}** | {m} |" for lab, pr, m, _ in calls)
     ladder_rows = "\n".join(f"| {t} or more | **{lad[t][0]:.0%}** | {lad[t][1]:.0%} |" for t in LADDER)
-    md = f"""# Bills at Jets: our prediction. The NFL's best offense gets one of its leakiest pass defenses
+    md = f"""# Bills at Jets: our prediction. Buffalo's passing game gets one of the NFL's leakiest pass defenses
 
 **Finding: We project the Bills for {pb:.1f} points and the Jets for {pj:.1f}, which gives Buffalo a {P['p_buf']:.0%} chance to win. The biggest mismatch on
 the field: the Bills' passing game, {ordn_(R['buf_off_rk'])}-best in the NFL, against a Jets pass defense that's {ordn_(R['opp_def_most'])}-worst. Our matchup model gives an
@@ -232,15 +243,21 @@ and [how it went](bills-vikings-postgame.html): {w9_hits} of 7 calls hit.*
 
 ## The matchup that decides it
 
-Every play moves a drive closer to scoring or further away; we measure that in points. This season the Bills' pass plays have gained
-{R['buf_off']:+.2f} points each on average, {ordn_(R['buf_off_rk'])} in the NFL, over {R['n_off']} dropbacks. The Jets' pass defense has given up {R['opp_def']:+.2f} a play, {ordn_(R['opp_def_most'])}-most
-of {R['n_teams']}, over {R['n_def']} dropbacks. An average pass play gains {R['lg']:+.2f}.
+These aren't scoreboard points. Every play moves a drive closer to scoring or further away, and we turn that into points. Last week at Minnesota,
+Josh Allen's 36-yard completion to T. Johnson on third-and-{X['gain_dist']} was worth about {X['gain']:.1f} points; a {X['loss_yds']}-yard sack on third-and-14 cost about
+{abs(X['loss']):.1f}. Add up every pass play and divide by how many there were.
 
-Put them together and our matchup model expects Buffalo's pass plays to gain about {C['buf_db']['expected']:+.2f} points each Sunday. Games swing a lot, so that's not a
-promise; it says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
+This season the Bills' pass plays have gained {R['buf_off']:.2f} points each on average, {ordn_(R['buf_off_rk'])} in the NFL, over {R['n_off']} pass plays (sacks and
+scrambles count). The Jets' pass defense has given up {R['opp_def']:.2f} a play, {ordn_(R['opp_def_most'])}-most of {R['n_teams']}, over {R['n_def']} pass plays. An average pass play gains {R['lg']:.2f}.
 
-**Is {C['buf_db']['p']:.0%} too bold?** It's the most confident pass call we've made, so we checked the model's track record at that level. On {db['n']} past team games
-(2023-2025) it hadn't seen, when it gave a passing game 70% or more, it said {db_hi.said:.0%} on average and it happened {db_hi.happened:.0%} of the time ({int(db_hi.n)} games).
+Our matchup model averages those game by game. In a typical game the Bills' passing gains about {C['buf_db']['off_mean']:.2f} a play, the Jets' pass defense
+allows about {C['buf_db']['def_mean']:.2f}, and an average game is {C['buf_db']['league']:.2f}. Start from average, add half of how far above average the Bills are and half
+of how far the Jets' defense is, and you get about **{C['buf_db']['expected']:.2f} points a play** for Buffalo on Sunday. Games swing a lot, so that's not a
+promise; the model says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
+
+**Is {C['buf_db']['p']:.0%} too bold?** It's the most confident pass call we've made, so we checked the model's record at that level. We tested it on {db['n']}
+past team games from 2023-2025 that it had never seen. In the {int(db_hi.n)} where it gave a passing game 70% or more, it said {db_hi.said:.0%} on average, and the
+passing game came out ahead {db_hi.happened:.0%} of the time.
 
 The rest of the game is closer to even. The Jets score {P['raw']['opp_off']:.2f} points per drive ({ordn_(P['rk']['opp_off_rank'])} of {P['rk']['n']}); the Bills' defense allows
 {P['raw']['buf_def']:.2f} ({ordn_(P['rk']['buf_def_rank'])}).
@@ -255,10 +272,26 @@ For each scoreline, here's our chance that each team gets at least that many poi
 
 Read it like this: there's a {lad[24][0]:.0%} chance the Bills score 24 or more, and a {lad[24][1]:.0%} chance the Jets do.
 
+## Where the {pb:.0f} comes from
+
+Points come from drives. Four steps:
+
+1. **How good is each side?** This season the Bills average {P['raw']['buf_off']:.2f} points per drive, the most in the NFL ({P['rk']['off']}). The Jets' defense
+   allows {P['raw']['opp_def']:.2f} per drive, {P['rk']['def_most']}-most. An average offense scores {P['lg']:.2f}.
+2. **Don't overreact to nine weeks.** We mix in last season and an average team. That makes the Bills' offense {P['off_b']:.2f} and the Jets' defense {P['def_m']:.2f}.
+3. **Let them meet.** Both sides tilt toward Buffalo: its offense is well above average and the Jets' defense is below it, which leaves about
+   {P['ppd_b']:.2f} points per drive.
+4. **Count the drives and check against history.** About {P['drv']:.0f} drives a game gets you to about {P['ppd_b'] * P['drv']:.0f}. A final check against past games pulls
+   extreme projections like this {P['ppd_b'] * P['drv']:.0f} back toward normal and gives the home team about {P['coef'][2]:.1f} points. Buffalo is on the road, so it lands at **{pb:.1f}**.
+
+The Jets go through the same steps from the other direction. After mixing in last season, their offense rates {P['off_m']:.2f} per drive against a Bills
+defense at {P['def_b']:.2f}, plus the home bump.
+That's **{pj:.1f}**.
+
 ## How a 30-point projection becomes {P['p_buf']:.0%}
 
 Nobody scores exactly what we project. We looked at {len(res):,} past team scores from 2019-2023 and asked how far off we were. Half the time, a team landed
-within about {miss50:.0f} points of our number; eight times in ten, within about {miss80:.0f}. (On games it had never seen, its average miss was {mae['model']:.1f} points.)
+within about {miss50:.0f} points of our number; eight times in ten, within about {miss80:.0f}. (On games the model had never seen, our average miss was {mae['model']:.1f} points.)
 
 Then we play Sunday's game over and over, once for every one of those past misses. Eight times in ten the Bills land between {P['rng']['BUF'][0]:.0f} and
 {P['rng']['BUF'][1]:.0f} points. For who wins, we took {wt['n_pairs']:,} real past games, noted how far off we were for each team in that same game, applied each pair
@@ -276,29 +309,16 @@ What "gain points" and "lose points" mean: these aren't scoreboard points. A tea
 than before. That's normal: in {ru['n']} past team games, runs lost points overall {1 - ru['rate']:.0%} of the time.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
-those lines again. We haven't fixed it yet, so we're not logging them. The ladder above has the same issue: on games the model never saw, when it gave a
+those 20-point chances again. We haven't fixed it yet, so they're still shown in the ladder, flagged, but not logged until fixed. The ladder has the same issue: on games the model never saw, when it gave a
 team a 40-60% chance of reaching a scoreline, it said {mid_said:.0%} on average and the team got there {mid_hap:.0%} of the time. Read the middle of the ladder as a little low.
 
 {ledger_status()}
 
-## Where the {pb:.0f} comes from
-
-Points come from drives. Four steps:
-
-1. **How good is each side?** This season the Bills average {P['raw']['buf_off']:.2f} points per drive, the most in the NFL ({P['rk']['off']}). The Jets' defense
-   allows {P['raw']['opp_def']:.2f} per drive, {P['rk']['def_most']}-most. An average offense scores {P['lg']:.2f}.
-2. **Don't overreact to nine weeks.** We mix in last season and an average team. That makes the Bills' offense {P['off_b']:.2f} and the Jets' defense {P['def_m']:.2f}.
-3. **Let them meet.** Both sides favor Buffalo, which leaves about {P['ppd_b']:.2f} points per drive.
-4. **Count the drives and check against history.** About {P['drv']:.0f} drives a game gets you to about {P['ppd_b'] * P['drv']:.0f}. A final check against past games pulls
-   extreme projections back toward normal and gives the home team about {P['coef'][2]:.1f} points. Buffalo is on the road, so it lands at **{pb:.1f}**.
-
-The Jets go through the same steps from the other direction: an offense at {P['off_m']:.2f} per drive against a Bills defense at {P['def_b']:.2f}, plus the home bump.
-That's **{pj:.1f}**.
-
 ## Did we check it?
 
-**The win chance.** On {wt['n']} games from 2024-2026 the model had never seen, the team it leaned to won {wt['right']:.0%} of the time. Taking the home team every
-time would have been right {wt['home_won']:.0%}.
+**The win chance.** On {wt['n']} games from 2024-2026 the model had never seen, the team it gave the better chance won {wt['right']:.0%} of the time. Taking the
+home team every time would have been right {wt['home_won']:.0%}. When it gave a team 70% or more, as it gives Buffalo Sunday, it said {cal.said.iloc[2]:.0%} on average and that team
+won {cal.happened.iloc[2]:.0%} of the time ({int(cal.n.iloc[2])} games; a tie counts as half a win).
 
 ![Win chance test](wk10-win-test.png)
 
@@ -327,7 +347,7 @@ It beat the guess on pass calls and edged it on run calls.
   season's gap; calibrated score = {P['coef'][0]:.2f} + {P['coef'][1]:.3f} x raw + {P['coef'][2]:.2f} x home, fit on 2019-23 (week 2 on).
 - Win chance ({WIN_VERSION}): {wt['n_pairs']:,} same-game residual pairs; out of sample (2024-26, week 2 on, n={wt['n']}): Brier {wt['brier']:.4f} vs {wt['brier_half']:.4f}
   (50/50) and {wt['brier_home']:.4f} (home-win rate).
-- Ladder calibration out of sample (2024-26, all {len(LADDER)} lines pooled), chances 0.4-0.6: said {mid_said:.3f}, happened {mid_hap:.3f}, n={mid_n:,}.
+- Ladder calibration out of sample (2024-26, all {len(LADDER)} scorelines pooled), chances 0.4-0.6: said {mid_said:.3f}, happened {mid_hap:.3f}, n={mid_n:,}.
 - Data pinned through 2026 week {THRU}. No betting lines are used anywhere in these models.
 """
     (OUT / f"{SLUG}.md").write_text(md)
