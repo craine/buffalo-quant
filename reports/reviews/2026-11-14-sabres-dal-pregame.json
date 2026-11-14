@@ -68,6 +68,14 @@
    "at_utc": "2026-11-14T00:08:28Z",
    "notes": "Re-check of 07a7794d: only the 2 changed lines differ (Oct 8 'lost 4-0' matches raw 0-4 at BUF; 2.99 vs 2.97 now correctly attributed to the pre-rescale scale, 2.971/0.9922=2.994). Generator template matches. All other numbers as verified previously; P0011 0.38 matches.",
    "report": "2026-11-14-sabres-dal-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+   "at_utc": "2026-11-14T00:11:41Z",
+   "notes": "Independent re-derivation matches all numbers: 62/38 (P(DAL) 0.616, xG 3.49/2.79, tie 0.157) = P0011 0.38 and notes, logged 00:05:13Z before 01:00Z puck drop; team table and ranks; bounce 0.463 (697) vs 0.504, OOS 0.487 vs 0.501, won 0.460 (261); GA 3.58 vs 3.25, goalies -0.228/g; Oct 8 4-0, 2.57 vs 2.11; goalie table/ranks of 76; 60-65% bin 231 won 62%; CHI contrast accurate. Charts, hero, dek consistent. No betting language or body jargon.",
+   "report": "2026-11-14-sabres-dal-pregame-final.md"
   }
  ],
  "self": {
@@ -89,5 +97,12 @@
   "at_utc": "2026-11-14T00:08:28Z",
   "notes": "Re-check of 07a7794d: only the 2 changed lines differ (Oct 8 'lost 4-0' matches raw 0-4 at BUF; 2.99 vs 2.97 now correctly attributed to the pre-rescale scale, 2.971/0.9922=2.994). Generator template matches. All other numbers as verified previously; P0011 0.38 matches.",
   "report": "2026-11-14-sabres-dal-pregame-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "07a7794d6267fdb49c8ededd039540729717dd60f6b7a3b9990c2f067e8d359a",
+  "at_utc": "2026-11-14T00:11:41Z",
+  "notes": "Independent re-derivation matches all numbers: 62/38 (P(DAL) 0.616, xG 3.49/2.79, tie 0.157) = P0011 0.38 and notes, logged 00:05:13Z before 01:00Z puck drop; team table and ranks; bounce 0.463 (697) vs 0.504, OOS 0.487 vs 0.501, won 0.460 (261); GA 3.58 vs 3.25, goalies -0.228/g; Oct 8 4-0, 2.57 vs 2.11; goalie table/ranks of 76; 60-65% bin 231 won 62%; CHI contrast accurate. Charts, hero, dek consistent. No betting language or body jargon.",
+  "report": "2026-11-14-sabres-dal-pregame-final.md"
  }
 }
