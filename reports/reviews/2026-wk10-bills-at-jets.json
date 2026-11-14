@@ -82,26 +82,49 @@
    "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
    "at_utc": "2026-11-14T12:57:19Z",
    "notes": "Wording-only change: four pass/run call labels rewritten as plain standalone sentences in table, chart, lead and explainer; dated clarification note added; no numbers changed (diff shows text only); Ledger wording left as logged and the note says so."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+   "at_utc": "2026-11-14T12:58:51Z",
+   "notes": "Check 7: hero explainer text/title don't stand alone; calls chart doesn't name the game. New call labels, dek, explainer and clarification note pass; recommended note/explainer tweaks. Ledger P0013-16 old wording fails standalone, can't change.",
+   "report": "2026-wk10-bills-at-jets-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+   "at_utc": "2026-11-14T12:58:59Z",
+   "notes": "Numbers unchanged and labels match P0013-P0016. Fix 1: clarification note implies Ledger wording = old story label ('gain points'); Ledger says 'add points'/'designed runs lose points'. Fix 2: explainer 'every run' should say designed runs, scrambles count as pass plays.",
+   "report": "2026-wk10-bills-at-jets-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+   "at_utc": "2026-11-14T13:00:03Z",
+   "notes": "Applied Editor 1-8 and Quant 1-2: hero explainer and title stand alone, card chart names the game, clarification quotes the Ledger's actual wording, designed runs with scrambles counted as pass plays, matchup lines in plain wording, header, 'faces'. No numbers changed."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
-  "at_utc": "2026-11-14T12:57:19Z",
-  "notes": "Wording-only change: four pass/run call labels rewritten as plain standalone sentences in table, chart, lead and explainer; dated clarification note added; no numbers changed (diff shows text only); Ledger wording left as logged and the note says so."
+  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+  "at_utc": "2026-11-14T13:00:03Z",
+  "notes": "Applied Editor 1-8 and Quant 1-2: hero explainer and title stand alone, card chart names the game, clarification quotes the Ledger's actual wording, designed runs with scrambles counted as pass plays, matchup lines in plain wording, header, 'faces'. No numbers changed."
  },
  "editor": {
-  "verdict": "pass",
-  "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
-  "at_utc": "2026-11-14T00:56:00Z",
-  "notes": "Ready. All round-2 fixes verified in text a9078ec040c0 (ladder note, duplicate disclaimer cut, 'We grade every play in points' opening, Ty Johnson, 0.26/0.27 explained, footnote removed). Ledger line matches P0012-P0016 at 00:54:53Z = 7:54 p.m. ET Nov 13. For final check: P0012 claim wording differs slightly from story table; 63% tie rule no longer contrasted with chart.",
+  "verdict": "fail",
+  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+  "at_utc": "2026-11-14T12:58:51Z",
+  "notes": "Check 7: hero explainer text/title don't stand alone; calls chart doesn't name the game. New call labels, dek, explainer and clarification note pass; recommended note/explainer tweaks. Ledger P0013-16 old wording fails standalone, can't change.",
   "report": "2026-wk10-bills-at-jets-editor.md"
  },
  "quant": {
-  "verdict": "pass",
-  "sha256": "ff02a816ce8749d0bd23a266574b4cde41b0d56714a009b3e2f22bfd5d05d668",
-  "at_utc": "2026-11-14T00:54:21Z",
-  "notes": "Round 2 on sha ff02a816: all 4 round-1 fixes verified (0.26/273, 0.27/0.19/0.05 -> 0.23, no 'lines', calls footer). Editor additions verified: Allen-to-Ty Johnson 3rd-and-8 +3.775, 3rd-and-14 sack -1.755, 70%+ win bucket 75/74 n=102, raw 33.6, Jets 1.81/2.08. Logger unchanged, 0.75/0.80/0.55/0.66/0.75. Wording fix before final: 'flagged' is not true (the ladder has no marker), and 'The ladder has the same issue' repeats; reword. Final check must be on post-logging text.",
+  "verdict": "fail",
+  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
+  "at_utc": "2026-11-14T12:58:59Z",
+  "notes": "Numbers unchanged and labels match P0013-P0016. Fix 1: clarification note implies Ledger wording = old story label ('gain points'); Ledger says 'add points'/'designed runs lose points'. Fix 2: explainer 'every run' should say designed runs, scrambles count as pass plays.",
   "report": "2026-wk10-bills-at-jets-quant.md"
  },
  "final": {

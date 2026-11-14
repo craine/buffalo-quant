@@ -1,36 +1,19 @@
-# Quant re-check (stage 2, round 2): reports/2026-wk10-bills-at-jets.md
+# Quant re-review (narrow): 2026-wk10-bills-at-jets.md, plain-English call labels
 
-Text checked: sha256 ff02a816ce8749d0bd23a266574b4cde41b0d56714a009b3e2f22bfd5d05d668. I didn't run the generator or the logger. The Ledger still has 11 predictions; nothing for week 10 is logged.
+Verdict: FAIL as-is. Publish with two one-line text fixes (no number or model change needed).
 
-**Verdict: PASS.** Every number in the new text reproduces from my own scratch code. There's one small wording fix to make before the final check.
+## Required fixes
+1. Clarification note misquotes the Ledger. Text: "...instead of "pass plays gain points overall"). No numbers changed. The Ledger keeps the original wording, logged Nov. 13."
+   Evidence: "pass plays gain points overall" was the story's old label, not the Ledger's. P0013/P0014 claim_text say "pass plays add points overall (EPA per dropback above zero)"; P0015/P0016 say "designed runs lose points overall (rush EPA below zero)". A reader who checks the Ledger finds different wording than the note implies is "original".
+   Fix: "...instead of "pass plays gain points overall"). No numbers changed. The Ledger entries, logged Nov. 13 (ET), keep the wording they were logged with (for example, "Bills' pass plays add points overall")."
+   (Timing is fine: created_at_utc 2026-11-14T00:54:53Z = Nov. 13, 7:54 p.m. ET, before the 2026-11-15T18:00Z kickoff.)
+2. Explainer says "every run" but the run calls count designed runs only. Text: "add up the value of every pass play (or every run) in the game".
+   Evidence: rush_epa = rush_epa_sum/rushes from clean_team_week, where is_designed_rush = rush==1 AND qb_dropback!=1 on play_type 'run', kneels/spikes/2-pt/no-plays excluded (src/clean/build.py:35, 22-25, 86). 2026 raw_pbp: all 489 real-play scrambles have qb_dropback=1, rush=0, so they sit in the pass number. Ledger P0015/P0016 say "designed runs". Josh Allen scrambles are a large part of what fans call the Bills' running game, and the table is far from line 22's "(sacks and scrambles count)".
+   Fix: "add up the value of every pass play (or every designed run; QB scrambles count as pass plays) in the game..."
 
-## My four fixes from round 1
-1. **Two-point tries:** `pass_ranks` now has `COALESCE(two_point_attempt,0)=0`. The body says 0.26 over 273 (4th) and 0.16 over 312 (7th-most of 32), league 0.05. Stat-heads says +0.263 and +0.047. These match my numbers from raw_pbp (+0.2633/273, +0.1608/312, +0.0466). Fixed.
-2. **The 0.23 paragraph:** it now uses 0.27, 0.19 and 0.05. 0.049 + 0.5 x (0.221 + 0.146) = 0.233, so 0.23. These are the model's game-averaged values, which I recomputed from clean_team_week (+0.2705, +0.1950, +0.0486). Fixed.
-3. **"lines":** the word is gone from the body. Stat-heads now says "8 scorelines". The only "lines" left is "No betting lines are used", which is a disclaimer and fine. Fixed.
-4. **Calls chart:** I looked at the new wk10-calls.png. The footer is "Matchup calls tested on 990 past team games; win chance on 632". Both are correct, and it no longer says the calls are logged. Fixed.
-
-## The Editor's changes, checked
-- **The two example plays:** I checked them in raw_pbp, game 2026_09_BUF_MIN, Bills on offense.
-  - The completion is play 2588, Q3 3rd-and-8, 36 yards. Passer gsis 00-0034857 is Josh Allen; receiver 00-0035537 is Ty Johnson ("T. Johnson" is fine). EPA +3.775, so about 3.8.
-  - The sack is play 132, Q1 3rd-and-14, -7 yards, Allen sacked. EPA -1.755, so about 1.8.
-  - Neither play is a penalty or a two-point try. The asserts in example_plays() pin each to a single row.
-- **The win-test sentence:** 70%+ bucket said 75.0%, won 74.0%, 102 games, ties counted as half. The win chart shows the same. "As it gives Buffalo Sunday" is right: Buffalo is at 74.7%, which is in the 70%+ bucket.
-- **"pulls extreme projections like this 34":** the raw projection is 33.6, which rounds to 34. That matches "about 11 drives (10.92) ... about 34".
-- **The Jets' blend:** their offense rates 1.805, so 1.81, and the Bills' defense 2.078, so 2.08. Then the home bump of 1.45 gives 22.08, so 22.1. Correct.
-- **"Both sides tilt toward Buffalo":** Bills offense 2.73 is above the league's 2.05, and the Jets' defense 2.40 allows more than average. Points per drive 3.074, so 3.07. Correct.
-- **The headline**, "Buffalo's passing game gets one of the NFL's leakiest pass defenses": the Jets are 7th-most allowed per pass play. This also fixes the "best offense" vs. "4th-best passing" tension.
-- **Unchanged and still right:** the ladder (all 16 cells), 29.9 / 22.1 / 75%, the 80/55/66/75 calls, 134 games said 75 / happened 78, the 990-game backtest, 64% of runs losing points, the 632-game test (63% / 52%), the 1,744-case caveat (50 → 55), 2,494 misses, 1,247 pairs, the 18-42 range, "within 6 / 12", the average miss of 7.5, the ranks (19th, 16th, 1st, 6th-most), and "5 of 7".
-- **Logger:** log_wk10.py is unchanged and still pulls `points_block()` and `matchup_calls()`, which this round didn't touch. It would log 0.75 / 0.80 / 0.55 / 0.66 / 0.75, matching the story.
-- **Hero JSON and dek:** unchanged and consistent (30, 22, 75%, 4th, 7th-worst, 134, 0.754/0.776).
-- **Brand:** no betting language. The body uses plain decimals with no "EPA", and the jargon stays in the stat-heads section.
-
-## Fix before the final check (wording only)
-- **"they're still shown in the ladder, flagged, but not logged until fixed. The ladder has the same issue: ..."**
-  - Nothing in the ladder table or chart flags the 20+ row; the only flag is this paragraph.
-  - "The ladder has the same issue" right after "still shown in the ladder" also reads as a repeat.
-  - Suggested: "We haven't fixed it yet, so we're not logging them; they're still in the ladder above, with this caveat: on games the model never saw, when it gave a team a 40-60% chance ..."
-  - Alternatively, add a marker to the 20+ row.
-
-## Note for the final check
-After the logger runs, `ledger_status()` swaps in the "Logged on ... before kickoff" sentence. That changes the text's sha256, so the final check has to be on the post-logging text. Also confirm that the logged rows are 0.75 / 0.80 / 0.55 / 0.66 / 0.75 and that created_at_utc is before 2026-11-15 18:00Z.
+## Verified
+- Numbers: diff touches labels, the explainer, the note, the chart title only. All values unchanged: 75/80/55/66/75%, 990, 64%, 632, projections. Chart redraw shows same bars and footer.
+- Labels vs Ledger: "passing game helps more than it hurts" = P(dropback EPA/play > 0) = P0013/P0014 (0.80, 0.55). "running game hurts more than it helps" = 1 - P(rush EPA > 0) = P0015/P0016 (0.66, 0.75). Per-play average above/below zero has the same sign as the total, so "add up ... total above zero" is equivalent. Dropbacks include scrambles and sacks (qb_dropback=1), as the story says. "Running game" = designed runs in model and Ledger; acceptable plain English once fix 2 lands.
+- 990 / 64%: re-derived from clean_team_week, 2023-25 REG weeks 8+, offense side, rushes>0: n=990, share with rush_epa_sum<0 = 0.639 (no exact zeros). Matches model_v01_backtest (rate of v>0 = 36%).
+- Chart wk10-calls.png: title and labels read on their own, no jargon, 50/50 line, footer with source and samples.
+- No betting language; no jargon added in body.
