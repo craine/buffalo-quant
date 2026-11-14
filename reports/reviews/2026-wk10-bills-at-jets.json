@@ -59,6 +59,22 @@
    "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
    "at_utc": "2026-11-14T00:55:33Z",
    "notes": "Editor round-2 fixes applied (no 'flagged', single scoreboard disclaimer, opening reworded, receiver full name from raw_players by gsis id, game-by-game note, footnote removed); Week 10 calls logged P0012-P0016 at 00:54:53Z Nov 14; story shows logged time."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
+   "at_utc": "2026-11-14T00:56:00Z",
+   "notes": "Ready. All round-2 fixes verified in text a9078ec040c0 (ladder note, duplicate disclaimer cut, 'We grade every play in points' opening, Ty Johnson, 0.26/0.27 explained, footnote removed). Ledger line matches P0012-P0016 at 00:54:53Z = 7:54 p.m. ET Nov 13. For final check: P0012 claim wording differs slightly from story table; 63% tie rule no longer contrasted with chart.",
+   "report": "2026-wk10-bills-at-jets-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
+   "at_utc": "2026-11-14T00:58:34Z",
+   "notes": "Final check on a9078ec040c0: all numbers re-derived read-only (29.9/22.1/75%, ladder 16 cells, 0.26/273 rank 4 excl 2-pt, NYJ 0.16/312 7th-most, lg 0.05, 0.27/0.19/0.05->0.233, plays +3.775/-1.755, 134 games 75->78, 632 games 63%/52% (same under either tie rule), 70%+ 75/74 n=102, ladder mid 50->55 n=1744, 5 of 7). Ledger P0012-P0016 0.75/0.80/0.55/0.66/0.75 at 00:54:53Z = 7:54 pm ET Nov 13, before 18:00Z kickoff. Hero, dek, 3 charts consistent. No betting language or body jargon. P0012 wording paraphrase non-blocking.",
+   "report": "2026-wk10-bills-at-jets-final.md"
   }
  ],
  "self": {
@@ -68,10 +84,10 @@
   "notes": "Editor round-2 fixes applied (no 'flagged', single scoreboard disclaimer, opening reworded, receiver full name from raw_players by gsis id, game-by-game note, footnote removed); Week 10 calls logged P0012-P0016 at 00:54:53Z Nov 14; story shows logged time."
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "ff02a816ce8749d0bd23a266574b4cde41b0d56714a009b3e2f22bfd5d05d668",
-  "at_utc": "2026-11-14T00:54:09Z",
-  "notes": "Round 1 edits landed well; 4 small text-only fixes left: (1) ladder note says 20-point chances are 'flagged' but nothing in table/chart is; (2) duplicate 'these aren't scoreboard points' line 87 not cut; (3) section opens with 'These aren't scoreboard points' before points introduced; (4) 'T. Johnson' -> full name. Charts pass.",
+  "verdict": "pass",
+  "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
+  "at_utc": "2026-11-14T00:56:00Z",
+  "notes": "Ready. All round-2 fixes verified in text a9078ec040c0 (ladder note, duplicate disclaimer cut, 'We grade every play in points' opening, Ty Johnson, 0.26/0.27 explained, footnote removed). Ledger line matches P0012-P0016 at 00:54:53Z = 7:54 p.m. ET Nov 13. For final check: P0012 claim wording differs slightly from story table; 63% tie rule no longer contrasted with chart.",
   "report": "2026-wk10-bills-at-jets-editor.md"
  },
  "quant": {
@@ -80,5 +96,12 @@
   "at_utc": "2026-11-14T00:54:21Z",
   "notes": "Round 2 on sha ff02a816: all 4 round-1 fixes verified (0.26/273, 0.27/0.19/0.05 -> 0.23, no 'lines', calls footer). Editor additions verified: Allen-to-Ty Johnson 3rd-and-8 +3.775, 3rd-and-14 sack -1.755, 70%+ win bucket 75/74 n=102, raw 33.6, Jets 1.81/2.08. Logger unchanged, 0.75/0.80/0.55/0.66/0.75. Wording fix before final: 'flagged' is not true (the ladder has no marker), and 'The ladder has the same issue' repeats; reword. Final check must be on post-logging text.",
   "report": "2026-wk10-bills-at-jets-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "a9078ec040c014ccbf25bc868fafb9137a3414b8b8d29ca692681c82f2bdcbf5",
+  "at_utc": "2026-11-14T00:58:34Z",
+  "notes": "Final check on a9078ec040c0: all numbers re-derived read-only (29.9/22.1/75%, ladder 16 cells, 0.26/273 rank 4 excl 2-pt, NYJ 0.16/312 7th-most, lg 0.05, 0.27/0.19/0.05->0.233, plays +3.775/-1.755, 134 games 75->78, 632 games 63%/52% (same under either tie rule), 70%+ 75/74 n=102, ladder mid 50->55 n=1744, 5 of 7). Ledger P0012-P0016 0.75/0.80/0.55/0.66/0.75 at 00:54:53Z = 7:54 pm ET Nov 13, before 18:00Z kickoff. Hero, dek, 3 charts consistent. No betting language or body jargon. P0012 wording paraphrase non-blocking.",
+  "report": "2026-wk10-bills-at-jets-final.md"
  }
 }
