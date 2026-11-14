@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-jets-prediction", "2026-wk10-bills-at-jets.md", "2026-11-14", "Bills &middot; Week 10 preview",
+     "We project Bills 29.9, Jets 22.1: a 75% chance Buffalo wins. The biggest mismatch is the Bills' passing game against one of the NFL's leakiest pass defenses.",
+     "wk10-calls.png"),
     ("sabres-stars-pregame-nov-14", "2026-11-14-sabres-dal-pregame.md", "2026-11-14", "Sabres &middot; Pregame",
      "Our model: Stars 62%, Sabres 38%. Dallas allows the 4th-fewest chances in the NHL. And Dallas's 8-3 loss Thursday doesn't make a bounce-back more likely: teams coming off a blowout won 46% of their next game, a little less than usual.",
      "sabres-dal-bounce.png"),
