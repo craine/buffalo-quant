@@ -15,8 +15,8 @@ Every play moves a drive closer to scoring or further away; we measure that in p
 +0.25 points each on average, 4th in the NFL, over 277 dropbacks. The Jets' pass defense has given up +0.16 a play, 7th-most
 of 32, over 312 dropbacks. An average pass play gains +0.05.
 
-Put them together and our matchup model expects Buffalo's pass plays to gain about +0.23 points each Sunday. Games swing a lot, so it doesn't
-say that's a lock; it says there's an **80%** chance that, all told, the Bills' passing plays leave them better off than they started.
+Put them together and our matchup model expects Buffalo's pass plays to gain about +0.23 points each Sunday. Games swing a lot, so that's not a
+promise; it says there's an **80%** chance that, all told, the Bills' passing plays leave them better off than they started.
 
 **Is 80% too bold?** It's the most confident pass call we've made, so we checked the model's track record at that level. On 990 past team games
 (2023-2025) it hadn't seen, when it gave a passing game 70% or more, it said 75% on average and it happened 78% of the time (134 games).

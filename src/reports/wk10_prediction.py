@@ -236,8 +236,8 @@ Every play moves a drive closer to scoring or further away; we measure that in p
 {R['buf_off']:+.2f} points each on average, {ordn_(R['buf_off_rk'])} in the NFL, over {R['n_off']} dropbacks. The Jets' pass defense has given up {R['opp_def']:+.2f} a play, {ordn_(R['opp_def_most'])}-most
 of {R['n_teams']}, over {R['n_def']} dropbacks. An average pass play gains {R['lg']:+.2f}.
 
-Put them together and our matchup model expects Buffalo's pass plays to gain about {C['buf_db']['expected']:+.2f} points each Sunday. Games swing a lot, so it doesn't
-say that's a lock; it says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
+Put them together and our matchup model expects Buffalo's pass plays to gain about {C['buf_db']['expected']:+.2f} points each Sunday. Games swing a lot, so that's not a
+promise; it says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
 
 **Is {C['buf_db']['p']:.0%} too bold?** It's the most confident pass call we've made, so we checked the model's track record at that level. On {db['n']} past team games
 (2023-2025) it hadn't seen, when it gave a passing game 70% or more, it said {db_hi.said:.0%} on average and it happened {db_hi.happened:.0%} of the time ({int(db_hi.n)} games).

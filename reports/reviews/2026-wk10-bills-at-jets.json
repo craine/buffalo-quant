@@ -6,12 +6,19 @@
    "sha256": "87e76467bd01b0187137205f2353887ed546038d98bf427621bfa8bd85201347",
    "at_utc": "2026-11-14T00:47:37Z",
    "notes": "Both models run through week 9; 80% pass call checked against the model's top-bucket record (said 75%, happened 78%, 134 games); 20+ calls dropped per week 9's stated promise; ladder caveat computed here; 'most confident call' corrected (P0008 was 81%) to 'most confident pass call'; 'most of the gap' overclaim removed; betting words scanned ('lock' appears only in 'doesn't say that's a lock')."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "100cbc893b0a8427becc8a021f1101c60298709b2050c459ae29b4923ac48835",
+   "at_utc": "2026-11-14T00:48:07Z",
+   "notes": "As before, plus 'lock' removed."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "87e76467bd01b0187137205f2353887ed546038d98bf427621bfa8bd85201347",
-  "at_utc": "2026-11-14T00:47:37Z",
-  "notes": "Both models run through week 9; 80% pass call checked against the model's top-bucket record (said 75%, happened 78%, 134 games); 20+ calls dropped per week 9's stated promise; ladder caveat computed here; 'most confident call' corrected (P0008 was 81%) to 'most confident pass call'; 'most of the gap' overclaim removed; betting words scanned ('lock' appears only in 'doesn't say that's a lock')."
+  "sha256": "100cbc893b0a8427becc8a021f1101c60298709b2050c459ae29b4923ac48835",
+  "at_utc": "2026-11-14T00:48:07Z",
+  "notes": "As before, plus 'lock' removed."
  }
 }
