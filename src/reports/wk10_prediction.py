@@ -106,12 +106,13 @@ def matchup_calls():
 
 def example_plays():
     """Two real Bills plays from week 9 at Minnesota, to show what a play's points mean."""
-    q = query(f"""SELECT qtr, down, ydstogo, yards_gained, sack, complete_pass, epa, desc FROM raw_pbp
+    q = query(f"""SELECT qtr, down, ydstogo, yards_gained, sack, complete_pass, epa, desc, receiver_player_id FROM raw_pbp
                   WHERE season={SEASON} AND game_id='2026_09_BUF_MIN' AND posteam='BUF' AND qb_dropback=1 AND epa IS NOT NULL""")
     gain = q[(q.complete_pass == 1) & (q.down == 3) & (q.yards_gained == 36)]
     loss = q[(q.sack == 1) & (q.down == 3) & (q.ydstogo == 14)]
     assert len(gain) == 1 and len(loss) == 1 and "T.Johnson" in gain.iloc[0].desc
-    return dict(gain=gain.iloc[0].epa, gain_dist=int(gain.iloc[0].ydstogo), loss=loss.iloc[0].epa, loss_yds=-int(loss.iloc[0].yards_gained))
+    rec = query(f"SELECT display_name FROM raw_players WHERE gsis_id='{gain.iloc[0].receiver_player_id}'").display_name.iloc[0]
+    return dict(rec=rec, gain=gain.iloc[0].epa, gain_dist=int(gain.iloc[0].ydstogo), loss=loss.iloc[0].epa, loss_yds=-int(loss.iloc[0].yards_gained))
 
 
 def pass_ranks():
@@ -243,14 +244,15 @@ and [how it went](bills-vikings-postgame.html): {w9_hits} of 7 calls hit.*
 
 ## The matchup that decides it
 
-These aren't scoreboard points. Every play moves a drive closer to scoring or further away, and we turn that into points. Last week at Minnesota,
-Josh Allen's 36-yard completion to T. Johnson on third-and-{X['gain_dist']} was worth about {X['gain']:.1f} points; a {X['loss_yds']}-yard sack on third-and-14 cost about
+We grade every play in points, though not scoreboard points: every play moves a drive closer to scoring or further away, and we turn that into
+points. Last week at Minnesota,
+Josh Allen's 36-yard completion to {X['rec']} on third-and-{X['gain_dist']} was worth about {X['gain']:.1f} points; a {X['loss_yds']}-yard sack on third-and-14 cost about
 {abs(X['loss']):.1f}. Add up every pass play and divide by how many there were.
 
 This season the Bills' pass plays have gained {R['buf_off']:.2f} points each on average, {ordn_(R['buf_off_rk'])} in the NFL, over {R['n_off']} pass plays (sacks and
 scrambles count). The Jets' pass defense has given up {R['opp_def']:.2f} a play, {ordn_(R['opp_def_most'])}-most of {R['n_teams']}, over {R['n_def']} pass plays. An average pass play gains {R['lg']:.2f}.
 
-Our matchup model averages those game by game. In a typical game the Bills' passing gains about {C['buf_db']['off_mean']:.2f} a play, the Jets' pass defense
+Our matchup model counts every game equally instead of every play, so the numbers shift a little. In a typical game the Bills' passing gains about {C['buf_db']['off_mean']:.2f} a play, the Jets' pass defense
 allows about {C['buf_db']['def_mean']:.2f}, and an average game is {C['buf_db']['league']:.2f}. Start from average, add half of how far above average the Bills are and half
 of how far the Jets' defense is, and you get about **{C['buf_db']['expected']:.2f} points a play** for Buffalo on Sunday. Games swing a lot, so that's not a
 promise; the model says there's an **{C['buf_db']['p']:.0%}** chance that, all told, the Bills' passing plays leave them better off than they started.
@@ -305,11 +307,11 @@ to Sunday's projections, and checked who came out ahead: Buffalo, {P['p_buf']:.0
 
 ![The calls](wk10-calls.png)
 
-What "gain points" and "lose points" mean: these aren't scoreboard points. A team's runs "lose points" if, all told, its running plays left it worse off
+A team's runs "lose points" if, all told, its running plays left it worse off
 than before. That's normal: in {ru['n']} past team games, runs lost points overall {1 - ru['rate']:.0%} of the time.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
-those 20-point chances again. We haven't fixed it yet, so they're still shown in the ladder, flagged, but not logged until fixed. The ladder has the same issue: on games the model never saw, when it gave a
+those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a
 team a 40-60% chance of reaching a scoreline, it said {mid_said:.0%} on average and the team got there {mid_hap:.0%} of the time. Read the middle of the ladder as a little low.
 
 {ledger_status()}
@@ -321,8 +323,6 @@ home team every time would have been right {wt['home_won']:.0%}. When it gave a 
 won {cal.happened.iloc[2]:.0%} of the time ({int(cal.n.iloc[2])} games; a tie counts as half a win).
 
 ![Win chance test](wk10-win-test.png)
-
-*The chart counts a tied game as half a win; the {wt['right']:.0%} above counts it as a miss.*
 
 **The pass and run calls.** These come from a simpler model, tested on {db['n']} past team games (2023-2025) against just guessing the league's usual rate.
 It beat the guess on pass calls and edged it on run calls.

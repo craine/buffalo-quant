@@ -11,14 +11,15 @@ and [how it went](bills-vikings-postgame.html): 5 of 7 calls hit.*
 
 ## The matchup that decides it
 
-These aren't scoreboard points. Every play moves a drive closer to scoring or further away, and we turn that into points. Last week at Minnesota,
-Josh Allen's 36-yard completion to T. Johnson on third-and-8 was worth about 3.8 points; a 7-yard sack on third-and-14 cost about
+We grade every play in points, though not scoreboard points: every play moves a drive closer to scoring or further away, and we turn that into
+points. Last week at Minnesota,
+Josh Allen's 36-yard completion to Ty Johnson on third-and-8 was worth about 3.8 points; a 7-yard sack on third-and-14 cost about
 1.8. Add up every pass play and divide by how many there were.
 
 This season the Bills' pass plays have gained 0.26 points each on average, 4th in the NFL, over 273 pass plays (sacks and
 scrambles count). The Jets' pass defense has given up 0.16 a play, 7th-most of 32, over 312 pass plays. An average pass play gains 0.05.
 
-Our matchup model averages those game by game. In a typical game the Bills' passing gains about 0.27 a play, the Jets' pass defense
+Our matchup model counts every game equally instead of every play, so the numbers shift a little. In a typical game the Bills' passing gains about 0.27 a play, the Jets' pass defense
 allows about 0.19, and an average game is 0.05. Start from average, add half of how far above average the Bills are and half
 of how far the Jets' defense is, and you get about **0.23 points a play** for Buffalo on Sunday. Games swing a lot, so that's not a
 promise; the model says there's an **80%** chance that, all told, the Bills' passing plays leave them better off than they started.
@@ -84,14 +85,14 @@ to Sunday's projections, and checked who came out ahead: Buffalo, 75% of the tim
 
 ![The calls](wk10-calls.png)
 
-What "gain points" and "lose points" mean: these aren't scoreboard points. A team's runs "lose points" if, all told, its running plays left it worse off
+A team's runs "lose points" if, all told, its running plays left it worse off
 than before. That's normal: in 990 past team games, runs lost points overall 64% of the time.
 
 **Why no 20-point calls this week.** Last week we said our chances of a team reaching 20 points ran a few points low, and that we'd fix that before using
-those 20-point chances again. We haven't fixed it yet, so they're still shown in the ladder, flagged, but not logged until fixed. The ladder has the same issue: on games the model never saw, when it gave a
+those 20-point chances again. We haven't fixed it yet, so they're still in the ladder above but aren't logged. The whole middle of the ladder has the same issue: on games the model never saw, when it gave a
 team a 40-60% chance of reaching a scoreline, it said 50% on average and the team got there 55% of the time. Read the middle of the ladder as a little low.
 
-**These are our model's numbers.** They count once they're logged on the [Ledger](../ledger.html) before kickoff; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) on Nov. 13 at 7:54 p.m. ET, before kickoff.** All 5 calls are graded after the game, hit or miss, and stay up either way.
 
 ## Did we check it?
 
@@ -100,8 +101,6 @@ home team every time would have been right 52%. When it gave a team 70% or more,
 won 74% of the time (102 games; a tie counts as half a win).
 
 ![Win chance test](wk10-win-test.png)
-
-*The chart counts a tied game as half a win; the 63% above counts it as a miss.*
 
 **The pass and run calls.** These come from a simpler model, tested on 990 past team games (2023-2025) against just guessing the league's usual rate.
 It beat the guess on pass calls and edged it on run calls.
