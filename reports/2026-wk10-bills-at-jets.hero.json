@@ -13,7 +13,7 @@
  "note": "Bills win 75% of the time. The key matchup: Buffalo's passing game (4th in the NFL) against a Jets pass defense that's 7th-worst.",
  "explainer": {
   "kicker": "How we checked it",
-  "title": "Our most confident calls have held up.",
+  "title": "Our most confident pass calls have held up.",
   "text": "In 134 past games the model hadn't seen, it gave a team's passing game a 70% or better chance to help more than it hurt. Here's the chance it gave, on average, and how often it happened:",
   "fmt": "pct",
   "bars": [

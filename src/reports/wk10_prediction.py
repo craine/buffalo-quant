@@ -153,8 +153,8 @@ def main():
         ("Bills win (overtime counts; a tie counts as a miss)", P["p_buf"], "Points model, win chance", "win"),
         ("Bills' passing game helps more than it hurts", C["buf_db"]["p"], "Matchup model", "dropback_epa"),
         ("Jets' passing game helps more than it hurts", C["opp_db"]["p"], "Matchup model", "dropback_epa"),
-        ("Bills' running game hurts more than it helps", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
-        ("Jets' running game hurts more than it helps", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Bills' running game (designed runs) hurts more than it helps", 1 - C["buf_ru"]["p"], "Matchup model", "rush_epa"),
+        ("Jets' running game (designed runs) hurts more than it helps", 1 - C["opp_ru"]["p"], "Matchup model", "rush_epa"),
     ]
     db, db_cal = T["dropback_epa"]; ru, ru_cal = T["rush_epa"]
     db_hi = db_cal.iloc[-1]                     # the model's most confident pass calls (70%+)
@@ -199,7 +199,7 @@ def main():
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"Our surest call: the Bills' passing game helps more than it hurts ({C['buf_db']['p']:.0%})",
-           "Bills at Jets, Sunday, Nov. 15: our chance that each one happens. Every model behind these was tested on past games first.",
+           "Bills at Jets, Sunday, Nov. 15: our chance that each one happens. QB scrambles count as pass plays. Every model was tested on past games first.",
            f"Points model {pm.VERSION}; matchup model {V01}. Data through 2026 week {THRU}. Matchup calls tested on {db['n']} past team games; win chance on {wt['n']}.")
     fig.savefig(OUT / "wk10-calls.png"); plt.close(fig)
 
@@ -362,7 +362,7 @@ It beat the guess on pass calls and edged it on run calls.
         "note": (f"Bills win {P['p_buf']:.0%} of the time. The key matchup: Buffalo's passing game ({ordn_(R['buf_off_rk'])} in the NFL) against a Jets pass "
                  f"defense that's {ordn_(R['opp_def_most'])}-worst."),
         "explainer": {
-            "kicker": "How we checked it", "title": "Our most confident calls have held up.",
+            "kicker": "How we checked it", "title": "Our most confident pass calls have held up.",
             "text": (f"In {int(db_hi.n)} past games the model hadn't seen, it gave a team's passing game a 70% or better chance to help more "
                      "than it hurt. Here's the chance it gave, on average, and how often it happened:"),
             "fmt": "pct", "bars": [["What it said", round(float(db_hi.said), 3)], ["What happened", round(float(db_hi.happened), 3)]]},

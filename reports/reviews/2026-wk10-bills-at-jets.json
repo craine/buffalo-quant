@@ -105,26 +105,49 @@
    "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
    "at_utc": "2026-11-14T13:00:03Z",
    "notes": "Applied Editor 1-8 and Quant 1-2: hero explainer and title stand alone, card chart names the game, clarification quotes the Ledger's actual wording, designed runs with scrambles counted as pass plays, matchup lines in plain wording, header, 'faces'. No numbers changed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+   "at_utc": "2026-11-14T13:00:50Z",
+   "notes": "Round 2 on 57801bec: all 8 prior fixes and Quant's 2 verified; hero, chart subtitle, note, explainer pass check 7. One fix: run-call table rows and chart lack the designed-runs/scrambles note the new CLAUDE.md rule requires next to any run call (chart is the card image).",
+   "report": "2026-wk10-bills-at-jets-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+   "at_utc": "2026-11-14T13:01:10Z",
+   "notes": "No numbers changed; reworded lines match computed/logged values. Fix 1: run-call table rows/chart labels must say designed runs and that QB scrambles count as pass plays (CLAUDE.md rule; chart travels alone). Fix 2: hero title 'Our most confident calls have held up' -> 'Our most confident pass calls have held up' (evidence shown is pass calls only).",
+   "report": "2026-wk10-bills-at-jets-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+   "at_utc": "2026-11-14T13:01:59Z",
+   "notes": "Run labels say '(designed runs)' in table and chart; chart subtitle: QB scrambles count as pass plays; hero title narrowed to pass calls. No numbers changed."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
-  "at_utc": "2026-11-14T13:00:03Z",
-  "notes": "Applied Editor 1-8 and Quant 1-2: hero explainer and title stand alone, card chart names the game, clarification quotes the Ledger's actual wording, designed runs with scrambles counted as pass plays, matchup lines in plain wording, header, 'faces'. No numbers changed."
+  "sha256": "a909c93f1252bba10c352644d569b545c9daf328f872da53d138133304cb70a4",
+  "at_utc": "2026-11-14T13:01:59Z",
+  "notes": "Run labels say '(designed runs)' in table and chart; chart subtitle: QB scrambles count as pass plays; hero title narrowed to pass calls. No numbers changed."
  },
  "editor": {
   "verdict": "fail",
-  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
-  "at_utc": "2026-11-14T12:58:51Z",
-  "notes": "Check 7: hero explainer text/title don't stand alone; calls chart doesn't name the game. New call labels, dek, explainer and clarification note pass; recommended note/explainer tweaks. Ledger P0013-16 old wording fails standalone, can't change.",
+  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+  "at_utc": "2026-11-14T13:00:50Z",
+  "notes": "Round 2 on 57801bec: all 8 prior fixes and Quant's 2 verified; hero, chart subtitle, note, explainer pass check 7. One fix: run-call table rows and chart lack the designed-runs/scrambles note the new CLAUDE.md rule requires next to any run call (chart is the card image).",
   "report": "2026-wk10-bills-at-jets-editor.md"
  },
  "quant": {
   "verdict": "fail",
-  "sha256": "8922f0154d8068154cde4a1760529e9c74a71780ae1c762db7fffdab4a56b183",
-  "at_utc": "2026-11-14T12:58:59Z",
-  "notes": "Numbers unchanged and labels match P0013-P0016. Fix 1: clarification note implies Ledger wording = old story label ('gain points'); Ledger says 'add points'/'designed runs lose points'. Fix 2: explainer 'every run' should say designed runs, scrambles count as pass plays.",
+  "sha256": "57801beccde4f63f0ca519395b56a2f4ab8dc52680d2353a09f5aeaae45983f1",
+  "at_utc": "2026-11-14T13:01:10Z",
+  "notes": "No numbers changed; reworded lines match computed/logged values. Fix 1: run-call table rows/chart labels must say designed runs and that QB scrambles count as pass plays (CLAUDE.md rule; chart travels alone). Fix 2: hero title 'Our most confident calls have held up' -> 'Our most confident pass calls have held up' (evidence shown is pass calls only).",
   "report": "2026-wk10-bills-at-jets-quant.md"
  },
  "final": {

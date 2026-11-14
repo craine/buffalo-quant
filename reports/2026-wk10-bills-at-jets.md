@@ -84,8 +84,8 @@ to Sunday's projections, and checked who came out ahead: Buffalo, 75% of the tim
 | Bills win (overtime counts; a tie counts as a miss) | **75%** | Points model, win chance |
 | Bills' passing game helps more than it hurts | **80%** | Matchup model |
 | Jets' passing game helps more than it hurts | **55%** | Matchup model |
-| Bills' running game hurts more than it helps | **66%** | Matchup model |
-| Jets' running game hurts more than it helps | **75%** | Matchup model |
+| Bills' running game (designed runs) hurts more than it helps | **66%** | Matchup model |
+| Jets' running game (designed runs) hurts more than it helps | **75%** | Matchup model |
 
 ![The calls](wk10-calls.png)
 
