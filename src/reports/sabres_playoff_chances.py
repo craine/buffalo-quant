@@ -99,7 +99,7 @@ def main():
     bt = []
     for season in PAST:
         g = G[G.season == season]; dv = P.divisions(g); d = cut_date(g)
-        tm, mk, _ = P.simulate(t_, coef, p_ot, season, nxt(d), g[g.game_date <= d], g[g.game_date > d], dv, n_sims=4000)
+        tm, mk, _ = P.simulate(t_, coef, p_ot, season, nxt(d), g[g.game_date <= d], g[g.game_date > d], dv, n_sims=N_SIMS)
         fin = P.standings(g).reindex(tm)
         actual = P.qualify((fin.pts + fin.rw * 1e-3 + fin.row * 1e-6).to_numpy()[None, :], tm, dv)[0]
         now = P.standings(g[g.game_date <= d]).reindex(tm)
@@ -114,6 +114,9 @@ def main():
     lo = bt[(bt.p >= 0.05) & (bt.p <= 0.30)]
     lo_n, lo_made, lo_said = len(lo), int(lo.made.sum()), float(lo.p.mean())
     buf_last = bt[(bt.season == 20252026) & (bt.team == US)].iloc[0]
+    by_season = bt.assign(b=(bt.p - bt.made) ** 2, bs=(bt.inspot.map(rate) - bt.made) ** 2).groupby("season")[["b", "bs"]].mean()
+    vlo = bt[bt.p < 0.05]
+    vlo_n, vlo_made = len(vlo), int(vlo.made.sum())
     assert buf_last.made == 1
 
     # ---- what's going wrong
@@ -135,11 +138,20 @@ def main():
     T["sh_ga"] = sh[sh.goal == 1].groupby("opp").size().reindex(T.index).fillna(0) / gpn
     T["pp_xgf"] = sh.groupby("team").xg.sum() / gpn
     T["pp_gf"] = sh[sh.goal == 1].groupby("team").size().reindex(T.index).fillna(0) / gpn
+    T["share"] = T.xgf / (T.xgf + T.xga)
+    T["oth_xga"] = T.xga - T.ev_xga - T.sh_xga          # everything else: own power play, extra attacker, 4-on-4, 3-on-3
     T = T.fillna(0)
     hi = lambda c: int(T[c].rank(ascending=False, method="min").loc[US])     # 1 = highest
     loo = lambda c: int(T[c].rank(ascending=True, method="min").loc[US])     # 1 = lowest
     B, L = T.loc[US], T.mean()
     n_sh_ga = int(round(B.sh_ga * gp))
+    L = L.where(L.abs() > 0.005, 0.0)
+    excess = B.xga - L.xga
+    ex_ev, ex_sh, ex_oth = B.ev_xga - L.ev_xga, B.sh_xga - L.sh_xga, B.oth_xga - L.oth_xga
+    sh_part = ex_sh / excess
+    # a worked example of a chance's worth: past three seasons, unblocked shots, empty net excluded
+    pr_ = s[unb & s.season.isin(PAST)]
+    close10, far60, n_pr = pr_[pr_.dist < 10].goal.mean(), pr_[pr_.dist >= 60].goal.mean(), len(pr_)
 
     # points the chances were worth (regulation shots replayed; ties split at the OT rate)
     bg = played[(played.home == US) | (played.away == US)]
@@ -186,18 +198,25 @@ def main():
     slow = cd.sort_values("gap").head(5)
     fast = cd.sort_values("gap", ascending=False).head(3)
     fin_low = cd.sort_values("fin").iloc[0]
+    cd["pace84"] = cd.p / cd.gp * 84
+    cd["rate84"] = cd.rate_p82 * 84 / 82
+    slow = cd.sort_values("gap").head(5)
     team_fin = float(B.fin * gp)
     gl = goalie_season(s[s.season == SEASON])
     gl = gl[gl.team == US].sort_values("shots_faced", ascending=False)
     all_g = goalie_season(s[s.season == SEASON])
+    lg_sv = 1 - all_g.GA.sum() / all_g.shots_faced.sum()
 
     # ---- what would change it: what-ifs
     off, de, lg, ratio = M.ratings(t, SEASON, NEXT)
-    sh_fix = float(B.sh_xga - L.sh_xga)                 # shorthanded chances allowed above league average, per game
+    # The model's rating already pulls Buffalo's 20-game number toward average; shrink the shorthanded gap the same way.
+    obs = t[(t.season == SEASON) & (t.team == US) & (t.game_date < NEXT)].xga.mean()       # unrescaled, like the rating
+    shrink = (de[US] - lg) / (obs - lg)
+    sh_fix = float(B.sh_xga - L.sh_xga) * shrink
     cases = [("As things stand", None),
-             ("Shorthanded chances allowed\ncut to league average", {US: (0, -sh_fix)}),
-             ("All chances allowed\ncut to league average", {US: (0, lg - de[US])}),
-             ("Create 0.2 more goals'\nworth of chances a game", {US: (0.2, 0)}),
+             ("Scoring chances allowed while\nshorthanded cut to league average", {US: (0, -sh_fix)}),
+             ("All scoring chances allowed\ncut to league average", {US: (0, lg - de[US])}),
+             ("Create 0.2 more goals' worth\nof scoring chances a game", {US: (0.2, 0)}),
              ("Both: average defense\nand 0.2 more created", {US: (0.2, lg - de[US])})]
     wi = []
     for lab, adj in cases:
@@ -211,18 +230,18 @@ def main():
     ax.hist(pts[:, ix], bins=bins, color=BLUE, alpha=0.9, zorder=2, weights=np.full(N_SIMS, 1 / N_SIMS))
     ax.axvspan(cut_lo, cut_hi, color=GOLD, alpha=0.25, zorder=1)
     ax.axvline(cut_med, color=INK, lw=1.5, ls="--")
-    ax.text(cut_med + 0.6, ax.get_ylim()[1] * 0.92, f"Points it usually takes\nto get in: about {cut_med:.0f}", fontsize=9.5, color=INK)
+    ax.text(cut_med + 0.6, ax.get_ylim()[1] * 0.92, f"Points it usually takes to get\nin, in our simulations: about {cut_med:.0f}", fontsize=9.5, color=INK)
     ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.set_xlabel("Sabres' final points"); ax.set_ylabel("Share of simulated seasons")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"The Sabres finish ahead of the line in about {p_buf:.0%} of seasons",
-           f"Sabres' final points in {N_SIMS:,} simulated seasons, from {int(b.pts)} points in {gp} games. Shaded: where the last Eastern playoff spot usually lands.",
+    finish(fig, f"The Sabres make the playoffs in about {p_buf:.0%} of our simulated seasons",
+           f"Sabres' final points in {N_SIMS:,} simulated seasons, from {int(b.pts)} points in {gp} games. Shaded: where the last Eastern playoff spot usually lands in those seasons.",
            f"Model nhl-game-v0.1 ratings from games through Nov. 14, 2026; the NHL's remaining schedule ({n_left} Sabres games, {len(rem):,} in all). {n_season}-game season.")
     fig.savefig(OUT / "sabres-playoffs-points.png"); plt.close(fig)
 
     # ---- chart 2: what carries over
     fig, ax = plt.subplots(figsize=(9.5, 4.6), dpi=200)
-    lab2 = [("Chances created", carry["xgf"]), ("Chances allowed", carry["xga"]), ("Chances allowed\nwhile shorthanded", carry["sh"]),
+    lab2 = [("Scoring chances created", carry["xgf"]), ("Scoring chances allowed", carry["xga"]), ("Scoring chances allowed\nwhile shorthanded", carry["sh"]),
             ("Finishing\n(goals vs. chances)", carry["fin"]), ("Goaltending\n(goals saved vs. average)", carry["gk"])]
     ax.barh(range(5)[::-1], [v for _, v in lab2], color=[BLUE, BLUE, BLUE, LIGHT, LIGHT], zorder=2)
     for k, (l_, v) in enumerate(lab2):
@@ -230,7 +249,7 @@ def main():
     ax.set_yticks(range(5)[::-1], [l_ for l_, _ in lab2], fontsize=9.5)
     ax.set_xlim(0, 1); ax.set_xlabel("How much the first 20 games tell you about the rest (0 = nothing, 1 = everything)")
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Chances carry over. Finishing and goaltending streaks don't",
+    finish(fig, "Scoring chances carry over. Finishing and goaltending streaks don't",
            "Each NHL team's first 20 games against the rest of its season, per game.",
            f"All 32 teams, 2023-24 to 2025-26 ({n_carry} team-seasons). Correlation between first-20-game and rest-of-season values.")
     fig.savefig(OUT / "sabres-playoffs-carry.png"); plt.close(fig)
@@ -245,42 +264,46 @@ def main():
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.set_xlabel("Sabres' chance to make the playoffs")
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Fewer chances against or more chances for: either one about doubles it",
+    finish(fig, "Fewer scoring chances against, or more for: either one about doubles the Sabres' playoff chance",
            "Sabres' playoff chance if each change held for the rest of the season. Everything else as it stands.",
-           f"{N_SIMS:,} simulated seasons each, games through Nov. 14, 2026. One goal's worth of chances = shots whose chances of going in add up to one.")
+           f"{N_SIMS:,} simulated seasons each, games through Nov. 14, 2026. One goal's worth of scoring chances = shots whose chances of going in add up to one.")
     fig.savefig(OUT / "sabres-playoffs-whatif.png"); plt.close(fig)
 
     def frac(p):
         return f"about a 1-in-{round(1 / p)}" if p < 0.5 else f"a {p:.0%}"
 
     east_rows = "\n".join(
-        f"| {'**' if r.team == US else ''}{r.team}{'**' if r.team == US else ''} | {r.pts} in {r.gp} | {r.proj:.0f} | {r.p:.0%} |"
+        f"| {'**' if r.team == US else ''}{r.team}{'**' if r.team == US else ''} | {r.pts} ({r.gp}) | {r.proj:.0f} | {r.p:.0%} |"
         for r in east_tab.itertuples())
     slow_rows = "\n".join(
-        f"| {r.name} | {r.pos} | {r.gp} | {r.g}-{r.a}-{r.p} | {r.pace_p82:.0f} | {r.rate_p82:.0f} |" for r in slow.itertuples())
+        f"| {r.name} | {r.pos} | {r.gp} | {r.g}-{r.a}-{r.p} | {r.pace84:.0f} | {r.rate84:.0f} |" for r in slow.itertuples())
     g_rows = "\n".join(
-        f"| {r['name']} | {int(r.shots_faced)} | {r['sv%']:.1%} | {r.GSAx:+.1f} |" for _, r in gl.iterrows())
+        f"| {r['name']} | {int(r.shots_faced)}{' (small sample)' if r.shots_faced < 100 else ''} | {r['sv%']:.1%} | {r.GSAx:+.1f} |"
+        for _, r in gl.iterrows())
     wi_rows = "\n".join(f"| {l_.replace(chr(10), ' ')} | {v:.0%} | {m:.0f} |" for l_, v, m in wi)
+    upl = gl.iloc[0]
+    ben_ng = int(fin_low.g - fin_low.en_g)
+    rk = lambda n, word: f"{ordn(n)}-{word} of 32"
 
-    md = f"""# Are the Sabres done? Not yet, but they need to stop giving up so many chances
+    md = f"""# Are the Sabres done? Not yet, but they have to stop giving up so many scoring chances
 
-**After {gp} games, our model gives the Sabres {frac(p_buf)} chance to make the playoffs ({p_buf:.0%}). They're {int(b.w)}-{int(b.l)}-{int(b.otl)} with {int(b.pts)} points, and it
-usually takes about {cut_med:.0f} points to get the last spot in the East: {need:.0f} more in their last {n_left} games. Their scoring slump and shaky
-goaltending rarely last. The real problem is how many chances they give up, especially when they're
-shorthanded, and that kind of problem tends to stick. Fix it, and their chances roughly double.**
+**After {gp} games, our model gives the Sabres {frac(p_buf)} playoff chance ({p_buf:.0%}). They're {int(b.w)}-{int(b.l)}-{int(b.otl)} with {int(b.pts)} points,
+and in our simulations the last playoff spot in the East usually goes to a team with about {cut_med:.0f}: Buffalo needs about {need:.0f} more in its last {n_left}
+games. Its cold shooting and shaky goaltending usually don't last. The scoring chances it gives up are more likely to. Cut those to league average
+and the Sabres' playoff chance doubles, to {wi[2][1]:.0%}.**
 
-*Numbers are through Nov. 14, 2026, the Sabres' first 20 games of {n_season}. Early-season numbers move a lot.*
+*Numbers are through Nov. 14, 2026, the Sabres' first {gp} games of {n_season}. Early-season numbers move a lot.*
 
 ![Where the season could finish](sabres-playoffs-points.png)
 
 ## Where they stand
 
-The Sabres have {int(b.pts)} points from {gp} games ({int(b.w)}-{int(b.l)}-{int(b.otl)}). Our model plays out the other {len(rem):,} games left on the NHL's schedule {N_SIMS:,} times.
-In the middle of those seasons, Buffalo finishes with about **{buf_med:.0f} points** (eight times in ten, between {buf_lo:.0f} and {buf_hi:.0f}), and the last playoff spot in
-the East goes to a team with about **{cut_med:.0f}** ({cut_lo:.0f} to {cut_hi:.0f}). To get there, Buffalo needs about {need:.0f} points from its last {n_left} games,
-{need_pg:.2f} a game. So far it's earned {b.pts / gp:.2f} a game. Last season's {int(lw.w)}-win team earned {lw.pts / lw.gp:.2f}.
+The Sabres have {int(b.pts)} points from {gp} games ({int(b.w)}-{int(b.l)}-{int(b.otl)}). Our model plays out the {len(rem):,} games left on the NHL's schedule {N_SIMS:,} times.
+In a typical one of those seasons, Buffalo finishes with about **{buf_med:.0f} points** (eight times in ten, between {buf_lo:.0f} and {buf_hi:.0f}), and the last playoff
+spot in the East goes to a team with about **{cut_med:.0f}** ({cut_lo:.0f} to {cut_hi:.0f}). To get there, Buffalo needs about {need:.0f} points from its last {n_left} games:
+{need_pg:.2f} points a game. So far it has earned {b.pts / gp:.2f} points a game. Last season's {int(lw.w)}-win team earned {lw.pts / lw.gp:.2f}.
 
-| Eastern team | Points now | Projected finish | Playoff chance |
+| Eastern team | Points (games played) | Projected final points | Playoff chance |
 |---|---|---|---|
 {east_rows}
 
@@ -291,67 +314,76 @@ the Sabres' next game. It's graded after the last regular-season game in April, 
 
 ## How we got the {p_buf:.0%}, and how we checked it
 
-**The source:** the NHL's own play-by-play for every game so far and its schedule for every game left. **The reasoning:** a team's results come
-from the chances it creates and allows. Our game model rates every team on those chances (blended with last season while the sample is small),
-turns two teams' ratings into expected goals for each game, and plays the game out, overtime included. **The math:** we play out the full schedule
-{N_SIMS:,} times, add up the points, apply the playoff format, and count how often Buffalo gets in.
+**The source:** the NHL's own play-by-play for every game so far, and its schedule for every game left. **The reasoning:** a team's results come
+from the scoring chances it creates and allows. Every shot has a chance of going in, based on where it was taken and what kind of shot it was: over
+the last three seasons ({n_pr:,} shots that weren't blocked, not counting empty nets), a shot from within 10 feet went in {close10:.1%} of the time; one from
+60 feet or more, {far60:.1%}. Add those up and you get what a team's scoring chances were worth in goals. Our game model rates every team on those
+(blended with last season while the sample is small) and turns two teams' ratings into how many goals each should score in that game.
+**The math:** we play every remaining game, overtime included, add up the points, apply the playoff format, and count how often Buffalo gets in.
+We do the whole season {N_SIMS:,} times.
 
-**How we checked it:** we ran the same thing from this point of the season (about 20 games in) in 2023-24, 2024-25 and 2025-26 and compared it
-with who actually made it. On our scorecard, where 0 is perfect and a coin flip scores 0.25, it scored {brier:.2f}. Going by who's in a playoff spot
-after 20 games scored {brier_spot:.2f}. One honest caution: of the {lo_n} teams we gave between 5% and 30%, the model said {lo_said:.0%} on average and
-{lo_made} made it. **One of them was last year's Sabres**: at this point we'd have given them {buf_last.p:.0%}, and they finished with {int(lw.pts)} points.
+**How we checked it:** we ran the same thing from this point of the season (about {CUT_GP} games in) in 2023-24, 2024-25 and 2025-26, and compared it
+with who actually made it. On our scorecard (lower is better; guessing 50% for everyone scores 0.25) it scored {brier:.2f}. Going by who's in a playoff
+spot after {CUT_GP} games scored {brier_spot:.2f}. Last season, the one the model was never fit on, was the hardest: {by_season.loc[20252026, 'b']:.2f}, against
+{by_season.loc[20252026, 'bs']:.2f} for going by the standings.
+
+Teams in Buffalo's range do sometimes get in. Of the {lo_n} teams the model gave between 5% and 30% at this point, it said {lo_said:.0%} on average and {lo_made}
+made it, about what it said. **One of them was last year's Sabres**: we'd have given them {buf_last.p:.0%}, and they finished with {int(lw.pts)} points. The model's
+bigger miss was at the bottom: {vlo_made} of the {vlo_n} teams it gave under 5% made it. That's a small sample, but it's a reason to treat very low numbers with care.
 
 ## Their record is about what they've earned
 
-Replay each of Buffalo's games from its shots, with every shot going in or missing at its own chance, and the Sabres' chances were worth about
-**{e_pts:.1f} points**. They have {int(b.pts)}. This isn't a good team having bad luck in the standings. It's a middle-of-the-pack team playing like one.
+Take every shot in every Sabres game, let each one go in or miss at its own chance, and replay the games many times. On average, Buffalo comes out with
+about **{e_pts:.1f} points**. It has {int(b.pts)}. This isn't a good team stuck with bad luck in the standings. It's a slightly below-average team, {ordn(hi('share'))} of 32 in
+its share of the scoring chances, getting about what that earns.
 
 ## What's going wrong
 
 | Per game, 2026-27 | Sabres | League average |
 |---|---|---|
-| Chances created (goals they were worth) | {B.xgf:.2f} ({ordn(hi('xgf'))} of 32) | {L.xgf:.2f} |
-| Chances allowed | {B.xga:.2f} ({ordn(hi('xga'))}-most) | {L.xga:.2f} |
-| At full strength (five-on-five), share of the chances | {B.ev:.1%} ({ordn(hi('ev'))}) | 50% |
-| Chances allowed while shorthanded | {B.sh_xga:.2f} ({ordn(hi('sh_xga'))}-most) | {L.sh_xga:.2f} |
-| Goals allowed while shorthanded | {B.sh_ga:.2f} ({ordn(hi('sh_ga'))}-most) | {L.sh_ga:.2f} |
-| Goals scored vs. what their chances were worth | {B.fin:+.2f} ({ordn(loo('fin'))}-worst) | {L.fin:+.2f} |
-| Goaltending: goals saved vs. an average goalie | {B.gk:+.2f} ({ordn(loo('gk'))}-worst) | {L.gk:+.2f} |
+| Scoring chances created (goals they were worth) | {B.xgf:.2f} ({rk(hi('xgf'), 'most')}) | {L.xgf:.2f} |
+| Scoring chances allowed | {B.xga:.2f} ({rk(hi('xga'), 'most')}) | {L.xga:.2f} |
+| At full strength (five-on-five), share of the scoring chances | {B.ev:.1%} ({ordn(hi('ev'))} of 32) | 50% |
+| Scoring chances allowed while shorthanded | {B.sh_xga:.2f} ({rk(hi('sh_xga'), 'most')}) | {L.sh_xga:.2f} |
+| Goals allowed while shorthanded | {B.sh_ga:.2f} ({rk(hi('sh_ga'), 'most')}) | {L.sh_ga:.2f} |
+| Goals scored vs. what their scoring chances were worth | {B.fin:+.2f} ({rk(loo('fin'), 'worst')}) | {L.fin:.2f} |
+| Goaltending: goals saved vs. an average goalie | {B.gk:+.2f} ({rk(loo('gk'), 'worst')}) | {L.gk:.2f} |
 
 Three problems stand out:
 
-1. **They give up too much when they're shorthanded.** At full strength, Buffalo is about even ({B.ev:.0%} of the chances). The extra chances against come
-   while a man down: the {ordn(hi('sh_xga'))}-most in the league, and {n_sh_ga} goals allowed. (That count mixes how often they're shorthanded with how well they kill
-   penalties; we can't yet split the two.)
-2. **They aren't finishing.** Buffalo has scored about {abs(team_fin):.0f} fewer goals than its chances were worth, {ordn(loo('fin'))}-worst in the league.
+1. **They give up too many scoring chances, and the biggest single piece comes while a man down.** Buffalo allows about {excess:.2f} goals' worth more a game than
+   the average team. About {sh_part:.0%} of that comes while it's shorthanded, where it has allowed {n_sh_ga} goals. Most of the rest comes in the odd situations
+   (its own power play, 4-on-4, 3-on-3, an extra attacker); at five-on-five it's close to even. (The shorthanded numbers mix how often Buffalo is a man down
+   with how well it kills penalties; we can't yet split the two.)
+2. **They aren't finishing.** Buffalo has scored about {abs(team_fin):.0f} fewer goals than its scoring chances were worth, {rk(loo('fin'), 'worst')}.
 3. **Goaltending has been a little below average**, about {abs(B.gk):.2f} of a goal a game.
 
 ## Which problems will last
 
 ![What carries over](sabres-playoffs-carry.png)
 
-We checked every team's first 20 games against the rest of its season over the last three years. How many chances a team creates and allows
-carries over strongly ({carry['xgf']:.2f} and {carry['xga']:.2f} on a scale where 1 means the first 20 games tell you everything). Chances allowed while
-shorthanded carry over about halfway ({carry['sh']:.2f}). Finishing ({carry['fin']:.2f}) and goaltending ({carry['gk']:.2f}) barely carry over at all: a team that
-can't buy a goal or a save over 20 games is about as likely as anyone to be fine the rest of the way.
+We checked every team's first {CUT_GP} games against the rest of its season over the last three years. How many scoring chances a team creates and allows
+carries over strongly ({carry['xgf']:.2f} and {carry['xga']:.2f}, on a scale where 1 means the first {CUT_GP} games tell you everything and 0 means nothing). Scoring
+chances allowed while shorthanded carry over about halfway ({carry['sh']:.2f}). Finishing ({carry['fin']:.2f}) and goaltending ({carry['gk']:.2f}) barely carry over at all:
+a team that can't buy a goal or a save over {CUT_GP} games is about as likely as anyone to be fine the rest of the way.
 
-That's why our projection already expects Buffalo's shooting and goaltending to be about average from here. **The part that won't fix itself is the
-chances they give up.**
+Our projection doesn't carry the cold shooting or the goaltending forward; it assumes about average from here. **The problem most likely to last is
+the scoring chances Buffalo gives up.** Even that tends to ease some, which the model already builds in.
 
 ## Who's underperforming
 
-Each Sabre's points pace this season against his rating, our best guess at his points per 82 games from here, built from this season and the last
-three. Ten or more games played.
+Each Sabre's points pace this season against what his track record says (our rating, built from this season and the last three), both over
+an {n_season}-game season. Ten or more games played.
 
-| Player | Pos. | Games | G-A-P | Points pace (per 82) | Rating (per 82) |
+| Player | Pos. | Games | G-A-P | Points pace (per {n_season} games) | Track record says (per {n_season} games) |
 |---|---|---|---|---|---|
 {slow_rows}
 
 These are the players furthest below their track records. Most of them should drift back up, but it's {int(slow.gp.min())} to {int(slow.gp.max())} games, so read it as
-a guess, not a verdict. The flip side: {', '.join(fast.name.iloc[:-1])} and {fast.name.iloc[-1]} are running furthest ahead of theirs.
+a guess, not a verdict. On the other side, {', '.join(fast.name.iloc[:-1])} and {fast.name.iloc[-1]} are running furthest ahead of theirs.
 
-The biggest single finishing gap belongs to **{fin_low['name']}**: {fin_low.g} goals on chances worth {fin_low.ixg:.1f}. That's about {abs(fin_low.fin):.0f} of the
-team's {abs(team_fin):.0f} missing goals. He's still producing ({fin_low.a} assists), and finishing streaks like that rarely last.
+The biggest finishing gap belongs to **{fin_low['name']}**: {ben_ng} goal{'s' if ben_ng != 1 else ''} on scoring chances worth {fin_low.ixg:.1f} (plus {int(fin_low.en_g)} into an empty net).
+That's about {abs(fin_low.fin):.0f} of the team's {abs(team_fin):.0f} missing goals. He's still producing ({fin_low.a} assists), and a player's finishing streak usually doesn't last.
 
 In goal:
 
@@ -359,59 +391,65 @@ In goal:
 |---|---|---|---|
 {g_rows}
 
+The league's save percentage is {lg_sv:.1%}. {upl['name']}, who has faced the most shots, has allowed about {abs(upl.GSAx):.0f} more goals than an average goalie
+would have on the same shots.
+
 ## What would change it
 
-We reran the season with one thing fixed at a time, holding everything else as it is now:
+We reran the season with one thing changed at a time, holding everything else as it is now:
 
 ![What-ifs](sabres-playoffs-whatif.png)
 
-| If Buffalo... | Playoff chance | Projected points |
+| If Buffalo... | Playoff chance | Projected final points |
 |---|---|---|
 {wi_rows}
 
-- **Give up less while shorthanded** (fewer penalties, a better penalty kill, or both). Cutting the chances allowed a man down to league average is worth
-  about {sh_fix:.2f} goals a game and moves Buffalo to {wi[1][1]:.0%}. It's the most specific fix on the list, and about half of a problem like this tends to
-  last if nothing changes.
-- **Allow league-average chances overall** and the Sabres are at {wi[2][1]:.0%}.
-- **Do that and create a little more** (0.2 goals' worth of chances a game) and it's {wi[4][1]:.0%}: about a coin flip.
-- **Wait for the shooting and the saves to come around.** Our projection already counts on that. It's built into the {p_buf:.0%}.
+- **Allow league-average scoring chances overall** and the Sabres' playoff chance goes to {wi[2][1]:.0%}, about double.
+- **Give up less while shorthanded** (fewer penalties, a better penalty kill, or both). Bringing that part to league average moves Buffalo to {wi[1][1]:.0%}.
+  It's the most specific fix on the list, and if nothing changes, about half of a gap like this tends to stick around.
+- **Create a little more** (0.2 goals' worth of scoring chances a game) and it's {wi[3][1]:.0%}. Do both and it's {wi[4][1]:.0%}: about a coin flip.
+- **Wait for the shooting and the saves to come around.** The projection already assumes about average from here, so that's built into the {p_buf:.0%}.
 
 ## The bottom line
 
-The Sabres aren't done. They've earned about a point a game and played like it, in a conference where about {cut_med:.0f} points gets you in. The goals
-should come, and the saves should be about average. What won't change on its own is how many chances they allow, especially a man down. That's
-where the season gets decided.
+The Sabres aren't done. They've earned about a point a game and played like it, and in our simulations about {cut_med:.0f} points gets a team in. The goals
+should come, and the saves should be closer to average. The scoring chances they give up, especially a man down, are the part least likely to fix
+itself, and that's where the season gets decided.
 
 ## For the stat-heads
 
 - Playoff simulation (`src/metrics/nhl_playoffs.py`): nhl-game-v0.1 team ratings from games before {NEXT} (xGF/xGA per game shrunk with K=10 toward
-  league + 0.5 x last season's edge), frozen for the rest of the season; independent Poisson goals per game; regulation ties to the home team at the
-  training-season OT/SO rate ({p_ot:.3f}); {N_SIMS:,} seasons. Format: top 3 per division + 2 wild cards per conference (assumed unchanged for 2026-27).
-  Ties: points, regulation wins, ROW, random. Divisions and conferences derived from the {n_season}-game schedule (4-game pairs, 3+ game pairs).
-  BUF ratings: xGF {off[US]:.3f}, xGA {de[US]:.3f}, league {lg:.3f} (unrescaled).
-- Backtest at the 20-game mark ({', '.join(str(cut_date(G[G.season == s_])) for s_ in PAST)}), {len(bt)} team-seasons, actual schedules: Brier {brier:.4f};
-  in-a-playoff-spot baseline {brier_spot:.4f}; coin 0.25. Rating noise (sd) chosen on 2023-24 and 2024-25 (0 was best) and kept. Teams given 5-30%:
-  mean p {lo_said:.3f}, made {lo_made} of {lo_n}. The model's coefficients were fit on 2023-24 and 2024-25, so those two backtest seasons aren't fully out of sample.
-- Points the chances were worth: Poisson-binomial over regulation shots per game, regulation ties valued at 1 + P(OT/SO win). {e_pts:.2f} vs {int(b.pts)}.
+  league + 0.5 x last season's edge), held fixed for the rest of the season (no extra noise for uncertainty in team strength); independent Poisson
+  goals per game; regulation ties to the home team at the training-season OT/SO rate ({p_ot:.3f}); {N_SIMS:,} seasons, seed 7. Format: top 3 per division
+  + 2 wild cards per conference (assumed unchanged for 2026-27). Ties: points, regulation wins, ROW, random. Divisions and conferences derived from the
+  {n_season}-game schedule (4-game pairs, 3+ game pairs). BUF ratings: xGF {off[US]:.3f}, xGA {de[US]:.3f}, league {lg:.3f} (unrescaled). Seed-to-seed noise is
+  about half a point of playoff chance.
+- Backtest at the {CUT_GP}-game mark ({', '.join(str(cut_date(G[G.season == s_])) for s_ in PAST)}), {len(bt)} team-seasons, actual schedules, {N_SIMS:,} seasons each: Brier
+  {brier:.4f} (by season {', '.join(f'{v:.3f}' for v in by_season.b)}); in-a-playoff-spot baseline {brier_spot:.4f} ({', '.join(f'{v:.3f}' for v in by_season.bs)}); coin 0.25. Teams
+  given 5-30%: mean p {lo_said:.3f}, made {lo_made} of {lo_n}; under 5%: made {vlo_made} of {vlo_n}. The model's coefficients were fit on 2023-24 and 2024-25, so only
+  2025-26 is fully out of sample.
+- Points the scoring chances were worth: Poisson-binomial over regulation shots per game, regulation ties valued at 1 + P(OT/SO win). {e_pts:.2f} vs {int(b.pts)}.
 - Carry-over: Pearson r, first {CUT_GP} games vs rest, per game, {n_carry} team-seasons 2023-24 to 2025-26: xGF {carry['xgf']:.2f}, xGA {carry['xga']:.2f},
   shorthanded xGA {carry['sh']:.2f}, finishing (G - xG) {carry['fin']:.2f}, GSAx {carry['gk']:.2f}.
-- xG rescaled per season so league xG = league goals (2026-27 factor {cal.loc[SEASON]:.3f}). Shorthanded = opponent at 5v4, 5v3 or 4v3.
-  BUF 5v5 xGA/game {B.ev_xga:.2f} (league {L.ev_xga:.2f}); PP xGF {B.pp_xgf:.2f}, PP GF {B.pp_gf:.2f} a game. Penalty counts not shown (attribution unverified).
-- What-ifs adjust BUF's ratings for the rest of the season only: shorthanded fix = BUF shorthanded xGA/game minus league ({sh_fix:.3f}) off xGA;
-  average defense = league minus BUF xGA rating ({lg - de[US]:+.3f}); +0.2 xGF. Same seed in every run.
-- Player ratings: skater cards (`src/reports/skater_cards.py`) as of {AS_OF}; pace = points / games x 82. Rating = projected points per 82 from this
-  season and the last three. Finishing = goals minus individual xG. Team finishing {team_fin:+.1f} goals.
+- xG rescaled per season so league xG = league goals (2026-27 factor {cal.loc[SEASON]:.3f}). Shorthanded = opponent at 5v4, 5v3 or 4v3. BUF xGA above league
+  average, per game: {excess:.3f} = 5v5 {ex_ev:+.3f} + shorthanded {ex_sh:+.3f} + other situations {ex_oth:+.3f}. xG share {B.share:.3f} ({ordn(hi('share'))}).
+  PP xGF {B.pp_xgf:.2f}, PP GF {B.pp_gf:.2f} a game. Penalty counts not shown (attribution unverified).
+- What-ifs adjust BUF's ratings for the rest of the season only. Average defense = league minus BUF xGA rating ({lg - de[US]:+.3f}). Shorthanded fix = BUF
+  shorthanded xGA gap ({ex_sh:.3f}) times the share of BUF's observed xGA gap the model keeps ({shrink:.3f}) = {sh_fix:.3f}. +0.2 xGF. Same seed in every run.
+- Player ratings: skater cards (`src/reports/skater_cards.py`) as of {AS_OF}, per 82 games scaled to {n_season}. Pace = points / games x {n_season}. Finishing = goals
+  (empty net excluded) minus individual xG. Team finishing {team_fin:+.1f} goals. League save percentage {lg_sv:.3f} (unblocked non-empty-net shots on goal).
+- Ledger P0017's resolves_at_utc field holds the next game's puck drop (the logger sets it to the cutoff time); the call is graded after the regular season ends, as its notes say.
 """
     (OUT / f"{SLUG}.md").write_text(md)
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
-        "label": "Sabres' chance to make the playoffs",
-        "big": [[f"{p_buf:.0%}", "Now"], [f"{wi[2][1]:.0%}", "If they allowed league-average chances"]],
-        "note": f"{int(b.w)}-{int(b.l)}-{int(b.otl)} after {gp} games. It usually takes about {cut_med:.0f} points to get the last spot in the East.",
+        "label": "Sabres' playoff chance",
+        "big": [[f"{p_buf:.0%}", "Now"], [f"{wi[2][1]:.0%}", "If they allowed league-average scoring chances"]],
+        "note": f"{int(b.w)}-{int(b.l)}-{int(b.otl)} after {gp} games. In our simulations, the last spot in the East usually takes about {cut_med:.0f} points.",
         "explainer": {
-            "kicker": "What lasts", "title": "Chances carry over. Finishing and goaltending streaks don't.",
+            "kicker": "What lasts", "title": "Scoring chances carry over. Finishing and goaltending streaks don't.",
             "text": "How much a team's first 20 games tell you about the rest of its season (1 = everything):",
             "fmt": "score",
-            "bars": [["Chances allowed", round(carry["xga"], 2)], ["Goaltending", round(carry["gk"], 2)]]},
+            "bars": [["Scoring chances allowed", round(carry["xga"], 2)], ["Goaltending", round(carry["gk"], 2)]]},
     }, indent=1))
     print(md)
 

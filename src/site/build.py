@@ -22,7 +22,7 @@ ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
      "We project Bills 29.9, Jets 22.1: a 75% chance Buffalo wins. The biggest mismatch is the Bills' passing game against one of the NFL's leakiest pass defenses.",
      "wk10-calls.png"),
     ("sabres-playoff-chances", "2026-11-15-sabres-playoff-chances.md", "2026-11-15", "Sabres &middot; Season outlook",
-     "Our model gives the Sabres about a 1-in-6 chance to make the playoffs. The scoring slump and goaltending should even out; the chances they give up, especially shorthanded, won't on their own.",
+     "Our model gives the Sabres about a 1-in-6 playoff chance. The cold shooting and goaltending usually don't last; the scoring chances they give up are more likely to. Cut those to league average and the playoff chance doubles.",
      "sabres-playoffs-points.png"),
     ("sabres-stars-pregame-nov-14", "2026-11-14-sabres-dal-pregame.md", "2026-11-14", "Sabres &middot; Pregame",
      "Our model: Stars 62%, Sabres 38%. Dallas allows the 4th-fewest chances in the NHL. And Dallas's 8-3 loss Thursday doesn't make a bounce-back more likely: teams coming off a blowout won 46% of their next game, a little less than usual.",

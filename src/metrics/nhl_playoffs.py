@@ -4,8 +4,8 @@
   division 4 times for at least some pairs (true for every season 2023-24 to 2025-26). Nothing is typed in by hand.
 - Each remaining game: home and away goals ~ Poisson(model expected goals); a regulation tie goes to overtime/shootout, won by
   the home team at the training-season rate; the loser there gets one point.
-- Team strength is uncertain, so each simulated season perturbs every team's chances-created and chances-allowed ratings
-  (normal noise, sd RATING_SD goals a game, chosen on 2023-24 and 2024-25 and tested on 2025-26 in the backtest).
+- Team ratings are held fixed for the rest of the season (RATING_SD = 0: no extra noise for uncertainty in team strength).
+  simulate() can add normal noise to each team's ratings per simulated season via rating_sd; it is off by default.
 - Format: top 3 in each division plus the next 2 by points in each conference. Ties: points, regulation wins, regulation+OT wins,
   then a coin flip (goal-differential tiebreaks are not modelled).
 """
