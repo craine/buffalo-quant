@@ -60,6 +60,22 @@
    "at_utc": "2026-11-15T13:16:17Z",
    "notes": "Round 3 (572279f3): round-2 edits 1-9 applied word for word; the one deviation ('Dallas's defense explains part of the shutout') is an improvement, since 'That' would have pointed at the moved correction note. Charts, hero, dek pass. Ready.",
    "report": "2026-11-15-sabres-dal-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "572279f3971464fba507eab6d1b560390870ac3c2c68c41327776a48da2c6a8c",
+   "at_utc": "2026-11-15T13:29:16Z",
+   "notes": "Quant re-check and final check passed on sha 572279f3 (full report reports/reviews/2026-11-15-sabres-dal-final.md): round-2 fixes in; 6th-most, Oct. 8 and Winnipeg now computed and confirmed; generator reproduces byte for byte. The Quant agent's own record command was blocked by a session permission check; recorded by the writer on Charlie's explicit approval (Nov 15, 2026), verdict text unchanged.",
+   "report": "2026-11-15-sabres-dal-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "572279f3971464fba507eab6d1b560390870ac3c2c68c41327776a48da2c6a8c",
+   "at_utc": "2026-11-15T13:29:16Z",
+   "notes": "Quant re-check and final check passed on sha 572279f3 (full report reports/reviews/2026-11-15-sabres-dal-final.md): round-2 fixes in; 6th-most, Oct. 8 and Winnipeg now computed and confirmed; generator reproduces byte for byte. The Quant agent's own record command was blocked by a session permission check; recorded by the writer on Charlie's explicit approval (Nov 15, 2026), verdict text unchanged.",
+   "report": "2026-11-15-sabres-dal-final.md"
   }
  ],
  "self": {
@@ -76,10 +92,17 @@
   "report": "2026-11-15-sabres-dal-editor.md"
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "d237dca4f7281fd6b5e6249242af9c903b652b7563ba18b120504e4d3907c564",
-  "at_utc": "2026-11-15T13:13:17Z",
-  "notes": "Re-check of d237dca4: all 5 stage-2 fixes landed (receipts DAL 3.54 vs 3.49 'about what it expected'; credit split with 2.6/6%/Oettinger +2.62; NJD 11.05; hero title/labels/'9'; chart 2 labels). Editor numbers all reproduce: 14 missed, Oct 8 Oettinger only goalie (2.563 v 2.108, 0-4), <=9 close 130/650=0.200 BUF 3/20, other-19 avg 3.081, 3rd PP 0.928, 23/685, Lyon -0.75/+1.54. Fixes: (1) 'Full strength is the worry' is a one-game trend contradicted by season data: BUF 5v5 share 51.3% thru 11-12 (15th), 50.3% thru 11-14; the 6th-most allowed is all-strength (48.8% share). Scope 71% to Saturday or drop. (2) Heading 'Buffalo never got to the net' is false (9 close-in shots, 1.02); use 'rarely'. Low: assert hard-coded Oct 8 and '6th-most' literals (both true now); optional soften 'offense has stalled' (last two xGF 2.11, 2.62).",
+  "verdict": "pass",
+  "sha256": "572279f3971464fba507eab6d1b560390870ac3c2c68c41327776a48da2c6a8c",
+  "at_utc": "2026-11-15T13:29:16Z",
+  "notes": "Quant re-check and final check passed on sha 572279f3 (full report reports/reviews/2026-11-15-sabres-dal-final.md): round-2 fixes in; 6th-most, Oct. 8 and Winnipeg now computed and confirmed; generator reproduces byte for byte. The Quant agent's own record command was blocked by a session permission check; recorded by the writer on Charlie's explicit approval (Nov 15, 2026), verdict text unchanged.",
   "report": "2026-11-15-sabres-dal-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "572279f3971464fba507eab6d1b560390870ac3c2c68c41327776a48da2c6a8c",
+  "at_utc": "2026-11-15T13:29:16Z",
+  "notes": "Quant re-check and final check passed on sha 572279f3 (full report reports/reviews/2026-11-15-sabres-dal-final.md): round-2 fixes in; 6th-most, Oct. 8 and Winnipeg now computed and confirmed; generator reproduces byte for byte. The Quant agent's own record command was blocked by a session permission check; recorded by the writer on Charlie's explicit approval (Nov 15, 2026), verdict text unchanged.",
+  "report": "2026-11-15-sabres-dal-final.md"
  }
 }
