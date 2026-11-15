@@ -235,7 +235,7 @@ def main():
     ax.set_xlabel("Sabres' final points"); ax.set_ylabel("Share of simulated seasons")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"The Sabres make the playoffs in about {p_buf:.0%} of our simulated seasons",
-           f"Sabres' final points in {N_SIMS:,} simulated seasons, from {int(b.pts)} points in {gp} games. Shaded: where the last Eastern playoff spot usually lands in those seasons.",
+           f"Sabres' final points in {N_SIMS:,} simulated seasons, from {int(b.pts)} points in {gp} games. Shaded: where the last Eastern playoff spot usually lands.",
            f"Model nhl-game-v0.1 ratings from games through Nov. 14, 2026; the NHL's remaining schedule ({n_left} Sabres games, {len(rem):,} in all). {n_season}-game season.")
     fig.savefig(OUT / "sabres-playoffs-points.png"); plt.close(fig)
 
@@ -264,8 +264,8 @@ def main():
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.set_xlabel("Sabres' chance to make the playoffs")
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Fewer scoring chances against, or more for: either one about doubles the Sabres' playoff chance",
-           "Sabres' playoff chance if each change held for the rest of the season. Everything else as it stands.",
+    finish(fig, "Either fix about doubles the Sabres' playoff chance",
+           "Allow fewer scoring chances, or create more: Sabres' playoff chance if each change held the rest of the season.",
            f"{N_SIMS:,} simulated seasons each, games through Nov. 14, 2026. One goal's worth of scoring chances = shots whose chances of going in add up to one.")
     fig.savefig(OUT / "sabres-playoffs-whatif.png"); plt.close(fig)
 
