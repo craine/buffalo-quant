@@ -51,6 +51,17 @@ def test_xg_totals_close_to_goals():
     assert ((t.xg / t.g - 1).abs() < 0.05).all(), t
 
 
+def test_xg_matches_fingerprint():
+    """Training data identical to config/xg_fingerprint.json; model totals within the hardware tolerance."""
+    import json
+
+    from src.db import ROOT
+    from src.metrics.xg_fingerprint import compare, data_hash, training_rows
+    now = query("SELECT season, SUM(xg) xg, COUNT(xg) n FROM clean_nhl_shots_xg WHERE season < 20262027 GROUP BY season")
+    fp = json.loads((ROOT / "config" / "xg_fingerprint.json").read_text())
+    assert compare(list(now.itertuples()), fp, data_hash(training_rows(query("SELECT * FROM clean_nhl_shots")))) == []
+
+
 def test_xg_bounded():
     r = query("SELECT MIN(xg) lo, MAX(xg) hi, SUM(xg IS NULL) nn FROM clean_nhl_shots_xg WHERE unblocked=1 AND empty_net_against=0")
     assert r.lo[0] > 0 and r.hi[0] < 1 and r.nn[0] == 0
