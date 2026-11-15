@@ -27,8 +27,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
-      # Pinned to the versions the xG model and ratings were validated with. The xG model trains only on completed seasons, so each
-      # run reproduces it exactly; validate_cards.py checks that against config/xg_fingerprint.json.
+      # Pinned to the versions the xG model and ratings were validated with. The xG model trains only on completed seasons;
+      # validate_cards.py checks its training data exactly and its totals within 0.05% (runner hardware moves them ~0.01%)
+      # against config/xg_fingerprint.json.
       - run: pip install pandas==3.0.5 numpy==2.5.3 pyarrow==26.0.1 scikit-learn==1.9.1 matplotlib==3.11.2 pytest pyyaml markdown
       - name: Rebuild NHL tables and cards
         env:
@@ -47,7 +48,7 @@ jobs:
       - name: Test data, cards and pages; confirm pinned files untouched
         run: |
           set -o pipefail
-          python -m pytest -q -rs tests/test_nhl.py tests/test_cards.py tests/test_review_gate.py | tee /tmp/pytest.txt
+          python -m pytest -q -rs tests/test_nhl.py tests/test_xg_fingerprint.py tests/test_cards.py tests/test_review_gate.py | tee /tmp/pytest.txt
           if grep -qi "skipped" /tmp/pytest.txt; then echo "Tests were skipped; refusing to publish"; exit 1; fi
           git diff --exit-code -- reports/cards/skaters.json reports/cards/goalies.json reports/*.md ledger/
       - name: Commit if anything changed

@@ -5,6 +5,7 @@ import json
 import sys
 
 from src.db import ROOT, query
+from src.metrics.xg_fingerprint import compare, data_hash, training_rows
 
 C = ROOT / "reports" / "cards"
 sk = json.loads((C / "skaters_league.json").read_text())
@@ -52,16 +53,15 @@ now = query("SELECT season, SUM(xg) xg, COUNT(xg) n FROM clean_nhl_shots_xg WHER
 ap = argparse.ArgumentParser()
 ap.add_argument("--update-fingerprint", action="store_true",
                 help="after a deliberate change (NHL edited old play-by-play, model or library change): record the current totals")
+# same query and row order as src/metrics/nhl_xg.py's fit
+digest = data_hash(training_rows(query("SELECT * FROM clean_nhl_shots")))
 if ap.parse_args().update_fingerprint:
     doc = json.loads(FP.read_text())
     doc["seasons"] = {str(int(x.season)): {"xg_sum": round(float(x.xg), 6), "n": int(x.n)} for x in now.itertuples()}
-    FP.write_text(json.dumps(doc, indent=1))
-    print("fingerprint updated:", doc["seasons"])
-fpr = json.loads(FP.read_text())["seasons"]
-for x in now.itertuples():
-    ref = fpr.get(str(int(x.season)))
-    if ref is None or ref["n"] != x.n or abs(ref["xg_sum"] - x.xg) > 1e-3:
-        fail.append(f"shot model changed for {x.season}: xG {x.xg:.3f} on {x.n} shots vs. fingerprint {ref}")
+    doc["data_sha256"] = digest
+    FP.write_text(json.dumps(doc, indent=1) + "\n")
+    print("fingerprint updated:", doc["seasons"], digest[:12])
+fail += compare(list(now.itertuples()), json.loads(FP.read_text()), digest)
 
 print(f"cards through {as_of}: {len(cards)} skaters, {len(gcards)} goalies, {ng} games")
 if fail:

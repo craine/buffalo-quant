@@ -1,5 +1,5 @@
 {
- "note": "Raw (unscaled) xG totals for completed seasons. The model trains only on these seasons, so a rerun must reproduce them; a change means the data or a library changed the model.",
+ "note": "Raw (unscaled) xG totals and a hash of the training rows for completed seasons. The model trains only on these seasons: the data hash and shot counts must match exactly; xG totals within 0.05% (runner hardware moves them about 0.01%). See src/metrics/xg_fingerprint.py.",
  "seasons": {
   "20232024": {
    "xg_sum": 7469.241811,
@@ -13,5 +13,6 @@
    "xg_sum": 7801.996166,
    "n": 111099
   }
- }
+ },
+ "data_sha256": "cbfac7cde6960589f6cc69a5aaed7ec3dfef6ebc4b6197eb29fbf0068300a2d1"
 }
