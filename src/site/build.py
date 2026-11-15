@@ -21,6 +21,9 @@ ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-jets-prediction", "2026-wk10-bills-at-jets.md", "2026-11-14", "Bills &middot; Week 10 preview",
      "We project Bills 29.9, Jets 22.1: a 75% chance Buffalo wins. The biggest mismatch is the Bills' passing game against one of the NFL's leakiest pass defenses.",
      "wk10-calls.png"),
+    ("sabres-stars-postgame-nov-14", "2026-11-15-sabres-dal.md", "2026-11-15", "Sabres &middot; Post-game",
+     "Dallas kept Buffalo away from the net: 9 shots from close in and no rebounds. Jake Oettinger stopped all 22 that reached him. Our pregame call, that the Stars were more likely to win, was right.",
+     "sabres-dal-post-flow.png"),
     ("sabres-stars-pregame-nov-14", "2026-11-14-sabres-dal-pregame.md", "2026-11-14", "Sabres &middot; Pregame",
      "Our model: Stars 62%, Sabres 38%. Dallas allows the 4th-fewest chances in the NHL. And Dallas's 8-3 loss Thursday doesn't make a bounce-back more likely: teams coming off a blowout won 46% of their next game, a little less than usual.",
      "sabres-dal-bounce.png"),
@@ -360,7 +363,7 @@ def build_home(articles, texts):
     if hd and "explainer" in hd:
         e = hd["explainer"]; mx = max(abs(v) for _, v in e["bars"])
         rows = "".join(f'<div class="xbar"><span class="xl">{html.escape(l)}</span><span class="xt"><span style="width:{max(v, 0) / mx:.0%}"></span></span>'
-                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.2f}" if e.get("fmt") == "score" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
+                       f'<span class="xv">{(f"{v:.1f} pts" if e.get("fmt") == "pts" else f"{v:+.0f} per 100" if e.get("fmt") == "per100" else f"{v:+.1f} goals" if e.get("fmt") == "goals" else f"{v:.2f}" if e.get("fmt") == "score" else f"{v:.1f}".removesuffix(".0") if e.get("fmt") == "num" else f"{v:.1%}")}</span></div>' for l, v in e["bars"])
         how = (f'<section class="how"><div><div class="kicker">{html.escape(e["kicker"])}</div><h2>{html.escape(e["title"])}</h2>'
                f'<p>{html.escape(e["text"])}</p><a href="analysis/{slug}.html">How we measure it &rarr;</a></div><div class="xbars">{rows}</div></section>')
     body = f"""<section class="hero"><div class="wrap hgrid"><div class="hcopy">
