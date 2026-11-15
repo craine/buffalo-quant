@@ -1,0 +1,30 @@
+{
+ "label": "Scoring chances, worth this many goals",
+ "big": [
+  [
+   2.6,
+   "Sabres"
+  ],
+  [
+   3.5,
+   "Stars"
+  ]
+ ],
+ "note": "Final: Stars 2, Sabres 0. Dallas kept Buffalo away from the net, and Jake Oettinger stopped all 22 shots that reached him.",
+ "explainer": {
+  "kicker": "Getting to the net",
+  "title": "Buffalo got 9 shots from in close, and no rebounds.",
+  "text": "Sabres' shots from within 20 feet:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Sabres' usual game (through Nov. 12)",
+    13.3
+   ],
+   [
+    "Sabres at Dallas, Nov. 14",
+    9
+   ]
+  ]
+ }
+}

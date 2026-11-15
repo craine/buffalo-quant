@@ -5,7 +5,8 @@ Writes, per season, to out/:
   nhl_plays_{season}.parquet   every play event, flattened (pd.json_normalize), plus game_id
   nhl_games_{season}.parquet   one row per game: ids, date, teams, final score, game state, period count
   nhl_rosters_{season}.parquet one row per (game, player): team, position, name
-Only completed games (gameState OFF or FINAL) are kept. Nothing is imputed.
+  nhl_schedule_{season}.parquet one row per scheduled regular-season game, any state (FUT, LIVE, OFF, ...): id, date, teams, state
+Plays, games and rosters keep only completed games (gameState OFF or FINAL). Nothing is imputed.
 """
 import json
 import sys
@@ -43,8 +44,12 @@ def fetch_season(season):
     ids = [int(f"{start}02{n:04d}") for n in range(1, MAX_GAMES + 1)]
     with ThreadPoolExecutor(8) as ex:
         results = list(ex.map(get, ids))
-    games, plays, rosters = [], [], []
+    games, plays, rosters, sched = [], [], [], []
     for gid, g in zip(ids, results):
+        if g is not None:
+            sched.append({"game_id": gid, "season": int(season), "game_date": g.get("gameDate"),
+                          "start_utc": g.get("startTimeUTC"), "home": g["homeTeam"]["abbrev"], "away": g["awayTeam"]["abbrev"],
+                          "game_state": g.get("gameState"), "game_type": g.get("gameType")})
         if g is None or g.get("gameState") not in ("OFF", "FINAL"):
             continue
         games.append({
@@ -71,7 +76,9 @@ def fetch_season(season):
             pl[c] = pl[c].astype("string")
     pl.to_parquet(OUT / f"nhl_plays_{season}.parquet", index=False)
     pd.DataFrame(rosters).to_parquet(OUT / f"nhl_rosters_{season}.parquet", index=False)
-    print(season, "games", len(games), "plays", len(pl), flush=True)
+    sc = pd.DataFrame(sched)
+    sc.to_parquet(OUT / f"nhl_schedule_{season}.parquet", index=False)
+    print(season, "games", len(games), "plays", len(pl), "scheduled", len(sc), sc.game_state.value_counts().to_dict(), flush=True)
 
 
 if __name__ == "__main__":
