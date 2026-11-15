@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "d7c4eab63e8c002caf153210740dd278f880fed51c51dd8400b016f4ef44670e",
+   "at_utc": "2026-11-15T14:02:34Z",
+   "notes": "Every number from the generator (pinned AS_OF 2026-11-14, seeded sims; byte-identical rerun). Schedule from the new raw_nhl_schedule (84-game season, divisions derived from it); playoff format assumed unchanged and said so. Backtest 2023-26 at the 20-game mark vs in-spot baseline, low-bucket calibration and last year's Sabres (13%, made it) disclosed. Record vs chances-worth points (20.7 vs 20) and carry-over (first 20 games vs rest) computed. Ledger P0017 logged on Charlie's go before the next game; story asserts p matches. Fixed: unsupported '0.2 is where they've been' claim, PK wording (mixes penalty count and kill quality), chart title overclaim, hardcoded record numbers. No betting words; jargon only in stat-heads; charts opened."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "d7c4eab63e8c002caf153210740dd278f880fed51c51dd8400b016f4ef44670e",
+  "at_utc": "2026-11-15T14:02:34Z",
+  "notes": "Every number from the generator (pinned AS_OF 2026-11-14, seeded sims; byte-identical rerun). Schedule from the new raw_nhl_schedule (84-game season, divisions derived from it); playoff format assumed unchanged and said so. Backtest 2023-26 at the 20-game mark vs in-spot baseline, low-bucket calibration and last year's Sabres (13%, made it) disclosed. Record vs chances-worth points (20.7 vs 20) and carry-over (first 20 games vs rest) computed. Ledger P0017 logged on Charlie's go before the next game; story asserts p matches. Fixed: unsupported '0.2 is where they've been' claim, PK wording (mixes penalty count and kill quality), chart title overclaim, hardcoded record numbers. No betting words; jargon only in stat-heads; charts opened."
+ }
+}

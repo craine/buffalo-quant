@@ -1,0 +1,30 @@
+{
+ "label": "Sabres' chance to make the playoffs",
+ "big": [
+  [
+   "16%",
+   "Now"
+  ],
+  [
+   "32%",
+   "If they allowed league-average chances"
+  ]
+ ],
+ "note": "8-8-4 after 20 games. It usually takes about 94 points to get the last spot in the East.",
+ "explainer": {
+  "kicker": "What lasts",
+  "title": "Chances carry over. Finishing and goaltending streaks don't.",
+  "text": "How much a team's first 20 games tell you about the rest of its season (1 = everything):",
+  "fmt": "score",
+  "bars": [
+   [
+    "Chances allowed",
+    0.66
+   ],
+   [
+    "Goaltending",
+    0.01
+   ]
+  ]
+ }
+}
