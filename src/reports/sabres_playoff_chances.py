@@ -264,7 +264,7 @@ def main():
     ax.set_xlim(0, 1); ax.xaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
     ax.set_xlabel("Sabres' chance to make the playoffs")
     ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Either fix about doubles the Sabres' playoff chance",
+    finish(fig, "Average defense or more offense about doubles the playoff chance",
            "Allow fewer scoring chances, or create more: Sabres' playoff chance if each change held the rest of the season.",
            f"{N_SIMS:,} simulated seasons each, games through Nov. 14, 2026. One goal's worth of scoring chances = shots whose chances of going in add up to one.")
     fig.savefig(OUT / "sabres-playoffs-whatif.png"); plt.close(fig)

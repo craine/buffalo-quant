@@ -45,6 +45,14 @@
    "at_utc": "2026-11-15T14:23:12Z",
    "notes": "Round 2: all round-1 text edits landed and read well; text is ready. Fails only on two clipped chart texts: what-if title runs off the image ('...doubles the Sabre'), points subtitle cut ('...lands in th'). Shorter replacements given. Optional: 'never fit on' -> 'never learned from'; reword 'about half of a gap'. Passes once PNGs fit.",
    "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:31:36Z",
+   "notes": "Round 3 (charts): points chart ready. What-if title 'Either fix about doubles...' can be read as covering the shorthanded bar (16->22%, not double). Replace with 'Average defense or more offense about doubles Sabres' playoff chance' (fallback: '...doubles the playoff chance'). Text unchanged and ready; passes once that title is in and fits.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
   }
  ],
  "self": {
@@ -56,8 +64,8 @@
  "editor": {
   "verdict": "fail",
   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
-  "at_utc": "2026-11-15T14:23:12Z",
-  "notes": "Round 2: all round-1 text edits landed and read well; text is ready. Fails only on two clipped chart texts: what-if title runs off the image ('...doubles the Sabre'), points subtitle cut ('...lands in th'). Shorter replacements given. Optional: 'never fit on' -> 'never learned from'; reword 'about half of a gap'. Passes once PNGs fit.",
+  "at_utc": "2026-11-15T14:31:36Z",
+  "notes": "Round 3 (charts): points chart ready. What-if title 'Either fix about doubles...' can be read as covering the shorthanded bar (16->22%, not double). Replace with 'Average defense or more offense about doubles Sabres' playoff chance' (fallback: '...doubles the playoff chance'). Text unchanged and ready; passes once that title is in and fits.",
   "report": "2026-11-15-sabres-playoff-chances-editor.md"
  },
  "quant": {
