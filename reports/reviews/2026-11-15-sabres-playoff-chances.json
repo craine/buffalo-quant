@@ -53,6 +53,14 @@
    "at_utc": "2026-11-15T14:31:36Z",
    "notes": "Round 3 (charts): points chart ready. What-if title 'Either fix about doubles...' can be read as covering the shorthanded bar (16->22%, not double). Replace with 'Average defense or more offense about doubles Sabres' playoff chance' (fallback: '...doubles the playoff chance'). Text unchanged and ready; passes once that title is in and fits.",
    "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:34:41Z",
+   "notes": "Round 4: what-if title 'Average defense or more offense about doubles the playoff chance' fits on one line and no longer reads as covering the 22% shorthanded bar; subtitle names the Sabres. Text, points/carry charts, hero, dek, Ledger call all ready from earlier rounds. No remaining edits.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
   }
  ],
  "self": {
@@ -62,10 +70,10 @@
   "notes": "Round-1 Quant and Editor fixes applied: shorthanded is ~42% of the excess chances allowed (split computed, in body and stat-heads); shorthanded what-if shrunk like the rating (now 22%); Benson 1 goal + 1 empty-netter; 'won't fix itself' -> 'most likely to last'; lead names the overall fix (32%); unsupported noise-tuning claim removed (ratings held fixed, said so); calibration paragraph rewritten (5-30% bucket fine, under-5% miss 2 of 11); 2025-26 season scorecard added; backtest at 20,000 sims (last year's Sabres 12%); per-84 player numbers; league save % and small-sample label; 'scoring chances' vs 'playoff chance' throughout; worked shot example; chart titles; 0.00 formatting; 'slightly below-average (21st)'. Byte-identical rerun."
  },
  "editor": {
-  "verdict": "fail",
+  "verdict": "pass",
   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
-  "at_utc": "2026-11-15T14:31:36Z",
-  "notes": "Round 3 (charts): points chart ready. What-if title 'Either fix about doubles...' can be read as covering the shorthanded bar (16->22%, not double). Replace with 'Average defense or more offense about doubles Sabres' playoff chance' (fallback: '...doubles the playoff chance'). Text unchanged and ready; passes once that title is in and fits.",
+  "at_utc": "2026-11-15T14:34:41Z",
+  "notes": "Round 4: what-if title 'Average defense or more offense about doubles the playoff chance' fits on one line and no longer reads as covering the 22% shorthanded bar; subtitle names the Sabres. Text, points/carry charts, hero, dek, Ledger call all ready from earlier rounds. No remaining edits.",
   "report": "2026-11-15-sabres-playoff-chances-editor.md"
  },
  "quant": {
