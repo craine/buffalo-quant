@@ -61,6 +61,22 @@
    "at_utc": "2026-11-15T14:34:41Z",
    "notes": "Round 4: what-if title 'Average defense or more offense about doubles the playoff chance' fits on one line and no longer reads as covering the 22% shorthanded bar; subtitle names the Sabres. Text, points/carry charts, hero, dek, Ledger call all ready from earlier rounds. No remaining edits.",
    "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T15:05:27Z",
+   "notes": "Re-check 2 at 85ae5817: md byte-identical to re-checked text (sha ba87b22c); only chart strings changed. Both PNGs opened: no clipping; what-if title claim holds (32%/31% from 16%); bars match table. All numbers verified in prior re-check. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+   "report": "2026-11-15-sabres-playoff-chances-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T15:05:28Z",
+   "notes": "Final check on sha ba87b22c: text unchanged since passing Quant re-check and Editor; chart-only changes verified (points subtitle fits; what-if title 'Average defense or more offense about doubles the playoff chance' accurate: 32%/31% vs 16%). Passes. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+   "report": "2026-11-15-sabres-playoff-chances-final.md"
   }
  ],
  "self": {
@@ -77,10 +93,17 @@
   "report": "2026-11-15-sabres-playoff-chances-editor.md"
  },
  "quant": {
-  "verdict": "fail",
+  "verdict": "pass",
   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
-  "at_utc": "2026-11-15T14:22:22Z",
-  "notes": "Re-check of d0294b46: all text fixes verified independently (42% shorthanded split, 0.084 shrunk what-if = 22%, backtest 20k 0.149 / 2025-26 0.209 vs 0.245, 3 of 23 and 2 of 11, BUF 12%, per-84 table, Benson 1+1 EN, worked example 13.8%/0.8%, league sv 89.1%). Fails only on clipped chart text: whatif title cut at 'the Sabre', points subtitle cut at 'lands in th'. Shorten/wrap and re-open; md needs no change. Final not recorded.",
+  "at_utc": "2026-11-15T15:05:27Z",
+  "notes": "Re-check 2 at 85ae5817: md byte-identical to re-checked text (sha ba87b22c); only chart strings changed. Both PNGs opened: no clipping; what-if title claim holds (32%/31% from 16%); bars match table. All numbers verified in prior re-check. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
   "report": "2026-11-15-sabres-playoff-chances-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+  "at_utc": "2026-11-15T15:05:28Z",
+  "notes": "Final check on sha ba87b22c: text unchanged since passing Quant re-check and Editor; chart-only changes verified (points subtitle fits; what-if title 'Average defense or more offense about doubles the playoff chance' accurate: 32%/31% vs 16%). Passes. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+  "report": "2026-11-15-sabres-playoff-chances-final.md"
  }
 }
