@@ -1,0 +1,109 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "d7c4eab63e8c002caf153210740dd278f880fed51c51dd8400b016f4ef44670e",
+   "at_utc": "2026-11-15T14:02:34Z",
+   "notes": "Every number from the generator (pinned AS_OF 2026-11-14, seeded sims; byte-identical rerun). Schedule from the new raw_nhl_schedule (84-game season, divisions derived from it); playoff format assumed unchanged and said so. Backtest 2023-26 at the 20-game mark vs in-spot baseline, low-bucket calibration and last year's Sabres (13%, made it) disclosed. Record vs chances-worth points (20.7 vs 20) and carry-over (first 20 games vs rest) computed. Ledger P0017 logged on Charlie's go before the next game; story asserts p matches. Fixed: unsupported '0.2 is where they've been' claim, PK wording (mixes penalty count and kill quality), chart title overclaim, hardcoded record numbers. No betting words; jargon only in stat-heads; charts opened."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "d7c4eab63e8c002caf153210740dd278f880fed51c51dd8400b016f4ef44670e",
+   "at_utc": "2026-11-15T14:04:49Z",
+   "notes": "Needs edits (17): lead names which fix doubles it (all chances allowed -> 32%); separate 'scoring chances' from 'playoff chance' throughout; overclaim that extra chances against all come shorthanded (0.12 of ~0.29; writer computes); Benson 2 on 7.3 vs 'about 6' missing doesn't add up; per-82 in 84-game season; points chart title 'ahead of the line' (betting flavor, not what 16% is); what-if title 'it'; add worked shot-chance example; scorecard/caution paragraph rewrite; -0.00 cells; goalie so-what. Note: no Quant record yet.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "d7c4eab63e8c002caf153210740dd278f880fed51c51dd8400b016f4ef44670e",
+   "at_utc": "2026-11-15T14:12:43Z",
+   "notes": "Publish with fixes. Headline 16% and every table value re-derive independently. Required: extra chances against are only ~42% shorthanded (0.124 of 0.294; other states +0.121, 2nd-most); Benson '2 goals on 7.3 = about 6' (one goal empty-net; say 1 goal); 'won't fix itself' contradicts 0.66/0.46 carry and model's own regression; lead 'fix it doubles' only true for overall fix; SH what-if uses unshrunk gap on shrunk rating (~21% not 25%); untraceable RATING_SD tuning claim; calibration caution misframed (5-30% bucket fine, <5% bucket 2 of 11 made); per-season Brier (2025-26 0.208 vs 0.245); per-82 in 84-game season; P0017 resolves_at_utc = 2026-11-18 not April.",
+   "report": "2026-11-15-sabres-playoff-chances-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:17:40Z",
+   "notes": "Round-1 Quant and Editor fixes applied: shorthanded is ~42% of the excess chances allowed (split computed, in body and stat-heads); shorthanded what-if shrunk like the rating (now 22%); Benson 1 goal + 1 empty-netter; 'won't fix itself' -> 'most likely to last'; lead names the overall fix (32%); unsupported noise-tuning claim removed (ratings held fixed, said so); calibration paragraph rewritten (5-30% bucket fine, under-5% miss 2 of 11); 2025-26 season scorecard added; backtest at 20,000 sims (last year's Sabres 12%); per-84 player numbers; league save % and small-sample label; 'scoring chances' vs 'playoff chance' throughout; worked shot example; chart titles; 0.00 formatting; 'slightly below-average (21st)'. Byte-identical rerun."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:22:22Z",
+   "notes": "Re-check of d0294b46: all text fixes verified independently (42% shorthanded split, 0.084 shrunk what-if = 22%, backtest 20k 0.149 / 2025-26 0.209 vs 0.245, 3 of 23 and 2 of 11, BUF 12%, per-84 table, Benson 1+1 EN, worked example 13.8%/0.8%, league sv 89.1%). Fails only on clipped chart text: whatif title cut at 'the Sabre', points subtitle cut at 'lands in th'. Shorten/wrap and re-open; md needs no change. Final not recorded.",
+   "report": "2026-11-15-sabres-playoff-chances-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:23:12Z",
+   "notes": "Round 2: all round-1 text edits landed and read well; text is ready. Fails only on two clipped chart texts: what-if title runs off the image ('...doubles the Sabre'), points subtitle cut ('...lands in th'). Shorter replacements given. Optional: 'never fit on' -> 'never learned from'; reword 'about half of a gap'. Passes once PNGs fit.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:31:36Z",
+   "notes": "Round 3 (charts): points chart ready. What-if title 'Either fix about doubles...' can be read as covering the shorthanded bar (16->22%, not double). Replace with 'Average defense or more offense about doubles Sabres' playoff chance' (fallback: '...doubles the playoff chance'). Text unchanged and ready; passes once that title is in and fits.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T14:34:41Z",
+   "notes": "Round 4: what-if title 'Average defense or more offense about doubles the playoff chance' fits on one line and no longer reads as covering the 22% shorthanded bar; subtitle names the Sabres. Text, points/carry charts, hero, dek, Ledger call all ready from earlier rounds. No remaining edits.",
+   "report": "2026-11-15-sabres-playoff-chances-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T15:05:27Z",
+   "notes": "Re-check 2 at 85ae5817: md byte-identical to re-checked text (sha ba87b22c); only chart strings changed. Both PNGs opened: no clipping; what-if title claim holds (32%/31% from 16%); bars match table. All numbers verified in prior re-check. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+   "report": "2026-11-15-sabres-playoff-chances-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+   "at_utc": "2026-11-15T15:05:28Z",
+   "notes": "Final check on sha ba87b22c: text unchanged since passing Quant re-check and Editor; chart-only changes verified (points subtitle fits; what-if title 'Average defense or more offense about doubles the playoff chance' accurate: 32%/31% vs 16%). Passes. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+   "report": "2026-11-15-sabres-playoff-chances-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+  "at_utc": "2026-11-15T14:17:40Z",
+  "notes": "Round-1 Quant and Editor fixes applied: shorthanded is ~42% of the excess chances allowed (split computed, in body and stat-heads); shorthanded what-if shrunk like the rating (now 22%); Benson 1 goal + 1 empty-netter; 'won't fix itself' -> 'most likely to last'; lead names the overall fix (32%); unsupported noise-tuning claim removed (ratings held fixed, said so); calibration paragraph rewritten (5-30% bucket fine, under-5% miss 2 of 11); 2025-26 season scorecard added; backtest at 20,000 sims (last year's Sabres 12%); per-84 player numbers; league save % and small-sample label; 'scoring chances' vs 'playoff chance' throughout; worked shot example; chart titles; 0.00 formatting; 'slightly below-average (21st)'. Byte-identical rerun."
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+  "at_utc": "2026-11-15T14:34:41Z",
+  "notes": "Round 4: what-if title 'Average defense or more offense about doubles the playoff chance' fits on one line and no longer reads as covering the 22% shorthanded bar; subtitle names the Sabres. Text, points/carry charts, hero, dek, Ledger call all ready from earlier rounds. No remaining edits.",
+  "report": "2026-11-15-sabres-playoff-chances-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+  "at_utc": "2026-11-15T15:05:27Z",
+  "notes": "Re-check 2 at 85ae5817: md byte-identical to re-checked text (sha ba87b22c); only chart strings changed. Both PNGs opened: no clipping; what-if title claim holds (32%/31% from 16%); bars match table. All numbers verified in prior re-check. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+  "report": "2026-11-15-sabres-playoff-chances-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "ba87b22cca22a0a798852c16419aec26c5592066f9206bd4412fecb2d60a6bd9",
+  "at_utc": "2026-11-15T15:05:28Z",
+  "notes": "Final check on sha ba87b22c: text unchanged since passing Quant re-check and Editor; chart-only changes verified (points subtitle fits; what-if title 'Average defense or more offense about doubles the playoff chance' accurate: 32%/31% vs 16%). Passes. Recorded by the writer on Charlie's explicit approval (Nov 15, 2026) after the Quant agent's own record command was blocked by a session permission check; verdict text is the Quant's, unchanged.",
+  "report": "2026-11-15-sabres-playoff-chances-final.md"
+ }
+}

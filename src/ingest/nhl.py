@@ -35,8 +35,11 @@ def download():
 def main():
     download()
     con = connect()
-    for kind in ("games", "plays", "rosters"):
+    for kind in ("games", "plays", "rosters", "schedule"):
         files = sorted(DL.glob(f"nhl_{kind}_*.parquet"))
+        if not files and kind == "schedule":
+            print("no nhl_schedule files in release yet; raw_nhl_schedule not built")
+            continue
         if not files:
             sys.exit(f"BLOCKED: no nhl_{kind} files in release")
         df = pd.concat([pd.read_parquet(f).assign(season=int(f.stem.split("_")[-1])) for f in files], ignore_index=True)
