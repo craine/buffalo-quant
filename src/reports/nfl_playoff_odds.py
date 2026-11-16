@@ -148,7 +148,7 @@ def main():
     fig.savefig(OUT / "wk11-odds-league.png"); plt.close(fig)
 
     # ---- chart 2: when the Bills clinch
-    fig, ax = plt.subplots(figsize=(9.5, 4.4), dpi=200)
+    fig, ax = plt.subplots(figsize=(9.5, 5.2), dpi=200)
     ys = [in_week[w] for w in weeks]
     ax.bar(weeks, ys, color=[RED if w == likely else BLUE for w in weeks], width=0.7, zorder=2)
     for w, y in zip(weeks, ys):
@@ -175,7 +175,7 @@ def main():
     ax.set_xlim(-0.02, 1.02); ax.set_ylim(-0.02, 1.05); ax.grid(color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "Tested on 7 past seasons: our chances vs. what happened",
            "Dots on the dashed line = a 30% chance came true about 30% of the time.",
-           f"{BACKTEST[0]}-{BACKTEST[-1]}, every team after week 10 ({len(bt)} team-seasons). Without quarterback news (no record of it then).")
+           f"{BACKTEST[0]}-{BACKTEST[-1]}, every team after week 10 ({len(bt)} team-seasons). No quarterback adjustments in the test.")
     fig.savefig(OUT / "wk11-odds-test.png"); plt.close(fig)
 
     # ---- text pieces
