@@ -131,13 +131,15 @@ def main():
     fig.savefig(OUT / "wk11-mvp-ballot.png"); plt.close(fig)
 
     # ---- chart 2: the check
-    fig, ax = plt.subplots(figsize=(9.5, 4.2), dpi=200)
-    ax.bar(hist.season, hist["rank"], color=[BLUE if r == 1 else ("#7F93BF" if r <= 3 else "#C9CDD4") for r in hist["rank"]],
-           width=0.6, zorder=2)
+    fig, ax = plt.subplots(figsize=(9.5, 4.8), dpi=200)
+    cols = [BLUE if r == 1 else ("#7F93BF" if r <= 3 else "#9AA3B2") for r in hist["rank"]]
+    ax.axhspan(0.5, 3.5, color="#EEF2FA", zorder=0)
+    ax.scatter(hist.season, hist["rank"], s=160, color=cols, zorder=3)
     for r in hist.itertuples():
-        ax.text(r.season, r.rank + 0.2, f"{r.winner}\n#{r.rank}", ha="center", fontsize=8.5, color=INK)
-    ax.set_ylabel("Where the real MVP ranked on our list"); ax.set_ylim(0, max(hist["rank"]) + 2.5)
-    ax.invert_yaxis(); ax.set_xticks(hist.season)
+        ax.text(r.season, r.rank + 0.75, f"{r.winner}\n#{r.rank}", ha="center", va="top", fontsize=8.5, color=INK)
+    ax.text(PAST.stop - 0.55, 2, "our top 3", ha="right", va="center", fontsize=8.5, color=MUTED)
+    ax.set_ylim(max(hist["rank"]) + 2.2, 0.3); ax.set_yticks([1, 3, 5, 7, 9, 11])
+    ax.set_ylabel("Real MVP's rank on our list"); ax.set_xticks(hist.season); ax.set_xlim(PAST.start - 0.6, PAST.stop - 0.4)
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, f"The real MVP was our No. 1 in {n1} of 7 seasons, and top 3 in {n3}",
            "Each season's actual AP MVP and where he ranked by points added over the full regular season.",
