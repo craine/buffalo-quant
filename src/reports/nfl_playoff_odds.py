@@ -14,6 +14,7 @@ import pandas as pd
 
 from src.db import ROOT, query
 from src.metrics import nfl_playoffs as NP
+from src.reports import infographics as IG
 from src.reports.defense_baseline import BLUE, GRAY, INK, MUTED, RED
 
 OUT = ROOT / "reports"
@@ -110,9 +111,7 @@ def main():
         top = sorted(w.values(), reverse=True)
         return (w[t] - top[1]) / 2 if w[t] == top[0] else 0
     lead = div_lead(US)
-    afc_leads = {t: div_lead(t) for t in NP.TEAMS if NP.CONF_OF[t] == "AFC"}
-    assert max(afc_leads, key=afc_leads.get) == US and sorted(afc_leads.values())[-2] < lead, afc_leads
-    lead = int(lead) if lead == int(lead) else lead
+    lead_txt = f"{int(lead)}{'½' if lead % 1 else ''}"
     sch = NP.season_games(SEASON)
     left_buf = sch[(sch.week >= WEEK) & ((sch.home_team == US) | (sch.away_team == US))]
     nxt = left_buf.iloc[0]
@@ -147,21 +146,28 @@ def main():
            "Records through week 10. 7 teams per conference make it.")
     fig.savefig(OUT / "wk11-odds-league.png"); plt.close(fig)
 
-    # ---- chart 2: when the Bills clinch
-    fig, ax = plt.subplots(figsize=(9.5, 5.2), dpi=200)
-    ys = [in_week[w] for w in weeks]
-    ax.bar(weeks, ys, color=[RED if w == likely else BLUE for w in weeks], width=0.7, zorder=2)
-    for w, y in zip(weeks, ys):
-        if y >= 0.005:
-            ax.text(w, y + 0.006, f"{y:.0%}", ha="center", fontsize=9, color=INK)
-    ax.set_xticks(weeks, [f"Wk {w}" for w in weeks])
-    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
-    ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"When the Bills lock up the AFC East: most likely week {likely}",
-           f"Chance Buffalo clinches the division in each week. They win it in {b.division:.0%} of simulated seasons.",
-           f"{N_SIMS:,} simulated seasons. 'Clinch' = no rival can catch Buffalo's win total even by winning out; ties at the top "
-           "aren't counted, so a real clinch can come a week sooner.")
-    fig.savefig(OUT / "wk11-odds-bills-clinch.png"); plt.close(fig)
+    # ---- graphic 2: the Bills clinch calendar
+    cal_weeks = []
+    for x in left_buf.itertuples():
+        home = x.home_team == US
+        cal_weeks.append(dict(n=int(x.week), opp=("vs. " if home else "at ") + NAMES[x.away_team if home else x.home_team],
+                        date=pd.Timestamp(x.gameday).strftime("%a., %b. %-d"),
+                        by=by_week[int(x.week)]))
+    best_opp = next(c for c in cal_weeks if c["n"] == likely)["opp"]
+    IG.clinch_calendar(cal_weeks, OUT / "wk11-odds-bills-clinch.png", "Buffalo Quant · AFC East watch",
+                       "When do the Bills<br>lock up the division?",
+                       f"Chance it's done by the end of each week. Most likely clinch: <b style='color:#fff'>Week {likely}, {IG.e(best_opp)}</b>.",
+                       f"Buffalo wins the AFC East in {b.division:.0%} of {N_SIMS:,} simulated seasons. \"Locked\" = no rival can catch them "
+                       "even by winning out (ties not counted, so it can come a week sooner).", likely)
+
+    # ---- graphic 3: the AFC ladder
+    afc = tab[tab.conf == "AFC"].sort_values(["playoffs", "division"], ascending=False)
+    out_qb = [NAMES[t] for t in afc.index if t in plan and qb.loc[t, "plan"] != "returns_week"]
+    IG.ladder([dict(name=NAMES[t], record=r.record, p=float(r.playoffs), d=float(r.division), hatched=t in plan and qb.loc[t, "plan"] != "returns_week",
+                    highlight=t == US) for t, r in afc.iterrows()],
+              OUT / "wk11-odds-afc-ladder.png", f"Buffalo Quant · Playoff odds · after week {WEEK - 1}", "The AFC ladder",
+              f"Chance to make the playoffs, from {N_SIMS:,} simulated seasons with quarterback injuries built in. Seven make it.",
+              f"Hatched = main quarterback out ({', '.join(out_qb)}). Half the simulations use our points model, half treat every game as a coin flip.")
 
     # ---- chart 3: the test, how often our chances came true (stat-heads)
     fig, ax = plt.subplots(figsize=(7.5, 5), dpi=200)
@@ -202,7 +208,7 @@ def main():
 
     md = f"""# The Bills have a {pct(b.division)} chance to win the AFC East, and will most likely clinch it in week {likely}
 
-**After 10 weeks, Buffalo ({b.record}) leads the AFC East by {lead} games. In {N_SIMS:,} simulated rest-of-seasons, the Bills win
+**After 10 weeks, Buffalo ({b.record}) leads the AFC East by {lead_txt} games. In {N_SIMS:,} simulated rest-of-seasons, the Bills win
 the division {pct(b.division)} of the time and make the playoffs {pct(b.playoffs)} of the time. The most likely week they lock up the
 division is week {likely} ({in_week[likely]:.0%} of simulations); by week {likely} they've clinched it {by_week[likely]:.0%} of the time. We also ran
 every other team, with this season's quarterback injuries built in.**
@@ -213,7 +219,7 @@ every other team, with this season's quarterback injuries built in.**
 
 ## The Bills
 
-- **Division:** {pct(b.division)}. Buffalo's {lead}-game lead with {len(left_buf)} games left is the biggest cushion in the AFC.
+- **Division:** {pct(b.division)}. Buffalo leads by {lead_txt} games with {len(left_buf)} to play.
 - **Playoffs:** {pct(b.playoffs)}. **Top seed (the only first-round bye):** {pct(b.seed1)}.
 - **Wins:** about {b.wins:.1f} on average in the simulations.
 - **Clinching:** by week {likely - 1}, {by_week[likely - 1]:.0%} of the time. By week {likely}, {by_week[likely]:.0%}. By week {likely + 1}, {by_week[likely + 1]:.0%}.
@@ -270,6 +276,8 @@ reliably yet, so we don't adjust for them. We will update this list as news come
 ## All 32 teams
 
 **AFC**
+
+![The AFC ladder](wk11-odds-afc-ladder.png)
 
 | Team | Record | Playoffs | Win division | Top seed |
 |---|---|---|---|---|

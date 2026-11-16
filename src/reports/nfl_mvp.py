@@ -14,6 +14,7 @@ import pandas as pd
 
 from src.db import ROOT, query
 from src.reports.defense_baseline import BLUE, INK, MUTED, RED
+from src.reports import infographics as IG
 from src.reports.nfl_playoff_odds import NAMES
 
 OUT = ROOT / "reports"
@@ -116,19 +117,14 @@ def main():
     n1, n3 = int((hist["rank"] == 1).sum()), int((hist["rank"] <= 3).sum())
     miss = hist.loc[hist["rank"].idxmax()]
 
-    # ---- chart 1: the ballot
-    fig, ax = plt.subplots(figsize=(9.5, 5.6), dpi=200)
-    t = top.iloc[::-1]
-    ax.barh(range(len(t)), t.pts, color=[RED if i == ALLEN else BLUE for i in t.index], height=0.65, zorder=2)
-    for y, (i, r) in enumerate(t.iterrows()):
-        ax.text(r.pts + 1, y, f"{r.pts:.0f}", va="center", fontsize=9.5, color=INK, fontweight="bold")
-    ax.set_yticks(range(len(t)), [f"{r.display_name}, {NAMES.get(r.team, r.team)} ({r.record})" for _, r in t.iterrows()], fontsize=9.5)
-    ax.set_xlabel("Points added this season (passes, sacks, scrambles and his own designed runs)")
-    ax.grid(axis="x", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"Our MVP vote after 10 weeks: {lead.display_name}",
-           "How many points each quarterback has added to his team's offense, compared with an average play. Red = Josh Allen.",
-           f"2026 weeks 1-{THRU}. Quarterbacks with {MIN_DROPBACKS}+ dropbacks. Every play counts, including late in blowouts.")
-    fig.savefig(OUT / "wk11-mvp-ballot.png"); plt.close(fig)
+    # ---- graphic 1: the race board (top six)
+    words = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven']
+    IG.mvp_board([dict(name=r.display_name, team=NAMES.get(r.team, r.team), record=r.record, pts=float(r.pts), share=float(r.share),
+                       highlight=(i == ALLEN)) for i, r in top.head(7).iterrows()],
+                 OUT / "wk11-mvp-board.png", f"Buffalo Quant · MVP vote · after week {THRU}", "The MVP race,<br>by points added",
+                 "Every pass, sack, scramble and designed run, measured by how much it moved his team's expected points.",
+                 f"Ring = share of his team's offensive plays he's the main player on. Tested on {PAST.start}-{PAST.stop - 1}: "
+                 f"the real MVP was our No. 1 in {n1} of 7 seasons, top 3 in {n3}.")
 
     # ---- chart 2: the check
     fig, ax = plt.subplots(figsize=(9.5, 4.8), dpi=200)
@@ -163,7 +159,7 @@ We tested this measure on the last seven MVP races: the real winner was our No. 
 
 *Every NFL quarterback's points added through week {THRU}. Numbers as of {AS_OF}. We'll update the vote as the season goes.*
 
-![Our MVP vote](wk11-mvp-ballot.png)
+![The MVP race, by points added](wk11-mvp-board.png)
 
 ## Our ballot
 
