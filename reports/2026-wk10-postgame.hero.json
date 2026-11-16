@@ -1,0 +1,30 @@
+{
+ "label": "Sunday, graded",
+ "big": [
+  [
+   31,
+   "Bills (we said 29.9)"
+  ],
+  [
+   12,
+   "Jets (we said 22.1)"
+  ]
+ ],
+ "note": "2 of 5 Ledger calls right: the win and the Bills' passing game. All three misses were run calls.",
+ "explainer": {
+  "kicker": "Receipts",
+  "title": "Every call graded, hit or miss.",
+  "text": "Our calls' score this week vs. guessing 50/50 on every one (lower is better):",
+  "fmt": "score",
+  "bars": [
+   [
+    "Our calls",
+    0.28
+   ],
+   [
+    "50/50 guess",
+    0.25
+   ]
+  ]
+ }
+}
