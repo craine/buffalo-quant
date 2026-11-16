@@ -1,0 +1,107 @@
+{
+  "as_of": "2026-11-16",
+  "note": "Teams whose expected starter for some remaining games isn't the QB with the most dropbacks this season (the 'main QB'). Every entry cites reporting. 'out_rest' = main QB out for every remaining game. 'returns_week' = main QB expected back that week. 'draw' = no timeline: games missed are drawn from past absences (src/metrics/nfl_playoffs.absence_lengths), conditioned on games already missed and any minimum (IR = 4).",
+  "teams": {
+    "ARI": {
+      "main_qb": "Jacoby Brissett",
+      "starter": "Carson Beck",
+      "plan": "out_rest",
+      "why": "Brissett traded to Baltimore; Gardner Minshew out for the season (elbow); rookie Carson Beck starts.",
+      "sources": [
+        "https://www.foxnews.com/outkick-sports/cardinals-name-rookie-carson-beck-starter-rule-out-gardner-minshew-ii-season-elbow-injury",
+        "https://www.nfl.com/news/cardinals-have-all-the-confidence-in-rookie-qb-carson-beck-ahead-of-first-nfl-start"
+      ]
+    },
+    "BAL": {
+      "main_qb": "Tyler Huntley",
+      "starter": "Jacoby Brissett or Joe Fagnano",
+      "plan": "out_rest",
+      "why": "Lamar Jackson's thumb injury is season-ending and Huntley (toe) is out for weeks; Baltimore traded for Brissett.",
+      "sources": [
+        "https://www.newstribune.com/news/2026/nov/05/ravens-turn-to-fagnano-at-qb-against-surging-jaguars/",
+        "https://www.nfl.com/news/cardinals-have-all-the-confidence-in-rookie-qb-carson-beck-ahead-of-first-nfl-start"
+      ]
+    },
+    "LV": {
+      "main_qb": "Kirk Cousins",
+      "starter": "Fernando Mendoza",
+      "plan": "out_rest",
+      "why": "Cousins went back to Minnesota before the trade deadline; rookie Fernando Mendoza starts.",
+      "sources": [
+        "https://www.thelines.com/nfl/vikings-bank-on-reunion-with-kirk-cousins-to-transform-struggling-offense/",
+        "https://www.si.com/nfl/grading-fernando-mendoza-carson-beck-first-starts"
+      ]
+    },
+    "MIA": {
+      "main_qb": "Malik Willis",
+      "starter": "Kyle McCord",
+      "plan": "draw",
+      "missed_so_far": 1,
+      "at_least": 4,
+      "why": "Willis is on injured reserve (core muscle), not season-ending; IR means at least four games.",
+      "sources": [
+        "https://www.thefantasyfootballers.com/news/647012/kyle-mccord-new-starting-qb-in-miami/",
+        "https://atozsports.com/?p=512550"
+      ]
+    },
+    "MIN": {
+      "main_qb": "Kyler Murray",
+      "starter": "Kirk Cousins",
+      "plan": "draw",
+      "missed_so_far": 2,
+      "why": "Murray (hamstring) is week to week and has missed two games; Cousins starts.",
+      "sources": [
+        "https://www.thelines.com/nfl/vikings-kyler-murray-out-week-to-week-with-strained-hamstring/",
+        "https://www.thelines.com/nfl/vikings-bank-on-reunion-with-kirk-cousins-to-transform-struggling-offense/"
+      ]
+    },
+    "NE": {
+      "main_qb": "Drake Maye",
+      "starter": "Tommy DeVito",
+      "plan": "draw",
+      "missed_so_far": 0,
+      "why": "Maye left Sunday's game with an ankle injury; no timeline yet. New England is off this week.",
+      "sources": [
+        "https://www.patspulpit.com/new-england-patriots-injuries/144491/drake-maye-injury-update-patriots-vs-lions"
+      ]
+    },
+    "NYG": {
+      "main_qb": "Jameis Winston",
+      "starter": "J.J. McCarthy",
+      "plan": "out_rest",
+      "why": "The Giants made McCarthy the starter over Winston in week 7.",
+      "sources": [
+        "https://abc7ny.com/post/source-giants-turning-jj-mccarthy-qb1-week-texans/19965065/"
+      ]
+    },
+    "NYJ": {
+      "main_qb": "Geno Smith",
+      "starter": "Cade Klubnik",
+      "plan": "draw",
+      "missed_so_far": 0,
+      "why": "Smith left Sunday's game hurt (ankle); the coach didn't know the severity. He starts when healthy.",
+      "sources": [
+        "https://x.com/Connor_J_Hughes/status/2122097024426189196"
+      ]
+    },
+    "PHI": {
+      "main_qb": "Jalen Hurts",
+      "starter": "Tanner McKee or Joe Milton",
+      "plan": "out_rest",
+      "why": "Hurts is out for the season (blood clots).",
+      "sources": [
+        "https://www.newsweek.com/eagles-qb-jalen-hurts-season-comes-to-stunning-end-after-alarming-health-news-12588895"
+      ]
+    },
+    "SEA": {
+      "main_qb": "Sam Darnold",
+      "starter": "Drew Lock",
+      "plan": "returns_week",
+      "returns_week": 12,
+      "why": "Darnold (quad, ribs) sat week 10 (\"Sam will be another week,\" the coach said Nov. 9) and Seattle is off in week 11. We assume he's back in week 12.",
+      "sources": [
+        "https://abc7news.com/post/seahawks-start-qb-drew-lock-raiders-giving-sam-darnold-more-time-heal/20027067/"
+      ]
+    }
+  }
+}
