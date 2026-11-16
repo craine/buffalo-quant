@@ -119,6 +119,18 @@ def main():
     rv = rv[(rv.side == "off") & ~rv.game_id.isin(NOT_FINAL)].copy()
     buf_run_rank = int((rv.v > rv[(rv.game_id == GAME) & (rv.team == "BUF")].v.iloc[0]).sum()) + 1
     lg_run_below = float((rv.v < 0).mean())
+    others = rv[~((rv.game_id == GAME) & (rv.team == "BUF"))]
+    rank_wo_big = int((others.v > rest.epa.mean()).sum()) + 1
+    inj = query(f"""SELECT play_id, qtr, time, desc FROM raw_pbp WHERE game_id='{GAME}'
+                    AND (desc LIKE '%G.Smith was injured%' OR desc LIKE '%G.Smith has returned%') ORDER BY play_id""")
+    assert len(inj) == 2 and "injured" in inj.desc.iloc[0] and int(inj.qtr.iloc[0]) == 2 and int(inj.qtr.iloc[1]) == 3, inj
+    jd = query(f"""SELECT drive, MIN(play_id) p, GROUP_CONCAT(DISTINCT COALESCE(passer_player_id, rusher_player_id)) qbs FROM raw_pbp
+                   WHERE game_id='{GAME}' AND posteam='NYJ' AND qb_dropback=1 GROUP BY drive ORDER BY p""")
+    smith_q2 = d[(d.posteam == "NYJ") & (d.qb == SMITH) & (d.qtr == 2)]
+    assert int(smith_q2.play_id.max()) == int(inj.play_id.iloc[0]) and smith_q2.loc[smith_q2.play_id.idxmax()].att  # last throw of the half
+    assert not ((d.posteam == "NYJ") & (d.qtr == 2) & (d.play_id > inj.play_id.iloc[0])).any()
+    seq = list(jd.qbs)
+    assert seq[:4] == [SMITH] * 4 and seq[4] == KLUBNIK and seq[5] == SMITH and set(seq[6:]) == {KLUBNIK}, seq
     past_best = {y: game_values(y, "rush_epa").query("side == 'off' and team == 'BUF'").v.max() for y in (2023, 2024, 2025)}
     nyj_run = rv[(rv.game_id == GAME) & (rv.team == "NYJ")].iloc[0]
 
@@ -137,7 +149,8 @@ def main():
         a = x.groupby("defteam").points.agg(["sum", "size"])
         a["ppd"] = a["sum"] / a["size"]
         return a.loc["BUF", "ppd"], int(a.ppd.rank(method="min")["BUF"]), len(a), x.points.sum() / len(x)
-    d9, d10 = def_rank(PRE_THRU), def_rank(WEEK)
+    d7, d9, d10 = def_rank(7), def_rank(PRE_THRU), def_rank(WEEK)
+    assert d7[1] > d9[1] > d10[1]
     nxt = query(f"""SELECT gameday, away_team, home_team FROM raw_schedules WHERE season={SEASON}
                     AND (home_team='BUF' OR away_team='BUF') AND week={WEEK + 1}""").iloc[0]
     assert nxt.home_team == "BUF" and nxt.away_team == "MIA"
@@ -187,16 +200,16 @@ def main():
     bv = rv[(rv.game_id == GAME) & (rv.team == "BUF")].v.iloc[0]
     ax.axvline(0, color=MUTED, lw=1, ls=(0, (3, 3)), zorder=1)
     ax.axvline(bv, color=RED, lw=2.5, zorder=3)
-    ax.text(bv - 0.01, ax.get_ylim()[1] * 0.92, f"Bills at Jets\n{bv:+.2f} a run", ha="right", va="top", fontsize=10,
+    ax.text(bv - 0.01, ax.get_ylim()[1] * 0.92, f"Bills at Jets\n{bv:+.2f} a run\n(about {ru['BUF']['epa']:.0f} over {ru['BUF']['n']} runs)", ha="right", va="top", fontsize=10,
             color=RED, fontweight="bold")
     ax.text(-0.01, ax.get_ylim()[1] * 0.92, "runs hurt  ", ha="right", va="top", fontsize=9.5, color=MUTED)
     ax.text(0.01, ax.get_ylim()[1] * 0.92, "  runs helped", ha="left", va="top", fontsize=9.5, color=MUTED)
     ax.set_xlabel("Points added per designed run in one game", fontsize=10, color=MUTED)
     ax.set_ylabel("Team games", fontsize=10, color=MUTED)
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, "Buffalo's best running night of any team this season",
+    finish(fig, "Bills at Jets: the best running game by any team this season",
            f"Every team's designed runs in every 2026 game so far ({len(rv)} team games). {lg_run_below:.0%} landed below zero.",
-           f"Designed runs only (QB scrambles count as pass plays). 2026 games final as of Nov. 15. Bills at Jets: {ru['BUF']['n']} runs.")
+           f"Designed runs only (QB scrambles count as pass plays). 2026 games final as of Nov. 15. Includes Cook's 74-yard TD; without it, Bills rank {ordn(rank_wo_big)}.")
     fig.savefig(OUT / "wk10d-run-nights.png"); plt.close(fig)
 
     # ---- scorecard table, plain English
@@ -216,8 +229,9 @@ def main():
     md = f"""# Bills {buf}, Jets {nyj}: our win call held, our run calls didn't
 
 **We gave the Bills a 75% chance to win and projected them for {proj['BUF']:.1f} points. They won {buf}-{nyj}. Our surest call, that the Bills'
-passing game would help more than it hurt, hit too. But we missed three calls, all built on the same idea: that running games usually hurt more
-than they help. Buffalo's designed runs had the best night of any team's this season, and the Jets' runs finished just above zero.**
+passing game would help more than it hurt, hit too. But we missed three calls. Two were run calls, built on the idea that running games usually
+hurt more than they help: counting every run, Buffalo's designed runs had the best game of any team's this season, and the Jets' runs helped, just barely. The third,
+on the Jets' passing game, was close to a coin flip.**
 
 *Bills at Jets, Sunday, Nov. 15, MetLife Stadium. Our prediction ran Saturday ([our preview](bills-jets-prediction.html)), and every call was
 logged on the [Ledger](../ledger.html) before kickoff. Here's how they did. League numbers are as of {AS_OF}.*
@@ -230,10 +244,12 @@ logged on the [Ledger](../ledger.html) before kickoff. Here's how they did. Leag
 |---|---|---|---|
 {rows}
 
+*Running-game calls count designed runs only; quarterback scrambles count as pass plays.*
+
 **What "helps" and "hurts" mean.** Every snap starts from a spot where an average offense can expect a certain number of points from the drive.
 A good play raises that number and a bad one lowers it. In the first quarter, on fourth-and-{int(ex.ydstogo)} from his own {100 - int(ex.yardline_100)},
-Josh Allen ran for {int(ex.yards_gained)} yards. That doesn't sound like much, but it kept the drive alive: Buffalo could expect about {ex.ep:.1f} points
-before the snap and about {ex.ep + ex.epa:.1f} after it, so the play was worth about {ex.epa:.1f} points. Add up every designed run, good and bad, and you get whether a team's running
+Josh Allen ran for {int(ex.yards_gained)} yards. That doesn't sound like much, but it kept the drive alive. Before the snap, Buffalo was a little more likely to give up
+the next score than to get it (about {ex.ep:.1f} points). After it, Buffalo could expect about {ex.ep + ex.epa:.1f}, so the play was worth about {ex.epa:.1f} points. Add up every designed run, good and bad, and you get whether a team's running
 game helped or hurt. Buffalo's added about {ru['BUF']['epa']:.0f}. That's not {ru['BUF']['epa']:.0f} points on the scoreboard. It means the runs kept
 moving drives toward points.
 
@@ -241,41 +257,41 @@ moving drives toward points.
 
 Our model expected Buffalo's designed runs to cost a little, the way most teams' do. In {lg_run_below:.0%} of {len(rv)} team games this season,
 a team's designed runs added up to less than zero. Instead, the Bills ran {ru['BUF']['n']} times for {ru['BUF']['yds']} yards, and the runs added
-about {ru['BUF']['epa']:.0f} points. Play for play, that's the best running night of any team this season ({ordn(buf_run_rank)} of {len(rv)}), and better
-than any Bills game in 2023, 2024 or 2025.
+about {ru['BUF']['epa']:.0f} points. Counting every run, that's the best running game by any team this season ({ordn(buf_run_rank)} of {len(rv)}),
+and better than any Bills game in 2023, 2024 or 2025. That counts James Cook's late 74-yard touchdown; without it, the game would rank
+{ordn(rank_wo_big)}. One game and {ru['BUF']['n']} runs is a small sample.
 
-![Every team's running night this season](wk10d-run-nights.png)
+![Every team's running game this season](wk10d-run-nights.png)
 
-**Was it one big run?** Partly. James Cook's 74-yard touchdown run, with {big_clock} left and the game already decided, was worth about {big.epa:.1f}
-points by itself. Take it out and Buffalo's other {len(rest)} designed runs still added about {rest.epa.sum():.0f} points. Count only the runs while the
+**Was it one big run?** Partly. Cook's 74-yard touchdown run, with {big_clock} left and the game all but decided (Buffalo had a
+{big.wp:.0%} chance to win), was worth about {big.epa:.1f} points by itself. Take it out and Buffalo's other {len(rest)} designed runs still added about {rest.epa.sum():.0f} points. Count only the runs while the
 game was still in doubt (each team with at least a 10% chance to win) and they still helped. Cook finished with {len(cook)} carries for
 {int(cook.yards_gained.sum())} yards. Allen's {len(allen)} designed runs gained only {int(allen.yards_gained.sum())} yards but added about {allen.epa.sum():.0f}
 points: two fourth-and-1 conversions and two 1-yard touchdowns. So this miss wasn't bad luck on one play. Buffalo ran the ball well
 all day, and our model didn't see it coming.
 
 **The Jets' runs: a coin on its edge.** We gave a 75% chance that the Jets' designed runs would hurt more than they helped. Over {ru['NYJ']['n']} runs
-they added {nyj_run.num:.1f} points, just barely above zero. By the rule we set before kickoff, that's a miss, and it counts. Last week, our call on
-the Bills' passing game hit by an even smaller margin.
+they added {nyj_run.num:.1f} points, just barely above zero. By the rule we set before kickoff, that's a miss, and it counts.
 
-## What we got right: the passing games and the win
+## The passing games and the win
 
 On {q['BUF']['db']} pass plays, Allen went {q['BUF']['cmp']} of {q['BUF']['att']} for {q['BUF']['yds']} yards with
 {q['BUF']['ints']} interception, and the passing game added about {q['BUF']['epa']:.0f} points. That's the call we gave 80%, and it hit.
 
-The Jets used two quarterbacks. Geno Smith ({jq['smith']['cmp']} of {jq['smith']['att']}, {jq['smith']['yds']} yards) and rookie Cade Klubnik split
-the third quarter, and Klubnik played the fourth ({jq['klubnik']['cmp']} of {jq['klubnik']['att']}, {jq['klubnik']['yds']} yards, {jq['klubnik']['ints']} interception,
-sacked {jq['klubnik']['sacks']} times). Together, the Jets' passing game cost them about {abs(q['NYJ']['epa']):.0f} points over {q['NYJ']['db']} pass plays.
+The Jets used two quarterbacks. Geno Smith started and was hurt on his last throw before halftime. Rookie Cade Klubnik opened the
+second half, Smith came back for one drive, and Klubnik played the rest. Smith went {jq['smith']['cmp']} of {jq['smith']['att']} for {jq['smith']['yds']} yards;
+Klubnik went {jq['klubnik']['cmp']} of {jq['klubnik']['att']} for {jq['klubnik']['yds']} yards with {jq['klubnik']['ints']} interception and was
+sacked {jq['klubnik']['sacks']} times. Together, the Jets' passing game cost them about {abs(q['NYJ']['epa']):.0f} points over {q['NYJ']['db']} pass plays.
 We had given 55% that it would help more than it hurt, close to a coin flip, so it's a miss, but not a confident one.
 
 The Jets scored {nyj} points on {int(drives.loc['NYJ', 'n'])} drives: {nyj_fg} field goals, no touchdowns, {nyj_to} turnovers and {nyj_downs} turnover on downs.
-Buffalo scored {buf} on {int(drives.loc['BUF', 'n'])} drives, with {buf_td} touchdowns. The Bills now allow about {d10[0]:.2f} points a drive
-({ordn(d10[1])} of {d10[2]} teams, league average {d10[3]:.2f}). They were {ordn(d9[1])} before Sunday.
+Buffalo scored {buf} on {int(drives.loc['BUF', 'n'])} drives, with {buf_td} touchdowns.
 
 ## The record
 
 **How we grade.** A call is a hit when the side we gave 50% or more happens. We also score every call by how far our chance was from what
 happened, squared, so a confident miss costs more than a timid one. This week our five calls scored {week_brier:.2f}; guessing 50/50 on every call
-would score 0.25, and lower is better. So this week we did worse than a coin flip, mostly because of the two run calls we were sure about.
+would score 0.25, and lower is better. So this week we did worse than a coin flip, mostly because of the two run calls we were most confident in.
 Across all {len(allg)} graded calls on the Ledger, Bills and Sabres, we're {all_hits} for {len(allg)} with a score of {all_brier:.2f}, a little better
 than 50/50. That's still a small record. It grows every week, misses included.
 
@@ -283,8 +299,10 @@ than 50/50. That's still a small record. It grows every week, misses included.
 
 - **Run calls need a better model.** Our run calls lean hard on "running games usually hurt," and two of them missed this week. Before we put
   run calls at 75% again, we'll check how often that confidence has held up for strong running teams.
-- **Our win projection was close.** We said {proj['BUF']:.1f} for Buffalo and they scored {buf}. The Jets' {nyj} came in well under our
+- **Our Bills score was close; the Jets' wasn't.** We said {proj['BUF']:.1f} for Buffalo and they scored {buf}. The Jets' {nyj} came in well under our
   {proj['NYJ']:.1f}, but inside the range we expected 8 games in 10 to land ({rng['NYJ'][0]:.0f} to {rng['NYJ'][1]:.0f}).
+- **The defense keeps climbing.** Buffalo now allows about {d10[0]:.2f} points a drive ({ordn(d10[1])} of {d10[2]} teams, league average
+  {d10[3]:.2f}). It was {ordn(d9[1])} before Sunday and {ordn(d7[1])} after week 7. Four teams hadn't played yet when we ran this, so that rank can still move.
 - **Next:** the Bills host Miami on {nxt_day}, with our predictions logged before kickoff.
 
 ## For the stat-heads
@@ -300,9 +318,10 @@ than 50/50. That's still a small record. It grows every week, misses included.
 - BUF EPA per designed run {ru['BUF']['epa'] / ru['BUF']['n']:+.3f} (n={ru['BUF']['n']}); without play {int(big.play_id)} (74-yard TD, win probability
   {big.wp:.2f} before the snap) {rest.epa.mean():+.3f} (n={len(rest)}); win probability 0.10-0.90 only {close.epa.mean():+.3f} (n={len(close)}). Rank 1 = best
   of {len(rv)} 2026 team-games final as of {AS_OF}. Best BUF game by the same measure: 2023 {past_best[2023]:+.3f}, 2024 {past_best[2024]:+.3f},
-  2025 {past_best[2025]:+.3f}.
-- NYJ dropbacks: Smith {jq['smith']['db']} (EPA {jq['smith']['epa']:+.1f}), Klubnik {jq['klubnik']['db']} (EPA {jq['klubnik']['epa']:+.1f}). We don't
-  say why the Jets changed quarterbacks; the play-by-play doesn't tell us.
+  2025 {past_best[2025]:+.3f}. Without play {int(big.play_id)}, BUF would rank {rank_wo_big} of {len(rv)}.
+- NYJ dropbacks: Smith {jq['smith']['db']} (EPA {jq['smith']['epa']:+.1f}), Klubnik {jq['klubnik']['db']} (EPA {jq['klubnik']['epa']:+.1f}). The play-by-play
+  notes Smith was injured on play {int(inj.play_id.iloc[0])} ({inj.time.iloc[0]}, 2nd quarter) and returned on play {int(inj.play_id.iloc[1])} ({inj.time.iloc[1]}, 3rd quarter);
+  it doesn't say why Klubnik took over again after that drive.
 - BUF points allowed per drive, regular season: through week {PRE_THRU} {d9[0]:.3f} ({d9[1]} of {d9[2]}); through week {WEEK} games final as of this
   run {d10[0]:.3f} ({d10[1]} of {d10[2]}).
 - Hit rule: the side given 50% or more happens (`ledger.summary`). The logged Ledger wording for P0012-P0016 is unchanged; this story uses the
@@ -312,7 +331,7 @@ than 50/50. That's still a small record. It grows every week, misses included.
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": "Sunday, graded",
         "big": [[buf, f"Bills (we said {proj['BUF']:.1f})"], [nyj, f"Jets (we said {proj['NYJ']:.1f})"]],
-        "note": f"{week_hits} of 5 Ledger calls right: the win and the Bills' passing game. All three misses were run calls.",
+        "note": f"{week_hits} of 5 Ledger calls right: the win and the Bills' passing game. Two of the three misses were run calls.",
         "explainer": {"kicker": "Receipts", "title": "Every call graded, hit or miss.",
                       "text": "Our calls' score this week vs. guessing 50/50 on every one (lower is better):",
                       "fmt": "score", "bars": [["Our calls", round(float(week_brier), 2)], ["50/50 guess", 0.25]]},
