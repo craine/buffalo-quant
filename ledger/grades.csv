@@ -10,3 +10,8 @@ P0008,2026-11-11T03:43:43Z,1,MIN EPA/rush -0.144,0.0361,"game_values(2026, metri
 P0009,2026-11-12T12:43:16Z,0,"TBL 8, BUF 3 (REG)",0.2209,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020293"
 P0010,2026-11-13T13:11:44Z,0,"BUF 2, CHI 3 (OT)",0.3249,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020305"
 P0011,2026-11-15T12:58:51Z,0,"BUF 0, DAL 2 (REG)",0.1444,"SELECT home, home_score, away, away_score, last_period_type, game_state FROM raw_nhl_games WHERE game_id=2026020322"
+P0012,2026-11-16T02:26:17Z,1,"BUF 31, NYJ 12",0.0625,"SELECT away_team, away_score, home_team, home_score FROM raw_schedules WHERE game_id='2026_10_BUF_NYJ'"
+P0013,2026-11-16T02:26:17Z,1,BUF EPA/dropback +0.211,0.0400,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_10_BUF_NYJ"
+P0014,2026-11-16T02:26:17Z,0,NYJ EPA/dropback -0.186,0.3025,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_10_BUF_NYJ"
+P0015,2026-11-16T02:26:17Z,0,BUF EPA/rush +0.477,0.4356,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_10_BUF_NYJ"
+P0016,2026-11-16T02:26:17Z,0,NYJ EPA/rush +0.056,0.5625,"game_values(2026, metric) from clean_team_week, offense side, game_id=2026_10_BUF_NYJ"
