@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Philadelphia, Tuesday 7 p.m.",
+ "big": [
+  [
+   "48%",
+   "Buffalo's chance to win, our model (Flyers 52%)"
+  ],
+  [
+   "46%",
+   "How often teams on a 4+ game skid won their next game (model expected 46%)"
+  ]
+ ],
+ "note": "Four straight losses and game 3 of a 6-game trip. No sign streaks or long trips matter beyond what the model already counts. Buffalo got 50% of the chances in its last 5 games; the finishing hasn't been there, plus one bad night in goal.",
+ "explainer": {
+  "kicker": "Losing streaks",
+  "title": "A skid hasn't told us more than the chances already show.",
+  "text": "How often teams that had lost 4+ straight won their next game, 2025-26 to now:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Model expected",
+    0.461
+   ],
+   [
+    "Actually won",
+    0.461
+   ]
+  ]
+ }
+}
