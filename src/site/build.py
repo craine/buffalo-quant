@@ -18,10 +18,10 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
-    ("nfl-playoff-odds-wk11", "2026-wk11-nfl-playoff-odds.md", "2026-11-17", "NFL &middot; Playoff chances",
+    ("nfl-playoff-odds-wk11", "2026-wk11-nfl-playoff-odds.md", "2026-11-17", "Bills &middot; NFL playoff chances",
      "Every team's playoff chances after week 10, with quarterback injuries built in. The Bills win the AFC East 95% of the time, most often locking it up in week 14 or 15.",
      "wk11-odds-afc-ladder.png"),
-    ("nfl-mvp-wk11", "2026-wk11-nfl-mvp.md", "2026-11-17", "NFL &middot; Our MVP vote",
+    ("nfl-mvp-wk11", "2026-wk11-nfl-mvp.md", "2026-11-17", "Bills &middot; NFL MVP vote",
      "Our MVP vote after 10 weeks, by points added: Joe Burrow first, Brock Purdy second, Josh Allen fourth. Run back over the last seven full seasons, this count had the real MVP in its top three six times.",
      "wk11-mvp-board.png"),
     ("sabres-flyers-pregame-nov-17", "2026-11-17-sabres-phi-pregame.md", "2026-11-17", "Sabres &middot; Pregame",
