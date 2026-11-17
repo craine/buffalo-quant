@@ -76,13 +76,13 @@ def mvp_board(rows, out, kicker, title, sub, foot):
     return render(_page(body, 1080, 1350, "#0B1530"), out, 1080, 1350)
 
 
-def ladder(rows, out, kicker, title, sub, foot, cut=7):
+def ladder(rows, out, kicker, title, sub, foot, cut=7, cut_label="Top 7 make it", div_head="Win division"):
     """rows: dicts with name, record, p (0-1), d (0-1), hatched (bool), highlight (bool). Best first."""
     pct = lambda x: "99%+" if x >= .995 else ("<1%" if 0 < x < .005 else f"{x:.0%}")
     items = []
     for i, r in enumerate(rows):
         if i == cut:
-            items.append(f"""<div style="display:flex;align-items:center;gap:12px;margin:2px 0;font-size:15px;font-weight:700;color:{RED};letter-spacing:.1em;text-transform:uppercase"><div style="flex:1;border-top:3px dashed {RED}"></div>Playoff line<div style="flex:1;border-top:3px dashed {RED}"></div></div>""")
+            items.append(f"""<div style="display:flex;align-items:center;gap:12px;margin:2px 0;font-size:15px;font-weight:700;color:{RED};letter-spacing:.1em;text-transform:uppercase"><div style="flex:1;border-top:3px dashed {RED}"></div>{e(cut_label)}<div style="flex:1;border-top:3px dashed {RED}"></div></div>""")
         bar = RED if r.get("highlight") else (f"repeating-linear-gradient(135deg,{NAVY} 0 8px,#4D6DB8 8px 14px)" if r.get("hatched") else NAVY)
         bg = "#FCECEF" if r.get("highlight") else ("#FFF" if i % 2 else "#F7F8FB")
         items.append(f"""<div style="display:grid;grid-template-columns:260px minmax(0,1fr) 110px 120px;gap:16px;align-items:center;padding:7px 16px;border-radius:12px;background:{bg}">
@@ -91,7 +91,7 @@ def ladder(rows, out, kicker, title, sub, foot, cut=7):
  <div class="g" style="font-size:28px;text-align:right">{pct(r['p'])}</div><div style="font-size:20px;color:#4A5368;text-align:right">{pct(r['d'])}</div></div>""")
     body = f"""<div style="flex:1;padding:56px 72px 44px;color:{INK};display:flex;flex-direction:column;gap:20px">
 <div style="display:flex;flex-direction:column;gap:12px"><div class="kick" style="color:{NAVY}">{e(kicker)}</div><div class="g" style="font-size:66px;line-height:.98">{e(title)}</div><div style="font-size:22px;line-height:1.4;color:#4A5368">{e(sub)}</div></div>
-<div style="display:grid;grid-template-columns:260px minmax(0,1fr) 110px 120px;gap:16px;font-size:16px;font-weight:700;color:#6B7488;text-transform:uppercase;letter-spacing:.08em;padding:0 16px"><div>Team</div><div>Playoff chance</div><div style="text-align:right">Playoffs</div><div style="text-align:right">Division</div></div>
+<div style="display:grid;grid-template-columns:260px minmax(0,1fr) 110px 120px;gap:16px;font-size:16px;font-weight:700;color:#6B7488;text-transform:uppercase;letter-spacing:.08em;padding:0 16px"><div>Team</div><div>Playoff chance</div><div style="text-align:right">Playoffs</div><div style="text-align:right">{e(div_head)}</div></div>
 <div style="display:flex;flex-direction:column;gap:4px">{''.join(items)}</div>
 <div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;font-size:17px;color:#4A5368;gap:24px"><div style="max-width:760px;line-height:1.45">{e(foot)}</div><div style="font-weight:700;color:{NAVY};font-size:22px">buffaloquant.com</div></div></div>"""
     return render(_page(body, 1080, 1350, "#FFFFFF"), out, 1080, 1350)
@@ -105,7 +105,7 @@ def clinch_calendar(weeks, out, kicker, title, sub_html, foot, best_week):
         tiles.append(f"""<div style="position:relative;overflow:hidden;border-radius:20px;background:rgba(255,255,255,.10);padding:20px;display:flex;flex-direction:column;justify-content:space-between;border:3px solid {'#FFF' if hot else 'transparent'}">
  <div style="position:absolute;left:0;right:0;bottom:0;height:{w['by'] * 100:.1f}%;background:{RED if hot else 'rgba(255,255,255,.22)'}"></div>
  <div style="position:relative"><div style="font-size:18px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#DCE4F7">Week {w['n']}</div><div style="font-size:20px;font-weight:600;margin-top:4px">{e(w['opp'])}</div><div style="font-size:16px;color:#DCE4F7;margin-top:4px">{e(w['date'])}</div></div>
- <div class="g" style="position:relative;font-size:58px">{'—' if w['by'] < .005 else f"{w['by']:.0%}"}</div></div>""")
+ <div class="g" style="position:relative;font-size:58px;text-shadow:0 2px 6px rgba(0,0,40,.45)">{'—' if w['by'] < .005 else f"{w['by']:.0%}"}</div></div>""")
     body = f"""<div style="flex:1;padding:64px;color:#FFF;display:flex;flex-direction:column;gap:34px">
 <div style="display:flex;flex-direction:column;gap:12px"><div class="kick" style="color:#B9C8EE">{e(kicker)}</div><div class="g" style="font-size:70px;line-height:.98">{title}</div><div style="font-size:22px;color:#DCE4F7">{sub_html}</div></div>
 <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;flex:1">{''.join(tiles)}</div>

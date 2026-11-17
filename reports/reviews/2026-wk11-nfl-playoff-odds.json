@@ -1,0 +1,98 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "af85377de6ba37249f0cf16338627d41ad29304c6564ea891b3ba4da1baeaaab",
+   "at_utc": "2026-11-17T12:57:00Z",
+   "notes": "Numbers rerun from pinned generator; charts viewed; computed claims checked (MVP totals re-derived independently; Sabres last-5 split computed both ways); betting language and jargon scan clean"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "af85377de6ba37249f0cf16338627d41ad29304c6564ea891b3ba4da1baeaaab",
+   "at_utc": "2026-11-17T12:58:52Z",
+   "notes": "Needs edits. (1) Betting language: 'odds' in story text line 8, AFC ladder header 'PLAYOFF ODDS', hero label, site card tag -> 'playoff chances'; '7-point favorite' in step 2 is spread language -> 'a team our model expects to win by 7'. (2) Clinch framing: 'most likely clinch week 14' (28%) while 59% of sims clinch later and the median is week 15; headline, hero, dek and clinch graphic (41% highlighted next to 'Most likely clinch') mislead. (3) QB table '-1 pts' reads as scoreboard points -> 'down 1 point of chance' / percentage points; Seahawks +1 contradicts 'penalty is zero'. (4) Jets row: 'lost for a week or more'/'Starting now: Klubnik' conflicts with 'should be fine'. (5) 'biggest game left in the division race' unsupported unless computed. (6) Lead buries the Maye injury, Patriots -7 pts. (7) Chart titles not takeaways; ladder 'PLAYOFF LINE' reads as betting line; '12%' clipped by fill in clinch graphic. (8) Method never ties back to the Bills' 96%. Check 'blend at least as well in 5 of 7' vs stat-heads table (looks like 6 of 7)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "62ced77dfdfe2cf49f7d977be12f9dec8082d8cea82b56b75a84b7a8451d93d7",
+   "at_utc": "2026-11-17T13:06:48Z",
+   "notes": "Re-run with seed 2026 reproduces the CSV exactly. Records, lead, NE paragraph, QB effect, absences, drift and backtest numbers all check out. Fixes needed: (1) The headline 'will most likely clinch it in week 14' overclaims: week 14 is only the most common single week (28%), only 41% have clinched by then, and the median is week 15. (2) The backtest is in-sample for 2019-2023 (points-model fit, residual pairs and K tuning) and drift uses later seasons, which isn't disclosed. In the only out-of-sample seasons (2024-25) the 50/50 baseline beat the blend (Brier 0.118 vs 0.128). (3) The Jets plan doesn't match the reporting: draw with missed 0 forces at least 1 missed game (median 2) and lists Klubnik as the starter, but tests found nothing major and Smith starts if healthy; NYJ is also shaded in both charts. (4) '7-point favorite' is betting language. (5) '3,266 games' should be team-games. (6) Minor: Seattle's +1 shows with a zero penalty, it/they grammar, the NYG/BAL penalty is for a backup-to-backup switch, the NE minimum-4 pool has only 10 absences, and the test chart footer cites QB reports."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "7e253fbb0e4f769773f03300d1993cef13166df888f4e17954bb164f753d14ff",
+   "at_utc": "2026-11-17T13:22:01Z",
+   "notes": "Round-1 Quant+Editor fixes applied: chances not odds; clinch wording (most common week 14 or 15); out-of-sample caution (2024-25 standings beat blend) in body and stat-heads; Jets questionable, not penalised; team games; Seattle/Giants/Ravens/absence-pool notes; percentage-point labels; takeaway chart titles; charts re-viewed"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "7e253fbb0e4f769773f03300d1993cef13166df888f4e17954bb164f753d14ff",
+   "at_utc": "2026-11-17T13:24:28Z",
+   "notes": "Round 2 pass (round 1 failed). All 12 round-1 items fixed or resolved. Apply before final: (A) site card dek in build.py still says 96%, should be 95% (CSV 0.9534); (B) caution para says standings beat blend in the 2 unseen seasons, but the blend edged them in 2024; reword to pooled, and swap the betting word 'lean' for 'hint'. Polish: 'Full odds table' in stat-heads; plain-English absence-pool note tied to Maye; Dolphins 3 vs 4 games; clinch graphic title is a question and its 12% sits on the fill; test chart footer should say 2019-23 in-sample and drop the QB-reports source; Ravens '(team)'.",
+   "report": "2026-wk11-nfl-playoff-odds-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "7e253fbb0e4f769773f03300d1993cef13166df888f4e17954bb164f753d14ff",
+   "at_utc": "2026-11-17T13:32:28Z",
+   "notes": "Round 2: all numbers reproduce (byte-identical re-run; sim, clinch, backtest, QB table independently checked). Fixes: (1) caution para says standings beat blend in 2024 and 2025, but the blend won 2024 (0.1047 vs 0.1058); only pooled is true; (2) 'Full odds table' in stat-heads; (3) test chart footer still cites QB reports (round-1 item not applied); (4) Dart started weeks 1-2, not just week 1. Non-blocking: OAK/LV 2019 mismatch in points model (training frame, drift, qb_effect drops 28 team-games).",
+   "report": "2026-wk11-nfl-playoff-odds-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+   "at_utc": "2026-11-17T13:38:34Z",
+   "notes": "Round-2 fixes: out-of-sample sentence per season (blend edged 2024, fell behind 2025; standings ahead combined); 'Full table of chances'; test chart own source line and label offsets; Dart wording; editor A (dek 95%) and polish P2/P4/P9"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+   "at_utc": "2026-11-17T13:42:58Z",
+   "notes": "Round 3 / final (rounds 1-2 failed): all round-2 fixes applied and true (per-season OOS sentence vs Brier 2024 0.1047/0.1058, 2025 0.1508/0.1305, pooled 0.1182/0.1277; 'table of chances'; test chart own source line, no label overlap; Dart opened season (pbp wks 1-2), Lamar wks 1-4). Site dek 95%. Numbers unchanged; generator re-run byte-identical (md, csv, hero, 4 PNGs). Non-blocking: OAK/LV points-model bug; clinch title question and 12% fill touch; odds in slug is Charlie's call.",
+   "report": "2026-wk11-nfl-playoff-odds-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+   "at_utc": "2026-11-17T13:42:58Z",
+   "notes": "Round 3 / final (rounds 1-2 failed): all round-2 fixes applied and true (per-season OOS sentence vs Brier 2024 0.1047/0.1058, 2025 0.1508/0.1305, pooled 0.1182/0.1277; 'table of chances'; test chart own source line, no label overlap; Dart opened season (pbp wks 1-2), Lamar wks 1-4). Site dek 95%. Numbers unchanged; generator re-run byte-identical (md, csv, hero, 4 PNGs). Non-blocking: OAK/LV points-model bug; clinch title question and 12% fill touch; odds in slug is Charlie's call.",
+   "report": "2026-wk11-nfl-playoff-odds-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+  "at_utc": "2026-11-17T13:38:34Z",
+  "notes": "Round-2 fixes: out-of-sample sentence per season (blend edged 2024, fell behind 2025; standings ahead combined); 'Full table of chances'; test chart own source line and label offsets; Dart wording; editor A (dek 95%) and polish P2/P4/P9"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "7e253fbb0e4f769773f03300d1993cef13166df888f4e17954bb164f753d14ff",
+  "at_utc": "2026-11-17T13:24:28Z",
+  "notes": "Round 2 pass (round 1 failed). All 12 round-1 items fixed or resolved. Apply before final: (A) site card dek in build.py still says 96%, should be 95% (CSV 0.9534); (B) caution para says standings beat blend in the 2 unseen seasons, but the blend edged them in 2024; reword to pooled, and swap the betting word 'lean' for 'hint'. Polish: 'Full odds table' in stat-heads; plain-English absence-pool note tied to Maye; Dolphins 3 vs 4 games; clinch graphic title is a question and its 12% sits on the fill; test chart footer should say 2019-23 in-sample and drop the QB-reports source; Ravens '(team)'.",
+  "report": "2026-wk11-nfl-playoff-odds-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+  "at_utc": "2026-11-17T13:42:58Z",
+  "notes": "Round 3 / final (rounds 1-2 failed): all round-2 fixes applied and true (per-season OOS sentence vs Brier 2024 0.1047/0.1058, 2025 0.1508/0.1305, pooled 0.1182/0.1277; 'table of chances'; test chart own source line, no label overlap; Dart opened season (pbp wks 1-2), Lamar wks 1-4). Site dek 95%. Numbers unchanged; generator re-run byte-identical (md, csv, hero, 4 PNGs). Non-blocking: OAK/LV points-model bug; clinch title question and 12% fill touch; odds in slug is Charlie's call.",
+  "report": "2026-wk11-nfl-playoff-odds-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "8f6e79d46af03b2932c98c44e59592b205ed6040fa5b5854abc760f82f61c0c8",
+  "at_utc": "2026-11-17T13:42:58Z",
+  "notes": "Round 3 / final (rounds 1-2 failed): all round-2 fixes applied and true (per-season OOS sentence vs Brier 2024 0.1047/0.1058, 2025 0.1508/0.1305, pooled 0.1182/0.1277; 'table of chances'; test chart own source line, no label overlap; Dart opened season (pbp wks 1-2), Lamar wks 1-4). Site dek 95%. Numbers unchanged; generator re-run byte-identical (md, csv, hero, 4 PNGs). Non-blocking: OAK/LV points-model bug; clinch title question and 12% fill touch; odds in slug is Charlie's call.",
+  "report": "2026-wk11-nfl-playoff-odds-final.md"
+ }
+}

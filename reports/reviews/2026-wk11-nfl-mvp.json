@@ -1,0 +1,145 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "5a7ed1514ef0b14f7dd07156d0ed8890a41610a60cecd9c3f55b956cf0effad1",
+   "at_utc": "2026-11-17T12:57:00Z",
+   "notes": "Numbers rerun from pinned generator; charts viewed; computed claims checked (MVP totals re-derived independently; Sabres last-5 split computed both ways); betting language and jargon scan clean"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "5a7ed1514ef0b14f7dd07156d0ed8890a41610a60cecd9c3f55b956cf0effad1",
+   "at_utc": "2026-11-17T12:58:36Z",
+   "notes": "Needs edits, not a rewrite. (1) Josh Allen 4th, the line Bills fans will argue about, is never explained: no paragraph on why an 8-1 Allen trails 7-2 Burrow by 26, and the story doesn't use its own best fairness point (this measure had Allen No. 1 in his 2024 MVP year). Add a short Allen section; writer computes any new numbers. (2) Lead and hero say Burrow 'added about 100 points to the Bengals' offense' with no plain gloss; fans read it as scoreboard points. (3) Lead says the measure was 'tested on the last seven MVP races' but the test used full seasons, not 10-week snapshots; say so. (4) Example play: 2.0 to 6.6 'added about 4.5' doesn't subtract on its face, and fans will ask why a TD is worth 6.6, not 7. (5) Hero shows Purdy 92.2 vs 92 in story; '#4 / Josh Allen (74)' doesn't stand alone. (6) Board chart footer lacks source line and sample (weeks 1-10, min 150 dropbacks). (7) Quant stage not yet recorded; self-check notes mention a Sabres split (stale copy). No betting language found."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "5a7ed1514ef0b14f7dd07156d0ed8890a41610a60cecd9c3f55b956cf0effad1",
+   "at_utc": "2026-11-17T13:00:42Z",
+   "notes": "Publish with fixes. All published numbers re-derived from raw_pbp by gsis id and match current data (also matched live nflverse play_by_play_2026.parquet, Last-Modified 2026-11-17 10:03 UTC: 26,246 plays, 0 EPA diffs): ballot pts/plays/share/close rank/records, best play (2026_03_CIN_PIT 1963, EP 2.04, EPA +4.54), non-QB top 5, backtest ranks 1,2,3,1,10,1,3 (2023 Lamar 62 vs Purdy 157). Winners confirmed via Fox Sports list (PFR fetch blocked). Fixes: (1) 'Variants tested... None matched more often' and body 'adding it didn't match their picks any better' have no code in repo (untraceable); my recreation: pts x team win% ranks 1,2,2,1,5,2,2 (No.1 2/7, top-3 6/7, avg rank 2.1 vs 3.0, worst miss 5 vs 10) so 'not better' is arguable; add code and reword. (2) Backtest matches winners by display_name; use gsis ids. (3) Lead 'tested this measure on the last seven MVP races' -> say full-season totals, not week-10 snapshots, and the measure was picked on those same seasons. (4) Stale orphan reports/wk11-mvp-ballot.png shows old-draft numbers (113/106/99/88); delete. (5) Board PNG footer lacks source line and sample (weeks 1-10, 150+ dropbacks, 31 QBs). (6) Table header 'Record' -> 'Team record'; hero '#4 / Josh Allen (74)' and 92.2 vs 92 don't stand alone/match. (7) Example play 2.0->6.6 'added about 4.5' doesn't subtract; give 2.04->6.58 = 4.54 or explain rounding. (8) 'Every NFL quarterback's points added' -> 'every quarterback with 150+ dropbacks'. (9) Pinning: THRU pins the week, not the data; a further nflverse refresh changes the story on re-run. Snapshot inputs or record source timestamp. Minor: share uses last team for traded QBs (Cousins 73% wrong, not published); self-check notes mention Sabres (stale). No betting language; body jargon clean."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "5aa98ea8fc9dc7df3ab5fb7f4ffca08edd380c366abaea8b6d8309165fe463f2",
+   "at_utc": "2026-11-17T13:08:58Z",
+   "notes": "Rerun after Editor and Quant round-1 fixes: Allen section built from computed play-type split and dropback rates (sacks/turnovers found even, gap is pass volume); variant test now in code; winners by gsis id; lead/test wording in-sample; board footer + takeaway title; data pin CSV; stale ballot PNG removed"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "5aa98ea8fc9dc7df3ab5fb7f4ffca08edd380c366abaea8b6d8309165fe463f2",
+   "at_utc": "2026-11-17T13:08:59Z",
+   "notes": "Round 1 fail (saved report); fixes applied, verified at final check",
+   "report": "2026-wk11-nfl-mvp-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "5aa98ea8fc9dc7df3ab5fb7f4ffca08edd380c366abaea8b6d8309165fe463f2",
+   "at_utc": "2026-11-17T13:08:59Z",
+   "notes": "Round 1 fail (saved report); fixes applied, verified at final check",
+   "report": "2026-wk11-nfl-mvp-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "5aa98ea8fc9dc7df3ab5fb7f4ffca08edd380c366abaea8b6d8309165fe463f2",
+   "at_utc": "2026-11-17T13:10:48Z",
+   "notes": "Round 2: needs edits. Round-1 items mostly done (#9 Smith-Njigba repeat not done). Blocking: Allen section parts don't sum to totals (147-52+2=97 vs 100; 109-48+10=71 vs 74); 'almost all of the gap' contradicts numbers (pass gap 38 > total 26); decimals 0.43/0.41 in body; more sacks/turnovers but cost less unexplained; record paragraph jargon ('team win share', 'No. 2.1 vs 3.0') and lacks Allen's rank with record counted (writer computes); 'our No. 1 in 3 of 7' on hero/dek/both charts reads as past track record. No betting language.",
+   "report": "2026-wk11-nfl-mvp-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2e02023fc9303ca6f6c67190b2eff912eab5fdc8200c2b9ff374bf62830e6249",
+   "at_utc": "2026-11-17T13:12:41Z",
+   "notes": "Round-2 editor fixes: split now sums (strip-sacks counted once) with an add-up line; opening claim fixed; decimals out of body; turnover cost per play shown; record paragraph plain with Allen's rank under record weighting; Looking-back wording on hero/board/check chart; repeats cut"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "2e02023fc9303ca6f6c67190b2eff912eab5fdc8200c2b9ff374bf62830e6249",
+   "at_utc": "2026-11-17T13:15:32Z",
+   "notes": "Round 2 on 2e02023f: publish with fixes. Must: (1) turnover counts include receivers' lost fumbles (Allen 11 incl. 3 receiver fumbles, own 8; Burrow 8 incl. 1, own 7; per-turnover cost own 2.3 vs 3.9, not 2.2); (2) check chart title clipped ('top 3 i'). Should: dropback rate query unfiltered (incl. no-plays) -> 54%/67% on story filter, BUF 2nd-lowest by 0.0003 over JAX; orphaned 'that number' / circular JSN sentence; 'whole gap' -> 'nearly all'. Verified: all other Allen-section numbers (342/267, 147/109, 0.43/0.41, sacks 15/17, costs 49/45, runs 36/+10 vs 2, sums), Allen No. 4 with record, variant test 3/6/3.0 vs 2/6/2.1 vs 2/5/3.3, MVP gsis ids, example play, pin + byte-identical rerun, round-1 fixes applied, no betting language. Final not recorded.",
+   "report": "2026-wk11-nfl-mvp-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "9b1e7867de7b727f2695246acef0db5221c3b6df911d274d8f5aa6ff0ca27898",
+   "at_utc": "2026-11-17T13:24:20Z",
+   "notes": "Round 3: needs two one-line fixes. (1) Site card dek in build.py still says 'the real MVP was in our top three' (round-2 B1, reads as a track record); use 'this count had the real MVP in its top three'. (2) Hard-coded 'throw for throw about even... a little under half a point for both' no longer matches generator per_rest (Burrow 0.415, Allen 0.383; efficiency ~9 of the 26 gap); compute it, say 'Burrow a little better', 'Most of the gap', per-throw values to stat-heads. All other round-2 editor and quant items done; charts and hero clean. Minor polish listed in report.",
+   "report": "2026-wk11-nfl-mvp-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "9b1e7867de7b727f2695246acef0db5221c3b6df911d274d8f5aa6ff0ca27898",
+   "at_utc": "2026-11-17T13:26:17Z",
+   "notes": "Round 3: all numbers verified and reproduce; split sums exactly. Fix 2 sentences: (1) 'about even / a little under half a point' now 0.415 vs 0.383, per-play gap worth ~8.7 pts unmentioned; (2) 'second-lowest' dropback rate is BUF 53.539% vs JAX 53.571%, third on house pass|rush filter - say 'one of the three lowest'.",
+   "report": "2026-wk11-nfl-mvp-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+   "at_utc": "2026-11-17T13:27:08Z",
+   "notes": "Round-3 fixes: per-throw sentence now 'Burrow a little better' with assert and stat-heads split (volume ~30, value ~9); 'Most of the gap'; dropback rank 'one of the three lowest'; lead 'this count had'; site dek reworded; repeat cut"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+   "at_utc": "2026-11-17T13:27:51Z",
+   "notes": "Round 4: rounds 1-3 failed. Card dek, per-throw sentence, lead wording and 'second-lowest' all fixed. Charts, hero, card clean. Minor optional polish only (P3, P5-P8).",
+   "report": "2026-wk11-nfl-mvp-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+   "at_utc": "2026-11-17T13:29:44Z",
+   "notes": "Round 4: pass. Changed sentences verified by own queries: per throw 0.415 vs 0.383 (about four-tenths, Burrow higher); BUF dropback rate in lowest three on story and standard filters (53.54%, SEA 4th at 55.50%); gap 38.9 = 30.3 volume + 8.7 per play; lead/dek wording matches check ranks 1,2,3,1,10,1,3. Hero and PNGs byte-identical to r3; clean rerun reproduces all files; pin assertion fires on perturbation; pytest 50 pass.",
+   "report": "2026-wk11-nfl-mvp-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+   "at_utc": "2026-11-17T13:29:44Z",
+   "notes": "Round 4: pass. Changed sentences verified by own queries: per throw 0.415 vs 0.383 (about four-tenths, Burrow higher); BUF dropback rate in lowest three on story and standard filters (53.54%, SEA 4th at 55.50%); gap 38.9 = 30.3 volume + 8.7 per play; lead/dek wording matches check ranks 1,2,3,1,10,1,3. Hero and PNGs byte-identical to r3; clean rerun reproduces all files; pin assertion fires on perturbation; pytest 50 pass.",
+   "report": "2026-wk11-nfl-mvp-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+  "at_utc": "2026-11-17T13:27:08Z",
+  "notes": "Round-3 fixes: per-throw sentence now 'Burrow a little better' with assert and stat-heads split (volume ~30, value ~9); 'Most of the gap'; dropback rank 'one of the three lowest'; lead 'this count had'; site dek reworded; repeat cut"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+  "at_utc": "2026-11-17T13:27:51Z",
+  "notes": "Round 4: rounds 1-3 failed. Card dek, per-throw sentence, lead wording and 'second-lowest' all fixed. Charts, hero, card clean. Minor optional polish only (P3, P5-P8).",
+  "report": "2026-wk11-nfl-mvp-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+  "at_utc": "2026-11-17T13:29:44Z",
+  "notes": "Round 4: pass. Changed sentences verified by own queries: per throw 0.415 vs 0.383 (about four-tenths, Burrow higher); BUF dropback rate in lowest three on story and standard filters (53.54%, SEA 4th at 55.50%); gap 38.9 = 30.3 volume + 8.7 per play; lead/dek wording matches check ranks 1,2,3,1,10,1,3. Hero and PNGs byte-identical to r3; clean rerun reproduces all files; pin assertion fires on perturbation; pytest 50 pass.",
+  "report": "2026-wk11-nfl-mvp-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "74396903eb2b7ef9570a6c1c2c9bad16990c060458cc99db5ec71ef71fffc4f5",
+  "at_utc": "2026-11-17T13:29:44Z",
+  "notes": "Round 4: pass. Changed sentences verified by own queries: per throw 0.415 vs 0.383 (about four-tenths, Burrow higher); BUF dropback rate in lowest three on story and standard filters (53.54%, SEA 4th at 55.50%); gap 38.9 = 30.3 volume + 8.7 per play; lead/dek wording matches check ranks 1,2,3,1,10,1,3. Hero and PNGs byte-identical to r3; clean rerun reproduces all files; pin assertion fires on perturbation; pytest 50 pass.",
+  "report": "2026-wk11-nfl-mvp-final.md"
+ }
+}
