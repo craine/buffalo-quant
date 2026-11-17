@@ -1,0 +1,83 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "dc630114fb0ac550b84bc9faf012e185958e2deacc0b4908bba31fd660869ebe",
+   "at_utc": "2026-11-17T12:57:01Z",
+   "notes": "Numbers rerun from pinned generator; charts viewed; computed claims checked (MVP totals re-derived independently; Sabres last-5 split computed both ways); betting language and jargon scan clean"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "dc630114fb0ac550b84bc9faf012e185958e2deacc0b4908bba31fd660869ebe",
+   "at_utc": "2026-11-17T12:58:41Z",
+   "notes": "Ready with minor edits. One-sentence: skid and road trip don't move it; model has Sabres 48% in Philly, a coin flip. Edits: (1) 'What to watch' repeats earlier text verbatim - make forward-looking (e.g. which Flyers goalie starts). (2) Cut/move to stat-heads the parenthetical '(The model works with the chances before our small season adjustment... 2.99 ... 2.96)'. (3) 'Philadelphia's defense 3.11' -> 'Philadelphia's chances allowed 3.11 a game'. (4) Myths chart title overclaims for road trips (road teams beat the model) -> 'Losing streaks and long road trips don't hurt teams more than our model expects'; x labels '2nd','3rd' -> '2nd game of trip' etc. (5) Lead 'won a little more often than expected, not less' -> say no sign of wearing down (same edge as game 1). (6) 'that one won't apply tonight' -> 'so the back-to-back effect doesn't apply tonight'. (7) Hero '...won next' -> 'won their next game'; hero note/explainer wording. (8) Model-test chart title 'Teams given 50-55%' -> 'Teams our model gave 50-55%'. (9) 3.2 vs 3.2 goals next to 48/52 may confuse; writer to add which side is ahead before rounding if desired. (10) '1-3-1 in last 5' vs 'lost 4 straight' - note one loss came in OT/shootout. No betting language; jargon confined to stat-heads."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "7a321a33fd3069e16cd86ba6b54e58dc5701e92631ed302c225a3fa301c73a95",
+   "at_utc": "2026-11-17T13:01:54Z",
+   "notes": "PUBLISH WITH REQUIRED FIXES (reviewed text sha 7a321a33). All numbers re-derived independently and match: records, per-game chances/ranks/league avg, rebounds, last-5 (16.5/11, 16.3/19; PHI 56.6%), Oct 21 (3.4/3.6, 3-1), 336,462/13.8%/0.8%, goalie table (76), BUF -0.15/gm, streak+trip tables (all n and rates), ratings 3.06/3.11/2.78/3.19/2.99, mu 3.17/3.23, tie 16%, 48/52, p_ot .545, backtest 55/52 and 60/53 (330), 50-55% bin 528/49%, Brier. Required: (1) disclose model overrates home ice out of sample (mean home p 54.9% vs 52.2% actual 2025-26; 54.3 vs 53.0 2026-27) since home ice is what tips tonight; (2) skid paragraph uses last-5 incl. 5-2 win; in the 4 losses chances were 12.1 vs 12.9 (48%), goals 6 vs 17; (3) 'only because they tend to be weaker teams' and hero 'A skid doesn't predict the next game' overclaim; (4) hero 'the goals just haven't gone in' ignores 19 vs 16.3 allowed; (5) model-test chart title clipped ('2025-'); (6) 2025-26 is out of sample for the game model but xG model was refit incl. 2025-26 shots: disclose; (7) goalie-test claim needs stat-heads numbers (v0.2 2024-25 Brier, split-half .07/.45/.17); soften 'tells you little'. Minor: 'play the game out many times' is an exact calc; 'goes by the full season' also blends last season. No betting language; body jargon clean."
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+   "at_utc": "2026-11-17T13:06:02Z",
+   "notes": "Rerun after Editor and Quant round-1 fixes: skid uses the 4 losses only; home-ice caution computed in generator; streak claim softened; hero rewritten; goalie test numbers in stat-heads; charts re-viewed"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+   "at_utc": "2026-11-17T13:06:03Z",
+   "notes": "Editor round 1: pass with edits (saved report); edits applied",
+   "report": "2026-11-17-sabres-phi-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+   "at_utc": "2026-11-17T13:06:03Z",
+   "notes": "Quant round 1: pass with 7 required fixes (saved report); all applied, verified at final check",
+   "report": "2026-11-17-sabres-phi-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+   "at_utc": "2026-11-17T13:09:01Z",
+   "notes": "All round-1 fixes applied; skid split, home calibration, road totals, 50-55% bucket, goalie r, Vegas link verified independently; generator reproduces md/hero/PNGs exactly; charts OK. Minor: hero explainer title still absolute (hero JSON only).",
+   "report": "2026-11-17-sabres-phi-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+  "at_utc": "2026-11-17T13:06:02Z",
+  "notes": "Rerun after Editor and Quant round-1 fixes: skid uses the 4 losses only; home-ice caution computed in generator; streak claim softened; hero rewritten; goalie test numbers in stat-heads; charts re-viewed"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+  "at_utc": "2026-11-17T13:06:03Z",
+  "notes": "Editor round 1: pass with edits (saved report); edits applied",
+  "report": "2026-11-17-sabres-phi-pregame-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+  "at_utc": "2026-11-17T13:06:03Z",
+  "notes": "Quant round 1: pass with 7 required fixes (saved report); all applied, verified at final check",
+  "report": "2026-11-17-sabres-phi-pregame-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "f26e3bc58bd1568753733592f2ba6199c562b33462052c9a4c3c947d10f7a90d",
+  "at_utc": "2026-11-17T13:09:01Z",
+  "notes": "All round-1 fixes applied; skid split, home calibration, road totals, 50-55% bucket, goalie r, Vegas link verified independently; generator reproduces md/hero/PNGs exactly; charts OK. Minor: hero explainer title still absolute (hero JSON only).",
+  "report": "2026-11-17-sabres-phi-pregame-final.md"
+ }
+}
