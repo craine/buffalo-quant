@@ -1,0 +1,29 @@
+{
+ "label": "NFL playoff chances",
+ "big": [
+  [
+   "95%",
+   "Bills win AFC East"
+  ],
+  [
+   "Wk 14",
+   "most common week the Bills clinch the AFC East"
+  ]
+ ],
+ "note": "Bills playoff chance: 99%. All 32 teams, with quarterback injuries built in.",
+ "explainer": {
+  "kicker": "How sure?",
+  "title": "Tested on 7 past seasons (5 of them the model was built on).",
+  "text": "Teams we'd have put at 90% or better after week 10, and how many made it:",
+  "bars": [
+   [
+    "Our average chance",
+    0.96
+   ],
+   [
+    "Made it",
+    0.97
+   ]
+  ]
+ }
+}

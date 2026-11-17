@@ -1,0 +1,34 @@
+{
+ "label": "Our MVP vote",
+ "big": [
+  [
+   "100",
+   "Joe Burrow: points added beyond an average offense"
+  ],
+  [
+   "#4",
+   "Josh Allen, Bills (74 points added)"
+  ]
+ ],
+ "note": "After 10 weeks. Run back over the last 7 full seasons, this count had the real MVP No. 1 three times and top 3 six times.",
+ "explainer": {
+  "kicker": "The vote",
+  "title": "Points added, top three.",
+  "text": "Points each quarterback has added beyond an average offense, through week 10:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Joe Burrow",
+    100
+   ],
+   [
+    "Brock Purdy",
+    92
+   ],
+   [
+    "Trevor Lawrence",
+    87
+   ]
+  ]
+ }
+}

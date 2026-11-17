@@ -1,0 +1,110 @@
+{
+ "as_of": "2026-11-16",
+ "note": "Teams whose expected starter for some remaining games isn't the QB with the most dropbacks this season (the 'main QB'). Every entry cites reporting. 'out_rest' = main QB out for every remaining game. 'returns_week' = main QB expected back that week. 'draw' = no timeline: games missed are drawn from past absences (src/metrics/nfl_playoffs.absence_lengths), conditioned on games already missed and any minimum (IR = 4).",
+ "teams": {
+  "ARI": {
+   "main_qb": "Jacoby Brissett",
+   "starter": "Carson Beck",
+   "plan": "out_rest",
+   "why": "Brissett traded to Baltimore; Gardner Minshew out for the season (elbow); rookie Carson Beck starts.",
+   "sources": [
+    "https://www.foxnews.com/outkick-sports/cardinals-name-rookie-carson-beck-starter-rule-out-gardner-minshew-ii-season-elbow-injury",
+    "https://www.nfl.com/news/cardinals-have-all-the-confidence-in-rookie-qb-carson-beck-ahead-of-first-nfl-start"
+   ]
+  },
+  "BAL": {
+   "main_qb": "Tyler Huntley",
+   "starter": "Jacoby Brissett",
+   "plan": "out_rest",
+   "why": "Huntley (toe) is on injured reserve for the season; Brissett started Monday. Lamar Jackson is out 6-10 weeks after thumb surgery (per the team), so he may return late in the season. We don't model that return, so Baltimore's chances may be a little low.",
+   "sources": [
+    "https://sports.yahoo.com/nfl/article/nfl-monday-night-football-preview-ravens-look-to-stay-relevant-with-jacoby-brissett-chargers-look-for-a-win-135635040.html",
+    "https://bolavip.com/en/nfl/why-arent-lamar-jackson-or-tyler-huntley-playing-today-for-ravens-vs-chargers-in-2026-nfl-week-10-mnf"
+   ]
+  },
+  "LV": {
+   "main_qb": "Kirk Cousins",
+   "starter": "Fernando Mendoza",
+   "plan": "out_rest",
+   "why": "Cousins went back to Minnesota before the trade deadline; rookie Fernando Mendoza starts.",
+   "sources": [
+    "https://www.thelines.com/nfl/vikings-bank-on-reunion-with-kirk-cousins-to-transform-struggling-offense/",
+    "https://www.si.com/nfl/grading-fernando-mendoza-carson-beck-first-starts"
+   ]
+  },
+  "MIA": {
+   "main_qb": "Malik Willis",
+   "starter": "Kyle McCord",
+   "plan": "draw",
+   "missed_so_far": 1,
+   "at_least": 4,
+   "why": "Willis is on injured reserve (core muscle), not season-ending; IR means at least four games.",
+   "sources": [
+    "https://www.thefantasyfootballers.com/news/647012/kyle-mccord-new-starting-qb-in-miami/",
+    "https://atozsports.com/?p=512550"
+   ]
+  },
+  "MIN": {
+   "main_qb": "Kyler Murray",
+   "starter": "Kirk Cousins",
+   "plan": "draw",
+   "missed_so_far": 2,
+   "why": "Murray (hamstring) is week to week and has missed two games; Cousins starts.",
+   "sources": [
+    "https://www.thelines.com/nfl/vikings-kyler-murray-out-week-to-week-with-strained-hamstring/",
+    "https://www.thelines.com/nfl/vikings-bank-on-reunion-with-kirk-cousins-to-transform-struggling-offense/"
+   ]
+  },
+  "NE": {
+   "main_qb": "Drake Maye",
+   "starter": "Tommy DeVito",
+   "plan": "draw",
+   "missed_so_far": 0,
+   "why": "The Patriots fear Maye fractured his ankle and say he likely won't play in week 12; he could miss the rest of the season (ESPN). We assume at least 4 more games, then draw the rest from past injuries.",
+   "sources": [
+    "https://www.espn.com/nfl/story/_/id/50500352/patriots-qb-drake-maye-leg-miss-extended-sources-say",
+    "https://www.rotowire.com/football/headlines/drake-maye-injury-not-expected-to-be-available-in-week-12-per-vrabel-648145"
+   ],
+   "at_least": 4
+  },
+  "NYG": {
+   "main_qb": "Jameis Winston",
+   "starter": "J.J. McCarthy",
+   "plan": "out_rest",
+   "why": "The Giants made McCarthy the starter over Winston in week 7.",
+   "sources": [
+    "https://abc7ny.com/post/source-giants-turning-jj-mccarthy-qb1-week-texans/19965065/"
+   ]
+  },
+  "NYJ": {
+   "main_qb": "Geno Smith",
+   "starter": "Geno Smith if cleared, otherwise Cade Klubnik",
+   "plan": "questionable",
+   "missed_so_far": 0,
+   "why": "Smith's ankle tests didn't show anything major (NFL Network); he's questionable for week 11 and starts if cleared (coach). We assume he plays.",
+   "sources": [
+    "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/geno-smith-getting-tests-on-ankle-will-start-in-week-11-if-healthy",
+    "https://thejetpress.com/jets-receive-positive-injury-update-geno-smith-despite-various-injuries-01m7kdtsq83n"
+   ]
+  },
+  "PHI": {
+   "main_qb": "Jalen Hurts",
+   "starter": "Tanner McKee or Joe Milton",
+   "plan": "out_rest",
+   "why": "Hurts is out for the season (blood clots).",
+   "sources": [
+    "https://www.newsweek.com/eagles-qb-jalen-hurts-season-comes-to-stunning-end-after-alarming-health-news-12588895"
+   ]
+  },
+  "SEA": {
+   "main_qb": "Sam Darnold",
+   "starter": "Drew Lock",
+   "plan": "returns_week",
+   "returns_week": 12,
+   "why": "Darnold (quad, ribs) sat week 10 (\"Sam will be another week,\" the coach said Nov. 9) and Seattle is off in week 11. We assume he's back in week 12.",
+   "sources": [
+    "https://abc7news.com/post/seahawks-start-qb-drew-lock-raiders-giving-sam-darnold-more-time-heal/20027067/"
+   ]
+  }
+ }
+}
