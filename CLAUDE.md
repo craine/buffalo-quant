@@ -220,6 +220,10 @@ Rules:
 - **If a network fetch is blocked or a source is missing: stop and report it in the PR
   description.** Do not substitute synthetic, cached-from-memory, or sample data.
 - If a result looks surprising, check it a second way before writing it up, and show both.
+- **Think like a quant who markets the site, not a calculator** (Charlie, Nov 2026). After every game, hunt for the shareable
+  note: firsts and "since" stats, records and paces, before/after splits, a player vs. whole teams, active streaks
+  (`src/reports/streak_watch.py`). Lead with the hook a fan would repost, then the receipt. Check record claims against an
+  official source; our play-by-play only goes back to 1999.
 - Reports are markdown in `reports/` with matplotlib PNGs. Lead with the one-sentence
   finding, then the chart, then the method and caveats.
 - Charts: clean, high-contrast, Bills blue `#00338D` and red `#C60C30`, source line and
