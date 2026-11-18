@@ -14,6 +14,7 @@ import numpy as np
 import pandas as pd
 
 from src.db import ROOT, query
+from src.reports.pins import drop_late
 from src.metrics.nhl_team import shots
 from src.reports.defense_baseline import BLUE, INK, MUTED
 from src.reports.sabres_postgame import finish
@@ -40,6 +41,7 @@ def main(as_of=AS_OF):
     s = shots()
     g = query(f"SELECT g.game_id, g.season, g.game_date, g.home, g.away, g.home_score, g.away_score, g.last_period_type "
               f"FROM raw_nhl_games g JOIN raw_nhl_schedule c ON c.game_id = g.game_id WHERE c.game_type = 2 AND g.game_date <= '{as_of}'")
+    g = drop_late(g, as_of)
     s = s[s.game_id.isin(set(g.game_id))].copy()
     unb = (s.unblocked == 1) & (s.empty_net_against == 0)
     cal = s[unb].groupby("season").goal.sum() / s[unb].groupby("season").xg.sum()
