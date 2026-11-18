@@ -50,3 +50,33 @@ No jargon in the body and no betting language. Where the key number comes from i
 4. **"Over a season" reads oddly.**
    - Text: "Neither tends to last over a season"
    - Rewrite: "Neither tends to carry over from one part of a season to the next"
+
+---
+
+# Round 3: new "Notes for Thursday" section
+
+I re-read the new section and checked that the round-2 polish was applied. It was: the chart title, the Tuch paragraph, the Tuesday note and the "carry over" sentence.
+
+## Verdict: ready (pass). Only minor polish remains.
+
+The section earns its place. The Thompson and Tuch note is the most shareable line in the story. The Benson note carries the
+three-season caveat instead of overclaiming. The overtime note is labeled as a small sample. There's no jargon: "three-on-three"
+is everyday hockey language. There's no betting language.
+
+## Polish (exact rewrites)
+
+1. **The Benson bold line doesn't stand alone.** Shared by itself, "biggest gap" doesn't say a gap in what.
+   - Text: "**Zach Benson has the biggest gap in the NHL** between his goals and what his chances were worth:"
+   - Rewrite: "**No NHL player is further behind his chances than Zach Benson:**"
+   - Then the body continues: "1 goal with a goalie in net on chances worth 7.6, the widest gap of the 772 players who have taken a shot this season."
+
+2. **The overtime chances sentence runs backwards** ("against ... to ... for").
+   - Text: "In overtime this season, Buffalo's chances against have been worth 2.7 goals to 1.8 for. Small sample: a handful of games."
+   - Rewrite: "In overtime this season, Buffalo's opponents have had chances worth 2.7 goals to Buffalo's 1.8. Small sample: six games, and
+     our model doesn't count overtime records."
+   - 2-4 is six games, which is why I say "six" instead of "a handful". The model's write-up shows no team overtime term, so the second clause is accurate.
+     The Quant should confirm the six games are the same ones the 2.7 and 1.8 cover. Shootout games have overtime too.
+
+3. **Benson's chances number doesn't match the earlier stories (for the Quant).** This story says chances worth 7.6. The GM story says
+   "about 7.5" (7.55 in its stat-heads section), and the playoff chances story says 7.3 as of Nov. 14. The Tuesday note covers 7.5 vs 7.6. Just confirm 7.6 is
+   right on this story's data.

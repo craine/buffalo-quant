@@ -121,6 +121,29 @@ def main(as_of=AS_OF):
     assert tu_d[LY] > 0 and tu_d[LY - 10001] > 0 and tu_d[SEASON] > 0
     tuch_pp = int(pp[(pp.shooter_id == TUCH)].goal.sum())
 
+    # notes: scorers, finishing gap, overtime
+    THOMPSON, BENSON = 8479420, 8484145
+    gl_ty = allg[allg.season == SEASON].groupby("shooter_id").size()
+    g_rank = gl_ty.rank(ascending=False, method="min")
+    tied = lambda pid: int((gl_ty == gl_ty[pid]).sum()) > 1
+    tom_g, tom_rk, tuch_rk = int(gl_ty[THOMPSON]), int(g_rank[THOMPSON]), int(g_rank[TUCH])
+    assert tom_rk <= 10 and tuch_rk <= 10
+    fd = cur.groupby("shooter_id").apply(lambda d: d.goal.sum() - d.xg.sum(), include_groups=False)
+    assert fd.idxmin() == BENSON
+    bpy = u[(u.shooter_id == BENSON) & (u.season < SEASON)].groupby('season').apply(lambda d: d.goal.sum() < d.xg.sum(), include_groups=False)
+    assert len(bpy) == 3 and bpy.all()
+    ben_g, ben_x = int(cur[cur.shooter_id == BENSON].goal.sum()), float(cur[cur.shooter_id == BENSON].xg.sum())
+    n_shooters = int((cur.groupby("shooter_id").size() > 0).sum())
+    ex = rec[rec.last_period_type.isin(["OT", "SO"])]
+    ex_b, ex_w = ex[ex.team == US], ex[ex.team == THEM]
+    ot = cur[cur.period >= 4]
+    ot_f, ot_a = float(ot[ot.team == US].xg.sum()), float(ot[ot.opp == US].xg.sum())
+    assert (int(ex_b.w.sum()), len(ex_b), int(ex_w.w.sum()), len(ex_w)) == (2, 6, 2, 2) and ot_a > ot_f
+    n_ot_games = ot[(ot.team == US) | (ot.opp == US)].game_id.nunique()
+    assert n_ot_games == len(ex_b)   # overtime chances cover the same games as the 2-4 record
+    tuch_ot_m1 = int(((allg.game_id == m1.game_id) & (allg.shooter_id == TUCH) & (allg.period >= 4)).sum())
+    assert tuch_ot_m1 == 1
+
     # goalies
     gk = cur[cur.goalie_id.notna()].groupby(["opp", "goalie_id"]).agg(gp=("game_id", "nunique"), sog=("on_goal", "sum"), xga=("xg", "sum"), ga=("goal", "sum")).reset_index()
     gk["gsax"], gk["name"], gk["sv"] = gk.xga - gk.ga, gk.goalie_id.map(names), 1 - gk.ga / gk.sog
@@ -306,6 +329,16 @@ In the {skid} straight losses ({skid_ot} in overtime), Buffalo got {skx['share']
 allowed {skx['ga']} on chances worth about {skx['xga']:.1f}. So the skid is both ends: the puck isn't going in, and the saves haven't been there. Neither tends to carry over from one part of a season to the next (see our
 [playoff chances story](sabres-playoff-chances.html)), and the skid itself doesn't tell you much: in our [Flyers preview](sabres-flyers-pregame-nov-17.html) teams on a skid of four or more
 won their next game about as often as our model expected from their chances.
+
+## Notes for Thursday
+
+- **Two of the league's top scorers used to share a dressing room.** Tage Thompson's {tom_g} goals are {'tied for ' if tied(THOMPSON) else ''}{ordn(tom_rk)} in the NHL;
+  Tuch's {tuch['g_all']} are {'tied for ' if tied(TUCH) else ''}{ordn(tuch_rk)}.
+- **No NHL player is further behind his chances than Zach Benson:** {ben_g} goal with a goalie in net on chances worth {ben_x:.1f}, the widest gap of the
+  {n_shooters} players who have taken a shot this season. Cold starts usually even out, but as the [GM story](sabres-if-i-were-gm.html)
+  noted, Benson has also scored less than his chances were worth in each of the last three seasons.
+- **Overtime has gone against Buffalo.** The Sabres are {int(ex_b.w.sum())}-{len(ex_b) - int(ex_b.w.sum())} in games that went past regulation; Washington is {int(ex_w.w.sum())}-{len(ex_w) - int(ex_w.w.sum())}, including
+  Tuch's three-on-three winner against Buffalo on Oct. 24. In overtime this season, Buffalo's opponents have had chances worth {ot_a:.1f} goals to Buffalo's {ot_f:.1f}. Small sample: {n_ot_games} games, and our model doesn't count overtime records.
 
 ## In goal
 

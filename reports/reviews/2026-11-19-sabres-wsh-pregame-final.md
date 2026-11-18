@@ -17,3 +17,12 @@
 Not changed and still verified: every table value and rank, power-play and penalty-kill numbers, the skid, Oct. 24, the goalies, the model (BUF 42.2%, expected goals 3.19 and 3.67, tied after 60 minutes 15.3%),
 home-ice calibration, Brier scores, and the ledger script (0.42, puck drop 2026-11-20 00:00 UTC). The site card is dated 2026-11-18, the day it publishes. A clean copy regenerates the story, hero JSON
 and all three charts byte-for-byte. No betting language, no jargon in the body.
+
+## Round 3 final check
+
+**Pass.** The only change since the last final check is the new "Notes for Thursday" section, and every number in it is verified (see the quant review, round 3). The rest of the story,
+the hero JSON, the site card and the charts are unchanged. A clean copy regenerates them byte-for-byte. Optional wording: "772 players who have had a shot at a goalie".
+
+## Round 3b final check
+
+**Pass** on the current text, which includes the editor's polish to the Benson and overtime lines (verified in the quant review, round 3b). Nothing else changed. A clean copy regenerates everything byte-for-byte.

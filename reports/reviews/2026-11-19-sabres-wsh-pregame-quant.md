@@ -76,3 +76,26 @@ early-season ranks).
 
 Everything after the Tuch section is the same as in round 1. A clean copy regenerates the story, hero JSON and all three charts byte-for-byte.
 The ledger script is unchanged: 0.42, puck drop 2026-11-20 00:00 UTC.
+
+## Round 3: "Notes for Thursday" (new section; nothing else changed)
+
+**Verdict: pass.** Only those 10 lines changed from the stage-4-passed version. The hero JSON and all three charts are unchanged.
+
+- Goal leaders (raw play-by-play, by scoring player, shootout goals excluded, empty-net goals included, 343 games through Nov. 17): Gauthier and Draisaitl 21; Kaprizov and Connor 17; Lehkonen 15;
+  Hagel, Guentzel, **Thompson** and McDavid 13 (tied 6th); Boldy, Matthews, **Tuch**, Sennecke, Aho, Bouchard and Podkolzin 12 (tied 10th). Correct.
+- Benson: 1 goal with a goalie in net (2 in all) on chances worth 7.59 (rescaled), -6.59, the widest in the NHL (next: Laferriere -5.46, Slafkovsky -4.91). The 772 is the
+  number of players with at least one unblocked shot at a goalie; 782 have tried a shot of any kind, 776 counting empty nets. Optional: "772 players who have had a shot at a goalie". The claim holds either way.
+  Last three seasons: 10 on 11.89, 10 on 14.81, 10 on 13.99, below his chances each year. Matches the GM story. The GM story's 7.5 versus 7.6 here is the rescale (0.986 vs 0.992), which the story already flags.
+- Past regulation: BUF 2-4 (W MIN OT, L MTL SO, W TOR OT, L MTL OT, L WSH OT, L CHI OT). WSH 2-0 (BUF Oct. 24 OT, at OTT Nov. 10 OT). Tuch's winner was at 3-on-3 in period 4. Correct.
+- BUF overtime chances (period 4, unblocked, empty nets left out, rescaled): 1.78 for, 2.73 against, in 6 games. "2.7 to 1.8" is right, and it's labeled a small sample.
+- No betting language and no jargon. A clean copy regenerates the story, hero JSON and charts byte-for-byte.
+
+## Round 3b: editor polish to the Notes section
+
+**Verdict: pass.** Two lines changed. (Note: my round-3 records were written seconds after this polish landed, so they already hashed this text. This section is the actual review of it.)
+- "No NHL player is further behind his chances than Zach Benson: 1 goal ... on chances worth 7.6, the widest gap of the 772 players". On this story's data
+  (all 343 games, 2026-27 factor 0.9916) his chances are worth 7.59, gap -6.59, the largest. Correct. The optional "who have had a shot at a goalie" for 772 still stands.
+- "Buffalo's opponents have had chances worth 2.7 goals to Buffalo's 1.8. Small sample: 6 games". The set of games with period-4 shots involving BUF is exactly
+  the 6 past-regulation games (2026020049, -092, -108, -126, -173, -305); the clean shots table has no period above 4 and no shootout attempts. 2.73 vs 1.78. Correct.
+- "our model doesn't count overtime records": true. The model rates teams on chances in all periods; ties go to the home team at a league-wide rate (0.545), not by team OT results.
+- A clean copy regenerates the story, hero JSON and charts byte-for-byte.

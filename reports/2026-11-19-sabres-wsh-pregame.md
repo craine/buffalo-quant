@@ -59,6 +59,16 @@ allowed 21 on chances worth about 15.8. So the skid is both ends: the puck isn't
 [playoff chances story](sabres-playoff-chances.html)), and the skid itself doesn't tell you much: in our [Flyers preview](sabres-flyers-pregame-nov-17.html) teams on a skid of four or more
 won their next game about as often as our model expected from their chances.
 
+## Notes for Thursday
+
+- **Two of the league's top scorers used to share a dressing room.** Tage Thompson's 13 goals are tied for 6th in the NHL;
+  Tuch's 12 are tied for 10th.
+- **No NHL player is further behind his chances than Zach Benson:** 1 goal with a goalie in net on chances worth 7.6, the widest gap of the
+  772 players who have taken a shot this season. Cold starts usually even out, but as the [GM story](sabres-if-i-were-gm.html)
+  noted, Benson has also scored less than his chances were worth in each of the last three seasons.
+- **Overtime has gone against Buffalo.** The Sabres are 2-4 in games that went past regulation; Washington is 2-0, including
+  Tuch's three-on-three winner against Buffalo on Oct. 24. In overtime this season, Buffalo's opponents have had chances worth 2.7 goals to Buffalo's 1.8. Small sample: 6 games, and our model doesn't count overtime records.
+
 ## In goal
 
 Goals saved compared with an average goalie facing the same shots. Positive is good.
