@@ -1,0 +1,30 @@
+{
+ "label": "After 21 games",
+ "big": [
+  [
+   "8-9-4",
+   "Sabres, 2025-26 (went on to win 50)"
+  ],
+  [
+   "8-9-4",
+   "Sabres, 2026-27"
+  ]
+ ],
+ "note": "Same record. This year's team creates a few more chances, gives up more, scores less than its chances are worth, and has allowed 21 power-play goals to last year's 7 (last year's was unusually low).",
+ "explainer": {
+  "kicker": "First 21 games",
+  "title": "Power-play goals allowed",
+  "text": "Goals opponents scored on the power play against Buffalo:",
+  "fmt": "num",
+  "bars": [
+   [
+    "2025-26",
+    7
+   ],
+   [
+    "2026-27",
+    21
+   ]
+  ]
+ }
+}
