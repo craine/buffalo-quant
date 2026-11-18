@@ -26,3 +26,12 @@ the hero JSON, the site card and the charts are unchanged. A clean copy regenera
 ## Round 3b final check
 
 **Pass** on the current text, which includes the editor's polish to the Benson and overtime lines (verified in the quant review, round 3b). Nothing else changed. A clean copy regenerates everything byte-for-byte.
+
+## Round 4 final check (Ledger logged)
+
+**Pass.** The only change is line 89, now "Logged on the Ledger at 2026-11-18 18:13:40 UTC, before puck drop. It gets graded after the game, hit or miss."
+The hero JSON, the charts and the code (generator, logger, game model) are unchanged.
+`ledger/predictions.csv` P0019: created 2026-11-18T18:13:40Z, before puck drop 2026-11-20T00:00:00Z (matches `raw_nhl_schedule.start_utc` for 2026020351);
+probability 0.42 (story 42%, my recompute 0.4218); model nhl-game-v0.1; notes say expected goals BUF 3.19, WSH 3.67, tied after 60 minutes 0.153, data through 2026-11-17. All match the story.
+Claim "Sabres beat the Capitals (any result: regulation, OT or shootout)" reads on its own. It is the only Ledger row that mentions Capitals, so the story's timestamp comes from P0019.
+A clean copy regenerates the story, with the logged line, hero JSON and all three charts byte-for-byte.

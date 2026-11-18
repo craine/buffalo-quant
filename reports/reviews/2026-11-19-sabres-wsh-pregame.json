@@ -93,6 +93,14 @@
    "at_utc": "2026-11-18T18:20:14Z",
    "notes": "Round 3b: current text (with Notes polish) passes; nothing else changed; regen byte-identical; 42% matches the ledger script.",
    "report": "2026-11-19-sabres-wsh-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "f86f954502314746a10586723ab1b3648549bb1187587d701428b9f6672deb75",
+   "at_utc": "2026-11-18T18:21:34Z",
+   "notes": "Round 4: only line 89 changed (logged timestamp). P0019 matches: 0.42, created 18:13:40Z before 00:00Z Nov 20 puck drop, nhl-game-v0.1, expected goals 3.19/3.67, tie 0.153, data through Nov 17. Code unchanged; clean regen byte-identical.",
+   "report": "2026-11-19-sabres-wsh-pregame-final.md"
   }
  ],
  "self": {
@@ -117,9 +125,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
-  "at_utc": "2026-11-18T18:20:14Z",
-  "notes": "Round 3b: current text (with Notes polish) passes; nothing else changed; regen byte-identical; 42% matches the ledger script.",
+  "sha256": "f86f954502314746a10586723ab1b3648549bb1187587d701428b9f6672deb75",
+  "at_utc": "2026-11-18T18:21:34Z",
+  "notes": "Round 4: only line 89 changed (logged timestamp). P0019 matches: 0.42, created 18:13:40Z before 00:00Z Nov 20 puck drop, nhl-game-v0.1, expected goals 3.19/3.67, tie 0.153, data through Nov 17. Code unchanged; clean regen byte-identical.",
   "report": "2026-11-19-sabres-wsh-pregame-final.md"
  }
 }

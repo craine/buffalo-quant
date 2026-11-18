@@ -86,7 +86,7 @@ starter: a goalie's first half of a season is a weak guide to his second half (d
 
 ## Our prediction: Sabres 42%, Capitals 58%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-18 18:13:40 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **3.2 goals for Buffalo and 3.7 for Washington**, and gives about a 15% chance the game is tied after 60 minutes. That's a lot of goals for both sides: both defenses give up more than average.
 
