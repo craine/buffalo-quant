@@ -1,0 +1,164 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "538a61ccaabb78e28df0d300d930ed6c536a6ca83cf59886793a71d7cb216d0e",
+   "at_utc": "2026-11-18T16:52:38Z",
+   "notes": "Records, game-21 comparison, LY 22-82 split, luck rank (1st of 96), Luukkonen splits, Tuch/Benson/Thompson, PK and ranks all computed with assertions; roster moves sourced (Daily Faceoff); Sabres-Capitals Oct 24 meeting checked; carry-over claim tied to the mirage study; charts viewed"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "538a61ccaabb78e28df0d300d930ed6c536a6ca83cf59886793a71d7cb216d0e",
+   "at_utc": "2026-11-18T16:54:07Z",
+   "notes": "Needs edits: 'shots' counts include missed shots (Benson 80, PK 150/164) and will contradict official SOG on air; PK 'fix' line contradicts the story's own luck finding (last year's 7 was also ~half its chances); 'Put together 0.59' doesn't add up from the bullets shown, and decimals/team-seasons read as stats; 'biggest' overstates a near-tie with BOS (0.595 vs 0.582); compare-chart title omits chances allowed. Minor polish on lead, 14th, Tuch wording, Byram, chart footer/labels.",
+   "report": "2026-11-18-sabres-then-now-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "9b1e2000d3150f1808728e7295c0c83ba05872385a47092944a4973055e6f2ef",
+   "at_utc": "2026-11-18T16:59:02Z",
+   "notes": "Numbers all reproduce (records, table, ranks, 96-team-season gap, Luukkonen, Tuch/Benson/Thompson, hero, card; generator reproduces files). Fixes: (1) 'a goal or two off the standings' is false for 2025-26: 8 empty-net goals against in first 21 (real GA 74 vs 66 shown; real GA flat at 74 both years); fix text, table label and compare-chart footer. (2) 'No. 45' pick not in cited Daily Faceoff piece (says a second-round pick). (3) PP goals allowed: tied 3rd with SJS, and it's a count not per game as stat-heads claims. (4) Thompson 'the exception' -> 'the biggest exception' (9 players above expected). (5) 'barely carry over' -> 'don't carry over well' (mirage r=0.32/0.21, 'Weak'). (6) Optional: BOS within 0.013/game; window picked at BUF turnaround.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "5982361469a8aa887769f4cc1a2ecb3a132e82d72d6060545b3dda7c7d3932ee",
+   "at_utc": "2026-11-18T17:04:41Z",
+   "notes": "Rewrote after quant/editor round 1 and Charlie's GM request: empty-net goal counts, tied PK rank per game, second-round pick per source, 5v5 vs PK split, GM section (PK value, cold-shooter follow-up n=11, Benson 3-yr, Tuch, 46/197 steady finishers, goalies) all computed with asserts; three charts viewed"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "5982361469a8aa887769f4cc1a2ecb3a132e82d72d6060545b3dda7c7d3932ee",
+   "at_utc": "2026-11-18T17:06:53Z",
+   "notes": "Round 2: round 1 handled. GM section good order/honest, but: PK fix says fewer shots while story shows PK faces fewer shots than last year (better ones); other half of xGA gap unexplained; Tuch doesn't fit 3-yr finisher profile and 46/197 lacks luck baseline; section 1 'mostly on the PK' overclaims vs last year; headline/lead don't set up GM angle; PK/Tuch repetition.",
+   "report": "2026-11-18-sabres-then-now-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "f62ac8bf5a8a8759a245a00877c20c314e9fcc823d796b052fd2dd62639c9907",
+   "at_utc": "2026-11-18T17:09:11Z",
+   "notes": "Round 2: round-1 fixes all in; all team numbers reproduce. Must fix: player goal totals exclude empty nets (Benson real 11/10/13, not 10 each; Benson 2 not 1 this season; Tuch 33 and 12). Also: 'mostly on the PK' is 36% of YoY rise; Tuch not a 3-year finisher and 46/197 not 'rare'; 'Fix the PK' assumes cause; goalie wording.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "6bd9fe6560f4448ff8ebf1a99cdd6a36889628b16083f98278d4c4acc054ceae",
+   "at_utc": "2026-11-18T17:10:55Z",
+   "notes": "Round 3: all round-2 findings handled; headline/lead set up GM; move 1/4/5 fixed. Minor polish only: section 3 header should say the jump 7->21 is mostly bounces (not 'both years'); Benson double parenthetical; double colon; 'not quite their usual form' unclear; personnel/roster redundancy; finishing bullet 0.21/game -> ~13 goals.",
+   "report": "2026-11-18-sabres-then-now-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "6bd9fe6560f4448ff8ebf1a99cdd6a36889628b16083f98278d4c4acc054ceae",
+   "at_utc": "2026-11-18T17:11:20Z",
+   "notes": "Round 3: all round-2 findings fixed; new numbers (30% more dangerous, 3v3 next-biggest, ~every 8 games, coin-flip 32.7/+13, goalies) reproduce; byte-identical re-run. Optional wording: restore PK sentence under section-1 header; 'mostly bounces' -> 'mostly how many went in'; soften 'finishing is mostly luck' and cut 'personnel' line.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "e048490095517e3ed22d0c5a0398023104df518020560ad4da9bf1950f888309",
+   "at_utc": "2026-11-18T17:12:38Z",
+   "notes": "Stage 4 on e0484900: all post-quant edits verified (4th-most PK, Benson 1 goalie goal + 1 EN on 80 shots/7.55, 13.04 finishing, 30% per-shot, 'mostly how many went in', 'finishing swings a lot'); generator reproduces md/hero/3 PNGs byte for byte; hero/charts/site card unchanged.",
+   "report": "2026-11-18-sabres-then-now-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "4ff3ec6a92095447c142ebbba3f22b0b03702d4cea4b72946584d2ea8978fc3f",
+   "at_utc": "2026-11-18T17:34:43Z",
+   "notes": "Charlie's 'If I were GM' rework: headline/lead/section in first person; new move 4 (power play: 17th chances, 28th goals, 10 on 13.9, asserted); 'What it adds up to' table read by regex from the published Nov 15 playoff story with asserts on 12% and 3 of 23; last-game PHI assert; site card renamed sabres-if-i-were-gm"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "4ff3ec6a92095447c142ebbba3f22b0b03702d4cea4b72946584d2ea8978fc3f",
+   "at_utc": "2026-11-18T17:35:54Z",
+   "notes": "Round 4 (If I were GM): framing works and verdict earned, but: GM plan buried ~1000 words in (add plan+call to lead); verdict (trade at 40 games, PK help before scorer) contradicts move 5 'Shop for finishing'; move 4 'power play' ambiguous vs opponents' PP used everywhere else; I/we voice needs byline or bridge line. Plus trims (cut What it means header, repeat lines), date caveat into table intro, '0.2 goals a game' row, tighter verdict-led headline.",
+   "report": "2026-11-18-sabres-then-now-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "4ff3ec6a92095447c142ebbba3f22b0b03702d4cea4b72946584d2ea8978fc3f",
+   "at_utc": "2026-11-18T17:36:10Z",
+   "notes": "Round 4 (GM reframe): new numbers reproduce (PP xGF/GP 0.664 17th, GF/GP 0.476, 10 G on 13.94); what-if table matches playoff story exactly; byte-identical re-run. Fix: 'The penalty kill alone moves it to 22%' -> shorthanded chances (penalties+kill, unsplit); PP goals rank is tied 28th with CHI; '12% at this point' was after 20 games, not 21.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "c0dedb75ea98f8617fec19549feb6468f1416e8688bd1b282acce533d323892a",
+   "at_utc": "2026-11-18T17:37:24Z",
+   "notes": "Round 5: all round-4 must-fixes applied; deviations OK. Two small fixes before final: move 4 'but is tied' -> 'but they're tied'; restore 'A man down, it allows the 4th-most; more on that below.' in section 1 so its header is supported. Optional polish only otherwise.",
+   "report": "2026-11-18-sabres-then-now-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+   "at_utc": "2026-11-18T17:37:56Z",
+   "notes": "Round 5: round-4 fixes in (on-its-own wording, tied 28th incl stat-heads, after 20 games/same point); 0.2/game = one goal every 5 games matches playoff story; table date note correct; GM calls framed as opinion; byte-identical re-run.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+   "at_utc": "2026-11-18T17:37:57Z",
+   "notes": "Numbers/claims pass. One required copy fix: 'they create chances ... but is tied for 28th' -> 'but are tied' (generator tie-flag text). Optional: sec-1 header support, 'that kind of luck', Charlie to approve signed calls.",
+   "report": "2026-11-18-sabres-then-now-final.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+   "at_utc": "2026-11-18T17:38:26Z",
+   "notes": "Round 5 on 0d56c8ae: round-4 fixes in; 4th-most PK restored (0.794 vs 0.661); 'they're tied for 28th' (BUF/CHI 0.476); 0.2/game = one goal every 5 games matches playoff story; table date note correct; GM calls framed as opinion; byte-identical re-run.",
+   "report": "2026-11-18-sabres-then-now-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+   "at_utc": "2026-11-18T17:38:27Z",
+   "notes": "Stage 4 on 0d56c8ae: all edits since round 4 verified; numbers, what-if table, timing notes intact; generator reproduces md/hero/3 PNGs byte for byte; site card consistent. Optional: 'that kind of luck' -> 'edge'; Charlie to approve signed calls.",
+   "report": "2026-11-18-sabres-then-now-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "4ff3ec6a92095447c142ebbba3f22b0b03702d4cea4b72946584d2ea8978fc3f",
+  "at_utc": "2026-11-18T17:34:43Z",
+  "notes": "Charlie's 'If I were GM' rework: headline/lead/section in first person; new move 4 (power play: 17th chances, 28th goals, 10 on 13.9, asserted); 'What it adds up to' table read by regex from the published Nov 15 playoff story with asserts on 12% and 3 of 23; last-game PHI assert; site card renamed sabres-if-i-were-gm"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "c0dedb75ea98f8617fec19549feb6468f1416e8688bd1b282acce533d323892a",
+  "at_utc": "2026-11-18T17:37:24Z",
+  "notes": "Round 5: all round-4 must-fixes applied; deviations OK. Two small fixes before final: move 4 'but is tied' -> 'but they're tied'; restore 'A man down, it allows the 4th-most; more on that below.' in section 1 so its header is supported. Optional polish only otherwise.",
+  "report": "2026-11-18-sabres-then-now-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+  "at_utc": "2026-11-18T17:38:26Z",
+  "notes": "Round 5 on 0d56c8ae: round-4 fixes in; 4th-most PK restored (0.794 vs 0.661); 'they're tied for 28th' (BUF/CHI 0.476); 0.2/game = one goal every 5 games matches playoff story; table date note correct; GM calls framed as opinion; byte-identical re-run.",
+  "report": "2026-11-18-sabres-then-now-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "0d56c8aec389af90471a021557e950d5f7ac56e40e164620ffe705184b97dc2e",
+  "at_utc": "2026-11-18T17:38:27Z",
+  "notes": "Stage 4 on 0d56c8ae: all edits since round 4 verified; numbers, what-if table, timing notes intact; generator reproduces md/hero/3 PNGs byte for byte; site card consistent. Optional: 'that kind of luck' -> 'edge'; Charlie to approve signed calls.",
+  "report": "2026-11-18-sabres-then-now-final.md"
+ }
+}
