@@ -176,6 +176,26 @@ def main(as_of=AS_OF):
     assert ben_all_ty == ben[0] + 1  # 'his other goal'
     upl_gsax = float(gks.loc[UPL]); others = gks.drop(UPL)
     assert (others.abs() < 1).all()  # "the other two about average"
+    ppx = x[x.strength.isin(PP)]
+    pp_pg = ppx.groupby("team").xg.sum() / gp
+    ppg_pg = ppx.groupby("team").goal.sum() / gp
+    rk_ppx = int(pp_pg.rank(ascending=False, method="min").loc[US]); rk_ppg = int(ppg_pg.rank(ascending=False, method="min").loc[US])
+    tie_ppg = int((ppg_pg == ppg_pg.loc[US]).sum()) > 1
+    pp_g, pp_x = int(ppx[ppx.team == US].goal.sum()), float(ppx[ppx.team == US].xg.sum())
+    assert 12 <= rk_ppx <= 20 and rk_ppg >= 25   # "league-average chances", "near the bottom in goals"
+    # published what-ifs from our Nov. 15 playoff story (games through Nov. 14); read from the file so they can't drift
+    import re
+    po = (OUT / "2026-11-15-sabres-playoff-chances.md").read_text()
+    def row(label):
+        m = re.search(r"\| " + re.escape(label) + r" \| (\d+)% \|", po); assert m, label; return int(m.group(1))
+    assert "0.2 more" in po  # the what-if's offense step is 0.2 goals' worth a game = one every 5 games
+    wi = dict(now=row("As things stand"), pk=row("Scoring chances allowed while shorthanded cut to league average"),
+              d=row("All scoring chances allowed cut to league average"), o=row("Create 0.2 more goals' worth of scoring chances a game"),
+              both=row("Both: average defense and 0.2 more created"))
+    assert "we'd have given them 12%" in po and "Of the 23 teams the model gave between 5% and 30%" in po and "3\nmade it" in po
+    last = bg[bg.game_date <= as_of].iloc[-1]
+    assert last.game_date == "2026-11-17" and "PHI" in (last.home, last.away)
+
     # next game
     nxt = query(f"SELECT game_date, home, away FROM raw_nhl_schedule WHERE season={TY} AND game_type=2 AND (home='{US}' OR away='{US}') "
                 f"AND game_date > '{as_of}' ORDER BY game_date LIMIT 1").iloc[0]
@@ -239,7 +259,7 @@ def main(as_of=AS_OF):
            f"Regular season through {pd.to_datetime(as_of):%b. %-d}, 2026. Shots that weren't blocked, empty nets excluded. {N} Sabres games.")
     fig.savefig(OUT / "sabres-then-now-gm.png"); plt.close(fig)
 
-    md = f"""# Same 8-9-4 start, different Sabres. Here's what changed, and how we'd fix it
+    md = f"""# If I were the Sabres' GM, I wouldn't sell. Here's how I'd fix this 8-9-4 team
 
 **After {N} games last season, the Sabres were {r_lys[0]}-{r_lys[1]}-{r_lys[2]}. After {N} games this season, they're {r_ty[0]}-{r_ty[1]}-{r_ty[2]}: the same record, to the game.
 Last year's team then went {r_lyr[0]}-{r_lyr[1]}-{r_lyr[2]} and won 50.**
@@ -247,7 +267,8 @@ Last year's team then went {r_lyr[0]}-{r_lyr[1]}-{r_lyr[2]} and won 50.**
 It did that without better scoring chances: over those {len(ly_rest)} games it got {R['share']:.0%} of the
 chances in its games, an even split. What carried it was goaltending and finishing, and by our count no NHL team in the last three seasons beat its chances
 by more over that stretch ({TEAMS.get(second.team, second.team)} came close). This year's team is creating a few more chances than last year's did at this point, but it's giving up more, it's scoring less than its chances
-are worth, and its penalty kill has allowed {B['pk_g']} goals to last year's {A['pk_g']}. Below: what's different, and what we'd do about it if we ran the team.
+are worth, and its penalty kill has allowed {B['pk_g']} goals to last year's {A['pk_g']}. My plan, in short: fix the penalty kill first, keep the five-on-five lineup, be patient with the shooters, and don't sell. If the penalty kill is still leaking
+at the 40-game mark, that's when I'd trade, for help a man down. Below: what's different, and why I'd do it that way.
 
 *Numbers are through {pd.to_datetime(as_of):%b. %-d}, 2026: the first {N} games of each season. {N} games is a small sample. The Sabres visit Alex Tuch and
 Washington on {pd.Timestamp(nxt.game_date).strftime('%A')}.*
@@ -278,7 +299,7 @@ Three things are different.
 
 **1. They give up more chances, and the penalty kill is the worst of it.** This season's chances against are worth {B['xga'] / N:.2f} goals a game, {B['xga'] / N - A['xga'] / N:.2f} more than
 at this point last year, the {ordn_(33 - rk_xga)}-most of 32 teams per game (league average {lg_xga:.2f}). At full strength, five-on-five, Buffalo is right at the league
-average ({ev_pg.loc[US]:.2f} a game against {lg_ev:.2f}). A man down, it allows the {ordn_(rk_pkx)}-most. The goals-allowed total hasn't moved: {A['ga_all']} last year, {B['ga_all']}
+average ({ev_pg.loc[US]:.2f} a game against {lg_ev:.2f}). A man down, it allows the {ordn_(rk_pkx)}-most; more on that below. The goals-allowed total hasn't moved: {A['ga_all']} last year, {B['ga_all']}
 this year. But {A['en_a']} of last year's were into an empty net, against {B['en_a']} this year, so with a goalie in net this year's team has allowed {B['ga'] - A['ga']} more.
 
 **2. The puck stopped going in.** Not counting empty nets, last year's team scored {A['gf']} goals in its first {N} games on chances worth {A['xgf']:.1f}, about {A['fin']:.0f} more
@@ -288,7 +309,7 @@ and {W[ben[0]]} goal to show for it. (His other goal was into an empty net.) Tag
 
 **3. Power-play goals against: the jump from {A['pk_g']} to {B['pk_g']} is mostly how many went in.** Opponents have scored {B['pk_g']} power-play goals on Buffalo in {N} games, {'tied for ' if tie_pkg else ''}the {ordn_(rk_pkg)}-most in the league
 per game. At this point last year it was {A['pk_g']}. Those power-play chances were worth {B['pk_x']:.1f} goals this year and {A['pk_x']:.1f} last year, on {B['pk_n']} shots this year
-and {A['pk_n']} last year (counting shots that missed the net, not blocked ones): fewer shots, but better ones. The average power-play shot against has been about {shot_up:.0%} more dangerous. Most of the jump in goals is how many have gone in.
+and {A['pk_n']} last year (counting shots that missed the net, not blocked ones): fewer shots, but better ones. The average power-play shot against has been about {shot_up:.0%} more dangerous.
 Last year's {A['pk_g']} was unusually low, too: about {pk_ratio_word} what those chances were worth.
 
 ## Who's gone
@@ -312,22 +333,19 @@ Put together, last year's Sabres scored and saved about {R['fin'] + R['save']:.0
 every other night. Of all {len(luck)} NHL teams over the last three seasons ({len(luck) // 3} a year), that was the most over the same stretch, just ahead of
 {'last season' + chr(39) + 's ' + TEAMS.get(second.team, second.team) if int(second.season) == LY else TEAMS.get(second.team, second.team)}.
 
-## What it means
+## If I were GM
 
-This year's team can't count on a repeat. Last season's run came with the best goaltending-and-finishing stretch of any team in three years, barely ahead of
-{TEAMS.get(second.team, second.team)}'s, and as we found in that [50-win study](sabres-50-win-mirage.html), finishing and goaltending don't carry over well. Chances do,
-and on those this year's team is a little better on offense and worse on defense. Our [playoff chances story](sabres-playoff-chances.html) put Buffalo at about 16% after
-20 games, and found that cutting the chances it allows to league average would double that.
+*The numbers are Buffalo Quant Desk's. The calls are mine. — Charlie*
 
-## If we were the GM
-
-Here's what we'd do, in order, and how much the numbers can tell us about each move.
+Last season's run came with the best goaltending-and-finishing stretch of any team in three years, barely ahead of {TEAMS.get(second.team, second.team)}'s, and as we
+found in that [50-win study](sabres-50-win-mirage.html), that kind of luck doesn't carry over well. Chances do: this year's team is a little better on offense and worse
+on defense. So here's what I'd do, in order, and how much our numbers can back up each move.
 
 ![Chances allowed, five-on-five vs. shorthanded](sabres-then-now-gm.png)
 
 **1. Cut the chances allowed a man down.** The penalty kill is the biggest single source of the extra chances. A man down, Buffalo gives up an extra goal's worth of
 chances about every {every_n:.0f} games compared with an average team, about half of its whole gap to a league-average defense. Five-on-five is almost none of it; the next-biggest
-piece is overtime. If this pace held, getting the penalty kill to average would take away chances worth about {pk_rest:.0f} goals over the last {82 - N} games. Remember from above: this
+piece is overtime. If this pace held, getting the penalty kill to average would take away chances worth about {pk_rest:.0f} goals over the last {82 - N} games. This
 year's penalty kill faces fewer shots than last year's, just better ones. So the job is fewer, and less dangerous, shots while a man down. That's as much a coaching
 job as a roster one. (Buffalo also faces {pk_shots_pg:.1f} power-play shots a game that aren't blocked, against {lg_pk_shots:.1f} for the average team; we can't
 yet tell how much of that is taking more penalties, because we haven't finished checking the NHL's penalty data.)
@@ -339,14 +357,33 @@ rate. The balance of chances is the part of a team's game that carries over best
 those seasons, as a group, they scored almost exactly what their chances were worth. A cold start is a bad reason to trade a shooter. One caution: Benson has scored
 10 goals with a goalie in net in each of the last three seasons ({', '.join(map(str, ben_all[:-1]))} and {ben_all[-1]} counting empty nets), on chances worth {bs.x_.min():.0f} to {bs.x_.max():.0f} each year. He creates chances; the goals may not catch up.
 
-**4. Shop for the finishing Tuch took.** Over a few weeks, finishing swings a lot. Over three years, some of it holds. Tuch scored {tu.loc[LY - 10001, 'g_'] - tu.loc[LY - 10001, 'x_']:.0f} and {tu.loc[LY, 'g_'] - tu.loc[LY, 'x_']:.0f} more goals than his chances
+**4. Leave Buffalo's own power play alone.** When the Sabres have the extra man, they create chances at a league-average rate ({ordn_(rk_ppx)} of 32 teams per game) but {'they' + chr(39) + 're tied for' if tie_ppg else 'they rank'} {ordn_(rk_ppg)} in goals:
+{pp_g} on chances worth {pp_x:.1f}. That's the same cold finishing as above, not a broken power play, and finishing tends to even out. Small sample, too.
+
+**5. When I do shop, look for proven finishers.** Over a few weeks, finishing swings a lot. Over three years, some of it holds. Tuch scored {tu.loc[LY - 10001, 'g_'] - tu.loc[LY - 10001, 'x_']:.0f} and {tu.loc[LY, 'g_'] - tu.loc[LY, 'x_']:.0f} more goals than his chances
 were worth the last two seasons (the year before he missed by a fraction of a goal), and has {tu.loc[TY, 'g_']} goals with a goalie in net ({tuch_all_ty} in all) on chances worth {tu.loc[TY, 'x_']:.1f} in Washington. Of {len(pf)} players whose chances were worth 10 or more goals in each
 of the last three seasons, {len(steady)} beat their chances in all three, about {len(steady) - luck_n:.0f} more than luck alone would produce. That's about 1 in 4: finishing is real, but it's not common. Buffalo has two, Thompson and Rasmus Dahlin.
-That's the profile to look for. We don't know who's available or what they'd cost.
+That's the profile I'd look for. I don't know who's available or what they'd cost.
 
-**5. Don't plan on the goalies to save it.** Luukkonen is {abs(upl_gsax):.1f} goals worse than an average goalie this season and the other two are about average, a combined
+**6. Don't plan on the goalies to save it.** Luukkonen is {abs(upl_gsax):.1f} goals worse than an average goalie this season and the other two are about average, a combined
 {abs(B['save']):.1f} goals worse than the chances against were worth. Goaltending was the biggest piece of last year's run (about {R['save']:.0f} of the {R['fin'] + R['save']:.0f} goals),
-and it's the hardest part to predict. A GM can hope for it, but shouldn't build the plan on it.
+and it's the hardest part to predict. I'd hope for it, but I wouldn't build the plan on it.
+
+### What it adds up to
+
+Our [playoff chances story](sabres-playoff-chances.html) reran the season with one thing changed at a time, using games through Nov. 14, before the Nov. 17 loss to Philadelphia:
+
+| If the Sabres... | Playoff chance |
+|---|---|
+| Stay as they are | {wi['now']}% |
+| Cut the chances they allow a man down to league average | {wi['pk']}% |
+| Cut all the chances they allow to league average | {wi['d']}% |
+| Create one more goal's worth of chances every {round(1 / 0.2):.0f} games | {wi['o']}% |
+| Do both: league-average defense and one more goal's worth of chances every {round(1 / 0.2):.0f} games | {wi['both']}% |
+
+**My call: don't sell.** After 20 games last season our model would have given the Sabres a 12% playoff chance, and they finished with {r_ly[3]} points. Of the 23
+teams it gave between 5% and 30% at the same point over the last three seasons, 3 made it. A team at {wi['now']}% isn't done. Cutting the chances allowed a man down to league average, on its own, moves it to {wi['pk']}%. Fix the defense and create a little more, and it's about a coin flip.
+I'd start in-house with the penalty kill. If it's still leaking by the 40-game mark, that's when I'd trade, and I'd go for help a man down first, then a proven finisher. Not a goalie.
 
 ## Sources for the roster moves
 
@@ -365,7 +402,9 @@ and it's the hardest part to predict. A GM can hope for it, but shouldn't build 
 - Luukkonen GSAx: 2025-26 games 1-{N} {upl_a[1]:+.2f} ({upl_a[0]} GP), games {N + 1}+ {upl_r[1]:+.2f} ({upl_r[0]} GP); 2026-27 {upl_t[1]:+.2f} ({upl_t[0]} GP).
 - Tuch 2025-26 (BUF, non-empty-net): {tuch_ly[0]} G on {tuch_ly[1]:.2f} xG ({tuch_ly[2]} unblocked). Benson 2026-27: {ben[0]} G on {ben[1]:.2f} xG ({ben[2]}). Thompson 2026-27: {tom[0]} G on {tom[1]:.2f} xG.
 - Standings goal totals for the first {N} games (shootout decider counted as a goal): GF {r_lys[4]} vs {r_ty[4]}, GA {r_lys[5]} vs {r_ty[5]}.
-- Ranks are per game among 32 teams through {as_of}. Table and chart goals include empty-net goals (2025-26: {A['en_a']} against; 2026-27: {B['en_a']} against)
+- Ranks are per game among 32 teams through {as_of}.
+- BUF power play (5v4, 5v3, 4v3) 2026-27: xGF/GP {pp_pg.loc[US]:.3f} ({ordn_(rk_ppx)}), GF/GP {ppg_pg.loc[US]:.3f} ({'T-' if tie_ppg else ''}{ordn_(rk_ppg)}); {pp_g} G on {pp_x:.2f} xG.
+- What-if playoff chances are read from reports/2026-11-15-sabres-playoff-chances.md (ratings through 2026-11-14, 20,000 simulated seasons each); not rerun here. Table and chart goals include empty-net goals (2025-26: {A['en_a']} against; 2026-27: {B['en_a']} against)
   and exclude shootouts; G-xG and xGA-GA exclude empty nets. 5v5 xGA/GP: BUF {ev_pg.loc[US]:.3f}, league {lg_ev:.3f} ({ordn_(rk_ev)}-most). Opp-PP xGA/GP: BUF {pkx_pg.loc[US]:.3f},
   league {lg_pkx:.3f} ({ordn_(rk_pkx)}-most); xGA/GP gap by state: 5v5 {gap_ev:+.3f}, 3v3 {gap_ot:+.3f}; opp-PP xG per unblocked shot {per_shot(A):.3f} vs {per_shot(B):.3f}; share of BUF's total xGA/GP gap to average {pk_share:.2f}; times {82 - N} games = {pk_rest:.1f}.
 - GM notes: shooters with G-xG <= -4 through team game {N}, 2023-24 to 2025-26 (same team, still shooting after): n={cold_n}, rest-of-season G/xG {cold_after:.3f}.

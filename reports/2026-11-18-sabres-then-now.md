@@ -1,4 +1,4 @@
-# Same 8-9-4 start, different Sabres. Here's what changed, and how we'd fix it
+# If I were the Sabres' GM, I wouldn't sell. Here's how I'd fix this 8-9-4 team
 
 **After 21 games last season, the Sabres were 8-9-4. After 21 games this season, they're 8-9-4: the same record, to the game.
 Last year's team then went 42-14-5 and won 50.**
@@ -6,7 +6,8 @@ Last year's team then went 42-14-5 and won 50.**
 It did that without better scoring chances: over those 61 games it got 50% of the
 chances in its games, an even split. What carried it was goaltending and finishing, and by our count no NHL team in the last three seasons beat its chances
 by more over that stretch (Boston came close). This year's team is creating a few more chances than last year's did at this point, but it's giving up more, it's scoring less than its chances
-are worth, and its penalty kill has allowed 21 goals to last year's 7. Below: what's different, and what we'd do about it if we ran the team.
+are worth, and its penalty kill has allowed 21 goals to last year's 7. My plan, in short: fix the penalty kill first, keep the five-on-five lineup, be patient with the shooters, and don't sell. If the penalty kill is still leaking
+at the 40-game mark, that's when I'd trade, for help a man down. Below: what's different, and why I'd do it that way.
 
 *Numbers are through Nov. 17, 2026: the first 21 games of each season. 21 games is a small sample. The Sabres visit Alex Tuch and
 Washington on Thursday.*
@@ -37,7 +38,7 @@ Three things are different.
 
 **1. They give up more chances, and the penalty kill is the worst of it.** This season's chances against are worth 3.22 goals a game, 0.35 more than
 at this point last year, the 6th-most of 32 teams per game (league average 2.95). At full strength, five-on-five, Buffalo is right at the league
-average (2.04 a game against 2.02). A man down, it allows the 4th-most. The goals-allowed total hasn't moved: 74 last year, 73
+average (2.04 a game against 2.02). A man down, it allows the 4th-most; more on that below. The goals-allowed total hasn't moved: 74 last year, 73
 this year. But 8 of last year's were into an empty net, against 1 this year, so with a goalie in net this year's team has allowed 6 more.
 
 **2. The puck stopped going in.** Not counting empty nets, last year's team scored 64 goals in its first 21 games on chances worth 58.2, about 6 more
@@ -47,7 +48,7 @@ and one goal to show for it. (His other goal was into an empty net.) Tage Thomps
 
 **3. Power-play goals against: the jump from 7 to 21 is mostly how many went in.** Opponents have scored 21 power-play goals on Buffalo in 21 games, tied for the 3rd-most in the league
 per game. At this point last year it was 7. Those power-play chances were worth 16.7 goals this year and 14.0 last year, on 150 shots this year
-and 164 last year (counting shots that missed the net, not blocked ones): fewer shots, but better ones. The average power-play shot against has been about 30% more dangerous. Most of the jump in goals is how many have gone in.
+and 164 last year (counting shots that missed the net, not blocked ones): fewer shots, but better ones. The average power-play shot against has been about 30% more dangerous.
 Last year's 7 was unusually low, too: about half what those chances were worth.
 
 ## Who's gone
@@ -71,22 +72,19 @@ Put together, last year's Sabres scored and saved about 36 more goals than their
 every other night. Of all 96 NHL teams over the last three seasons (32 a year), that was the most over the same stretch, just ahead of
 last season's Boston.
 
-## What it means
+## If I were GM
 
-This year's team can't count on a repeat. Last season's run came with the best goaltending-and-finishing stretch of any team in three years, barely ahead of
-Boston's, and as we found in that [50-win study](sabres-50-win-mirage.html), finishing and goaltending don't carry over well. Chances do,
-and on those this year's team is a little better on offense and worse on defense. Our [playoff chances story](sabres-playoff-chances.html) put Buffalo at about 16% after
-20 games, and found that cutting the chances it allows to league average would double that.
+*The numbers are Buffalo Quant Desk's. The calls are mine. — Charlie*
 
-## If we were the GM
-
-Here's what we'd do, in order, and how much the numbers can tell us about each move.
+Last season's run came with the best goaltending-and-finishing stretch of any team in three years, barely ahead of Boston's, and as we
+found in that [50-win study](sabres-50-win-mirage.html), that kind of luck doesn't carry over well. Chances do: this year's team is a little better on offense and worse
+on defense. So here's what I'd do, in order, and how much our numbers can back up each move.
 
 ![Chances allowed, five-on-five vs. shorthanded](sabres-then-now-gm.png)
 
 **1. Cut the chances allowed a man down.** The penalty kill is the biggest single source of the extra chances. A man down, Buffalo gives up an extra goal's worth of
 chances about every 8 games compared with an average team, about half of its whole gap to a league-average defense. Five-on-five is almost none of it; the next-biggest
-piece is overtime. If this pace held, getting the penalty kill to average would take away chances worth about 8 goals over the last 61 games. Remember from above: this
+piece is overtime. If this pace held, getting the penalty kill to average would take away chances worth about 8 goals over the last 61 games. This
 year's penalty kill faces fewer shots than last year's, just better ones. So the job is fewer, and less dangerous, shots while a man down. That's as much a coaching
 job as a roster one. (Buffalo also faces 7.1 power-play shots a game that aren't blocked, against 6.3 for the average team; we can't
 yet tell how much of that is taking more penalties, because we haven't finished checking the NHL's penalty data.)
@@ -98,14 +96,33 @@ rate. The balance of chances is the part of a team's game that carries over best
 those seasons, as a group, they scored almost exactly what their chances were worth. A cold start is a bad reason to trade a shooter. One caution: Benson has scored
 10 goals with a goalie in net in each of the last three seasons (11, 10 and 13 counting empty nets), on chances worth 12 to 15 each year. He creates chances; the goals may not catch up.
 
-**4. Shop for the finishing Tuch took.** Over a few weeks, finishing swings a lot. Over three years, some of it holds. Tuch scored 10 and 9 more goals than his chances
+**4. Leave Buffalo's own power play alone.** When the Sabres have the extra man, they create chances at a league-average rate (17th of 32 teams per game) but they're tied for 28th in goals:
+10 on chances worth 13.9. That's the same cold finishing as above, not a broken power play, and finishing tends to even out. Small sample, too.
+
+**5. When I do shop, look for proven finishers.** Over a few weeks, finishing swings a lot. Over three years, some of it holds. Tuch scored 10 and 9 more goals than his chances
 were worth the last two seasons (the year before he missed by a fraction of a goal), and has 11 goals with a goalie in net (12 in all) on chances worth 7.2 in Washington. Of 197 players whose chances were worth 10 or more goals in each
 of the last three seasons, 46 beat their chances in all three, about 13 more than luck alone would produce. That's about 1 in 4: finishing is real, but it's not common. Buffalo has two, Thompson and Rasmus Dahlin.
-That's the profile to look for. We don't know who's available or what they'd cost.
+That's the profile I'd look for. I don't know who's available or what they'd cost.
 
-**5. Don't plan on the goalies to save it.** Luukkonen is 3.3 goals worse than an average goalie this season and the other two are about average, a combined
+**6. Don't plan on the goalies to save it.** Luukkonen is 3.3 goals worse than an average goalie this season and the other two are about average, a combined
 4.4 goals worse than the chances against were worth. Goaltending was the biggest piece of last year's run (about 23 of the 36 goals),
-and it's the hardest part to predict. A GM can hope for it, but shouldn't build the plan on it.
+and it's the hardest part to predict. I'd hope for it, but I wouldn't build the plan on it.
+
+### What it adds up to
+
+Our [playoff chances story](sabres-playoff-chances.html) reran the season with one thing changed at a time, using games through Nov. 14, before the Nov. 17 loss to Philadelphia:
+
+| If the Sabres... | Playoff chance |
+|---|---|
+| Stay as they are | 16% |
+| Cut the chances they allow a man down to league average | 22% |
+| Cut all the chances they allow to league average | 32% |
+| Create one more goal's worth of chances every 5 games | 31% |
+| Do both: league-average defense and one more goal's worth of chances every 5 games | 52% |
+
+**My call: don't sell.** After 20 games last season our model would have given the Sabres a 12% playoff chance, and they finished with 109 points. Of the 23
+teams it gave between 5% and 30% at the same point over the last three seasons, 3 made it. A team at 16% isn't done. Cutting the chances allowed a man down to league average, on its own, moves it to 22%. Fix the defense and create a little more, and it's about a coin flip.
+I'd start in-house with the penalty kill. If it's still leaking by the 40-game mark, that's when I'd trade, and I'd go for help a man down first, then a proven finisher. Not a goalie.
 
 ## Sources for the roster moves
 
@@ -124,7 +141,9 @@ and it's the hardest part to predict. A GM can hope for it, but shouldn't build 
 - Luukkonen GSAx: 2025-26 games 1-21 -3.91 (5 GP), games 22+ +12.98 (30 GP); 2026-27 -3.32 (12 GP).
 - Tuch 2025-26 (BUF, non-empty-net): 32 G on 23.12 xG (317 unblocked). Benson 2026-27: 1 G on 7.55 xG (80). Thompson 2026-27: 13 G on 9.50 xG.
 - Standings goal totals for the first 21 games (shootout decider counted as a goal): GF 67 vs 58, GA 74 vs 74.
-- Ranks are per game among 32 teams through 2026-11-17. Table and chart goals include empty-net goals (2025-26: 8 against; 2026-27: 1 against)
+- Ranks are per game among 32 teams through 2026-11-17.
+- BUF power play (5v4, 5v3, 4v3) 2026-27: xGF/GP 0.664 (17th), GF/GP 0.476 (T-28th); 10 G on 13.94 xG.
+- What-if playoff chances are read from reports/2026-11-15-sabres-playoff-chances.md (ratings through 2026-11-14, 20,000 simulated seasons each); not rerun here. Table and chart goals include empty-net goals (2025-26: 8 against; 2026-27: 1 against)
   and exclude shootouts; G-xG and xGA-GA exclude empty nets. 5v5 xGA/GP: BUF 2.043, league 2.023 (15th-most). Opp-PP xGA/GP: BUF 0.794,
   league 0.661 (4th-most); xGA/GP gap by state: 5v5 +0.020, 3v3 +0.062; opp-PP xG per unblocked shot 0.085 vs 0.111; share of BUF's total xGA/GP gap to average 0.49; times 61 games = 8.1.
 - GM notes: shooters with G-xG <= -4 through team game 21, 2023-24 to 2025-26 (same team, still shooting after): n=11, rest-of-season G/xG 1.006.
