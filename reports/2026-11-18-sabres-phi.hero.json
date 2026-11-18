@@ -1,0 +1,30 @@
+{
+ "label": "Scoring chances, worth this many goals",
+ "big": [
+  [
+   2.2,
+   "Sabres"
+  ],
+  [
+   2.8,
+   "Flyers"
+  ]
+ ],
+ "note": "Final: Flyers 4, Sabres 3. Buffalo tied it with 15:29 left; Dvorak won it 52 seconds later on a shot with about a 2% chance.",
+ "explainer": {
+  "kicker": "Where the chances came from",
+  "title": "Even at five-on-five; Philadelphia's edge was the power play.",
+  "text": "Who had the better chances, and by how many goals:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Five-on-five: Sabres ahead by",
+    0.2
+   ],
+   [
+    "Power play: Flyers ahead by",
+    0.5
+   ]
+  ]
+ }
+}

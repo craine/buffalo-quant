@@ -1,0 +1,100 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "1134ef8178746b57de396f849523e32e376642084903674a6d0902359cf95c6a",
+   "at_utc": "2026-11-18T03:18:35Z",
+   "notes": "Every number generated and asserted against the game feed (score, goal sequence, 3-3 tie at 4:31 of the 3rd, winner 52 s later at 2% chance); pregame values (Woll +4.5, PHI 57% recent share, 5th-fewest chances, skid finishing 6 on 12.1) re-derived with assertions; P0018 graded (Brier 0.2304); both charts viewed; third-period chances split before/after the winner; no betting language"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "1134ef8178746b57de396f849523e32e376642084903674a6d0902359cf95c6a",
+   "at_utc": "2026-11-18T03:20:08Z",
+   "notes": "Needs edits: lead/site card describe the 2% winner as a frequency, contradicting the 0.9% in The winner; 'long shot' (also a betting term) for a 30-ft shot with no explanation why it rated 2% when a 27-ft goal rated 16% (writer must compute one sentence); 'What we said to watch' says the chances cost it but Lyon's 1.2 gap exceeds the 0.6 chances gap; cut repeated replay bullet; clarify whose 75%; hero explainer negative bar; minor jargon (+4.5, 0.23 scorecard, 3.2/3.2)",
+   "report": "2026-11-18-sabres-phi-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "1134ef8178746b57de396f849523e32e376642084903674a6d0902359cf95c6a",
+   "at_utc": "2026-11-18T03:21:36Z",
+   "notes": "PUBLISH WITH REQUIRED FIXES. All numbers re-derived independently and match; generator reproduces md/hero/PNGs byte-identical. Required: (1) 'finishing came back; chances it allowed are what cost it' contradicted (chance gap 0.59 vs Lyon -1.22; pre-winner chances ~even 2.00 vs 1.88; one game); (2) 'chances against are the thing to fix' is one-game prescription; BUF won 5v5 (53%), PHI 3rd-period edge mostly after the winner and on PP. Minor: 2% vs 0.9% framing (winner was a sharp-angle shot, 60 deg); 'What we said to watch' includes finishing that wasn't a watch item; 'long shot' betting-adjacent; model 3.2/3.2 vs chances; generator '?' fallback.",
+   "report": "2026-11-18-sabres-phi-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+   "at_utc": "2026-11-18T03:23:05Z",
+   "notes": "Round-1 Quant+Editor fixes applied: 2% wording; 'long shot' removed; computed why-2% sentence (angle, similar-shot rate 31/810); finishing bullet rewritten with goalie/chances split; 'thing to fix' replaced with five-on-five vs power play; 75% owner; tie sentence moved; expected-goals line cut; hero explainer positive labels; chart title shortened"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+   "at_utc": "2026-11-18T03:23:05Z",
+   "notes": "Round 1 pass with required fixes (saved report); applied, to be verified at final check",
+   "report": "2026-11-18-sabres-phi-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+   "at_utc": "2026-11-18T03:23:57Z",
+   "notes": "Round 2: all round-1 items fixed (2% wording, long shot -> explained sharp angle, overclaim, 75%, hero signs, repetition). Optional polish only: 4% vs 2% framing in The winner, '26 feet to the side', Woll 'whom', 'Even at five-on-five' header, hero rounding.",
+   "report": "2026-11-18-sabres-phi-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+   "at_utc": "2026-11-18T03:25:03Z",
+   "notes": "One fix needed: 'out-chanced Buffalo only on the power play' is contradicted by the story's own situations chart and stat-heads (PHI also ahead in everything else, 0.37 vs 0.15: 4v4 0.21 vs 0.12, SH 0.16). Change 'only' to 'mainly'. Everything else verified: round-1 fixes applied; winner geometry (15 ft out, 26 ft side, 60 deg), Thompson 27 ft/6 deg/16%, similar shots 31/810 = 4%, 0.6 gap, Lyon 1.2, 5v5/PP numbers, hero positive labels, site card, no betting language, charts OK, generator reproduces md/hero/PNGs byte-identical.",
+   "report": "2026-11-18-sabres-phi-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "a646b7138371f8a43c19cf5528b5fe55a8abf49d2d8702569538fa2ef15f83c6",
+   "at_utc": "2026-11-18T03:25:31Z",
+   "notes": "Final-check fix: 'only' -> 'mainly' on the power play; bullet heading 'About even at five-on-five'; '26 feet to the side of the middle of the net'; Woll sentence split; headline seconds computed"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a646b7138371f8a43c19cf5528b5fe55a8abf49d2d8702569538fa2ef15f83c6",
+   "at_utc": "2026-11-18T03:26:44Z",
+   "notes": "Round 2: 'only'->'mainly' applied; 3 changed lines (bullet heading, 'middle of the net', Woll sentence) all true; headline 52 s now computed, renders identically; generator reproduces md/hero/PNGs byte-identically; no betting language.",
+   "report": "2026-11-18-sabres-phi-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "a646b7138371f8a43c19cf5528b5fe55a8abf49d2d8702569538fa2ef15f83c6",
+  "at_utc": "2026-11-18T03:25:31Z",
+  "notes": "Final-check fix: 'only' -> 'mainly' on the power play; bullet heading 'About even at five-on-five'; '26 feet to the side of the middle of the net'; Woll sentence split; headline seconds computed"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+  "at_utc": "2026-11-18T03:23:57Z",
+  "notes": "Round 2: all round-1 items fixed (2% wording, long shot -> explained sharp angle, overclaim, 75%, hero signs, repetition). Optional polish only: 4% vs 2% framing in The winner, '26 feet to the side', Woll 'whom', 'Even at five-on-five' header, hero rounding.",
+  "report": "2026-11-18-sabres-phi-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "2798670e561ca4d02392cac8064f7054c30bbcba9f0ba584f9e8eec33d447742",
+  "at_utc": "2026-11-18T03:23:05Z",
+  "notes": "Round 1 pass with required fixes (saved report); applied, to be verified at final check",
+  "report": "2026-11-18-sabres-phi-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "a646b7138371f8a43c19cf5528b5fe55a8abf49d2d8702569538fa2ef15f83c6",
+  "at_utc": "2026-11-18T03:26:44Z",
+  "notes": "Round 2: 'only'->'mainly' applied; 3 changed lines (bullet heading, 'middle of the net', Woll sentence) all true; headline 52 s now computed, renders identically; generator reproduces md/hero/PNGs byte-identically; no betting language.",
+  "report": "2026-11-18-sabres-phi-final.md"
+ }
+}
