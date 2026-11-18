@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-capitals-pregame-nov-19", "2026-11-19-sabres-wsh-pregame.md", "2026-11-18", "Sabres &middot; Preview",
+     "Our model gives Buffalo a 42% chance in Washington. Alex Tuch leads the Capitals in goals, and Buffalo's leaky penalty kill meets one of the league's quieter power plays.",
+     "sabres-wsh-special.png"),
     ("sabres-if-i-were-gm", "2026-11-18-sabres-then-now.md", "2026-11-18", "Sabres &middot; If I were GM",
      "By Charlie. Same 8-9-4 start as last year's 50-win team, but a different Sabres team. What changed, and how I'd fix it: the penalty kill first, patience with the shooters, and don't sell.",
      "sabres-then-now-gm.png"),

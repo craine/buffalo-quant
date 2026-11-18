@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Washington, Thursday 7 p.m.",
+ "big": [
+  [
+   "42%",
+   "Buffalo's chance to win, our model (Capitals 58%)"
+  ],
+  [
+   "4th-most",
+   "Chances Buffalo's penalty kill allows, of 32 teams"
+  ]
+ ],
+ "note": "Alex Tuch leads Washington with 12 goals and scored twice against Buffalo on Oct. 24. Buffalo's leaky penalty kill meets one of the league's quieter power plays.",
+ "explainer": {
+  "kicker": "A man down",
+  "title": "Buffalo's penalty kill vs. the league",
+  "text": "Scoring chances allowed while a man down, counted in the goals they're worth, per game:",
+  "fmt": "num",
+  "bars": [
+   [
+    "League average",
+    0.66
+   ],
+   [
+    "Sabres",
+    0.8
+   ]
+  ]
+ }
+}

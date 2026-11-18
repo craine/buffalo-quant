@@ -1,0 +1,133 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "0d577d39198c07841c03e9596242e193d83e901d7bfb7251f37c46991d9e8a22",
+   "at_utc": "2026-11-18T18:02:54Z",
+   "notes": "All numbers computed with asserts (records, skid 5, trip 4 of 6, Oct 24 OT 4-3 + xG, Tuch 12 goals/2 in meeting/0 PP, PP/PK ranks, goalies, model 42%, calibration bin). Data complete through Nov 17 (11 games; asserted all scheduled games present). Charts viewed. Ledger script ready (not yet run)."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "0d577d39198c07841c03e9596242e193d83e901d7bfb7251f37c46991d9e8a22",
+   "at_utc": "2026-11-18T18:04:51Z",
+   "notes": "Needs edits: misquotes GM story ('hardest thing to replace'); same-date numbers differ from GM story (xG factor 0.992 vs 0.986: xGA/GP 3.24 vs 3.22, Luukkonen -3.1 vs -3.3); hero tile/explainer and chances + model-test chart titles don't stand alone; WSH PK/BUF PP half of matchup missing; 'Tuch's return' header; skid evidence mismatch; 'picking'; decimals; 6.9 total expected goals to confirm.",
+   "report": "2026-11-19-sabres-wsh-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "a900d66d668bf4fe29482a194de4d97133fd23b098380532573f8bfd4c4341f9",
+   "at_utc": "2026-11-18T18:08:30Z",
+   "notes": "Numbers all verify (42.2%, ranks, PK/PP, Tuch, goalies, calibration, ledger UTC). Fix before publish: model-test chart title clipped; 'Tuch is exactly that profile' contradicts GM story (missed 2023-24); 'shopping list starts with a proven finisher' reverses GM order (PK help first); '2 days off' should be one day off (both played Nov 17).",
+   "report": "2026-11-19-sabres-wsh-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "e857ab5a4d9816826ee21ee4f0b92eb860554c4051d4399bb859a3aaa2d14089",
+   "at_utc": "2026-11-18T18:10:02Z",
+   "notes": "Round 2: all 15 round-1 findings applied; ready. Optional polish: model-test chart title add 'chance to win'; Tuch 'about 9' stated twice; clarify Tuesday note (league-wide games); 'over a season' wording.",
+   "report": "2026-11-19-sabres-wsh-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "e857ab5a4d9816826ee21ee4f0b92eb860554c4051d4399bb859a3aaa2d14089",
+   "at_utc": "2026-11-18T18:10:15Z",
+   "notes": "Round 2: all four round-1 fixes verified (chart title fits, Tuch/GM-story wording matches the GM story and per-season numbers, one day off, no 'yesterday'; card dated 2026-11-18). Every number re-derived independently; 42.2% matches the ledger script; clean-copy regen byte-identical.",
+   "report": "2026-11-19-sabres-wsh-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "cb37759e818c8b31443527fb8ccd5f829fe4356b75cc07255e07ede524b8ed43",
+   "at_utc": "2026-11-18T18:12:10Z",
+   "notes": "Stage 4 on the post-polish text: chart title fits and is correct (54%, 426 games); Tuch +9.7/+8.9 in his last two Buffalo seasons verified; the 'every game played Tuesday' reason confirmed (dropping the 4 pinned late games reproduces the GM story: factor 0.986, 3.22, 2.95); the playoff story backs 'doesn't carry over' (finishing 0.05, goaltending 0.01). Clean regen byte-identical; 42% matches the ledger script.",
+   "report": "2026-11-19-sabres-wsh-pregame-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "939e6fe210156a784e651d598115f77dd5407ef552023e11794aeb32ecb8877e",
+   "at_utc": "2026-11-18T18:18:13Z",
+   "notes": "Added 'Notes for Thursday': Thompson/Tuch NHL goal ranks (with ties), Benson league-worst goals-vs-chances gap (asserted idxmin) with 3-season caveat consistent with GM story, overtime records 2-4 vs 2-0 and OT chances (asserted). All computed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "939e6fe210156a784e651d598115f77dd5407ef552023e11794aeb32ecb8877e",
+   "at_utc": "2026-11-18T18:18:38Z",
+   "notes": "Round 3: Notes for Thursday section is fan-readable and shareable, caveated; pass. Polish: Benson bold line should stand alone ('No NHL player is further behind his chances than Zach Benson'); OT chances sentence order + 'six games' + model ignores OT records; Quant to confirm Benson 7.6 vs GM 7.5.",
+   "report": "2026-11-19-sabres-wsh-pregame-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
+   "at_utc": "2026-11-18T18:19:29Z",
+   "notes": "Round 3 Notes verified independently: Thompson 13 T-6th, Tuch 12 T-10th (non-shootout, incl EN); Benson 1 G on 7.59, -6.59 widest of 772 unblocked shooters, under his chances each of the last 3 seasons; BUF 2-4 / WSH 2-0 past regulation; BUF OT chances 1.78 for vs 2.73 against in 6 games. Rest unchanged; regen byte-identical.",
+   "report": "2026-11-19-sabres-wsh-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
+   "at_utc": "2026-11-18T18:19:30Z",
+   "notes": "Round 3: only the Notes section changed; all its numbers verified; rest unchanged; clean regen byte-identical; 42% still matches the ledger script.",
+   "report": "2026-11-19-sabres-wsh-pregame-final.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
+   "at_utc": "2026-11-18T18:20:13Z",
+   "notes": "Round 3b polish verified: Benson 7.59 on this story's data (-6.59, widest of 772); overtime chances 2.73 vs 1.78 cover exactly the same 6 past-regulation games; 'model doesn't count overtime records' true. Clean regen byte-identical.",
+   "report": "2026-11-19-sabres-wsh-pregame-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
+   "at_utc": "2026-11-18T18:20:14Z",
+   "notes": "Round 3b: current text (with Notes polish) passes; nothing else changed; regen byte-identical; 42% matches the ledger script.",
+   "report": "2026-11-19-sabres-wsh-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "f86f954502314746a10586723ab1b3648549bb1187587d701428b9f6672deb75",
+   "at_utc": "2026-11-18T18:21:34Z",
+   "notes": "Round 4: only line 89 changed (logged timestamp). P0019 matches: 0.42, created 18:13:40Z before 00:00Z Nov 20 puck drop, nhl-game-v0.1, expected goals 3.19/3.67, tie 0.153, data through Nov 17. Code unchanged; clean regen byte-identical.",
+   "report": "2026-11-19-sabres-wsh-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "939e6fe210156a784e651d598115f77dd5407ef552023e11794aeb32ecb8877e",
+  "at_utc": "2026-11-18T18:18:13Z",
+  "notes": "Added 'Notes for Thursday': Thompson/Tuch NHL goal ranks (with ties), Benson league-worst goals-vs-chances gap (asserted idxmin) with 3-season caveat consistent with GM story, overtime records 2-4 vs 2-0 and OT chances (asserted). All computed."
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "939e6fe210156a784e651d598115f77dd5407ef552023e11794aeb32ecb8877e",
+  "at_utc": "2026-11-18T18:18:38Z",
+  "notes": "Round 3: Notes for Thursday section is fan-readable and shareable, caveated; pass. Polish: Benson bold line should stand alone ('No NHL player is further behind his chances than Zach Benson'); OT chances sentence order + 'six games' + model ignores OT records; Quant to confirm Benson 7.6 vs GM 7.5.",
+  "report": "2026-11-19-sabres-wsh-pregame-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "fae98212b1a7753b7ad369a469314f2e1300d102cb4163e22817505148fb8ec9",
+  "at_utc": "2026-11-18T18:20:13Z",
+  "notes": "Round 3b polish verified: Benson 7.59 on this story's data (-6.59, widest of 772); overtime chances 2.73 vs 1.78 cover exactly the same 6 past-regulation games; 'model doesn't count overtime records' true. Clean regen byte-identical.",
+  "report": "2026-11-19-sabres-wsh-pregame-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "f86f954502314746a10586723ab1b3648549bb1187587d701428b9f6672deb75",
+  "at_utc": "2026-11-18T18:21:34Z",
+  "notes": "Round 4: only line 89 changed (logged timestamp). P0019 matches: 0.42, created 18:13:40Z before 00:00Z Nov 20 puck drop, nhl-game-v0.1, expected goals 3.19/3.67, tie 0.153, data through Nov 17. Code unchanged; clean regen byte-identical.",
+  "report": "2026-11-19-sabres-wsh-pregame-final.md"
+ }
+}

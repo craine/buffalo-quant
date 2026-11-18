@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 
 from src.db import ROOT, query
+from src.reports.pins import drop_late
 from src.metrics.nhl_team import shots
 from src.reports.defense_baseline import BLUE, INK, MUTED
 from src.reports.sabres_postgame import finish, ordn
@@ -43,7 +44,7 @@ def pmf(ps):
 
 def main(as_of=AS_OF):
     s = shots()
-    keep = query(f"SELECT game_id, season, game_date, home, away FROM raw_nhl_games WHERE game_date <= '{as_of}'")
+    keep = drop_late(query(f"SELECT game_id, season, game_date, home, away FROM raw_nhl_games WHERE game_date <= '{as_of}'"), as_of)
     s = s[s.game_id.isin(set(keep.game_id))].copy()
     unb = (s.unblocked == 1) & (s.empty_net_against == 0)
     cal = s[unb].groupby("season").goal.sum() / s[unb].groupby("season").xg.sum()
