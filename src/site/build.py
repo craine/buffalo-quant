@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-flyers-postgame-nov-17", "2026-11-18-sabres-phi.md", "2026-11-18", "Sabres &middot; Post-game",
+     "Flyers 4, Sabres 3. Buffalo tied it with 15:29 left; Christian Dvorak won it 52 seconds later on a shot with about a 2% chance of going in. Philadelphia's chances were worth 2.8 goals to Buffalo's 2.2, the difference mostly on the power play.",
+     "sabres-phi-post-flow.png"),
     ("nfl-playoff-odds-wk11", "2026-wk11-nfl-playoff-odds.md", "2026-11-17", "Bills &middot; NFL playoff chances",
      "Every team's playoff chances after week 10, with quarterback injuries built in. The Bills win the AFC East 95% of the time, most often locking it up in week 14 or 15.",
      "wk11-odds-afc-ladder.png"),
