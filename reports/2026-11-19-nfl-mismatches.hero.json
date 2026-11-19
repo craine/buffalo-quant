@@ -1,0 +1,42 @@
+{
+ "label": "Lopsided NFL games, 1999-2025",
+ "big": [
+  [
+   "79%",
+   "How often the much better team won (17+ point gap in scoring margin)"
+  ],
+  [
+   "81%",
+   "Bills' chance vs. Miami Sunday, our model"
+  ]
+ ],
+ "note": "About 1 in 5 lopsided games still go the other way. The Bills have been the much better team and lost 5 times since 1999, including at Jacksonville in 2021.",
+ "explainer": {
+  "kicker": "Past 17 points, a bigger gap barely helps",
+  "title": "Better team's win rate",
+  "text": "By gap in scoring margin going in:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "7-10 pts",
+    0.669
+   ],
+   [
+    "10-14 pts",
+    0.713
+   ],
+   [
+    "14-17 pts",
+    0.737
+   ],
+   [
+    "17-20 pts",
+    0.791
+   ],
+   [
+    "20+ pts",
+    0.797
+   ]
+  ]
+ }
+}
