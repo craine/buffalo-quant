@@ -1,0 +1,30 @@
+{
+ "label": "Scoring chances, worth this many goals",
+ "big": [
+  [
+   1.9,
+   "Sabres"
+  ],
+  [
+   3.7,
+   "Capitals"
+  ]
+ ],
+ "note": "Final: Sabres 6, Capitals 3. The skid is over. Buffalo scored 4 in the first period on chances worth 0.9.",
+ "explainer": {
+  "kicker": "Was it luck?",
+  "title": "Goals vs. chances, Sabres",
+  "text": "Goals scored and what the chances were worth (empty net excluded):",
+  "fmt": "num",
+  "bars": [
+   [
+    "Goals",
+    5
+   ],
+   [
+    "Chances were worth",
+    1.9
+   ]
+  ]
+ }
+}
