@@ -1,0 +1,78 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2de2c941fb8573d61469470a60d52764a475acdba413f0600d7bbd4dd5951d55",
+   "at_utc": "2026-11-20T03:59:01Z",
+   "notes": "Score, goals table, period chances, replay 14%, finishing rank 2 of 22, skid 9 G on 14.3, goalie change after 3 goals on 5 SOG, Benson/Thompson/Tuch, WSH PP 1.18 vs 0.52 pre (asserted), Ledger P0019 graded (miss, Brier 0.3364), schedule all computed with asserts. Late Nov 19 games pinned. Plain language. Charts viewed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "2de2c941fb8573d61469470a60d52764a475acdba413f0600d7bbd4dd5951d55",
+   "at_utc": "2026-11-20T04:03:09Z",
+   "notes": "PUBLISH WITH REQUIRED FIXES. All numbers re-derived independently (raw plays/games/rosters + own rescale) and match; generator reproduces md/hero/PNGs byte-identical in a clean copy. Required: (1) lede 14% is regulation wins only, tie 13% omitted; (2) Benson has 3 goals, not 2 (2 with goalie in net) - writer computes 3; (3) GM story said fix the penalty kill first, not 'the chances'. Minor: 'first 5 shots' -> 'the 5 shots he faced'; '66% of them' is share of chance value -> 'about twice Buffalo's'. Luck framing fair.",
+   "report": "2026-11-20-sabres-wsh-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "2de2c941fb8573d61469470a60d52764a475acdba413f0600d7bbd4dd5951d55",
+   "at_utc": "2026-11-20T04:03:09Z",
+   "notes": "Needs edits: stacked-clause headline ('on a night Washington...'); 'we had the less likely winner'; 'after a skid of cold shooting, it was ... finishing night'; 'first 5 shots that reached him'; repeated '4 in the first on 0.9'; 'poke from 8 ft'; clunky table headers; '0.52 a game' unexplained; dek 'finished the ones it got'; plus Quant fixes (ties, Benson 3 goals, GM-story line). Plain rewrites in report.",
+   "report": "2026-11-20-sabres-wsh-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "f729e5cc6775c5d0130e8e643b014dcea35ce1e0693ed8d0454d230593e6674b",
+   "at_utc": "2026-11-20T04:04:54Z",
+   "notes": "Round 2: all round-1 text edits applied and read plainly; story text passes. Blocking: flow chart title is cut off at the right edge ('...plus an empty-netter) or'); shorten to e.g. 'Buffalo scored 5 (plus an empty-netter) on chances worth 1.9' and re-open the PNG. Optional: 'finishing night' -> 'shooting night' consistency; split long penalty-kill sentence.",
+   "report": "2026-11-20-sabres-wsh-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "71068ef962704546e6ac45c9c0c9f2878b0b0e44e47f37989030ae45eafa4143",
+   "at_utc": "2026-11-20T04:07:30Z",
+   "notes": "Round 3: flow chart title fits; 'shooting night in 22 games' matches the lede; penalty-kill passage split into two plain sentences. All round-1/2 edits in. Non-blocking: finishing chart title still says 'finishing night'.",
+   "report": "2026-11-20-sabres-wsh-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "71068ef962704546e6ac45c9c0c9f2878b0b0e44e47f37989030ae45eafa4143",
+   "at_utc": "2026-11-20T04:07:31Z",
+   "notes": "All changes since stage 2 verified against independent numbers (14% reg win + 13% tie, Benson 2 of 3 on 7.9, PK 9 shots 1.2 / 0.52 a game, 5 shots faced, rank 2 of 22, twice = 1.98x); flow chart title fits; clean-copy rerun byte-identical (md, hero, both PNGs); no betting language.",
+   "report": "2026-11-20-sabres-wsh-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "2de2c941fb8573d61469470a60d52764a475acdba413f0600d7bbd4dd5951d55",
+  "at_utc": "2026-11-20T03:59:01Z",
+  "notes": "Score, goals table, period chances, replay 14%, finishing rank 2 of 22, skid 9 G on 14.3, goalie change after 3 goals on 5 SOG, Benson/Thompson/Tuch, WSH PP 1.18 vs 0.52 pre (asserted), Ledger P0019 graded (miss, Brier 0.3364), schedule all computed with asserts. Late Nov 19 games pinned. Plain language. Charts viewed."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "2de2c941fb8573d61469470a60d52764a475acdba413f0600d7bbd4dd5951d55",
+  "at_utc": "2026-11-20T04:03:09Z",
+  "notes": "PUBLISH WITH REQUIRED FIXES. All numbers re-derived independently (raw plays/games/rosters + own rescale) and match; generator reproduces md/hero/PNGs byte-identical in a clean copy. Required: (1) lede 14% is regulation wins only, tie 13% omitted; (2) Benson has 3 goals, not 2 (2 with goalie in net) - writer computes 3; (3) GM story said fix the penalty kill first, not 'the chances'. Minor: 'first 5 shots' -> 'the 5 shots he faced'; '66% of them' is share of chance value -> 'about twice Buffalo's'. Luck framing fair.",
+  "report": "2026-11-20-sabres-wsh-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "71068ef962704546e6ac45c9c0c9f2878b0b0e44e47f37989030ae45eafa4143",
+  "at_utc": "2026-11-20T04:07:30Z",
+  "notes": "Round 3: flow chart title fits; 'shooting night in 22 games' matches the lede; penalty-kill passage split into two plain sentences. All round-1/2 edits in. Non-blocking: finishing chart title still says 'finishing night'.",
+  "report": "2026-11-20-sabres-wsh-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "71068ef962704546e6ac45c9c0c9f2878b0b0e44e47f37989030ae45eafa4143",
+  "at_utc": "2026-11-20T04:07:31Z",
+  "notes": "All changes since stage 2 verified against independent numbers (14% reg win + 13% tie, Benson 2 of 3 on 7.9, PK 9 shots 1.2 / 0.52 a game, 5 shots faced, rank 2 of 22, twice = 1.98x); flow chart title fits; clean-copy rerun byte-identical (md, hero, both PNGs); no betting language.",
+  "report": "2026-11-20-sabres-wsh-final.md"
+ }
+}
