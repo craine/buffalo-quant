@@ -19,10 +19,10 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("nfl-mismatches-home", "2026-11-21-nfl-mismatches-home.md", "2026-11-21", "Bills &middot; By the numbers",
-     "A much better NFL team wins about 9 in 10 at home but only about 7 in 10 on the road, and rivalry games are no closer. Sunday's Bills-Dolphins game is in Buffalo.",
+     "Much better NFL teams win about 9 in 10 games at home and 7 in 10 on the road. Division games are no different. Sunday's game is in Buffalo.",
      "nfl-mismatch-home.png"),
     ("nfl-mismatches", "2026-11-19-nfl-mismatches.md", "2026-11-19", "Bills &middot; By the numbers",
-     "Lopsided NFL games still go the other way about 1 in 5 times. Sunday's Bills-Dolphins game is that kind of mismatch, and our model gives Buffalo an 81% chance.",
+     "When an NFL team is much better than its opponent, it still loses about 1 game in 5. Our model gives the Bills an 81% chance to beat Miami on Sunday.",
      "nfl-mismatch-history.png"),
     ("sabres-capitals-pregame-nov-19", "2026-11-19-sabres-wsh-pregame.md", "2026-11-18", "Sabres &middot; Preview",
      "Our model gives Buffalo a 42% chance in Washington. Alex Tuch leads the Capitals in goals, and Buffalo's leaky penalty kill meets one of the league's quieter power plays.",

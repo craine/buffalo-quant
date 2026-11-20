@@ -70,19 +70,58 @@
    "at_utc": "2026-11-20T03:00:46Z",
    "notes": "Final check on ce79453f: only change is the Sunday line ('our model's chance for the Bills on Sunday, from the first story, is 81%'), accurate; hero/card/PNGs unchanged; clean copy byte-identical. Quant numbers verified on prior text unchanged. Open: log the 81% BUF-MIA call on the Ledger before 2026-11-22 kickoff.",
    "report": "2026-11-21-nfl-mismatches-home-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "0921192fe3a67126758f3e0a87cfdeb862ed0d36d1e77860053dd332341ae173",
+   "at_utc": "2026-11-20T03:14:30Z",
+   "notes": "Plain-language rewrite at Charlie's request: new lead (much better = 17+ gap in point differential, defined in italics right after), 'scoring margin' renamed 'point differential' throughout; all numbers unchanged and still computed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "0921192fe3a67126758f3e0a87cfdeb862ed0d36d1e77860053dd332341ae173",
+   "at_utc": "2026-11-20T03:15:49Z",
+   "notes": "Plain-language round: 'one team's point differential was 17+ points a game better' still in endings chart subtitle and cold note; stilted headline; 'lopsided' hero label; 'point gap in point differential' labels. 16 rewrites listed.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "450c77a69abe9128f052af43983f4aba551cd3afdb920984d0dc15f4486dfb56",
+   "at_utc": "2026-11-20T03:18:31Z",
+   "notes": "Plain-language round 2: two small lines left: intro link text 'how often big NFL mismatches go wrong' -> 'how often the much better NFL team loses'; '75% and 73%' line needs 'of division games / of other games'.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "1d98a4154c0f61fd2f4c4fe65fda467d1472abfc7fd3ce1806f0ce6514842846",
+   "at_utc": "2026-11-20T03:19:24Z",
+   "notes": "Plain-language round 3: link text and 75%/73% line fixed; whole story, charts, hero, blurb read plainly.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "1d98a4154c0f61fd2f4c4fe65fda467d1472abfc7fd3ce1806f0ce6514842846",
+   "at_utc": "2026-11-20T03:19:24Z",
+   "notes": "Wording-only vs final-checked ce79453f (lead sample sizes moved to stat-heads only; 9 in 10/7 in 10 = 88%/73% rounded); hero and stat-heads unchanged; clean copy /tmp/qa/clean6 byte-identical md, hero, both PNGs; 81% read from current 11-19 text (regex+assert, negative test fails as expected).",
+   "report": "2026-11-21-nfl-mismatches-home-final.md"
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "2840f7520db80b0737864365be87cecd0124a6ea8169bf4371d0fd9f1b2158cc",
-  "at_utc": "2026-11-20T02:55:46Z",
-  "notes": "Same sample as the first story (asserted 5,205). Home/road, division, upset margins, cold (n=29, temp missing 4%), parity split, Bills-Miami 4-2 all computed with asserts; no market columns read. Charts viewed; text and chart use the same one-score cutoff (8)."
+  "sha256": "0921192fe3a67126758f3e0a87cfdeb862ed0d36d1e77860053dd332341ae173",
+  "at_utc": "2026-11-20T03:14:30Z",
+  "notes": "Plain-language rewrite at Charlie's request: new lead (much better = 17+ gap in point differential, defined in italics right after), 'scoring margin' renamed 'point differential' throughout; all numbers unchanged and still computed."
  },
  "editor": {
   "verdict": "pass",
-  "sha256": "fe97a0fd04eae85b8b78cb45b5e12c1aa37af8746f343b4a1b3dae34324c7fb1",
-  "at_utc": "2026-11-20T02:59:58Z",
-  "notes": "Round 3: all round-1 and round-2 fixes in. Home edge '10 to 18 more games out of every 100' matches chart; Sunday states 88% is history and published chance is still 81% with no unsupported why. Optional: 'our model's published chance'.",
+  "sha256": "1d98a4154c0f61fd2f4c4fe65fda467d1472abfc7fd3ce1806f0ce6514842846",
+  "at_utc": "2026-11-20T03:19:24Z",
+  "notes": "Plain-language round 3: link text and 75%/73% line fixed; whole story, charts, hero, blurb read plainly.",
   "report": "2026-11-21-nfl-mismatches-home-editor.md"
  },
  "quant": {
@@ -94,9 +133,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "ce79453f06b220c1baeee7d1e061546730fd82b059bf168ea14f789ea14b7b0d",
-  "at_utc": "2026-11-20T03:00:46Z",
-  "notes": "Final check on ce79453f: only change is the Sunday line ('our model's chance for the Bills on Sunday, from the first story, is 81%'), accurate; hero/card/PNGs unchanged; clean copy byte-identical. Quant numbers verified on prior text unchanged. Open: log the 81% BUF-MIA call on the Ledger before 2026-11-22 kickoff.",
+  "sha256": "1d98a4154c0f61fd2f4c4fe65fda467d1472abfc7fd3ce1806f0ce6514842846",
+  "at_utc": "2026-11-20T03:19:24Z",
+  "notes": "Wording-only vs final-checked ce79453f (lead sample sizes moved to stat-heads only; 9 in 10/7 in 10 = 88%/73% rounded); hero and stat-heads unchanged; clean copy /tmp/qa/clean6 byte-identical md, hero, both PNGs; 81% read from current 11-19 text (regex+assert, negative test fails as expected).",
   "report": "2026-11-21-nfl-mismatches-home-final.md"
  }
 }

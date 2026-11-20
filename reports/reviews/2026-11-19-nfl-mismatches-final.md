@@ -101,3 +101,7 @@ Unchanged numbers were spot-checked against the round-1 recompute and are identi
 # Stage 4 final check (same text, md5 7b18e03c...)
 
 **PASS.** I checked what changed since round 1: the early/late sentence, the Week 18 note, "about 15", the 36-of-44 aside, the Weeks 2+ note and the lead line. I also checked everything those changes touch: hero JSON note, site dek and both charts. All are consistent with the data and with each other.
+
+# Final check after the plain-language rewrite
+
+**PASS.** Compared with the previously final-checked text (sha256 f75652c7..., git HEAD): only wording changed. Every number removed or added in the md was a lead number that is also in the body: removed "17" x2, "27", "30", "20", "4 in 5"; added "1999", "9.8", "8.4", "18.2". The hero JSON adds "16", the Bills' 16 games as the much better team, already in the body. The tables and stat-heads section are unchanged. "18.2 points a game better" is the same gap shown in the table and on the chart. A clean-copy re-run (/tmp/qa/clean5, tracked files plus the current generator) reproduces the md, hero JSON, nfl-mismatch-history.png and nfl-mismatch-model.png byte-for-byte. Charts viewed.

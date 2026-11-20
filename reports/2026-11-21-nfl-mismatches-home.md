@@ -1,42 +1,41 @@
-# Even a much better NFL team wins far less often on the road. Rivalry games aren't any closer.
+# Much better NFL teams win 9 in 10 at home, 7 in 10 on the road. Rivalry games are no closer.
 
-**In the last 27 seasons, when one team's scoring margin was 17 or more points a game better than its opponent's, it won 88% of the time at home
-(183 games) and only 73% on the road (237 games). Division games, the ones fans expect to be closer, came out the same as any other. And when
-the much better team did lose, it was usually a close game. Sunday's Dolphins at Bills game is the home kind.**
+**Since 1999, NFL teams that were much better than their opponent won 88% of the time at home and 73% on the road.
+Division games were no different. When the better team lost, it was usually close. Sunday's Bills-Dolphins game is in Buffalo.**
 
-*This follows our story on [how often big NFL mismatches go wrong](nfl-mismatches.html), using the same 5,205 regular-season games from 1999 to 2025. A
-mismatch is the gap between the two teams' scoring margins (points scored minus allowed, per game) going into the game. We don't use betting lines.*
+*This follows our story on [how often the much better NFL team loses](nfl-mismatches.html), using the same 5,205 regular-season games from 1999 to 2025. 
+"Much better" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game. We don't use betting lines.*
 
 ![Home vs road](nfl-mismatch-home.png)
 
 ## Home field
 
 Home teams won 56% of all these games, and the home edge shows up at every size of mismatch: in every group on the chart, the better team won 10 to
-18 more games out of every 100 at home than on the road. A big gap doesn't make it go away. Among the 86 times a much better team lost, 64
+18 more games out of every 100 at home than on the road. Even in the biggest mismatches, home field still matters. Of the 86 times a much better team lost, 64
 were on the road.
 
 ## Sunday
 
-The Bills have outscored opponents by 9.8 points a game this season, and Miami has been outscored by 8.4: a gap of 18.2, with the game in Buffalo.
-Sunday fits the group that won 88% of the time. That describes past games, not a forecast: our model's chance for the Bills on Sunday, from the first story, is 81%.
+The Bills have outscored opponents by 9.8 points a game this season, and Miami has been outscored by 8.4, so the Bills are 18.2 points a game better, and they're at home.
+Much better teams at home have won 88% of the time. That's history, not a forecast: our model's chance for the Bills on Sunday, from the first story, is 81%.
 
 ## Rivalry games aren't closer
 
-"Throw out the records" is a common line for division games. The numbers don't back it up. With a gap of 17 or more, the better team won 80% of division
-games (171) and 79% of the rest (249). With a gap of 10 or more it was 75% and 73%. The Bills, when they were the
-better team by 10 or more going in, went 4-2 against Miami from 1999 to 2025, too few games to read much into.
+"Throw out the records" is a common line for division games. The numbers don't back it up. Much better teams won 80% of division
+games (171 games) and 79% of other games (249). Teams 10 or more points a game better won 75% of division games and 73% of other games. When the Bills were
+10 or more points a game better than Miami going in, they went 4-2 from 1999 to 2025. That's too few games to read much into.
 
 ## When the upset comes, it's usually close
 
 ![How the games ended](nfl-mismatch-endings.png)
 
-In the 86 games the much better team lost, the typical upset was decided by 5 points (half were closer, half wider), and 65% were one-score games
-(8 points or fewer). When the much better team won, it won by 17 or more 42% of the time and by one score 36% of the time. Its typical winning margin was
-13 points.
+In the 86 games the much better team lost, the typical upset was decided by 5 points, and 65% were one-score games
+(8 points or fewer). When the much better team won, it won by 17 or more 42% of the time and by one score 36% of the time. Its typical win was
+by 13.
 
 ## One smaller note
 
-**Cold weather.** When a team 17+ points a game better hosted outdoors at 40°F or colder, it won 28 of 29. That's a small group, and the schedule
+**Cold weather.** When a much better team played at home outdoors at 40°F or colder, it won 28 of 29. That's a small group, and the schedule
 data has no temperature for 4% of these outdoor home games, so take it as a note, not a finding.
 
 ## For the stat-heads

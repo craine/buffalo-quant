@@ -1,19 +1,19 @@
 {
- "label": "Lopsided NFL games, 1999-2025",
+ "label": "Big NFL mismatches, 1999-2025",
  "big": [
   [
    "88%",
-   "Much better team at home won (17+ point gap in scoring margin)"
+   "How often the much better team won at home (17+ points a game better by point differential)"
   ],
   [
    "73%",
-   "Much better team on the road won"
+   "How often the much better team won on the road"
   ]
  ],
  "note": "Division games came out the same as any other, and when the much better team lost, it was usually a one-score game.",
  "explainer": {
   "kicker": "Home vs. road",
-  "title": "How often a much better team won (17+ point gap in scoring margin)",
+  "title": "How often a much better team won (17+ points a game better by point differential)",
   "text": "How often the much better team won:",
   "fmt": "pct",
   "bars": [

@@ -1,7 +1,7 @@
 """How often do big NFL mismatches go wrong? 25 years of lopsided games, and where Bills-Dolphins (Week 11, 2026) fits.
 
 History: every regular-season game 1999-2025 where both teams had played 4+ games. "Mismatch" = the gap between the two teams'
-scoring margins (points scored minus allowed, per game) going into the game. No betting lines anywhere (brand rule): the
+point differentials (points scored minus allowed, per game) going into the game. No betting lines anywhere (brand rule): the
 schedule table's market columns are never read.
 Our model: points model v0.1 (src/ledger/points_model.py), pregame projections 2018-2026 (through Week 10 of 2026).
 Pinned: history through 2025; 2026 through WEEK_DONE. Writes reports/2026-11-19-nfl-mismatches.md, two PNGs and a hero JSON.
@@ -30,7 +30,7 @@ NAMES = {"BUF": "Bills", "TEN": "Titans", "MIA": "Dolphins", "JAX": "Jaguars", "
 
 
 def pregame_margins(s):
-    """Each team's scoring margin per game before each game, within the season (team codes are fixed within a season)."""
+    """Each team's point differential per game before each game, within the season (team codes are fixed within a season)."""
     rows = []
     for side, opp in (("home", "away"), ("away", "home")):
         t = s[["game_id", "season", "week", f"{side}_team", f"{side}_score", f"{opp}_score"]].copy()
@@ -144,16 +144,16 @@ def main():
     ax.axhline(0.5, color="#D5D8DE", lw=1, ls="--")
     ax.text(0.5, 0.507, "coin\nflip", ha="center", va="bottom", fontsize=8, color=MUTED, linespacing=0.9)
     ax.set_xticks(xs, [f"{l}\npoints" for l in tab.index], fontsize=9.5)
-    ax.set_xlabel("Gap between the two teams' scoring margins going in (points per game)")
+    ax.set_xlabel("How much better the better team was going in (point differential, points a game)")
     ax.set_ylim(0, 1); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
-    ax.set_ylabel("How often the team with the\nbetter scoring margin won")
+    ax.set_ylabel("How often the team with the\nbetter point differential won")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     ax.annotate(f"Bills vs. Dolphins Sunday:\n{abs(gap_now):.1f}-point gap", (list(tab.index).index(b_now), hist_now), xytext=(0, 34), textcoords="offset points",
                 ha="center", fontsize=9, color=RED, fontweight="bold")
-    finish(fig, "Even the most lopsided NFL games go the other way about 1 in 5 times",
+    finish(fig, "Even a much better NFL team loses about 1 game in 5",
            f"Every regular-season game {yr0}-{yr1} where both teams had played {MIN_GP}+ games ({n_hist:,} games). Ties count as half a win.",
-           "Scoring margin = points scored minus points allowed per game, that season, before the game.")
-    fig.texts[-1].set_text(f"Source: nflverse schedules, {yr0}-{yr1} regular seasons.\nScoring margin = points scored minus points allowed per game, that season, before the game.")
+           "Point differential = points scored minus points allowed per game, that season, before the game.")
+    fig.texts[-1].set_text(f"Source: nflverse schedules, {yr0}-{yr1} regular seasons.\nPoint differential = points scored minus points allowed per game, that season, before the game.")
     fig.savefig(OUT / "nfl-mismatch-history.png"); plt.close(fig)
 
     # ---- chart 2: our model
@@ -179,12 +179,14 @@ def main():
         f"{int(r.away_score if not r.better_home else r.home_score)} | {NAMES.get(r.away_team if not r.better_home else r.home_team, r.away_team if not r.better_home else r.home_team)} | {r.gap:.1f} |"
         for r in ups.head(8).itertuples())
 
-    md = f"""# How often do big NFL mismatches go wrong? {yr1 - yr0 + 1} seasons of lopsided games, and where Bills-Dolphins fits
+    md = f"""# How often does the much better NFL team lose? {yr1 - yr0 + 1} seasons of answers, and what it means for Bills-Dolphins
 
-**Over {yr1 - yr0 + 1} seasons, when one NFL team's scoring margin was 17 or more points a game better than its opponent's, the better team won
-{big_rate:.0%} of the time. About 1 in 5 still lost ({big_lost} of {big_n} games, plus {big_ties} tie), and past 17 points a bigger gap barely helped. Our own model
-projects Bills {pb:.0f}, Dolphins {pmi:.0f} on Sunday, and gives Buffalo an {p_buf:.0%} chance to win. History and our model point the same
-way: about 4 times in 5.**
+**Since {yr0}, when an NFL team was much better than its opponent, it won {big_rate:.0%} of the time. About 1 in 5 still lost.
+Sunday's game is one of those: the Bills have outscored opponents by {bm:.1f} points a game, Miami has been outscored by {abs(mm):.1f}, so the Bills are {gap_now:.1f} points a game better.
+Our model gives the Bills an {p_buf:.0%} chance to win Sunday.**
+
+*"Much better" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game.
+That happened {big_n} times. The better team lost {big_lost} and tied {big_ties}.*
 
 *Regular season only. History covers {yr0}-{yr1}; this season counts through Week {WEEK_DONE}. We don't use betting lines: every number here comes from game
 results and our own model.*
@@ -193,21 +195,21 @@ results and our own model.*
 
 ## How we measured a mismatch
 
-For every regular-season game since {yr0}, we took each team's scoring margin going in: points scored minus points allowed, per game, that season, before
-that game. The gap between the two teams' margins is the size of the mismatch. We only counted games where both teams had played at least {MIN_GP} games, which
-leaves {n_hist:,} games. Then we checked how often the team with the better margin won. Ties count as half a win.
+For every regular-season game since {yr0}, we took each team's point differential going in: points scored minus points allowed, per game, that season, before
+that game. The difference between the two teams' point differentials is the size of the mismatch. We only counted games where both teams had played at least {MIN_GP} games, which
+leaves {n_hist:,} games. Then we checked how often the team with the better point differential won. Ties count as half a win.
 
 | Gap going in (points per game) | Games | Better team won |
 |---|---|---|
 """ + "\n".join(f"| {lab} | {int(r.n):,} | {r.won:.0%} |" for lab, r in tab.iterrows()) + f"""
 
-## Why the biggest gaps stop helping
+## Why a bigger gap stops mattering past 17 points
 
 The better team's win rate climbs with the gap, then flattens out around {big_rate:.0%}. One big reason is that a few weeks of scores exaggerate how far apart
 two teams really are. In the games with a gap of 17 or more, by the end of those seasons the gap between the same two teams had shrunk by about
 {1 - shrink:.0%}. Take the 2021 Bills at Jacksonville: going in, Buffalo had outscored opponents by {ex.am:.1f} points a game and the Jaguars had been
-outscored by {abs(ex.hm):.1f}, a gap of about {ex.gap:.1f} points. By season's end it was Buffalo {ex_b_end:+.1f} and Jacksonville {ex_j_end:+.1f}, a gap of {ex_b_end - ex_j_end:.1f}. A team that has been crushing people is usually good, but not as good as its early scores say, and the same goes in reverse.
-Early in the season the effect is stronger: with a 17-point gap or more, the better team won {early.res.mean():.0%} through Week 8 ({len(early)} games) and {late.res.mean():.0%} after ({len(late)} games).
+outscored by {abs(ex.hm):.1f}, a gap of about {ex.gap:.1f} points. By season's end it was Buffalo {ex_b_end:+.1f} and Jacksonville {ex_j_end:+.1f}, a gap of {ex_b_end - ex_j_end:.1f}. A team that has been crushing people is usually good, just not as good as its early scores say. A team getting crushed is usually not quite that bad.
+This matters most early in the season. Much better teams won {early.res.mean():.0%} of the time through Week 8 ({len(early)} games) and {late.res.mean():.0%} after that ({len(late)} games).
 
 ## The biggest upsets since {yr0}
 
@@ -215,7 +217,7 @@ Early in the season the effect is stronger: with a 17-point gap or more, the bet
 |---|---|---|---|
 {up_rows}
 
-Miami pulled one of them off, in Chicago in 2006. The Bills have been the much better team (a gap of 17 or more) {buf_w + buf_l} times since {yr0}: they went {buf_w}-{buf_l}. The losses: {bills_list}.
+Miami pulled one of them off, in Chicago in 2006. The Bills have been the much better team {buf_w + buf_l} times since {yr0}. They went {buf_w}-{buf_l}. The losses: {bills_list}.
 
 ## Sunday: Dolphins at Bills
 
@@ -223,9 +225,9 @@ By the same measure, the Bills have outscored opponents by {bm:.1f} points a gam
 of 32 teams) and Miami has been outscored by {abs(mm):.1f} ({33 - mia_rank}th). That's a gap of {abs(gap_now):.1f} points a game.
 In the last {yr1 - yr0 + 1} seasons, the better team won {hist_now:.0%} of games with a gap that size ({n_now:,} games).
 
-**Our model's number: Bills {p_buf:.0%}, right next to the {hist_now:.0%} history gives.** It projects about {pb:.0f} points for Buffalo and {pmi:.0f} for Miami. It's built from each offense's points per drive
-and each defense's points allowed per drive this season, blended with last season's numbers and pulled toward the league average while the season is young,
-plus how many drives each team usually gets and home field. The model's pull toward the middle is why it rarely expects a blowout: in {len(g):,} games since {int(g.season.min())} it has expected a
+**Our model: Bills {p_buf:.0%}. History says {hist_now:.0%}.** It projects about {pb:.0f} points for Buffalo and {pmi:.0f} for Miami. It starts with how many points each offense scores per drive
+and each defense gives up per drive. Early in the season it leans on last year's numbers and on the league average. Then it adds how many drives each team usually
+gets, and home field. Because it leans toward average, it rarely expects a blowout: in {len(g):,} games since {int(g.season.min())} it has expected a
 team to win by 14 or more only {n14} times, and never by more than about {max_pm:.0f}.
 
 ![Our model's projections vs. results](nfl-mismatch-model.png)
@@ -249,11 +251,11 @@ This is our model's number. It counts once it's logged on the [Ledger](../ledger
 """
     (OUT / "2026-11-19-nfl-mismatches.md").write_text(md)
     (OUT / "2026-11-19-nfl-mismatches.hero.json").write_text(json.dumps({
-        "label": f"Lopsided NFL games, {yr0}-{yr1}",
-        "big": [[f"{big_rate:.0%}", "How often the much better team won (17+ point gap in scoring margin)"],
+        "label": f"Big NFL mismatches, {yr0}-{yr1}",
+        "big": [[f"{big_rate:.0%}", "How often the much better team won (17+ points a game better by point differential)"],
                 [f"{p_buf:.0%}", "Bills' chance vs. Miami Sunday, our model"]],
-        "note": f"About 1 in 5 lopsided games still go the other way. The Bills have been the much better team and lost {buf_l} times since {yr0}, including at Jacksonville in 2021.",
-        "explainer": {"kicker": "Past 17 points, a bigger gap barely helps", "title": "Better team's win rate", "text": "By gap in scoring margin going in:", "fmt": "pct",
+        "note": f"A much better team still loses about 1 game in 5. Since {yr0} the Bills have been the much better team {buf_w + buf_l} times and lost {buf_l}, including at Jacksonville in 2021.",
+        "explainer": {"kicker": "Past 17 points, a bigger gap barely helps", "title": "Better team's win rate", "text": "By how much better the team was going in (points a game):", "fmt": "pct",
                       "bars": [[f"{lab} pts", round(float(r.won), 3)] for lab, r in tab.iterrows()][2:]},
     }, indent=1))
     print(md)

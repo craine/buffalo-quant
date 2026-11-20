@@ -146,3 +146,17 @@ The generator diff is this one string. The hero JSON, site card and both PNGs ar
 **Final check: PASS on ce79453f06b2.**
 
 Still open: the change of wording doesn't change brand rule 2. The 81% Bills-Dolphins chance is a public model probability, and it is not in `ledger/predictions.csv`. Log it before kickoff on 2026-11-22.
+
+# Final check after the plain-language rewrite
+
+**PASS.** Compared with the previously final-checked text (sha256 ce79453f..., git HEAD), only wording changed:
+- Removed from the lead: 183, 237, 17 (twice) and 27. The 183 and 237 still appear in the stat-heads section.
+- Added: "Since 1999"; "9 in 10" / "7 in 10" in the headline, which are 88% and 73% rounded; the blurb already used the same rounding; and repeated "10 or more" wording in the rivalry section.
+- The hero JSON numbers and the stat-heads section are unchanged. "18.2 points a game better" matches the first story.
+
+Checks run:
+- A clean-copy re-run (/tmp/qa/clean6: tracked files plus the current generators and the current 11-19 md, sha256 7d72b785...) reproduces the md, hero JSON, nfl-mismatch-home.png and nfl-mismatch-endings.png byte-for-byte.
+- The 81% comes from the current 11-19 text through the regex "Our model: Bills (\d+)%" with an assert. I changed it to 80% in the clean copy and the generator failed (rc=1), so it really is reading that text.
+- Charts viewed.
+
+Note: the home/road sample sizes (183, 237) are now only in the stat-heads section. Neither group is small.

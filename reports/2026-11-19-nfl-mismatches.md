@@ -1,9 +1,11 @@
-# How often do big NFL mismatches go wrong? 27 seasons of lopsided games, and where Bills-Dolphins fits
+# How often does the much better NFL team lose? 27 seasons of answers, and what it means for Bills-Dolphins
 
-**Over 27 seasons, when one NFL team's scoring margin was 17 or more points a game better than its opponent's, the better team won
-79% of the time. About 1 in 5 still lost (86 of 420 games, plus 1 tie), and past 17 points a bigger gap barely helped. Our own model
-projects Bills 30, Dolphins 20 on Sunday, and gives Buffalo an 81% chance to win. History and our model point the same
-way: about 4 times in 5.**
+**Since 1999, when an NFL team was much better than its opponent, it won 79% of the time. About 1 in 5 still lost.
+Sunday's game is one of those: the Bills have outscored opponents by 9.8 points a game, Miami has been outscored by 8.4, so the Bills are 18.2 points a game better.
+Our model gives the Bills an 81% chance to win Sunday.**
+
+*"Much better" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game.
+That happened 420 times. The better team lost 86 and tied 1.*
 
 *Regular season only. History covers 1999-2025; this season counts through Week 10. We don't use betting lines: every number here comes from game
 results and our own model.*
@@ -12,9 +14,9 @@ results and our own model.*
 
 ## How we measured a mismatch
 
-For every regular-season game since 1999, we took each team's scoring margin going in: points scored minus points allowed, per game, that season, before
-that game. The gap between the two teams' margins is the size of the mismatch. We only counted games where both teams had played at least 4 games, which
-leaves 5,205 games. Then we checked how often the team with the better margin won. Ties count as half a win.
+For every regular-season game since 1999, we took each team's point differential going in: points scored minus points allowed, per game, that season, before
+that game. The difference between the two teams' point differentials is the size of the mismatch. We only counted games where both teams had played at least 4 games, which
+leaves 5,205 games. Then we checked how often the team with the better point differential won. Ties count as half a win.
 
 | Gap going in (points per game) | Games | Better team won |
 |---|---|---|
@@ -26,13 +28,13 @@ leaves 5,205 games. Then we checked how often the team with the better margin wo
 | 17-20 | 220 | 79% |
 | 20+ | 200 | 80% |
 
-## Why the biggest gaps stop helping
+## Why a bigger gap stops mattering past 17 points
 
 The better team's win rate climbs with the gap, then flattens out around 79%. One big reason is that a few weeks of scores exaggerate how far apart
 two teams really are. In the games with a gap of 17 or more, by the end of those seasons the gap between the same two teams had shrunk by about
 23%. Take the 2021 Bills at Jacksonville: going in, Buffalo had outscored opponents by 17.1 points a game and the Jaguars had been
-outscored by 11.4, a gap of about 28.6 points. By season's end it was Buffalo +11.4 and Jacksonville -12.0, a gap of 23.4. A team that has been crushing people is usually good, but not as good as its early scores say, and the same goes in reverse.
-Early in the season the effect is stronger: with a 17-point gap or more, the better team won 75% through Week 8 (164 games) and 82% after (256 games).
+outscored by 11.4, a gap of about 28.6 points. By season's end it was Buffalo +11.4 and Jacksonville -12.0, a gap of 23.4. A team that has been crushing people is usually good, just not as good as its early scores say. A team getting crushed is usually not quite that bad.
+This matters most early in the season. Much better teams won 75% of the time through Week 8 (164 games) and 82% after that (256 games).
 
 ## The biggest upsets since 1999
 
@@ -47,7 +49,7 @@ Early in the season the effect is stronger: with a 17-point gap or more, the bet
 | 2000, Week 8 | Bengals 31, Broncos 21 | Broncos | 27.7 |
 | 2008, Week 6 | Browns 35, Giants 14 | Giants | 27.5 |
 
-Miami pulled one of them off, in Chicago in 2006. The Bills have been the much better team (a gap of 17 or more) 16 times since 1999: they went 11-5. The losses: at Titans in 2021, at Jaguars in 2021, vs. Jaguars in 2023 (in London), at Patriots in 2023, at Patriots in 2024 (Week 18: Josh Allen played 1 snap, then Mitchell Trubisky and Mike White played the rest).
+Miami pulled one of them off, in Chicago in 2006. The Bills have been the much better team 16 times since 1999. They went 11-5. The losses: at Titans in 2021, at Jaguars in 2021, vs. Jaguars in 2023 (in London), at Patriots in 2023, at Patriots in 2024 (Week 18: Josh Allen played 1 snap, then Mitchell Trubisky and Mike White played the rest).
 
 ## Sunday: Dolphins at Bills
 
@@ -55,9 +57,9 @@ By the same measure, the Bills have outscored opponents by 9.8 points a game thi
 of 32 teams) and Miami has been outscored by 8.4 (30th). That's a gap of 18.2 points a game.
 In the last 27 seasons, the better team won 79% of games with a gap that size (220 games).
 
-**Our model's number: Bills 81%, right next to the 79% history gives.** It projects about 30 points for Buffalo and 20 for Miami. It's built from each offense's points per drive
-and each defense's points allowed per drive this season, blended with last season's numbers and pulled toward the league average while the season is young,
-plus how many drives each team usually gets and home field. The model's pull toward the middle is why it rarely expects a blowout: in 2,133 games since 2018 it has expected a
+**Our model: Bills 81%. History says 79%.** It projects about 30 points for Buffalo and 20 for Miami. It starts with how many points each offense scores per drive
+and each defense gives up per drive. Early in the season it leans on last year's numbers and on the league average. Then it adds how many drives each team usually
+gets, and home field. Because it leans toward average, it rarely expects a blowout: in 2,133 games since 2018 it has expected a
 team to win by 14 or more only 6 times, and never by more than about 15.
 
 ![Our model's projections vs. results](nfl-mismatch-model.png)

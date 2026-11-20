@@ -158,3 +158,50 @@ line conditional, since the call isn't approved for logging yet.
 ## For the Quant (new facts in round 2, not checked by the Editor)
 Bills 16 games with a 17+ gap, 11-5. 2024 Week 18: Trubisky started and the starters rested. 2006 Dolphins-Bears was in Chicago.
 2021 example margins: 17.1 / -11.4 going in, +11.4 / -12.0 at season's end. Also "86 of 420, plus 1 tie".
+
+## Plain-language round (2026-11-20, after Charlie's "just say it plain" note)
+
+**One-sentence version:** Teams that are much better than their opponent still lose about 1 game in 5, and our model gives the Bills an 81% chance against Miami on Sunday.
+
+**Verdict: needs edits (FAIL).** The new lead is much better, but the phrase Charlie named, "go the other way", is still on the main chart title and in the hero note. "Lopsided" is still in the headline and hero label. The rename to "point differential" stopped partway: the method paragraph still says "margins" and "better margin".
+
+Edits, most important first (exact text, then the plain version). No numbers change.
+
+1. Chart title (nfl-mismatch-history.png, `finish(...)` in nfl_mismatches.py): "Even the most lopsided NFL games go the other way about 1 in 5 times"
+   -> "Even a much better NFL team loses about 1 game in 5"
+2. Hero note: "About 1 in 5 lopsided games still go the other way. The Bills have been the much better team and lost 5 times since 1999, including at Jacksonville in 2021."
+   -> "A much better team still loses about 1 game in 5. Since 1999 the Bills have been the much better team 16 times and lost 5, including at Jacksonville in 2021." (16 is already in the story; otherwise keep "and lost 5 times")
+3. Headline: "How often do big NFL mismatches go wrong? 27 seasons of lopsided games, and where Bills-Dolphins fits"
+   -> "How often does the much better NFL team lose? 27 seasons of answers, and what it means for Bills-Dolphins"
+4. Hero label (both hero JSONs): "Lopsided NFL games, 1999-2025" -> "Big NFL mismatches, 1999-2025"
+5. Lead, second sentence: "The Bills and Dolphins are that far apart this season: Buffalo has outscored its opponents by 9.8 points a game, and Miami has been outscored by 8.4."
+   "That far apart" points back to a definition the reader hasn't seen yet, and leaves them to add 9.8 and 8.4.
+   -> "Sunday's game is one of those: the Bills have outscored opponents by 9.8 points a game, Miami has been outscored by 8.4, so the Bills are 18.2 points a game better."
+6. Definition line: "\"Much better\" here means the gap between the two teams' point differentials (points scored minus points allowed, per game) was 17 or more going in. That happened 420 times; the better team lost 86 and tied 1."
+   "the gap between the two teams' point differentials" is a stacked phrase.
+   -> "\"Much better\" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game. That happened 420 times. The better team lost 86 and tied 1."
+7. Method paragraph, leftover from the rename: "The gap between the two teams' margins is the size of the mismatch." -> "The difference between the two teams' point differentials is the size of the mismatch."
+   and "how often the team with the better margin won" -> "how often the team with the better point differential won"
+8. Hero big-number label: "How often the much better team won (17+ point gap in point differential)" ("point gap in point differential" repeats "point" and reads as math)
+   -> "How often the much better team won (17+ points a game better by point differential)"
+9. Hero explainer text: "By gap in point differential going in:" -> "By how much better the team was going in (points a game):"
+10. Chart x-axis label (history and home charts): "Gap between the two teams' point differentials going in (points per game)"
+    -> "How much better the better team was going in (point differential, points a game)"
+11. Section header "Why the biggest gaps stop helping" -> "Why a bigger gap stops mattering past 17 points"
+12. "A team that has been crushing people is usually good, but not as good as its early scores say, and the same goes in reverse."
+    -> "A team that has been crushing people is usually good, just not as good as its early scores say. A team getting crushed is usually not quite that bad."
+13. "Early in the season the effect is stronger: with a 17-point gap or more, the better team won 75% through Week 8 (164 games) and 82% after (256 games)."
+    -> "This matters most early in the season. Much better teams won 75% of the time through Week 8 (164 games) and 82% after that (256 games)."
+14. Upsets paragraph: "The Bills have been the much better team (a gap of 17 or more) 16 times since 1999: they went 11-5."
+    -> "The Bills have been the much better team 16 times since 1999. They went 11-5."
+15. Model paragraph, stacked clauses: "It's built from each offense's points per drive and each defense's points allowed per drive this season, blended with last season's numbers and pulled toward the league average while the season is young, plus how many drives each team usually gets and home field."
+    -> "It starts with how many points each offense scores per drive and each defense gives up per drive. Early in the season it leans on last year's numbers and on the league average. Then it adds how many drives each team usually gets, and home field."
+16. "The model's pull toward the middle is why it rarely expects a blowout: ..." -> "Because it leans toward average, it rarely expects a blowout: ..."
+17. "Our model's number: Bills 81%, right next to the 79% history gives." -> "Our model: Bills 81%. History says 79%."
+
+Blurb (build.py "nfl-mismatches"): reads plainly. OK as is.
+Charts: model chart reads fine.
+
+## Plain-language round 2 (re-read after rewrites applied)
+
+**Verdict: ready (PASS).** All 17 edits are in. "Lopsided", "go the other way" and "scoring margin" are gone, and the method paragraph says "point differential" throughout. Lead, headline, chart titles and axes, hero labels and note, and the site blurb all read as a fan or host would say them. Charts re-viewed: the history chart's title and x-axis are plain, and the model chart is unchanged.

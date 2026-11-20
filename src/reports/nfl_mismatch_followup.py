@@ -1,7 +1,7 @@
 """Follow-up to the NFL mismatches story: home field, rivalries, close upsets and cold, from the same 27 seasons.
 
 Same games and definitions as src/reports/nfl_mismatches.py (regular season 1999-2025, both teams 4+ games played, mismatch = gap in
-season-to-date scoring margin). No betting lines: the schedule query lists only game, team, score, division, roof, temperature and
+season-to-date point differential). No betting lines: the schedule query lists only game, team, score, division, roof, temperature and
 rest columns. Writes reports/2026-11-21-nfl-mismatches-home.md, two PNGs and a hero JSON.
 """
 import json
@@ -81,7 +81,7 @@ def main():
 
     first = (OUT / "2026-11-19-nfl-mismatches.md").read_text()
     import re
-    p_buf_pub = int(re.search(r"Our model's number: Bills (\d+)%", first).group(1))
+    p_buf_pub = int(re.search(r"Our model: Bills (\d+)%", first).group(1))
     assert p_buf_pub == 81
     # ---- chart 1: home vs road by gap
     fig, ax = plt.subplots(figsize=(9.5, 5.2), dpi=200)
@@ -94,14 +94,14 @@ def main():
         ax.text(x_ + w / 2, b_ + 0.012, f"{b_:.0%}", ha="center", fontsize=9, color=MUTED)
     ax.axhline(0.5, color="#D5D8DE", lw=1, ls="--")
     ax.set_xticks(xs, [f"{l}\npoints" for l in by_side.index], fontsize=9.5)
-    ax.set_xlabel("Gap between the two teams' scoring margins going in (points per game)")
+    ax.set_xlabel("How much better the better team was going in (point differential, points a game)")
     ax.set_ylim(0, 1.05); ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0))
-    ax.set_ylabel("How often the team with the\nbetter scoring margin won")
+    ax.set_ylabel("How often the team with the\nbetter point differential won")
     ax.legend(frameon=False, fontsize=9.5, loc="upper left"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "At every size of mismatch, the better team wins more at home",
            f"Every regular-season game {yr0}-{yr1} where both teams had played {MIN_GP}+ games ({len(d):,} games). Ties count as half a win.",
            "x")
-    fig.texts[-1].set_text(f"Source: nflverse schedules, {yr0}-{yr1} regular seasons.\nScoring margin = points scored minus points allowed per game, that season, before the game.")
+    fig.texts[-1].set_text(f"Source: nflverse schedules, {yr0}-{yr1} regular seasons.\nPoint differential = points scored minus points allowed per game, that season, before the game.")
     fig.savefig(OUT / "nfl-mismatch-home.png"); plt.close(fig)
 
     # ---- chart 2: how the 17+ games ended
@@ -116,50 +116,49 @@ def main():
     ax.set_xticks(np.arange(len(labs)), labs, fontsize=9.5)
     ax.set_ylabel("Games"); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     finish(fig, "When the much better team loses, it's usually close",
-           f"How the {len(big)} games where one team's scoring margin was 17+ points a game better ended, {yr0}-{yr1}, from the better team's side.",
+           f"How the much better team's {len(big)} games ended, {yr0}-{yr1} (17+ points a game better by point differential).",
            "x")
     fig.texts[-1].set_text(f"Source: nflverse schedules. One score = 8 points or fewer.")
     fig.savefig(OUT / "nfl-mismatch-endings.png"); plt.close(fig)
 
-    md = f"""# Even a much better NFL team wins far less often on the road. Rivalry games aren't any closer.
+    md = f"""# Much better NFL teams win 9 in 10 at home, 7 in 10 on the road. Rivalry games are no closer.
 
-**In the last {yr1 - yr0 + 1} seasons, when one team's scoring margin was 17 or more points a game better than its opponent's, it won {home.res.mean():.0%} of the time at home
-({len(home)} games) and only {road.res.mean():.0%} on the road ({len(road)} games). Division games, the ones fans expect to be closer, came out the same as any other. And when
-the much better team did lose, it was usually a close game. Sunday's Dolphins at Bills game is the home kind.**
+**Since {yr0}, NFL teams that were much better than their opponent won {home.res.mean():.0%} of the time at home and {road.res.mean():.0%} on the road.
+Division games were no different. When the better team lost, it was usually close. Sunday's Bills-Dolphins game is in Buffalo.**
 
-*This follows our story on [how often big NFL mismatches go wrong](nfl-mismatches.html), using the same {len(d):,} regular-season games from {yr0} to {yr1}. A
-mismatch is the gap between the two teams' scoring margins (points scored minus allowed, per game) going into the game. We don't use betting lines.*
+*This follows our story on [how often the much better NFL team loses](nfl-mismatches.html), using the same {len(d):,} regular-season games from {yr0} to {yr1}. 
+"Much better" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game. We don't use betting lines.*
 
 ![Home vs road](nfl-mismatch-home.png)
 
 ## Home field
 
 Home teams won {home_all:.0%} of all these games, and the home edge shows up at every size of mismatch: in every group on the chart, the better team won {edge_shown.min():.0f} to
-{edge_shown.max():.0f} more games out of every 100 at home than on the road. A big gap doesn't make it go away. Among the {int((big.res == 0).sum())} times a much better team lost, {int((road.res == 0).sum())}
+{edge_shown.max():.0f} more games out of every 100 at home than on the road. Even in the biggest mismatches, home field still matters. Of the {int((big.res == 0).sum())} times a much better team lost, {int((road.res == 0).sum())}
 were on the road.
 
 ## Sunday
 
-The Bills have outscored opponents by {bm26:.1f} points a game this season, and Miami has been outscored by {abs(mm26):.1f}: a gap of {gap_now:.1f}, with the game in Buffalo.
-Sunday fits the group that won {home.res.mean():.0%} of the time. That describes past games, not a forecast: our model's chance for the Bills on Sunday, from the first story, is {p_buf_pub}%.
+The Bills have outscored opponents by {bm26:.1f} points a game this season, and Miami has been outscored by {abs(mm26):.1f}, so the Bills are {gap_now:.1f} points a game better, and they're at home.
+Much better teams at home have won {home.res.mean():.0%} of the time. That's history, not a forecast: our model's chance for the Bills on Sunday, from the first story, is {p_buf_pub}%.
 
 ## Rivalry games aren't closer
 
-"Throw out the records" is a common line for division games. The numbers don't back it up. With a gap of 17 or more, the better team won {div.res.mean():.0%} of division
-games ({len(div)}) and {nondiv.res.mean():.0%} of the rest ({len(nondiv)}). With a gap of 10 or more it was {div10.res.mean():.0%} and {nondiv10.res.mean():.0%}. The Bills, when they were the
-better team by 10 or more going in, went {bb_w}-{bb_l} against Miami from {yr0} to {yr1}, too few games to read much into.
+"Throw out the records" is a common line for division games. The numbers don't back it up. Much better teams won {div.res.mean():.0%} of division
+games ({len(div)} games) and {nondiv.res.mean():.0%} of other games ({len(nondiv)}). Teams 10 or more points a game better won {div10.res.mean():.0%} of division games and {nondiv10.res.mean():.0%} of other games. When the Bills were
+10 or more points a game better than Miami going in, they went {bb_w}-{bb_l} from {yr0} to {yr1}. That's too few games to read much into.
 
 ## When the upset comes, it's usually close
 
 ![How the games ended](nfl-mismatch-endings.png)
 
-In the {len(ups)} games the much better team lost, the typical upset was decided by {up_med:.0f} points (half were closer, half wider), and {up_one:.0%} were one-score games
-(8 points or fewer). When the much better team won, it won by 17 or more {win_big:.0%} of the time and by one score {win_close:.0%} of the time. Its typical winning margin was
-{win_med:.0f} points.
+In the {len(ups)} games the much better team lost, the typical upset was decided by {up_med:.0f} points, and {up_one:.0%} were one-score games
+(8 points or fewer). When the much better team won, it won by 17 or more {win_big:.0%} of the time and by one score {win_close:.0%} of the time. Its typical win was
+by {win_med:.0f}.
 
 ## One smaller note
 
-**Cold weather.** When a team 17+ points a game better hosted outdoors at {COLD}°F or colder, it won {int(cold.res.sum())} of {len(cold)}. That's a small group, and the schedule
+**Cold weather.** When a much better team played at home outdoors at {COLD}°F or colder, it won {int(cold.res.sum())} of {len(cold)}. That's a small group, and the schedule
 data has no temperature for {miss:.0%} of these outdoor home games, so take it as a note, not a finding.
 
 ## For the stat-heads
@@ -174,11 +173,11 @@ data has no temperature for {miss:.0%} of these outdoor home games, so take it a
 """
     (OUT / "2026-11-21-nfl-mismatches-home.md").write_text(md)
     (OUT / "2026-11-21-nfl-mismatches-home.hero.json").write_text(json.dumps({
-        "label": f"Lopsided NFL games, {yr0}-{yr1}",
-        "big": [[f"{home.res.mean():.0%}", "Much better team at home won (17+ point gap in scoring margin)"],
-                [f"{road.res.mean():.0%}", "Much better team on the road won"]],
+        "label": f"Big NFL mismatches, {yr0}-{yr1}",
+        "big": [[f"{home.res.mean():.0%}", "How often the much better team won at home (17+ points a game better by point differential)"],
+                [f"{road.res.mean():.0%}", "How often the much better team won on the road"]],
         "note": "Division games came out the same as any other, and when the much better team lost, it was usually a one-score game.",
-        "explainer": {"kicker": "Home vs. road", "title": "How often a much better team won (17+ point gap in scoring margin)", "text": "How often the much better team won:", "fmt": "pct",
+        "explainer": {"kicker": "Home vs. road", "title": "How often a much better team won (17+ points a game better by point differential)", "text": "How often the much better team won:", "fmt": "pct",
                       "bars": [["At home", round(float(home.res.mean()), 3)], ["On the road", round(float(road.res.mean()), 3)]]},
     }, indent=1))
     print(md)

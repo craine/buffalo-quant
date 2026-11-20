@@ -154,3 +154,54 @@ still need fixing. One brings back the round-1 "points" problem; the other gives
 
 Optional, not required: in Sunday, "our published chance" could read "our model's published chance" to match the site card's
 wording and tell a first-time reader where the 81% comes from.
+
+## Plain-language round (2026-11-20, after Charlie's "just say it plain" note)
+
+**One-sentence version:** A much better NFL team wins about 9 in 10 at home but only about 7 in 10 on the road, division games are no closer, and Sunday's game is in Buffalo.
+
+**Verdict: needs edits (FAIL).** The new lead is plain, but the construction Charlie objected to ("one team's ... was 17+ points a game better") is still in the endings chart subtitle and the cold-weather note. The headline is stilted, "lopsided" is still in the hero label, and the hero labels say "point gap in point differential".
+
+Edits, most important first (exact text, then the plain version). No numbers change.
+
+1. Endings chart subtitle: "How the 420 games where one team's point differential was 17+ points a game better ended, 1999-2025, from the better team's side."
+   -> "How the much better team's 420 games ended, 1999-2025 (17+ points a game better by point differential)."
+2. Cold note: "When a team 17+ points a game better hosted outdoors at 40°F or colder, it won 28 of 29."
+   -> "When a much better team played at home outdoors at 40°F or colder, it won 28 of 29."
+3. Headline: "Even a much better NFL team wins far less often on the road. Rivalry games aren't any closer."
+   -> "Much better NFL teams win 9 in 10 at home, 7 in 10 on the road. Rivalry games are no closer."
+4. Hero label: "Lopsided NFL games, 1999-2025" -> "Big NFL mismatches, 1999-2025"
+5. Hero big-number label: "Much better team at home won (17+ point gap in point differential)" -> "How often the much better team won at home (17+ points a game better by point differential)"
+   and "Much better team on the road won" -> "How often the much better team won on the road"
+6. Hero explainer title: "How often a much better team won (17+ point gap in point differential)" -> "How often a much better team won (17+ points a game better by point differential)"
+7. Intro italics: "A mismatch is the gap between the two teams' point differentials (points scored minus allowed, per game) going into the game."
+   -> "\"Much better\" means 17 or more points a game better by point differential (points scored minus points allowed, per game) going into the game."
+8. Sunday: "Sunday fits the group that won 88% of the time. That describes past games, not a forecast: ..."
+   -> "Much better teams at home have won 88% of the time. That's history, not a forecast: ..."
+9. Sunday: "a gap of 18.2, with the game in Buffalo." -> "so the Bills are 18.2 points a game better, and they're at home."
+10. Home field: "A big gap doesn't make it go away." -> "Even in the biggest mismatches, home field still matters."
+11. Home field: "Among the 86 times a much better team lost, 64 were on the road." -> "Of the 86 times a much better team lost, 64 were on the road."
+12. Rivalry: "With a gap of 17 or more, the better team won 80% of division games (171) and 79% of the rest (249). With a gap of 10 or more it was 75% and 73%."
+    -> "Much better teams won 80% of division games (171 games) and 79% of other games (249). Teams 10 or more points a game better won 75% and 73%."
+13. Rivalry: "The Bills, when they were the better team by 10 or more going in, went 4-2 against Miami from 1999 to 2025, too few games to read much into."
+    -> "When the Bills were 10 or more points a game better than Miami going in, they went 4-2 from 1999 to 2025. That's too few games to read much into."
+14. Upsets: "the typical upset was decided by 5 points (half were closer, half wider)" -> "the typical upset was decided by 5 points"
+    ("half were closer, half wider" explains a median; cut it, or keep only if the writer wants the definition.)
+15. Upsets: "When the much better team won, it won by 17 or more 42% of the time and by one score 36% of the time. Its typical winning margin was 13 points."
+    -> "When the much better team won, it usually won big: by 17 or more 42% of the time, by one score 36% of the time. Its typical win was by 13."
+16. Home chart x-axis label: same fix as the first story, "How much better the better team was going in (point differential, points a game)".
+
+Blurb (build.py "nfl-mismatches-home"): plain. OK as is.
+Charts: home chart title "At every size of mismatch, the better team wins more at home" is OK. Endings title is OK.
+
+## Plain-language round 2 (re-read after rewrites applied)
+
+**Verdict: needs edits (FAIL), two small lines.** Everything else reads plainly: headline, lead, Sunday section, endings chart subtitle, cold note, hero labels and blurb. The coordinator's change to item 15 is right ("usually won big" overstated 42%).
+
+1. Intro link text still uses the old headline idea: "[how often big NFL mismatches go wrong](nfl-mismatches.html)". "Go wrong" is the same phrasing family Charlie objected to, and it no longer matches the first story's title.
+   -> "[how often the much better NFL team loses](nfl-mismatches.html)"
+2. "Teams 10 or more points a game better won 75% and 73%." doesn't say which is which when read alone.
+   -> "Teams 10 or more points a game better won 75% of division games and 73% of other games."
+
+## Plain-language round 3
+
+**Verdict: ready (PASS).** Both remaining lines are fixed: the link text now reads "how often the much better NFL team loses", and the 75%/73% line now says which games each number is for. The whole body, both charts, the hero JSON and the blurb read plainly.
