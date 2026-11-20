@@ -1,0 +1,109 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "c51da2d275279dc835d91b6a2f7a9b25155a3b55a4fb30dc36fdc437b18c69e5",
+   "at_utc": "2026-11-19T23:17:58Z",
+   "notes": "No betting data read (explicit column list; spread/moneyline never selected). History 1999-2025 from schedules, buckets, 17+ rate, shrink ratio, early/late split, upset table and Bills' 5 losses all computed with asserts; model backtest 2018-2026 wk10 and BUF-MIA projection (30.3-19.5, 81%) computed from points_model. Charts viewed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "c51da2d275279dc835d91b6a2f7a9b25155a3b55a4fb30dc36fdc437b18c69e5",
+   "at_utc": "2026-11-19T23:19:32Z",
+   "notes": "Needs edits: hero kicker 'Bigger gaps don't help' contradicts its rising bars; 'Bills by about 11' is spread phrasing (lead, model chart title, site card); 87% placed beside Bills 81% overclaims (lead, chart title); Bills 5-loss list undefined ('like this'), no record, 2024 Wk18 at NE needs starters context, 2023 JAX was London; upset table doesn't name the better team; '77% as far apart' unclear and 'The reason is' too certain; no worked real example for gap or shrink; '15 for 15' unclear.",
+   "report": "2026-11-19-nfl-mismatches-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "31cd7498a5255c6ad507e36106c2b59ea5c1779631be6a3fed4129a5a442e77f",
+   "at_utc": "2026-11-19T23:21:21Z",
+   "notes": "Round 2: all round-1 fixes applied; hook, explanation, table and Bills list land; no betting phrasing. Minor polish: model chart subtitle clipped at right edge; 'coin flip' label overlaps 20+ bar; 79% repeated (drop inserted 'That lines up with history' sentence, fold into bold line); worked example 17.1+11.4=28.5 vs 28.6 printed; drop '+' in 'outscored by +9.8'. Ledger line conditional accepted.",
+   "report": "2026-11-19-nfl-mismatches-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "bfb8afd1c6c2f594a8cc5a8d3b8b2cc189df5d38af678741998b49cfda535ad2",
+   "at_utc": "2026-11-19T23:23:34Z",
+   "notes": "2 factual errors: early/late split labeled 14+ but computed on 17+ (14+ is 74%/78%); 2024 Wk18 'Trubisky starting' false (Allen 1 snap per raw_snap_counts/pbp), 'starters rested' hard-coded. Minor: 'never more than 15' (max 15.09), 87% mixes training seasons, Weeks 2+ disclosure. All other numbers re-derived; brand rule clean; reproducible.",
+   "report": "2026-11-19-nfl-mismatches-quant.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "f75652c741e999126ad6459ebb12e807ffaefa62d4b9e0cb7868fe615332dc51",
+   "at_utc": "2026-11-19T23:25:21Z",
+   "notes": "Round 2: all round-1 fixes verified (17+ early/late 164/.750 & 256/.822; Allen 1 snap from raw_snap_counts; 'about 15'; 36 of 44; Weeks 2+; lead line). All numbers re-derived independently; no betting language; clean-copy rerun byte-identical.",
+   "report": "2026-11-19-nfl-mismatches-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "f75652c741e999126ad6459ebb12e807ffaefa62d4b9e0cb7868fe615332dc51",
+   "at_utc": "2026-11-19T23:25:22Z",
+   "notes": "Final check on md5 7b18e03c: changed lines and touched hero/dek/charts verified; numbers and claims hold.",
+   "report": "2026-11-19-nfl-mismatches-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "b14f54b844b1475a4e33dfcf1599fa48d7e065862aad56a0a440377cadb2401b",
+   "at_utc": "2026-11-20T03:14:29Z",
+   "notes": "Plain-language rewrite at Charlie's request: new lead (much better = 17+ gap in point differential, defined in italics right after), 'scoring margin' renamed 'point differential' throughout; all numbers unchanged and still computed."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "b14f54b844b1475a4e33dfcf1599fa48d7e065862aad56a0a440377cadb2401b",
+   "at_utc": "2026-11-20T03:15:48Z",
+   "notes": "Plain-language round: 'go the other way' still on main chart title and hero note; 'lopsided' in headline/hero label; rename incomplete ('margins', 'better margin' in method); 'point gap in point differential' labels. 17 rewrites listed.",
+   "report": "2026-11-19-nfl-mismatches-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "7d72b78519305a1067aece9347cde568a0ac4f27d48dfd5b6e6310b344dca18b",
+   "at_utc": "2026-11-20T03:18:30Z",
+   "notes": "Plain-language round 2: all 17 rewrites applied; no lopsided/go the other way/scoring margin; reads plainly incl. charts, hero, blurb.",
+   "report": "2026-11-19-nfl-mismatches-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "7d72b78519305a1067aece9347cde568a0ac4f27d48dfd5b6e6310b344dca18b",
+   "at_utc": "2026-11-20T03:18:31Z",
+   "notes": "Wording-only vs final-checked f75652c7: lead numbers moved, none new (9.8/8.4/18.2/16/1999 already in body); tables and stat-heads unchanged; clean copy /tmp/qa/clean5 byte-identical md, hero, both PNGs.",
+   "report": "2026-11-19-nfl-mismatches-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "b14f54b844b1475a4e33dfcf1599fa48d7e065862aad56a0a440377cadb2401b",
+  "at_utc": "2026-11-20T03:14:29Z",
+  "notes": "Plain-language rewrite at Charlie's request: new lead (much better = 17+ gap in point differential, defined in italics right after), 'scoring margin' renamed 'point differential' throughout; all numbers unchanged and still computed."
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "7d72b78519305a1067aece9347cde568a0ac4f27d48dfd5b6e6310b344dca18b",
+  "at_utc": "2026-11-20T03:18:30Z",
+  "notes": "Plain-language round 2: all 17 rewrites applied; no lopsided/go the other way/scoring margin; reads plainly incl. charts, hero, blurb.",
+  "report": "2026-11-19-nfl-mismatches-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "f75652c741e999126ad6459ebb12e807ffaefa62d4b9e0cb7868fe615332dc51",
+  "at_utc": "2026-11-19T23:25:21Z",
+  "notes": "Round 2: all round-1 fixes verified (17+ early/late 164/.750 & 256/.822; Allen 1 snap from raw_snap_counts; 'about 15'; 36 of 44; Weeks 2+; lead line). All numbers re-derived independently; no betting language; clean-copy rerun byte-identical.",
+  "report": "2026-11-19-nfl-mismatches-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "7d72b78519305a1067aece9347cde568a0ac4f27d48dfd5b6e6310b344dca18b",
+  "at_utc": "2026-11-20T03:18:31Z",
+  "notes": "Wording-only vs final-checked f75652c7: lead numbers moved, none new (9.8/8.4/18.2/16/1999 already in body); tables and stat-heads unchanged; clean copy /tmp/qa/clean5 byte-identical md, hero, both PNGs.",
+  "report": "2026-11-19-nfl-mismatches-final.md"
+ }
+}
