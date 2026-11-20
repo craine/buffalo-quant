@@ -19,7 +19,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("sabres-capitals-postgame-nov-19", "2026-11-20-sabres-wsh.md", "2026-11-20", "Sabres &middot; Post-game",
-     "Sabres 6, Capitals 3. The five-game skid is over, but Washington had twice the chances. Buffalo made the most of what it got: four goals in the first period.",
+     "Sabres 6, Capitals 3. The five-game skid is over, but Washington's chances were worth twice Buffalo's. The Sabres made the most of what they got: four goals in the first period.",
      "sabres-wsh-post-flow.png"),
     ("nfl-mismatches", "2026-11-19-nfl-mismatches.md", "2026-11-19", "Bills &middot; By the numbers",
      "When an NFL team is much better than its opponent, it still loses about 1 game in 5. Our model gives the Bills an 81% chance to beat Miami on Sunday.",

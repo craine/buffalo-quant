@@ -2,8 +2,8 @@
 
 **The Sabres scored four goals in the first period and beat Washington 6-3, ending a five-game losing streak. They didn't win it with better chances:
 Washington's were worth 3.7 goals and Buffalo's 1.9. Play this game over and over with those chances, and Buffalo wins it in regulation only about 14% of the time (it's tied after three periods another 13%).
-This time the puck went in. After five games of cold shooting, it was Buffalo's second-best shooting night of the season. Zach Benson scored, Tage Thompson got his 14th,
-and Alex Tuch scored against his old team.**
+This time the puck went in. After a cold-shooting skid, it was Buffalo's second-best shooting night of the season. Zach Benson scored, Tage Thompson got his 14th,
+and former Sabre Alex Tuch scored for Washington.**
 
 *One game, Nov. 19, in Washington. [Our preview](sabres-capitals-pregame-nov-19.html).*
 
@@ -11,7 +11,7 @@ and Alex Tuch scored against his old team.**
 
 ## How we measure "chances"
 
-Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Jack Quinn's first goal, a snap shot from 26 feet,
+Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays. Jack Quinn's first goal, a snap shot from 26 feet,
 had about a 16% chance. Tuch's, from 32 feet, had about 8%. Add those chances up
 over a game and you get what a team's chances were worth in goals. The shot locations come from the NHL's own play-by-play; the full explanation is in our story on
 [last year's 50-win season](sabres-50-win-mirage.html).
@@ -39,22 +39,21 @@ over a game and you get what a team's chances were worth in goals. The shot loca
 | 3 | 9:44 | Capitals | Boone Jenner | poked in from 1 ft | 54% | Sabres 5, Capitals 3 |
 | 3 | 19:17 | Sabres | Jack Quinn | empty net |  | Sabres 6, Capitals 3 |
 
-Logan Thompson gave up 3 goals on the 5 shots he faced, and Washington pulled him for Charlie Lindgren after Buffalo's third goal, 10:11 in. Washington then took over: in the third period its chances were worth 2.2 goals to Buffalo's 0.4, and it
+Logan Thompson gave up 3 goals on the 5 shots he faced, and Washington pulled him for Charlie Lindgren after Buffalo's third goal, 10:11 in. In the third period Washington took over: its chances were worth 2.2 goals to Buffalo's 0.4, and it
 scored twice before Jack Quinn's empty-netter.
 
 ## Was it luck?
 
-Mostly, yes, and that's not a knock. In the five losses before tonight, Buffalo scored 9 goals on chances worth about 14.3. Tonight it scored 5 (not counting the
-empty-netter) on chances worth 1.9, about 3 more than chances like that usually produce. That's its 2nd-best shooting night in 22 games this season.
+Mostly, yes. Every team needs nights like this. In the five losses before Thursday, Buffalo scored 9 goals on chances worth about 14.3. On Thursday it scored 5 (not counting the
+empty-netter) on chances worth 1.9, about 3 more than chances like that usually produce. That's its second-best shooting night in 22 games this season.
 
 ![Finishing by game](sabres-wsh-post-finishing.png)
 
-Our [GM story](sabres-if-i-were-gm.html) said cold shooting tends to even out, and tonight it did. What it said to fix first was the penalty kill, and Washington's
-power play got 9 shots worth 1.2 goals. Overall, Washington's chances were worth about twice Buffalo's.
+Our [GM story](sabres-if-i-were-gm.html) said cold shooting tends to even out. For one night, at least, the puck went in. It said the first thing to fix was the penalty kill. More on that below.
 
 ## Players
 
-- **Zach Benson** scored at four-on-four in the first, his first goal since Oct. 29. Two of his three goals this season came with a goalie in net, on chances worth 7.9.
+- **Zach Benson** scored at four-on-four in the first, his first goal since Oct. 29. Not counting an empty-netter, he has 2 goals this season on shots worth about 7.9 goals.
 - **Tage Thompson** scored on the power play in the second. His 14 goals are 6th in the NHL.
 - **Alex Tuch** scored for Washington in the first, his 13th of the season.
 - **Ukko-Pekka Luukkonen** faced chances worth 3.7 goals and allowed 3, about 0.7 fewer than an average goalie would have.
@@ -62,7 +61,7 @@ power play got 9 shots worth 1.2 goals. Overall, Washington's chances were worth
 
 ## The penalty kill
 
-Our preview called Buffalo's penalty kill against Washington's quiet power play the matchup to watch. The power play wasn't quiet tonight: Washington had 9 power-play shots
+Our preview called Buffalo's penalty kill against Washington's quiet power play the matchup to watch. The power play wasn't quiet on Thursday: Washington had 9 power-play shots
 worth 1.2 goals and scored once. Coming in, its power play averaged chances worth 0.52 goals a game. Buffalo's own power play scored twice on chances worth 0.6.
 
 ## Receipts: our pregame call

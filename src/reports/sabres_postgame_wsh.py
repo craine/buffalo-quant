@@ -192,14 +192,14 @@ def main(as_of=AS_OF):
     cols = [BLUE if gid == G else ("#C60C30" if gid in skid_ids else GRAY) for gid in order]
     ax.bar(np.arange(1, len(order) + 1), dv.values, color=cols, width=0.7, zorder=2)
     ax.axhline(0, color=INK, lw=0.8)
-    ax.text(len(order), dv.loc[G] + 0.1, "Thursday", ha="center", fontsize=9, color=BLUE, fontweight="bold")
+    ax.text(len(order), dv.loc[G] + 0.1, "Nov. 19 at WSH", ha="center", fontsize=9, color=BLUE, fontweight="bold")
     lo = float(min(dv.min(), 0)) - 0.9
     ax.set_ylim(lo, float(dv.max()) + 0.6)
     ax.text(len(order) - 3, lo + 0.25, "the 5-game skid", ha="center", fontsize=9, color="#C60C30")
     ax.set_xticks(range(1, len(order) + 1, 3))
     ax.set_xlabel("Sabres game number, 2026-27"); ax.set_ylabel("Goals scored minus\nwhat the chances were worth")
     ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True); ax.set_xlim(0.3, len(order) + 0.7)
-    finish(fig, "After a skid of cold shooting, the Sabres' second-best shooting night",
+    finish(fig, "Nov. 19 was the Sabres' second-best shooting night of the season",
            f"Each bar: Buffalo's goals minus what its chances were worth that game ({n_bg} games). Above zero = scored more than its chances.",
            "x")
     fig.texts[-1].set_text("Source: NHL play-by-play, Buffalo Quant Desk chances model. Empty-net goals excluded.")
@@ -215,8 +215,8 @@ def main(as_of=AS_OF):
 
 **The Sabres scored four goals in the first period and beat Washington {us_sc}-{them_sc}, ending a five-game losing streak. They didn't win it with better chances:
 Washington's were worth {a.xg.sum():.1f} goals and Buffalo's {f.xg.sum():.1f}. Play this game over and over with those chances, and Buffalo wins it in regulation only about {p_win:.0%} of the time (it's tied after three periods another {p_tie:.0%}).
-This time the puck went in. After five games of cold shooting, it was Buffalo's second-best shooting night of the season. Zach Benson scored, Tage Thompson got his {ordn(tt_g)},
-and Alex Tuch scored against his old team.**
+This time the puck went in. After a cold-shooting skid, it was Buffalo's second-best shooting night of the season. Zach Benson scored, Tage Thompson got his {ordn(tt_g)},
+and former Sabre Alex Tuch scored for Washington.**
 
 *One game, Nov. 19, in Washington. [Our preview](sabres-capitals-pregame-nov-19.html).*
 
@@ -224,7 +224,7 @@ and Alex Tuch scored against his old team.**
 
 ## How we measure "chances"
 
-Every shot has a chance of going in, based on where it was taken and what kind of shot it was. Jack Quinn's first goal, a snap shot from {quinn.iloc[0].dist:.0f} feet,
+Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays. Jack Quinn's first goal, a snap shot from {quinn.iloc[0].dist:.0f} feet,
 had about a {quinn.iloc[0].xg:.0%} chance. Tuch's, from {tuch_goal.dist:.0f} feet, had about {tuch_goal.xg:.0%}. Add those chances up
 over a game and you get what a team's chances were worth in goals. The shot locations come from the NHL's own play-by-play; the full explanation is in our story on
 [last year's 50-win season](sabres-50-win-mirage.html).
@@ -242,22 +242,21 @@ over a game and you get what a team's chances were worth in goals. The shot loca
 |---|---|---|---|---|---|---|
 {goal_rows}
 
-Logan Thompson gave up 3 goals on the {int(lt.on)} shots he faced, and Washington pulled him for Charlie Lindgren after Buffalo's third goal, {clock(pulled_at)} in. Washington then took over: in the third period its chances were worth {per.loc[3, THEM]:.1f} goals to Buffalo's {per.loc[3, US]:.1f}, and it
+Logan Thompson gave up 3 goals on the {int(lt.on)} shots he faced, and Washington pulled him for Charlie Lindgren after Buffalo's third goal, {clock(pulled_at)} in. In the third period Washington took over: its chances were worth {per.loc[3, THEM]:.1f} goals to Buffalo's {per.loc[3, US]:.1f}, and it
 scored twice before Jack Quinn's empty-netter.
 
 ## Was it luck?
 
-Mostly, yes, and that's not a knock. In the five losses before tonight, Buffalo scored {sk_gf} goals on chances worth about {sk_xf:.1f}. Tonight it scored {us_sc - en_goals} (not counting the
-empty-netter) on chances worth {f.xg.sum():.1f}, about {f.goal.sum() - f.xg.sum():.0f} more than chances like that usually produce. That's its {ordn(fin_rank)}-best shooting night in {n_bg} games this season.
+Mostly, yes. Every team needs nights like this. In the five losses before Thursday, Buffalo scored {sk_gf} goals on chances worth about {sk_xf:.1f}. On Thursday it scored {us_sc - en_goals} (not counting the
+empty-netter) on chances worth {f.xg.sum():.1f}, about {f.goal.sum() - f.xg.sum():.0f} more than chances like that usually produce. That's its {'second' if fin_rank == 2 else ordn(fin_rank)}-best shooting night in {n_bg} games this season.
 
 ![Finishing by game](sabres-wsh-post-finishing.png)
 
-Our [GM story](sabres-if-i-were-gm.html) said cold shooting tends to even out, and tonight it did. What it said to fix first was the penalty kill, and Washington's
-power play got {len(pp_a)} shots worth {pp_a.xg.sum():.1f} goals. Overall, Washington's chances were worth about twice Buffalo's.
+Our [GM story](sabres-if-i-were-gm.html) said cold shooting tends to even out. For one night, at least, the puck went in. It said the first thing to fix was the penalty kill. More on that below.
 
 ## Players
 
-- **Zach Benson** scored at four-on-four in the first, his first goal since {pd.Timestamp(ben_prev_date):%b. %-d}. {W[ben_g].capitalize()} of his {W[ben_all]} goals this season came with a goalie in net, on chances worth {ben_x:.1f}.
+- **Zach Benson** scored at four-on-four in the first, his first goal since {pd.Timestamp(ben_prev_date):%b. %-d}. Not counting an empty-netter, he has {ben_g} goals this season on shots worth about {ben_x:.1f} goals.
 - **Tage Thompson** scored on the power play in the second. His {tt_g} goals are {'tied for ' if tt_tied else ''}{ordn(tt_rank)} in the NHL.
 - **Alex Tuch** scored for Washington in the first, his {ordn(tuch_g)} of the season.
 - **Ukko-Pekka Luukkonen** faced chances worth {ours.xga:.1f} goals and allowed {int(ours.ga)}, about {abs(ours.saved):.1f} {'fewer' if ours.saved > 0 else 'more'} than an average goalie would have.
@@ -265,7 +264,7 @@ power play got {len(pp_a)} shots worth {pp_a.xg.sum():.1f} goals. Overall, Washi
 
 ## The penalty kill
 
-Our preview called Buffalo's penalty kill against Washington's quiet power play the matchup to watch. The power play wasn't quiet tonight: Washington had {len(pp_a)} power-play shots
+Our preview called Buffalo's penalty kill against Washington's quiet power play the matchup to watch. The power play wasn't quiet on Thursday: Washington had {len(pp_a)} power-play shots
 worth {pp_a.xg.sum():.1f} goals and scored once. Coming in, its power play averaged chances worth {wpp_pre:.2f} goals a game. Buffalo's own power play scored twice on chances worth {pp_f.xg.sum():.1f}.
 
 ## Receipts: our pregame call
