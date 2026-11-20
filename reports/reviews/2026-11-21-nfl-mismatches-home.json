@@ -1,0 +1,102 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2840f7520db80b0737864365be87cecd0124a6ea8169bf4371d0fd9f1b2158cc",
+   "at_utc": "2026-11-20T02:55:46Z",
+   "notes": "Same sample as the first story (asserted 5,205). Home/road, division, upset margins, cold (n=29, temp missing 4%), parity split, Bills-Miami 4-2 all computed with asserts; no market columns read. Charts viewed; text and chart use the same one-score cutoff (8)."
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "2840f7520db80b0737864365be87cecd0124a6ea8169bf4371d0fd9f1b2158cc",
+   "at_utc": "2026-11-20T02:57:09Z",
+   "notes": "Needs edits: (1) 88% home figure clashes with Thursday's 'model 81%, right next to history' with no reconciliation; (2) 'difference of 15 points' reads as scoreboard points; (3) headline/home section/chart title claim home field matters more in lopsided games, chart shows roughly constant home edge; plus Sunday worked example, 14+ threshold switch, small-sample Bills-Miami, 'median', blowout wording, cold gap, card hook, chart subtitle, hero line.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "5f8aa600a68fcceb30804a6eaeffbf27f259b80155d43a2d07e9d55ffe7181ef",
+   "at_utc": "2026-11-20T02:59:15Z",
+   "notes": "Round 2: 12 round-1 fixes in. Two sentences remain: (1) 'ran 10 to 17 points higher' brings back the scoreboard-points ambiguity and disagrees with the chart's 89 vs 71 (18); (2) Sunday's reason for model 81% vs history 88% (shrink) doesn't follow, since history's pregame margins already include it; use the first story's model-runs-cautious calibration (n=61, said 82%, won 87%) or drop the why. Polish: 'history's 88% spot', '17-point rout'.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "fe97a0fd04eae85b8b78cb45b5e12c1aa37af8746f343b4a1b3dae34324c7fb1",
+   "at_utc": "2026-11-20T02:59:55Z",
+   "notes": "Round 2 on 5f8aa600: all numbers re-derived independently (88/73, edges 10-17, 80/79, 75/73, 4-2 games listed, 86/64, median 5, 65%, 42%/36%, 13, chart buckets, cold 28/29 at 17+, 3.7%, 17+ era split 0.797/0.781, gap 18.2, 81% from first story). Round-1 overclaims fixed. No market columns or betting language. Clean copy byte-identical. Remaining wording fix: '17-point rout' should be '17 or more'. 81% not yet on the Ledger.",
+   "report": "2026-11-21-nfl-mismatches-home-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "fe97a0fd04eae85b8b78cb45b5e12c1aa37af8746f343b4a1b3dae34324c7fb1",
+   "at_utc": "2026-11-20T02:59:55Z",
+   "notes": "'a 17-point rout 42% of the time' reads as exactly 17; the 42% is 17+ (140 of 333, only 17 exactly 17). Change to 'won by 17 or more 42% of the time'. Everything else on 5f8aa600 verified. Editor round-2 pass is also not yet recorded.",
+   "report": "2026-11-21-nfl-mismatches-home-final.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "fe97a0fd04eae85b8b78cb45b5e12c1aa37af8746f343b4a1b3dae34324c7fb1",
+   "at_utc": "2026-11-20T02:59:58Z",
+   "notes": "Round 3: all round-1 and round-2 fixes in. Home edge '10 to 18 more games out of every 100' matches chart; Sunday states 88% is history and published chance is still 81% with no unsupported why. Optional: 'our model's published chance'.",
+   "report": "2026-11-21-nfl-mismatches-home-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "538f636c097305e37352d5ec18453a4904236d1919316dd8cbdd072ca23af200",
+   "at_utc": "2026-11-20T03:00:26Z",
+   "notes": "Re-recorded on fe97a0fd: all numbers independently re-derived (88/73, edge 10-18 from chart labels, 80/79, 75/73, Bills-MIA 4-2 games checked, 86/64, median 5, 65%, 42%/36%, 13, chart buckets, cold 28/29, 3.7%, 17+ era 0.797/0.781, gap 18.2, 81% matches first story). No market columns or betting language. Clean copy byte-identical. Earlier entries on this sha were recorded mid-regeneration.",
+   "report": "2026-11-21-nfl-mismatches-home-quant.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "538f636c097305e37352d5ec18453a4904236d1919316dd8cbdd072ca23af200",
+   "at_utc": "2026-11-20T03:00:26Z",
+   "notes": "Final check on fe97a0fd: changed lines (home edge 10-18 from chart labels, Sunday 88%/81% without model-why sentence, 'won by 17 or more 42% / one score 36%') verified; hero, card, PNGs unchanged and reproduce. Open: log the 81% BUF-MIA call on the Ledger before 2026-11-22 kickoff.",
+   "report": "2026-11-21-nfl-mismatches-home-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "ce79453f06b220c1baeee7d1e061546730fd82b059bf168ea14f789ea14b7b0d",
+   "at_utc": "2026-11-20T03:00:46Z",
+   "notes": "Final check on ce79453f: only change is the Sunday line ('our model's chance for the Bills on Sunday, from the first story, is 81%'), accurate; hero/card/PNGs unchanged; clean copy byte-identical. Quant numbers verified on prior text unchanged. Open: log the 81% BUF-MIA call on the Ledger before 2026-11-22 kickoff.",
+   "report": "2026-11-21-nfl-mismatches-home-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "2840f7520db80b0737864365be87cecd0124a6ea8169bf4371d0fd9f1b2158cc",
+  "at_utc": "2026-11-20T02:55:46Z",
+  "notes": "Same sample as the first story (asserted 5,205). Home/road, division, upset margins, cold (n=29, temp missing 4%), parity split, Bills-Miami 4-2 all computed with asserts; no market columns read. Charts viewed; text and chart use the same one-score cutoff (8)."
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "fe97a0fd04eae85b8b78cb45b5e12c1aa37af8746f343b4a1b3dae34324c7fb1",
+  "at_utc": "2026-11-20T02:59:58Z",
+  "notes": "Round 3: all round-1 and round-2 fixes in. Home edge '10 to 18 more games out of every 100' matches chart; Sunday states 88% is history and published chance is still 81% with no unsupported why. Optional: 'our model's published chance'.",
+  "report": "2026-11-21-nfl-mismatches-home-editor.md"
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "538f636c097305e37352d5ec18453a4904236d1919316dd8cbdd072ca23af200",
+  "at_utc": "2026-11-20T03:00:26Z",
+  "notes": "Re-recorded on fe97a0fd: all numbers independently re-derived (88/73, edge 10-18 from chart labels, 80/79, 75/73, Bills-MIA 4-2 games checked, 86/64, median 5, 65%, 42%/36%, 13, chart buckets, cold 28/29, 3.7%, 17+ era 0.797/0.781, gap 18.2, 81% matches first story). No market columns or betting language. Clean copy byte-identical. Earlier entries on this sha were recorded mid-regeneration.",
+  "report": "2026-11-21-nfl-mismatches-home-quant.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "ce79453f06b220c1baeee7d1e061546730fd82b059bf168ea14f789ea14b7b0d",
+  "at_utc": "2026-11-20T03:00:46Z",
+  "notes": "Final check on ce79453f: only change is the Sunday line ('our model's chance for the Bills on Sunday, from the first story, is 81%'), accurate; hero/card/PNGs unchanged; clean copy byte-identical. Quant numbers verified on prior text unchanged. Open: log the 81% BUF-MIA call on the Ledger before 2026-11-22 kickoff.",
+  "report": "2026-11-21-nfl-mismatches-home-final.md"
+ }
+}

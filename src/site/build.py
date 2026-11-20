@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("nfl-mismatches-home", "2026-11-21-nfl-mismatches-home.md", "2026-11-21", "Bills &middot; By the numbers",
+     "In 27 seasons, a team whose scoring margin was 17+ points a game better than its opponent's won 88% at home and 73% on the road. Division games came out the same as any other. Sunday's Dolphins at Bills game is the home kind; our model's chance for the Bills is 81%.",
+     "nfl-mismatch-home.png"),
     ("nfl-mismatches", "2026-11-19-nfl-mismatches.md", "2026-11-19", "Bills &middot; By the numbers",
      "Over 27 seasons, when one NFL team's scoring margin was 17+ points a game better than its opponent's, it still lost about 1 in 5. Our model gives the Bills an 81% chance against Miami on Sunday.",
      "nfl-mismatch-history.png"),
