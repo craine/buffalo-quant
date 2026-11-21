@@ -1,16 +1,9 @@
-# Editor review: 2026-11-21-sabres-fla-pregame (stage 3, round 2)
+# Editor review: 2026-11-21-sabres-fla-pregame (stage 3, round 4)
 
-Round-1 report: `2026-11-21-sabres-fla-pregame-editor-r1.md`.
+Round 3: -editor-r3.md. **Verdict: ready (pass).**
 
-**One sentence:** Florida's power play creates more chances than anyone's, Buffalo's penalty kill is one of the leakiest, and our model
-gives the Sabres a 37% chance on Saturday. **Verdict: ready (pass).**
-
-All six round-1 edits are in: no "other way" phrasing, hero reads "1st / Florida's power play in chances created, of 32 NHL teams",
-the home-team caution is three short sentences with both sample sizes, "Florida's top two" line, and the chances chart is clean.
-Polish applied: model-test title says who gave the chance, plain overtime sentence, no stray ticks on the power-play chart, card dek
-"a 37% chance to win in Florida". Headline, dek, hero, card and body agree. Every chart title, label and the card dek read on their own.
-No text overlaps or is cut off in any of the three PNGs.
-
-Optional polish:
-- "Buffalo's own power play scored twice in Washington on Thursday." sits alone as a one-line paragraph; it could join the paragraph above.
-- On the chances chart, the "Sabres" label just touches a neighbouring dot.
+All six edits are in. "**The key:**" holds up: it fits Charlie's keys format and names a target without saying Buffalo can't win otherwise,
+and the lead ("Three things go with winning") sets that up. The 6-of-12 / 3-of-10 line no longer looks like a hockey record. The first-goal
+line is concrete and fair. The "After the game" line promises only what a season of grading can show. Headline, lead, hero, card dek and body
+agree. Card dek now uses the body's wording. All three charts (keys, power play, model test) are unchanged from round 3: they read on their own,
+with nothing overlapping or cut off. No betting words, no jargon in the body.

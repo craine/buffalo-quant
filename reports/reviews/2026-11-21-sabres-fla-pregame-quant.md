@@ -1,21 +1,18 @@
-# Quant review: 2026-11-21-sabres-fla-pregame (stage 2, round 2)
+# Quant review: 2026-11-21-sabres-fla-pregame (stage 2, round 4)
 
-Reviewed md sha256 712b924c..., hero JSON, site card, all three PNGs. Round-1 report: `2026-11-21-sabres-fla-pregame-quant-r1.md`
-(all round-1 numbers verified there still apply; the diff against round 1 touches only the sentences below).
+Text: md sha256 89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52 (recomputed), hero, card, three PNGs.
+Round-3 full re-review: -quant-r3.md (all numbers there still apply; the diff touches only the lines below). PNGs are byte-identical to round 3.
 
 **Verdict: publish (pass).**
 
-Round-1 issues:
-1. "Florida spreads its scoring around": replaced with "Florida's top two..." in the suggested wording. Fixed.
-2. Florida penalty-kill claim: dropped. The paragraph is now "Buffalo's own power play scored twice in Washington on Thursday."
-   Generator computes `thu_ppg` from game 2026020351 (my check: 2026-11-19, WSH 3, BUF 6) and asserts 2; my count is 2 (Dahlin, Thompson, both 5-on-4). Fixed.
-3. "Staying out of the penalty box matters on Saturday" with the unsupported "can't yet split out" and "than almost anyone" removed. Fixed.
-4. Chances chart: Panthers label and corner notes no longer overlap any dot. Fixed.
-5. Five-game skid now asserted (sk == 5); matches my L, L, OTL, L, L. Fixed.
-
-Changed sentences checked against my numbers: home-ice OT share 55% (0.5451, fit on 2023-24 and 2024-25, home teams' OT/SO wins); caution
-54.9% / 52.2% of 1,312 and 54.4% / 52.2% of 358 (mine 54.92 / 52.21 / 1,312; 54.38 / 52.23 / 358); attack 3.1 and allowed 3.2 (3.112, 3.193);
-model-test title 60-65% / 62% (61.9%, 231 games); hero "1st" (FLA 1.048, next CAR 0.867); card dek 37% and 4th-most unchanged.
-No betting language, no jargon in the body. Generator reproduces md, hero and all three PNGs byte-identically in a clean copy.
-
-Polish (not blocking): "Sabres" label on the chances chart just touches the grey dot at about (3.00, 3.18).
+- Necessity framing gone: headline "three keys for Buffalo in Florida"; lead "Three things go with winning, and they're Buffalo's keys";
+  "what to watch on Saturday". "**The key:**" labels: acceptable. They name a target, not a requirement, and sit under a lead that says these
+  "go with winning" and "aren't magic". No "must", "need" or "has to" remains.
+- First-goal line: Buffalo 5 of 13 (38.5%); only CHI (2 of 9) and VAN (3 of 9) lower, matching my query; 4 of the other 8 were OT/SO losses (mine: 4).
+  Computed and asserted in the generator.
+- 5v5 line: won 6 of 12 and 3 of 10, matches; small samples labeled.
+- Buffalo since 2023-24: 59% (134) and 25% (28), matches.
+- "After the game" line no longer causal.
+- Stat-heads scoreless-games note is accurate (5 games, 10 team-games).
+- Hero "two or more" and card dek wording: no number changed.
+No betting language, no jargon in the body. Clean-copy rebuild reproduces md, hero and all three PNGs byte-identically.

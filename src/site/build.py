@@ -19,8 +19,8 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("sabres-panthers-pregame-nov-21", "2026-11-21-sabres-fla-pregame.md", "2026-11-21", "Sabres &middot; Preview",
-     "Our model gives Buffalo a 37% chance to win in Florida on Saturday. Florida's power play creates more chances than any in the NHL, and Buffalo's penalty kill allows the 4th-most.",
-     "sabres-fla-special.png"),
+     "Our model gives Buffalo a 37% chance to win in Florida on Saturday. Three keys: hold Florida's power play to one goal or fewer, score first and keep it, and get more of the chances at five-on-five.",
+     "sabres-fla-keys.png"),
     ("sabres-capitals-postgame-nov-19", "2026-11-20-sabres-wsh.md", "2026-11-20", "Sabres &middot; Post-game",
      "Sabres 6, Capitals 3. The five-game skid is over, but Washington's chances were worth twice Buffalo's. The Sabres made the most of what they got: four goals in the first period.",
      "sabres-wsh-post-flow.png"),

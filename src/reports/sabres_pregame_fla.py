@@ -179,26 +179,64 @@ def main(as_of=AS_OF):
                      if len(lp) else "**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; "
                      "every logged call is graded after the game, hit or miss.")
 
-    # ---- chart 1: chances created vs allowed
-    fig, ax = plt.subplots(figsize=(9.5, 6.2), dpi=200)
-    others = t.drop([US, THEM])
-    ax.scatter(others.xgf_pg, others.xga_pg, s=42, color="#C9CDD4", zorder=2)
-    for tm, col, lab, off, ha in ((US, BLUE, "Sabres", (8, 6), "left"), (THEM, RED_W, "Panthers", (10, -18), "left")):
-        r = t.loc[tm]
-        ax.scatter(r.xgf_pg, r.xga_pg, s=140, color=col, zorder=3, edgecolor="white", lw=1.5)
-        ax.annotate(lab, (r.xgf_pg, r.xga_pg), xytext=off, textcoords="offset points", fontsize=11, fontweight="bold", color=INK, ha=ha)
-    ax.axvline(t.xgf_pg.mean(), color="#D5D8DE", lw=1, ls="--"); ax.axhline(t.xga_pg.mean(), color="#D5D8DE", lw=1, ls="--")
-    ax.invert_yaxis()
-    ax.margins(x=0.12, y=0.12)
-    ax.text(0.99, 0.99, "Create a lot,\nallow little", transform=ax.transAxes, ha="right", va="top", fontsize=9, color=MUTED)
-    ax.text(0.01, 0.01, "Create little,\nallow a lot", transform=ax.transAxes, ha="left", va="bottom", fontsize=9, color=MUTED)
-    ax.set_xlabel("Chances created per game (goals they were worth)")
-    ax.set_ylabel("Chances allowed per game (better defense is higher)")
-    ax.grid(color="#EEF0F3"); ax.set_axisbelow(True)
-    finish(fig, f"Florida allows the {ordn(33 - rk('xga_pg', THEM))}-fewest chances; Buffalo allows the {ordn(rk('xga_pg', US))}-most",
-           f"All 32 NHL teams, 2026-27 through {pd.to_datetime(last_date):%b. %-d}. Dashed lines are league averages.",
-           f"Unblocked shots, empty net excluded, all situations. Sabres {int(b.gp)} games, Panthers {int(v.gp)}.")
-    fig.savefig(OUT / "sabres-fla-chances.png"); plt.close(fig)
+    # ---- the three keys: what goes with winning, every regular-season game since 2023-24 through AS_OF
+    gl = s[s.goal == 1].sort_values(["game_id", "period", "t"])
+    first = gl.groupby("game_id").head(1).set_index("game_id").team
+    kr = []
+    for side, opp in (("home", "away"), ("away", "home")):
+        kr.append(gm.rename(columns={side: "team", f"{side}_score": "gf", f"{opp}_score": "ga"})[["game_id", "season", "team", "gf", "ga"]])
+    kr = pd.concat(kr)
+    kr = kr[kr.season >= 20232024].copy()
+    kr["win"] = kr.gf > kr.ga
+    kr["first"] = kr.game_id.map(first) == kr.team
+    ppg_a = gl[gl.strength.isin(PP)].groupby(["game_id", "opp"]).size()
+    kr["ppga"] = [int(ppg_a.get((gid, tm), 0)) for gid, tm in zip(kr.game_id, kr.team)]
+    e5 = u[u.strength == "5v5"]
+    e5f, e5a = e5.groupby(["game_id", "team"]).xg.sum(), e5.groupby(["game_id", "opp"]).xg.sum()
+    kr["ev_won"] = [e5f.get((gid, tm), 0) > e5a.get((gid, tm), 0) for gid, tm in zip(kr.game_id, kr.team)]
+    assert kr.first.notna().all() and abs(kr.win.mean() - 0.5) < 1e-9
+    wr = lambda m: (float(kr[m].win.mean()), int(m.sum()))
+    K = dict(pp0=wr(kr.ppga == 0), pp1=wr(kr.ppga == 1), pp2=wr(kr.ppga >= 2), f1=wr(kr.first), f0=wr(~kr.first),
+             e1=wr(kr.ev_won), e0=wr(~kr.ev_won))
+    n_kr, n_seasons = len(kr), kr.season.nunique()
+    bk = kr[kr.team == US]; by = bk[bk.season == SEASON]; fy = kr[(kr.team == THEM) & (kr.season == SEASON)]
+    BK = dict(pp0=(float(bk[bk.ppga == 0].win.mean()), int((bk.ppga == 0).sum())), pp2=(float(bk[bk.ppga >= 2].win.mean()), int((bk.ppga >= 2).sum())))
+    b_first_n, b_first_w = int(by.first.sum()), int(by[by.first].win.sum())
+    f_first_n, f_first_w = int(fy.first.sum()), int(fy[fy.first].win.sum())
+    b_ev_n, b_ev_w, b_noev_n, b_noev_w = int(by.ev_won.sum()), int(by[by.ev_won].win.sum()), int((~by.ev_won).sum()), int(by[~by.ev_won].win.sum())
+    b_pp2_n = int((by.ppga >= 2).sum())
+    assert (b_first_n, b_first_w, f_first_n, f_first_w) == (13, 5, 10, 8), (b_first_n, b_first_w, f_first_n, f_first_w)
+    assert (b_ev_n, b_ev_w, b_noev_n, b_noev_w) == (12, 6, 10, 3)
+    ty = kr[kr.season == SEASON]
+    fs = ty[ty.first].groupby('team').win.mean()
+    lower = sorted(fs[fs < fs[US]].index)
+    FULL = {'CHI': 'Chicago', 'VAN': 'Vancouver'}
+    assert lower == ['CHI', 'VAN'], lower
+    fn_list = ' and '.join(FULL[x] for x in lower)
+    otl = set(gm[gm.last_period_type.isin(['OT', 'SO'])].game_id)
+    b_first_ot = int(by[by.first & ~by.win].game_id.isin(otl).sum())
+    assert b_first_ot == 4
+    assert K["pp2"][0] < 0.3 < K["pp1"][0] < K["pp0"][0] and K["f1"][0] > 0.65 and K["e1"][0] > 0.58
+
+    fig, axes = plt.subplots(1, 3, figsize=(10.5, 4.6), dpi=200, sharey=True)
+    panels = [("Power-play goals allowed", [("0", K["pp0"]), ("1", K["pp1"]), ("2+", K["pp2"])]),
+              ("First goal", [("Scored it", K["f1"]), ("Allowed it", K["f0"])]),
+              ("Five-on-five chances", [("Had more", K["e1"]), ("Had fewer", K["e0"])])]
+    for ax, (ttl, bars) in zip(axes, panels):
+        xs_ = np.arange(len(bars))
+        ax.bar(xs_, [v_[1][0] for v_ in bars], 0.62, color=[BLUE if i == 0 else GRAY for i in range(len(bars))], zorder=2)
+        for x_, (lab, (pw, n)) in zip(xs_, bars):
+            ax.text(x_, pw + 0.02, f"{pw:.0%}", ha="center", fontsize=11, fontweight="bold", color=INK)
+        ax.set_xticks(xs_, [lab for lab, _ in bars], fontsize=10); ax.tick_params(axis="x", length=0)
+        ax.set_title(ttl, fontsize=11, color=INK, loc="left")
+        ax.axhline(0.5, color="#D5D8DE", lw=1, ls="--", zorder=1)
+        ax.set_ylim(0, 0.85); ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
+    axes[0].yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1, decimals=0)); axes[0].set_ylabel("How often the team won")
+    fig.subplots_adjust(top=0.74, bottom=0.17, wspace=0.12)
+    finish(fig, "Three things that go with winning an NHL game",
+           f"Win rate for every NHL team in every regular-season game, 2023-24 through Nov. 19, 2026 ({n_kr:,} team-games). Dashed line = 50%.",
+           "Five-on-five chances: whose shots were worth more in goals. Ties count as fewer.")
+    fig.savefig(OUT / "sabres-fla-keys.png"); plt.close(fig)
 
     # ---- chart 2: Florida's power play vs Buffalo's penalty kill
     fig, ax = plt.subplots(figsize=(9.5, 4.4), dpi=200)
@@ -257,60 +295,56 @@ def main(as_of=AS_OF):
     assert 33 - rk("xga_pg", THEM) <= 12 and rk("xga_pg", US) <= 8
     b_pkg, f_ppg = int(b.pk_g), int(v.pp_g)
     assert pts(THEM) == 27 and pts(US) == 22 and f6 == (3, 2, 1)
-    md = f"""# Sabres at Panthers: the NHL's busiest power play meets Buffalo's leaky penalty kill
+    md = f"""# Sabres at Panthers: three keys for Buffalo in Florida
 
-**Our model gives Buffalo a {p_b:.0%} chance to win in Florida on Saturday (Panthers {1 - p_b:.0%}). The Sabres just ended a five-game skid with a 6-3 win in Washington.
-The matchup to watch: Florida's power play creates more chances than any team's in the NHL, and Buffalo's penalty kill allows the {ordn(rk('pk_x_pg', US))}-most.
-That's the problem the [GM story](sabres-if-i-were-gm.html) said to fix first.**
+**Our model gives Buffalo a {p_b:.0%} chance to win in Florida on Saturday (Panthers {1 - p_b:.0%}). Three things go with winning, and they're Buffalo's keys.
+Hold the NHL's busiest power play to one goal or fewer. Score first, and this time keep the lead. And get more of the chances at five-on-five.
+We'll check all three after the game.**
 
-*Buffalo at Florida, Saturday, Nov. 21, 6 p.m. ET, game {trip_no} of a {trip_len}-game road trip. Buffalo played Thursday and plays again Sunday in Tampa; Florida last played Tuesday.
-Numbers are 2026-27 through {pd.to_datetime(last_date):%B %-d}: Sabres {recd(US)} ({pts(US)} points) in {int(b.gp)} games, Panthers {recd(THEM)} ({pts(THEM)} points) in {int(v.gp)}.
-Early-season ranks can move a lot.*
+*Buffalo at Florida, Saturday, Nov. 21, 6 p.m. ET, game {trip_no} of a {trip_len}-game road trip. Sabres {recd(US)} ({pts(US)} points), Panthers {recd(THEM)} ({pts(THEM)} points), through {pd.to_datetime(last_date):%B %-d}.
+Buffalo played Thursday and plays again Sunday in Tampa; Florida last played Tuesday.*
 
-![Chances created vs allowed](sabres-fla-chances.png)
+![Three things that go with winning](sabres-fla-keys.png)
 
-## The two teams, side by side
+The chart covers every NHL game since 2023-24 ({n_kr:,} team results). These aren't magic: better teams tend to do all three. But they're what to watch on Saturday.
 
-| Per game, 2026-27 | Sabres | Panthers | League average |
-|---|---|---|---|
-| Chances created (worth this many goals) | {b.xgf_pg:.2f} ({ordn(rk('xgf_pg', US))}) | {v.xgf_pg:.2f} ({ordn(rk('xgf_pg', THEM))}) | {lg.xgf_pg:.2f} |
-| Chances allowed | {b.xga_pg:.2f} ({ordn(33 - rk('xga_pg', US))}) | {v.xga_pg:.2f} ({ordn(33 - rk('xga_pg', THEM))}) | {lg.xga_pg:.2f} |
-| Share of the chances at five-on-five | {b.ev_share:.1%} ({ordn(rk('ev_share', US))}) | {v.ev_share:.1%} ({ordn(rk('ev_share', THEM))}) | 50% |
-| Goals scored, actual | {gfa.loc[US].GF / b.gp:.2f} | {gfa.loc[THEM].GF / v.gp:.2f} | |
-| Goals allowed, actual | {gfa.loc[US].GA / b.gp:.2f} | {gfa.loc[THEM].GA / v.gp:.2f} | |
-| Power-play chances created | {b.pp_x_pg:.2f} ({ordn(rk('pp_x_pg', US))}) | {v.pp_x_pg:.2f} ({ordn(rk('pp_x_pg', THEM))}) | {lg.pp_x_pg:.2f} |
-| Chances allowed a man down | {b.pk_x_pg:.2f} ({ordn(33 - rk('pk_x_pg', US))}) | {v.pk_x_pg:.2f} ({ordn(33 - rk('pk_x_pg', THEM))}) | {lg.pk_x_pg:.2f} |
+## Key 1: Florida gets one power-play goal at most
 
-Ranks are among 32 teams; 1st is best (most created, fewest allowed). Actual goals come from final scores; chances leave out empty-net shots.
+**The key:** a penalty kill that gives up one goal or none.
 
-## How we measure "chances"
+NHL teams that allow no power-play goals win {K['pp0'][0]:.0%} of the time. Allow one and it's {K['pp1'][0]:.0%}. Allow two or more and it drops to {K['pp2'][0]:.0%} ({K['pp2'][1]:,} games).
+The Sabres are no different: since 2023-24 they've won {BK['pp0'][0]:.0%} of games with none allowed ({BK['pp0'][1]} games) and {BK['pp2'][0]:.0%} with two or more ({BK['pp2'][1]}).
 
-Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays. Over the last three seasons
-({n_pri:,} shots that weren't blocked, not counting empty nets), a shot from within 10 feet went in {close10:.1%} of the time; one from 60 feet or more, {far60:.1%}.
-Add up those chances on every shot and you get what a team's chances were worth in goals. The shot locations come from the NHL's own play-by-play. The full explanation
-and how we checked it are in our story on [last year's 50-win season](sabres-50-win-mirage.html).
-
-## A man down
+This is the hard one on Saturday. Florida's power play creates {v.pp_x_pg:.2f} goals' worth of chances a game, the most in the NHL (league average {lg.pp_x_pg:.2f}), and has scored {f_ppg} times in {int(v.gp)} games.
+Buffalo's penalty kill allows {b.pk_x_pg:.2f} a game, {ordn(rk('pk_x_pg', US))}-most of 32, and has given up {b_pkg} goals in {int(b.gp)} games. It's the problem the [GM story](sabres-if-i-were-gm.html)
+said to fix first. Buffalo has allowed two or more power-play goals in {b_pp2_n} games this season.
 
 ![Power play vs penalty kill](sabres-fla-special.png)
 
-Florida's power play creates {v.pp_x_pg:.2f} goals' worth of chances a game, the most in the NHL (league average {lg.pp_x_pg:.2f}), and has scored {f_ppg} power-play goals in {int(v.gp)} games.
-Buffalo's penalty kill allows {b.pk_x_pg:.2f} a game, {ordn(rk('pk_x_pg', US))}-most of 32, and has allowed {b_pkg} power-play goals in {int(b.gp)} games. Both numbers also depend on how many
-penalties get called. Staying out of the penalty box matters on Saturday.
+## Key 2: Score first, and keep it
 
-Buffalo's own power play scored {W2[thu_ppg]} in Washington on Thursday.
+**The key:** the first goal, and no giving it back.
 
-## The first meeting
+NHL teams that score first win {K['f1'][0]:.0%} of the time. Buffalo has scored first in {b_first_n} of {int(b.gp)} games this season, more often than not, but won only {b_first_w} of them.
+Only {fn_list} have won a smaller share of the games they scored first, though {b_first_ot} of Buffalo's other {b_first_n - b_first_w} went to overtime. It's a small sample. Florida has scored first {f_first_n} times and won {f_first_w}.
 
-Buffalo beat Florida {m1_sc[US]}-{m1_sc[THEM]} at home on Oct. 12. The chances were even: Buffalo's were worth {m1_x[US]:.1f} goals, Florida's {m1_x[THEM]:.1f}. Each team scored {m1_pp[US]} power-play goals.
-Last season Buffalo won {ly_w} of the {len(ly)} games between them. One game is a small sample, and our prediction goes by the full season, blended with last season.
+## Key 3: More of the chances at five-on-five
 
-## Notes for Saturday
+**The key:** shots worth more than Florida's when both teams are at full strength.
 
-- **Florida's top two.** Sam Reinhart leads the Panthers with {int(fsc.iloc[0])} goals, and his chances add up to the most on the team, worth about {rein_x:.0f} goals.
-  Brady Tkachuk, who played for Ottawa through last season, has {int(fsc.iloc[1])}.
-- **Tage Thompson's {tom_g} goals are {'tied for ' if tied(THOMPSON) else ''}{ordn(tom_rk)} in the NHL.**
-- **Rest.** Florida has had three days off. Buffalo has had one, and plays again Sunday in Tampa. Our model doesn't count rest.
+Teams that get more of the five-on-five chances win {K['e1'][0]:.0%} of the time. Buffalo has won {b_ev_w} of the {b_ev_n} games it's done that this season, and {b_noev_w} of the {b_noev_n} when it hasn't. Small samples, but the gap is there.
+On paper this one is even: Buffalo gets {b.ev_share:.1%} of the five-on-five chances ({ordn(rk('ev_share', US))} of 32), Florida {v.ev_share:.1%} ({ordn(rk('ev_share', THEM))}).
+
+**How we measure "chances."** Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays.
+A shot from within 10 feet went in {close10:.1%} of the time over the last three seasons; one from 60 feet or more, {far60:.1%}. Add them up and you get what a team's chances were worth in goals.
+More in our story on [last year's 50-win season](sabres-50-win-mirage.html).
+
+## Who to watch
+
+- **Sam Reinhart** leads Florida with {int(fsc.iloc[0])} goals, and his chances add up to the most on the team, worth about {rein_x:.0f} goals. **Brady Tkachuk**, who played for Ottawa through last season, has {int(fsc.iloc[1])}.
+- **Tage Thompson's {tom_g} goals are {'tied for ' if tied(THOMPSON) else ''}{ordn(tom_rk)} in the NHL.** He scored on the power play Thursday; Buffalo's power play scored {W2[thu_ppg]} in Washington.
+- **The last meeting.** Buffalo won {m1_sc[US]}-{m1_sc[THEM]} at home on Oct. 12. The chances were even ({m1_x[US]:.1f} to {m1_x[THEM]:.1f}), and each team scored {m1_pp[US]} power-play goals.
+- **Rest.** Florida has had three days off; Buffalo has had one and plays again Sunday. Our model doesn't count rest.
 
 ## In goal
 
@@ -320,19 +354,14 @@ Goals saved compared with an average goalie facing the same shots. Positive is g
 |---|---|---|---|---|
 {gk_rows}
 
-Ranks are among all {n_gk} goalies who have played this season. We hadn't seen confirmed starters when we published, and our prediction doesn't change with the
-starter: a goalie's first half of a season is a weak guide to his second half (details in our [Vegas preview](sabres-vegas-pregame-nov-8.html)).
+Ranks are among all {n_gk} goalies this season. Starters weren't confirmed when we published.
 
 ## Our prediction: Sabres {p_b:.0%}, Panthers {1 - p_b:.0%}
 
 {ledger_status}
 
-Our model expects about **{mu_b:.1f} goals for Buffalo and {mu_v:.1f} for Florida**, and gives about a {p_tie:.0%} chance the game is tied after 60 minutes.
-
-**Where the number comes from.** The chances numbers above. Early in a season we blend in last season's numbers and pull everything toward the league
-average, which makes Buffalo's attack worth {off_r[US]:.1f} goals a game and Florida's chances allowed {def_r[THEM]:.1f}. Florida's attack comes out at
-{off_r[THEM]:.1f}, and Buffalo's chances allowed at {def_r[US]:.1f}. Home ice adds about {coef[2]:.1f} of a goal for the Panthers. Then we work out the chance of every possible
-final score. If it's tied after 60 minutes, Florida gets {p_ot:.0%}: how often home teams won in overtime or a shootout in 2023-24 and 2024-25.
+Our model expects about **{mu_b:.1f} goals for Buffalo and {mu_v:.1f} for Florida**, and about a {p_tie:.0%} chance the game is tied after 60 minutes. It works from each team's chances this season,
+blended with last season's, plus home ice (about {coef[2]:.1f} of a goal for Florida). If it's tied after 60 minutes, Florida gets {p_ot:.0%}: how often home teams won in overtime or a shootout in 2023-24 and 2024-25.
 
 **One caution.** Our model has been a little high on home teams. In 2025-26 it gave them {home_gap[LY][0]:.1%} on average, and they won {home_gap[LY][1]:.1%} of
 {home_gap[LY][2]:,} games. This season it's {home_gap[SEASON][0]:.1%}, and they've won {home_gap[SEASON][1]:.1%} of {home_gap[SEASON][2]:,}. So Buffalo's real chance on the road may be a little better than {p_b:.0%}.
@@ -344,23 +373,26 @@ We're logging the model's number as it is.
 It called the winner {bt[LY]['right']:.0%} of the time; always going with the home team would have been right {bt[LY]['home_obs']:.0%}. This season ({bt[SEASON]['n']} games) it has called
 {bt[SEASON]['right']:.0%} right. When it gave a team {calb[bin_i][0]} in 2025-26, as it gives {FAV} on Saturday, that team won {calb[bin_i][2]:.0%} of the time ({calb[bin_i][3]} games).
 
+## After the game
+
+Our recap will grade the three keys: did Buffalo hit each one, and did it win? Over a season, that will show how often Buffalo wins when it hits each one.
+
 ## For the stat-heads
 
-- xG: Buffalo Quant Desk model (`src/metrics/nhl_xg.py`), unblocked non-empty-net shots, all strengths, rescaled per season so league xG = league goals
-  (2026-27 factor {cal.loc[SEASON]:.3f}). Data through {last_date} ({len(g26)} games, every scheduled game through that date).
-- Power play = 5v4, 5v3, 4v3 shots; per game over all games played, so it mixes how often a team is on the power play with what it does there. Penalty counts not used.
-- Oct. 12: xGF BUF {m1_x[US]:.2f}, FLA {m1_x[THEM]:.2f}. Reinhart 2026-27: {rein_g} G on {rein_x:.2f} xG, non-empty-net.
-- Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`), ratings from games through {as_of}. Team xGF/xGA per game shrunk with K={gmod.K}
-  games toward league + {gmod.PRIOR_KEEP} x last season's edge; goals = {coef[0]:.3f} + {coef[1]:.3f} x expected + {coef[2]:.3f} x home (fit 2023-25), on unrescaled xG;
-  independent Poisson; regulation ties to home at {p_ot:.3f}. Brier: 2025-26 {bt[LY]['brier']:.4f} (home-team rate {bt[LY]['b_home']:.4f}, coin 0.25); 2026-27 to date {bt[SEASON]['brier']:.4f}.
-  No goalie, rest, back-to-back or road-trip term. The shot model was trained on 2023-24 to 2025-26 shots, so 2025-26 checks are not fully clean; 2026-27 is.
+- Keys: all regular-season team-games {n_seasons} seasons (2023-24 through {last_date}), n = {n_kr:,}. PP goals = goals at 5v4, 5v3, 4v3 by the opponent. First goal includes any goal; games scoreless after overtime count as no first goal for either team.
+  5v5 "won" = team 5v5 xG > opponent 5v5 xG (unblocked, non-empty-net). Win rates: PPGA 0 {K['pp0'][0]:.3f} (n {K['pp0'][1]:,}), 1 {K['pp1'][0]:.3f} (n {K['pp1'][1]:,}), 2+ {K['pp2'][0]:.3f} (n {K['pp2'][1]:,});
+  first goal {K['f1'][0]:.3f} / {K['f0'][0]:.3f}; 5v5 xG won {K['e1'][0]:.3f} (n {K['e1'][1]:,}) / lost {K['e0'][0]:.3f}. Descriptive, not causal; all three are correlated with team quality.
+- xG: Buffalo Quant Desk model (`src/metrics/nhl_xg.py`), rescaled per season so league xG = league goals (2026-27 factor {cal.loc[SEASON]:.3f}). Data through {last_date} ({len(g26)} games this season).
+- Win chance: NHL game model {gmod.VERSION} (`src/ledger/nhl_game_model.py`), ratings from games through {as_of}. Ratings: BUF off {off_r[US]:.2f}, def {def_r[US]:.2f}; FLA off {off_r[THEM]:.2f}, def {def_r[THEM]:.2f}.
+  Team xGF/xGA per game shrunk with K={gmod.K} toward league + {gmod.PRIOR_KEEP} x last season's edge; goals = {coef[0]:.3f} + {coef[1]:.3f} x expected + {coef[2]:.3f} x home; independent Poisson;
+  regulation ties to home at {p_ot:.3f}. Brier: 2025-26 {bt[LY]['brier']:.4f} (home-team rate {bt[LY]['b_home']:.4f}, coin 0.25); 2026-27 to date {bt[SEASON]['brier']:.4f}. No goalie, rest or back-to-back term.
 """
     (OUT / "2026-11-21-sabres-fla-pregame.md").write_text(md)
     (OUT / "2026-11-21-sabres-fla-pregame.hero.json").write_text(json.dumps({
         "label": "Sabres at Florida, Saturday 6 p.m.",
         "big": [[f"{p_b:.0%}", f"Buffalo's chance to win, our model (Panthers {1 - p_b:.0%})"],
-                ["1st", "Florida's power play in chances created, of 32 NHL teams"]],
-        "note": f"Florida's power play creates more chances than any in the NHL. Buffalo's penalty kill allows the {ordn(rk('pk_x_pg', US))}-most.",
+                [f"{K['pp2'][0]:.0%}", "How often NHL teams win when they allow two or more power-play goals"]],
+        "note": "Three keys for Buffalo: hold Florida's power play to one goal or fewer, score first and keep it, and get more of the five-on-five chances.",
         "explainer": {"kicker": "A man down", "title": "Florida's power play vs. the league",
                       "text": "Scoring chances created on the power play, counted in the goals they're worth, per game:", "fmt": "num",
                       "bars": [["League average", round(float(lg.pp_x_pg), 2)], ["Panthers", round(float(v.pp_x_pg), 2)]]},
