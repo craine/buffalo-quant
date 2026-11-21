@@ -180,7 +180,7 @@ CSS = """
 .pbox{position:relative}.tip{position:absolute;pointer-events:none;background:#0B1B3F;color:#fff;font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:240px;z-index:5}
 .tbl{padding:12px 0 0}.tbl .phead{padding:0 20px 6px}.tbl table{margin:0;min-width:640px}
 .tbl th{cursor:pointer;white-space:nowrap;text-align:right;user-select:none}.tbl th:nth-child(-n+4),.tbl td:nth-child(-n+4){text-align:left}
-.tbl td{text-align:right}.tbl th.on{color:var(--navy)}.tbl tr.buf td{background:#EAF0FB}.tbl tr.buf a{font-weight:800}
+.tbl td{text-align:right}.tbl td:nth-child(2){white-space:nowrap}.tbl td.key{font-weight:800}.tbl th.on{color:var(--navy)}.tbl tr.buf td{background:#EAF0FB}.tbl tr.buf a{font-weight:800}
 .tbl tr.sep td{background:#F6F7F9;font-size:13px;font-weight:700;color:var(--muted);text-align:left}.tbl td.rk{color:var(--muted)}
 .tfoot{display:flex;justify-content:space-between;gap:10px;padding:12px 20px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 .lnk{border:0;background:none;color:var(--navy);font:600 14px inherit;cursor:pointer;padding:0}
@@ -246,8 +246,9 @@ async function render(){
   const sk=S.sk&&G.cols.some(c=>c.k===S.sk)?S.sk:S.r, sc=col(sk);
   const tv=[...view].sort((a,b)=>{const x=a[sk],y=b[sk];if(x==null)return 1;if(y==null)return -1;return (sc.hi?y-x:x-y)*(S.sd<0?1:-1)||rk.get(a)-rk.get(b)});
   $("ttitle").textContent=`Ranked by ${R.l.toLowerCase()}`;
-  const head=`<thead><tr><th data-k="__rk">Rank</th><th data-k="__n">Player</th><th data-k="__t">Team</th><th data-k="__p">Pos.</th>${G.cols.map(c=>`<th data-k="${c.k}" class="${c.k===sk?"on":""}">${esc(c.l)}${c.k===sk?(S.sd<0?" ▾":" ▴"):""}</th>`).join("")}</tr></thead>`;
-  const row=r=>`<tr class="${r.t==="BUF"?"buf":""}"><td class="rk">${rks(r)}</td><td><a href="${r.u}">${esc(r.n)}</a>${r.o?" *":""}</td><td>${r.t}</td><td>${r.pos}</td>${G.cols.map(c=>`<td>${fmt(r[c.k],c.f)}</td>`).join("")}</tr>`;
+  const tcols=[col(S.r),...G.cols.filter(c=>c.k!==S.r)];
+  const head=`<thead><tr><th data-k="__rk">Rank</th><th data-k="__n">Player</th><th data-k="__t">Team</th><th data-k="__p">Pos.</th>${tcols.map(c=>`<th data-k="${c.k}" class="${c.k===sk?"on":""}">${esc(c.l)}${c.k===sk?(S.sd<0?" ▾":" ▴"):""}</th>`).join("")}</tr></thead>`;
+  const row=r=>`<tr class="${r.t==="BUF"?"buf":""}"><td class="rk">${rks(r)}</td><td><a href="${r.u}">${esc(r.n)}</a>${r.o?" *":""}</td><td>${r.t}</td><td>${r.pos}</td>${tcols.map((c,i)=>`<td${i===0?' class="key"':""}>${fmt(r[c.k],c.f)}</td>`).join("")}</tr>`;
   const N=25; let body;
   if(S.all||S.b||tv.length<=N){body=tv.map(row).join("")}else{const top=tv.slice(0,N),rest=tv.slice(N).filter(r=>r.t==="BUF");body=top.map(row).join("")+(rest.length?`<tr class="sep"><td colspan="${G.cols.length+4}">More ${bn}</td></tr>`+rest.map(row).join(""):"")}
   $("table").innerHTML=head+`<tbody>${body}</tbody>`;
