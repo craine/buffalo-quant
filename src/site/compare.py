@@ -141,7 +141,7 @@ PAGE = r"""
 <label>Minimum games<select id="mingp"></select></label>
 <label>Rank by<select id="rank"></select></label>
 <label>Chart against<select id="ystat"></select></label>
-<label class="rng">Only show <span id="rlab"></span> from<span class="rr"><input id="lo" type="number" step="any" inputmode="decimal" aria-label="Lowest value"> to <input id="hi" type="number" step="any" inputmode="decimal" aria-label="Highest value"></span></label>
+<label class="rng"><span>Range: <span id="rlab"></span></span><span class="rr"><input id="lo" type="number" step="any" inputmode="decimal" aria-label="Lowest value"> to <input id="hi" type="number" step="any" inputmode="decimal" aria-label="Highest value"></span></label>
 </div>
 <div class="fbot"><label class="chk"><input type="checkbox" id="bufonly"> <span id="buflab">Show only Sabres</span></label>
 <span class="cnt" id="count"></span><button type="button" class="btn sm" id="share">Copy link to this view</button></div>
@@ -213,12 +213,13 @@ async function render(){
   // the ranking pool: this position group, enough games, has a value for the stat
   const pool=D.rows.filter(r=>r.grp===G.id&&r.gp>=+S.m&&r[S.r]!=null);
   const sorted=[...pool].sort((a,b)=>R.hi?b[S.r]-a[S.r]:a[S.r]-b[S.r]); const rk=new Map(); sorted.forEach((r,i)=>{const prev=sorted[i-1];rk.set(r,prev&&prev[S.r]===r[S.r]?rk.get(prev):i+1)});
+  const tie=new Map();for(const r of pool){const k=rk.get(r);tie.set(k,(tie.get(k)||0)+1)} const rks=r=>{const k=rk.get(r);return tie.get(k)>1?"T-"+k:String(k)}; const rkw=r=>{const k=rk.get(r);return (tie.get(k)>1?"tied for ":"")+ord(k)};
   const avg=pool.reduce((s,r)=>s+r[S.r],0)/(pool.length||1);
   let view=pool.filter(r=>(S.t==="all"||r.t===S.t)&&(S.lo===""||r[S.r]>=+S.lo)&&(S.hi===""||r[S.r]<=+S.hi)&&(!S.b||r.t==="BUF"));
   $("count").textContent=`${view.length} of ${pool.length} ${G.label.toLowerCase()} match`;
   const bufs=sorted.filter(r=>r.t==="BUF");
   const best=bufs[0];
-  $("tiles").innerHTML=[best?`<div class="tile"><div class="k">Best ${bn.slice(0,-1)} in ${esc(R.l.toLowerCase())}</div><div class="v b">${ord(rk.get(best))} of ${pool.length}</div><div class="s">${esc(best.n)}, ${fmt(best[S.r],R.f)}</div></div>`:`<div class="tile"><div class="k">${bn}</div><div class="v">None</div><div class="s">No ${bn} in this group with ${S.m}+ games</div></div>`,
+  $("tiles").innerHTML=[best?`<div class="tile"><div class="k">Best ${bn.slice(0,-1)} in ${esc(R.l.toLowerCase())}</div><div class="v b">${rkw(best)} of ${pool.length}</div><div class="s">${esc(best.n)}, ${fmt(best[S.r],R.f)}</div></div>`:`<div class="tile"><div class="k">${bn}</div><div class="v">None</div><div class="s">No ${bn} in this group with ${S.m}+ games</div></div>`,
     `<div class="tile"><div class="k">League average</div><div class="v">${fmt(avg,R.f)}</div><div class="s">${esc(R.l.toLowerCase())}, ${G.label.toLowerCase()} with ${S.m}+ games</div></div>`,
     `<div class="tile"><div class="k">${bn} in the top 25%</div><div class="v">${bufs.filter(r=>rk.get(r)<=Math.ceil(pool.length/4)).length} of ${bufs.length}</div><div class="s">${esc(bufs.filter(r=>rk.get(r)<=Math.ceil(pool.length/4)).map(r=>r.n.split(" ").slice(-1)[0]).join(", ")||"—")}</div></div>`].join("");
   // chart
@@ -238,7 +239,7 @@ async function render(){
   pts.filter(r=>r.t==="BUF").sort((a,b)=>rk.get(a)-rk.get(b)).slice(0,4).forEach(r=>{svg+=`<text x="${X(r[S.r])+9}" y="${Yp(r[S.y])-8}" font-size="13" font-weight="700" fill="#00338D">${esc(r.n.split(" ").slice(-1)[0])}</text>`});
   svg+=`<text x="${(L+W-Rm)/2}" y="${H-10}" font-size="13" fill="#14171F" text-anchor="middle">${esc(R.l)}</text><text transform="translate(16 ${(T+H-B)/2}) rotate(-90)" font-size="13" fill="#14171F" text-anchor="middle">${esc(Y.l)}</text></svg>`;
   $("chart").innerHTML=svg; $("chart").onpointermove=e=>{const c=e.target.closest("circle");const tip=$("tip");if(!c){tip.hidden=true;return}const r=order[+c.dataset.i];
-    tip.innerHTML=`<b>${esc(r.n)}</b> · ${r.t} · ${r.pos}<br>${esc(R.l)}: ${fmt(r[S.r],R.f)} (${ord(rk.get(r))})<br>${esc(Y.l)}: ${fmt(r[S.y],Y.f)}<br>${r.gp} games`;
+    tip.innerHTML=`<b>${esc(r.n)}</b> · ${r.t} · ${r.pos}<br>${esc(R.l)}: ${fmt(r[S.r],R.f)} (${rkw(r)})<br>${esc(Y.l)}: ${fmt(r[S.y],Y.f)}<br>${r.gp} games`;
     const bx=$("chart").parentElement.getBoundingClientRect();tip.hidden=false;tip.style.left=Math.min(e.clientX-bx.left+12,bx.width-250)+"px";tip.style.top=(e.clientY-bx.top+12)+"px"};
   $("chart").onpointerleave=()=>{$("tip").hidden=true}}
   // table
@@ -246,14 +247,14 @@ async function render(){
   const tv=[...view].sort((a,b)=>{const x=a[sk],y=b[sk];if(x==null)return 1;if(y==null)return -1;return (sc.hi?y-x:x-y)*(S.sd<0?1:-1)||rk.get(a)-rk.get(b)});
   $("ttitle").textContent=`Ranked by ${R.l.toLowerCase()}`;
   const head=`<thead><tr><th data-k="__rk">Rank</th><th data-k="__n">Player</th><th data-k="__t">Team</th><th data-k="__p">Pos.</th>${G.cols.map(c=>`<th data-k="${c.k}" class="${c.k===sk?"on":""}">${esc(c.l)}${c.k===sk?(S.sd<0?" ▾":" ▴"):""}</th>`).join("")}</tr></thead>`;
-  const row=r=>`<tr class="${r.t==="BUF"?"buf":""}"><td class="rk">${rk.get(r)}</td><td><a href="${r.u}">${esc(r.n)}</a>${r.o?" *":""}</td><td>${r.t}</td><td>${r.pos}</td>${G.cols.map(c=>`<td>${fmt(r[c.k],c.f)}</td>`).join("")}</tr>`;
+  const row=r=>`<tr class="${r.t==="BUF"?"buf":""}"><td class="rk">${rks(r)}</td><td><a href="${r.u}">${esc(r.n)}</a>${r.o?" *":""}</td><td>${r.t}</td><td>${r.pos}</td>${G.cols.map(c=>`<td>${fmt(r[c.k],c.f)}</td>`).join("")}</tr>`;
   const N=25; let body;
   if(S.all||S.b||tv.length<=N){body=tv.map(row).join("")}else{const top=tv.slice(0,N),rest=tv.slice(N).filter(r=>r.t==="BUF");body=top.map(row).join("")+(rest.length?`<tr class="sep"><td colspan="${G.cols.length+4}">More ${bn}</td></tr>`+rest.map(row).join(""):"")}
   $("table").innerHTML=head+`<tbody>${body}</tbody>`;
   const shown=S.all||S.b||tv.length<=N?tv.length:Math.min(N,tv.length)+tv.slice(N).filter(r=>r.t==="BUF").length;
   $("showing").textContent=`Showing ${shown} of ${tv.length}`; $("more").textContent=S.all?"Show fewer":"Show all"; $("more").hidden=S.b||tv.length<=N;
   $("table").querySelectorAll("th").forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(k.startsWith("__")){S.sk=null;S.sd=-1}else if(S.sk===k)S.sd*=-1;else{S.sk=k;S.sd=-1}render()});
-  $("foot").textContent=`${D.meta.label} Ranks are among ${G.label.toLowerCase()} with ${S.m}+ games and a number for that stat; the team and range filters don't change them. A dash means too few attempts to count. * Also played for another team this season. ${S.s==="nhl"?"Chances: what a player's shots were worth in goals, based on where and how each was taken. Goals vs. chances: goals scored minus that total. Goals saved vs. an average goalie: goals an average goalie would have allowed on the same shots, minus goals allowed.":"Points added per dropback: how much each pass play, sack or scramble changed the expected points of the drive, on average."} Every number comes from the same files as our player cards.`;
+  $("foot").textContent=`${D.meta.label} Ranks are among ${G.label.toLowerCase()} with ${S.m}+ games and a number for that stat; the team and range filters don't change them. Ranks use the rounded numbers shown, so they can differ by a spot from the player cards. A dash means too few attempts to count. * Also played for another team this season. ${S.s==="nhl"?"Chances: what a player's shots were worth in goals, based on where and how each was taken. Goals vs. chances: goals scored minus that total. Goals saved vs. an average goalie: goals an average goalie would have allowed on the same shots, minus goals allowed.":"Points added per dropback: how much each pass play, sack or scramble changed the expected points of the drive, on average."} Every number comes from the same files as our player cards.`;
   writeHash();
 }
 document.querySelector(".seg").onclick=e=>{const b=e.target.closest("button");if(!b)return;S={...S,s:b.dataset.s,g:null,t:"all",m:null,r:null,y:null,lo:"",hi:"",sk:null,sd:-1,all:0};render()};
