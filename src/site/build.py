@@ -221,7 +221,7 @@ NAV = [("index.html", "Home", None),
                       ("cards/index.html", "NHL player cards", "Every skater and goalie, all 32 teams")]),
        (None, "NFL", [("analysis/bills.html", "Bills stories", "Previews, post-games and deep dives"),
                       ("cards/nfl/index.html", "NFL player cards", "Every player, all 32 teams")]),
-       ("compare/index.html", "Compare", None), ("ledger.html", "Ledger", None), ("about.html", "About", None)]
+       ("rankings/index.html", "Rankings", None), ("ledger.html", "Ledger", None), ("about.html", "About", None)]
 NAV_JS = ("<script>document.addEventListener('click',e=>{document.querySelectorAll('nav details[open]')"
           ".forEach(d=>{if(!d.contains(e.target))d.removeAttribute('open')})});</script>")   # one menu open at a time
 
@@ -769,7 +769,7 @@ def main():
             (SITE / "ledger" / f.name).write_text(",".join(PRED_COLS if f == PRED_CSV else GRADE_COLS) + "\n")
     (SITE / "404.html").write_text(page("Not found | Buffalo Quant Desk", '<h1 style="margin-top:50px">Not found.</h1><p><a href="/">Home</a></p>', ""))
     (SITE / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}/sitemap.xml\n")
-    urls = (["", "analysis/", "cards/", "compare/", "ledger.html", "about.html"] + [f"analysis/{a[0]}.html" for a in ARTICLES]
+    urls = (["", "analysis/", "cards/", "rankings/", "ledger.html", "about.html"] + [f"analysis/{a[0]}.html" for a in ARTICLES]
             + [f"cards/{p.name}" for p in sorted((SITE / "cards").glob("*.html")) if p.name != "index.html"])
     (SITE / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
                                       + "".join(f"<url><loc>{DOMAIN}/{u}</loc></url>" for u in urls) + "</urlset>")

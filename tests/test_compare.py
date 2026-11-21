@@ -12,13 +12,14 @@ def built(tmp_path_factory):
     from src.site.build import CSS_V, card_slugs, page
     site = tmp_path_factory.mktemp("site")
     compare.build_compare(site, page, card_slugs(), CSS_V)
-    return site / "compare"
+    assert "/compare/ /rankings/ 301" in (site / "_redirects").read_text()
+    return site / "rankings"
 
 
 def test_files(built):
     for f in ("index.html", "nhl.json", "nfl.json"):
         assert (built / f).exists()
-    assert "Compare Buffalo players to the league" in (built / "index.html").read_text()
+    assert "Where every Sabre and Bill ranks" in (built / "index.html").read_text()
 
 
 @pytest.mark.parametrize("sport", ["nhl", "nfl"])
