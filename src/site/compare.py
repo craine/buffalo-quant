@@ -1,7 +1,7 @@
 """Compare page: filter and rank Buffalo players against the league. Static page + slim JSON built from the committed card files.
 
 Reads reports/cards/skaters_league.json, goalies_league.json and nfl_players.json (the same files the player cards use,
-refreshed daily/weekly by the bots). Writes site/compare/index.html, site/compare/nhl.json and site/compare/nfl.json.
+refreshed daily/weekly by the bots). Writes site/rankings/index.html, nhl.json and nfl.json, plus a redirect from the old /compare/ address.
 Every number shown is a card number or simple arithmetic on card numbers (per game, percentages) done in this file.
 """
 import json
@@ -130,9 +130,9 @@ def config():
 
 PAGE = r"""
 <div class="cmp">
-<p class="kicker">Compare</p>
-<h1>Compare Buffalo players to the league</h1>
-<p class="dek">Pick a group, set the filters, and see where every Sabre or Bill ranks.</p>
+<p class="kicker">Rankings</p>
+<h1>Where every Sabre and Bill ranks</h1>
+<p class="dek">Pick a position, set the filters, and see how Buffalo stacks up against the rest of the league.</p>
 <div class="seg" role="group" aria-label="Sport"><button type="button" data-s="nhl">Sabres vs. NHL</button><button type="button" data-s="nfl">Bills vs. NFL</button></div>
 <section class="fbox" aria-label="Filters">
 <div class="chips" id="groups" role="group" aria-label="Position"></div>
@@ -271,8 +271,8 @@ readHash(); render();
 
 
 def build_compare(site, page, slugs, css_v):
-    """Write site/compare/. `page` is build.page; `slugs` is build.card_slugs()."""
-    out = site / "compare"
+    """Write site/rankings/. `page` is build.page; `slugs` is build.card_slugs()."""
+    out = site / "rankings"
     out.mkdir(exist_ok=True)
     nhl, nm = nhl_rows(slugs)
     (out / "nhl.json").write_text(json.dumps(dict(meta=nm, rows=nhl), separators=(",", ":")))
@@ -283,6 +283,7 @@ def build_compare(site, page, slugs, css_v):
     (out / "nfl.json").write_text(json.dumps(dict(meta=fm, rows=nfl), separators=(",", ":")))
     js = JS.replace("__CFG__", json.dumps(config())).replace("__V__", css_v)
     body = f"<style>{CSS}</style>{PAGE}<script>{js}</script>"
-    (out / "index.html").write_text(page("Compare Buffalo players to the league | Buffalo Quant Desk", body, "Compare", 1,
-                                         desc="Filter and rank every Sabre and Bill against the league.", full=True))
+    (out / "index.html").write_text(page("Where every Sabre and Bill ranks | Buffalo Quant Desk", body, "Rankings", 1,
+                                         desc="Sabres and Bills player rankings: filter every position and see where Buffalo stacks up against the league.", full=True))
+    (site / "_redirects").write_text("/compare /rankings/ 301\n/compare/ /rankings/ 301\n/compare/* /rankings/:splat 301\n")
     return len(nhl), len(nfl)
