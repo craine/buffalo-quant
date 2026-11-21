@@ -1,0 +1,147 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "03957caeecc4797caed200f055751426a3876414ada4f8eff0fc2f67e2758908",
+   "at_utc": "2026-11-20T23:08:32Z",
+   "notes": "Built from the WSH preview template; all numbers asserted in the generator; charts opened and checked; Thursday PP shot count dropped (8 vs recap's 9 under this definition)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "03957caeecc4797caed200f055751426a3876414ada4f8eff0fc2f67e2758908",
+   "at_utc": "2026-11-20T23:14:13Z",
+   "notes": "Numbers all verify and generator reproduces byte-identically. Must fix: 'spreads its scoring around' false (top two 31.9% of goals vs 29.7% avg); 'cuts the other way'/FLA PK 3rd-most is per-game only (per minute 15th, avg) and 'twice' is a literal; 'matters more...than almost anyone' unsupported in code and contradicted by 'can't yet split out' (true by PP-time check: FLA 1st in PP time, 2nd per minute); chances chart label overlaps.",
+   "report": "2026-11-21-sabres-fla-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "03957caeecc4797caed200f055751426a3876414ada4f8eff0fc2f67e2758908",
+   "at_utc": "2026-11-20T23:14:14Z",
+   "notes": "Lead works. Must fix: 'It cuts the other way too' and 'The other way,' (rejected phrasing); hero 'Most' stilted; stacked home-caution sentence; 'spreads its scoring around'; chances chart overlaps. Polish: model-test title, OT sentence, PP chart ticks, card dek.",
+   "report": "2026-11-21-sabres-fla-pregame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "712b924cf96b3dd91c92c86905a1a8f193c54b4185035cd2bfd54f2a25849342",
+   "at_utc": "2026-11-20T23:16:54Z",
+   "notes": "Round 1 fixes applied: all 7 must-fixes (#2 simplified to the computed Thursday PP goal count with the FLA PK claim dropped; #3 used the fallback), plus polish (model chart title, overtime sentence, PP ticks, card dek, skid assert). Charts reopened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "712b924cf96b3dd91c92c86905a1a8f193c54b4185035cd2bfd54f2a25849342",
+   "at_utc": "2026-11-20T23:18:12Z",
+   "notes": "Round 2: all round-1 fixes in; changed sentences match independent numbers (Thu PP goals 2, caution 54.9/52.2 of 1,312 and 54.4/52.2 of 358, OT 55%); skid and thu_ppg asserted; byte-identical clean rebuild.",
+   "report": "2026-11-21-sabres-fla-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "712b924cf96b3dd91c92c86905a1a8f193c54b4185035cd2bfd54f2a25849342",
+   "at_utc": "2026-11-20T23:18:12Z",
+   "notes": "Round 2: all edits in, no rejected phrasing, hero/card/charts read alone, no overlaps. Optional: join the one-line Thursday PP paragraph to the one above.",
+   "report": "2026-11-21-sabres-fla-pregame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "712b924cf96b3dd91c92c86905a1a8f193c54b4185035cd2bfd54f2a25849342",
+   "at_utc": "2026-11-20T23:18:13Z",
+   "notes": "Every changed sentence re-verified; no other text touched; md, hero and 3 PNGs reproduce byte-identically in a clean copy; logger matches 0.37.",
+   "report": "2026-11-21-sabres-fla-pregame-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "ecd446b99edb5e302bef0435c3ea551da18e485bb95edd00566f300a14ef3a36",
+   "at_utc": "2026-11-20T23:54:51Z",
+   "notes": "Rebuilt as a three-keys preview at Charlie's request: new keys analysis (8,588 team-games since 2023-24), new keys chart, scatter and big table dropped. All keys numbers asserted. Charts opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "ecd446b99edb5e302bef0435c3ea551da18e485bb95edd00566f300a14ef3a36",
+   "at_utc": "2026-11-20T23:57:50Z",
+   "notes": "Round 3 full re-review: all numbers verify independently (keys from raw plays, PP by scorer's side, rescaled 5v5 xG); byte-identical rebuild. Must fix: 'has to'/'need'/'where this game will be decided' necessity framing (no-keys teams still win 13%); 'strangest number' unsupported (BUF 3rd-lowest win share when scoring first); 6-6/3-7 hide OT losses; 'which keys really matter' causal.",
+   "report": "2026-11-21-sabres-fla-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "ecd446b99edb5e302bef0435c3ea551da18e485bb95edd00566f300a14ef3a36",
+   "at_utc": "2026-11-20T23:57:50Z",
+   "notes": "Round 3: strong structure. Must fix: headline/lead necessity, 'Buffalo needs:' labels, 'where this game will be decided', 6-6/3-7 records, 'strangest number', 'which keys really matter'. Polish: Sabres sample sizes, card dek wording, hero 2+.",
+   "report": "2026-11-21-sabres-fla-pregame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+   "at_utc": "2026-11-20T23:59:15Z",
+   "notes": "Round 3 fixes applied; 'The key:' used instead of 'What to watch' to keep the keys format Charlie asked for, without 'needs/has to'."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+   "at_utc": "2026-11-21T00:00:04Z",
+   "notes": "Round 4: necessity framing removed ('The key:' acceptable); first-goal rank (CHI, VAN lower) and 4 OT losses match my queries and are asserted; 6 of 12 / 3 of 10 labeled small; byte-identical rebuild.",
+   "report": "2026-11-21-sabres-fla-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+   "at_utc": "2026-11-21T00:00:04Z",
+   "notes": "Round 4: all edits in; 'The key:' fits the keys format without claiming necessity; hero/card/body agree; charts clean.",
+   "report": "2026-11-21-sabres-fla-pregame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+   "at_utc": "2026-11-21T00:00:04Z",
+   "notes": "Every changed line re-verified against independent numbers; nothing else touched; md, hero and 3 PNGs reproduce byte-identically in a clean copy; logger matches 0.37.",
+   "report": "2026-11-21-sabres-fla-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "06bc4badd2385daec956a3c363282999df137eeed9368ded5e691d05496dffe0",
+   "at_utc": "2026-11-21T00:10:33Z",
+   "notes": "Only the Ledger status line changed; matches P0020 (2026-11-21T00:08:18Z, 0.37, nhl-game-v0.1, before 23:00Z puck drop); md, hero and 3 PNGs reproduce byte-identically in a clean copy.",
+   "report": "2026-11-21-sabres-fla-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+  "at_utc": "2026-11-20T23:59:15Z",
+  "notes": "Round 3 fixes applied; 'The key:' used instead of 'What to watch' to keep the keys format Charlie asked for, without 'needs/has to'."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+  "at_utc": "2026-11-21T00:00:04Z",
+  "notes": "Round 4: necessity framing removed ('The key:' acceptable); first-goal rank (CHI, VAN lower) and 4 OT losses match my queries and are asserted; 6 of 12 / 3 of 10 labeled small; byte-identical rebuild.",
+  "report": "2026-11-21-sabres-fla-pregame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
+  "at_utc": "2026-11-21T00:00:04Z",
+  "notes": "Round 4: all edits in; 'The key:' fits the keys format without claiming necessity; hero/card/body agree; charts clean.",
+  "report": "2026-11-21-sabres-fla-pregame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "06bc4badd2385daec956a3c363282999df137eeed9368ded5e691d05496dffe0",
+  "at_utc": "2026-11-21T00:10:33Z",
+  "notes": "Only the Ledger status line changed; matches P0020 (2026-11-21T00:08:18Z, 0.37, nhl-game-v0.1, before 23:00Z puck drop); md, hero and 3 PNGs reproduce byte-identically in a clean copy.",
+  "report": "2026-11-21-sabres-fla-pregame-final.md"
+ }
+}

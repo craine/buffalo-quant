@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Florida, Saturday 6 p.m.",
+ "big": [
+  [
+   "37%",
+   "Buffalo's chance to win, our model (Panthers 63%)"
+  ],
+  [
+   "25%",
+   "How often NHL teams win when they allow two or more power-play goals"
+  ]
+ ],
+ "note": "Three keys for Buffalo: hold Florida's power play to one goal or fewer, score first and keep it, and get more of the five-on-five chances.",
+ "explainer": {
+  "kicker": "A man down",
+  "title": "Florida's power play vs. the league",
+  "text": "Scoring chances created on the power play, counted in the goals they're worth, per game:",
+  "fmt": "num",
+  "bars": [
+   [
+    "League average",
+    0.66
+   ],
+   [
+    "Panthers",
+    1.05
+   ]
+  ]
+ }
+}
