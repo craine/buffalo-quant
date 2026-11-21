@@ -107,6 +107,14 @@
    "at_utc": "2026-11-21T00:00:04Z",
    "notes": "Every changed line re-verified against independent numbers; nothing else touched; md, hero and 3 PNGs reproduce byte-identically in a clean copy; logger matches 0.37.",
    "report": "2026-11-21-sabres-fla-pregame-final.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "06bc4badd2385daec956a3c363282999df137eeed9368ded5e691d05496dffe0",
+   "at_utc": "2026-11-21T00:10:33Z",
+   "notes": "Only the Ledger status line changed; matches P0020 (2026-11-21T00:08:18Z, 0.37, nhl-game-v0.1, before 23:00Z puck drop); md, hero and 3 PNGs reproduce byte-identically in a clean copy.",
+   "report": "2026-11-21-sabres-fla-pregame-final.md"
   }
  ],
  "self": {
@@ -131,9 +139,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "89a42f80f40e1aa17d7765846317c404e6d1d519b7ec73bd3c66f74c29e2ff52",
-  "at_utc": "2026-11-21T00:00:04Z",
-  "notes": "Every changed line re-verified against independent numbers; nothing else touched; md, hero and 3 PNGs reproduce byte-identically in a clean copy; logger matches 0.37.",
+  "sha256": "06bc4badd2385daec956a3c363282999df137eeed9368ded5e691d05496dffe0",
+  "at_utc": "2026-11-21T00:10:33Z",
+  "notes": "Only the Ledger status line changed; matches P0020 (2026-11-21T00:08:18Z, 0.37, nhl-game-v0.1, before 23:00Z puck drop); md, hero and 3 PNGs reproduce byte-identically in a clean copy.",
   "report": "2026-11-21-sabres-fla-pregame-final.md"
  }
 }

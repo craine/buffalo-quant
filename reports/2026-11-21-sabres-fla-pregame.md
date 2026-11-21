@@ -66,7 +66,7 @@ Ranks are among all 77 goalies this season. Starters weren't confirmed when we p
 
 ## Our prediction: Sabres 37%, Panthers 63%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-21 00:08:18 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **2.8 goals for Buffalo and 3.6 for Florida**, and about a 15% chance the game is tied after 60 minutes. It works from each team's chances this season,
 blended with last season's, plus home ice (about 0.3 of a goal for Florida). If it's tied after 60 minutes, Florida gets 55%: how often home teams won in overtime or a shootout in 2023-24 and 2024-25.
