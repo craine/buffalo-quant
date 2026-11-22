@@ -1,0 +1,30 @@
+{
+ "label": "Sabres at Tampa Bay, Sunday 5 p.m.",
+ "big": [
+  [
+   "35%",
+   "Buffalo's chance to win, our model (Lightning 65%)"
+  ],
+  [
+   "39%",
+   "How often NHL road teams win on the second night of a back-to-back against a rested team"
+  ]
+ ],
+ "note": "Three keys for Buffalo: hold Tampa Bay's power play to one goal or fewer, score first and keep it, and get more of the five-on-five chances.",
+ "explainer": {
+  "kicker": "The back-to-back",
+  "title": "Road teams' win rate since 2023-24",
+  "text": "How often the road team won:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Both teams rested",
+    0.47
+   ],
+   [
+    "Road team on a back-to-back",
+    0.386
+   ]
+  ]
+ }
+}
