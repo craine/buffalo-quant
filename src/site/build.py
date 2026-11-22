@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-panthers-postgame-nov-21", "2026-11-22-sabres-fla.md", "2026-11-22", "Sabres &middot; Post-game",
+     "Panthers 4, Sabres 3. Buffalo hit two of its three keys: no Florida power-play goals and more of the five-on-five chances. Its only lead lasted 18 seconds.",
+     "sabres-fla-post-flow.png"),
     ("sabres-panthers-pregame-nov-21", "2026-11-21-sabres-fla-pregame.md", "2026-11-21", "Sabres &middot; Preview",
      "Our model gives Buffalo a 37% chance to win in Florida on Saturday. Three keys: hold Florida's power play to one goal or fewer, score first and keep it, and get more of the chances at five-on-five.",
      "sabres-fla-keys.png"),
