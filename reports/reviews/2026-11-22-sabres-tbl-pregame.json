@@ -1,0 +1,85 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "071b92005342fb7cb7550701e5745bbf49e71b8173e5adcb4cb6971a8a1e0334",
+   "at_utc": "2026-11-22T13:53:49Z",
+   "notes": "Built from the FLA keys preview; Tampa specifics, back-to-back analysis and chart; all key numbers asserted; charts opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "071b92005342fb7cb7550701e5745bbf49e71b8173e5adcb4cb6971a8a1e0334",
+   "at_utc": "2026-11-22T13:56:56Z",
+   "notes": "Numbers verify independently (rest 38.6%/648 vs 47.0%/3,162, keys, ranks, goalies, model 0.3535). Must fix: Ledger line falsely says logged 2026-11-11 (matched P0009 by 'Lightning'); branch overwrites the published Nov. 11 story's generator, logger and model-test PNG; keys chart says through Nov. 19; 'lost both' hides OT/SO and is hard-coded.",
+   "report": "2026-11-22-sabres-tbl-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "071b92005342fb7cb7550701e5745bbf49e71b8173e5adcb4cb6971a8a1e0334",
+   "at_utc": "2026-11-22T13:56:56Z",
+   "notes": "Good angle. Must fix: 'pulls the other way' (rejected phrasing); false Ledger line; 'lost both' -> OT and shootout; keys chart date. Polish: card dek 'to win', 'tired legs' headline.",
+   "report": "2026-11-22-sabres-tbl-pregame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+   "at_utc": "2026-11-22T13:58:33Z",
+   "notes": "Round 1 fixes: restored the three Nov. 11 files and moved this story to *_nov22 names; Ledger lookup by game_id; chart dates from AS_OF; OT/SO computed; 'works against Buffalo'; headline 'a back-to-back'; card dek. Logged P0022 (0.35) on Charlie's publish go."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+   "at_utc": "2026-11-22T14:00:10Z",
+   "notes": "Round 2: Ledger line matches P0022 (0.35, 13:58:15Z); Nov. 11 files restored and its md/hero/model-test reproduce; chart dates from AS_OF; OT/SO split asserted; byte-identical rebuild. Pre-existing: Nov. 11 chances/rebounds PNGs changed by commit 0af34367.",
+   "report": "2026-11-22-sabres-tbl-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+   "at_utc": "2026-11-22T14:00:11Z",
+   "notes": "Round 2: all edits in; no rejected phrasing; hero/card/charts read alone; headline and dek polished.",
+   "report": "2026-11-22-sabres-tbl-pregame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+   "at_utc": "2026-11-22T14:00:11Z",
+   "notes": "Changed lines re-verified; P0022 matches; clean-copy rebuild byte-identical; restored Nov. 11 story reproduces.",
+   "report": "2026-11-22-sabres-tbl-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+  "at_utc": "2026-11-22T13:58:33Z",
+  "notes": "Round 1 fixes: restored the three Nov. 11 files and moved this story to *_nov22 names; Ledger lookup by game_id; chart dates from AS_OF; OT/SO computed; 'works against Buffalo'; headline 'a back-to-back'; card dek. Logged P0022 (0.35) on Charlie's publish go."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+  "at_utc": "2026-11-22T14:00:10Z",
+  "notes": "Round 2: Ledger line matches P0022 (0.35, 13:58:15Z); Nov. 11 files restored and its md/hero/model-test reproduce; chart dates from AS_OF; OT/SO split asserted; byte-identical rebuild. Pre-existing: Nov. 11 chances/rebounds PNGs changed by commit 0af34367.",
+  "report": "2026-11-22-sabres-tbl-pregame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+  "at_utc": "2026-11-22T14:00:11Z",
+  "notes": "Round 2: all edits in; no rejected phrasing; hero/card/charts read alone; headline and dek polished.",
+  "report": "2026-11-22-sabres-tbl-pregame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "549a051f960ee4c5a578f98386bb5b269f7c1461b1886788db35bf9b59c9656d",
+  "at_utc": "2026-11-22T14:00:11Z",
+  "notes": "Changed lines re-verified; P0022 matches; clean-copy rebuild byte-identical; restored Nov. 11 story reproduces.",
+  "report": "2026-11-22-sabres-tbl-pregame-final.md"
+ }
+}
