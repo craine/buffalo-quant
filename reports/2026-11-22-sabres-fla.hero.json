@@ -1,0 +1,30 @@
+{
+ "label": "Scoring chances, worth this many goals",
+ "big": [
+  [
+   2.9,
+   "Sabres"
+  ],
+  [
+   2.7,
+   "Panthers"
+  ]
+ ],
+ "note": "Final: Panthers 4, Sabres 3. Buffalo hit two of its three keys; its only lead lasted 18 seconds.",
+ "explainer": {
+  "kicker": "In goal",
+  "title": "Goals allowed vs. chances, Alex Lyon",
+  "text": "Goals Florida scored and what its chances were worth:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Goals allowed",
+    4
+   ],
+   [
+    "Chances were worth",
+    2.7
+   ]
+  ]
+ }
+}

@@ -1,0 +1,85 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "af5cf2d231d387d23af2bd98e3d31bd6b083de0d2aa2119b8f47ba9d6c1463c9",
+   "at_utc": "2026-11-22T02:38:22Z",
+   "notes": "New recap grading the preview's three keys with the preview's definitions; all key facts asserted; chart opened; P0020 graded (outcome 0, Brier 0.1369)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "af5cf2d231d387d23af2bd98e3d31bd6b083de0d2aa2119b8f47ba9d6c1463c9",
+   "at_utc": "2026-11-22T02:41:03Z",
+   "notes": "All numbers verify independently (goals/strengths from raw plays, chances, replays, goalies, keys 45.6% of 1,775 and 78.2% of 2,058, Ledger 12 of 19 / 5 of 7); byte-identical rebuild. Must fix: 'tomorrow' in a story dated Nov. 22 -> 'Sunday'.",
+   "report": "2026-11-22-sabres-fla-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "af5cf2d231d387d23af2bd98e3d31bd6b083de0d2aa2119b8f47ba9d6c1463c9",
+   "at_utc": "2026-11-22T02:41:03Z",
+   "notes": "Strong recap. Must fix: 'did enough to have a little less than an even shot, and this one got away' (stilted, implies cause); 'tomorrow' -> 'Sunday'. Polish: 'didn't score first'; flow line past 60.",
+   "report": "2026-11-22-sabres-fla-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+   "at_utc": "2026-11-22T02:41:29Z",
+   "notes": "Round 1 fixes: day name and time from the schedule, 'Teams in Buffalo's spot' line, 'didn't score first', flow line ends at 60."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+   "at_utc": "2026-11-22T02:41:57Z",
+   "notes": "Round 2: 'Sunday' and 5 p.m. computed from schedule and correct; 'didn't score first' matches preview definition (45.6% of 1,775); byte-identical rebuild.",
+   "report": "2026-11-22-sabres-fla-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+   "at_utc": "2026-11-22T02:41:57Z",
+   "notes": "Round 2: both edits in; plain, no causal claim; chart ends at 60; hero/card/body agree.",
+   "report": "2026-11-22-sabres-fla-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+   "at_utc": "2026-11-22T02:41:58Z",
+   "notes": "Changed lines 19, 20, 73 and chart x-range re-verified; nothing else touched; md, hero, PNG reproduce byte-identically in a clean copy.",
+   "report": "2026-11-22-sabres-fla-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+  "at_utc": "2026-11-22T02:41:29Z",
+  "notes": "Round 1 fixes: day name and time from the schedule, 'Teams in Buffalo's spot' line, 'didn't score first', flow line ends at 60."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+  "at_utc": "2026-11-22T02:41:57Z",
+  "notes": "Round 2: 'Sunday' and 5 p.m. computed from schedule and correct; 'didn't score first' matches preview definition (45.6% of 1,775); byte-identical rebuild.",
+  "report": "2026-11-22-sabres-fla-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+  "at_utc": "2026-11-22T02:41:57Z",
+  "notes": "Round 2: both edits in; plain, no causal claim; chart ends at 60; hero/card/body agree.",
+  "report": "2026-11-22-sabres-fla-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "94eae3f8768fd6bd113042338f53ddcdc8facc0a11a48b1a79a03b4478eac9a1",
+  "at_utc": "2026-11-22T02:41:58Z",
+  "notes": "Changed lines 19, 20, 73 and chart x-range re-verified; nothing else touched; md, hero, PNG reproduce byte-identically in a clean copy.",
+  "report": "2026-11-22-sabres-fla-final.md"
+ }
+}
