@@ -171,6 +171,11 @@ REST API (`gh api`, not `gh release download`, which needs GraphQL). Seasons 202
   calls count designed runs only; QB scrambles count as pass plays, so say so next to any run call.
 - **Published stories never change silently.** Every generator pins its data with an `AS_OF` date (games through that
   date). Re-running it reproduces the published numbers. Updated numbers mean a new, clearly dated story or note.
+- **Published images are frozen.** `reports/published_images.json` holds the SHA-256 of every PNG a story on the site shows;
+  `make test` fails if one changes or if a new story's images aren't frozen. When publishing a story, run
+  `python3 scripts/freeze_images.py` and commit the manifest. Give every new story its own file names (e.g. `sabres-tbl-nov22-*`,
+  `*_nov22.py`): never reuse an older story's generator, logger or chart names. A deliberate correction uses
+  `freeze_images.py --change <png> --reason "..."`, which keeps the reason in the manifest.
 
 ## Analysis conventions
 
