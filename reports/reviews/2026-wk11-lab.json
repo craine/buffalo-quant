@@ -22,13 +22,20 @@
    "at_utc": "2026-11-23T03:17:18Z",
    "notes": "Needs edits: 'lab game' headline/hero/card states intent the lead only hedges; lead sentence 3 stacks four actions; body lacks how-we-counted for headline number (needs 3 new computed numbers); 'Seven things don't add up to a secret', 'jumbo packages', 'package on film' jargon/stilted. Chart reads on its own; footer needs sample size.",
    "report": "2026-wk11-lab-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+   "at_utc": "2026-11-23T03:22:56Z",
+   "notes": "Round 2: all quant and editor must-fixes applied; typed numbers now computed and asserted; career runs exclude kneels and two-point tries; chart footer has sample size; chart title no longer claims firsts."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
-  "at_utc": "2026-11-23T03:10:55Z",
-  "notes": "New analysis; all claims computed and asserted; names from raw_players by gsis id; onside claim rewritten after checking all 28 onside kicks; chart opened."
+  "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+  "at_utc": "2026-11-23T03:22:56Z",
+  "notes": "Round 2: all quant and editor must-fixes applied; typed numbers now computed and asserted; career runs exclude kneels and two-point tries; chart footer has sample size; chart title no longer claims firsts."
  },
  "quant": {
   "verdict": "fail",
