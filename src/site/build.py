@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-dolphins-postgame-wk11", "2026-wk11-postgame.md", "2026-11-22", "Bills &middot; Post-game",
+     "Bills 26, Dolphins 9. The defense held Miami without a touchdown. Five Josh Allen throws that usually get caught fell incomplete or were picked off.",
+     "wk11d-allen-throws.png"),
     ("sabres-lightning-pregame-nov-22", "2026-11-22-sabres-tbl-pregame.md", "2026-11-22", "Sabres &middot; Preview",
      "Our model gives Buffalo a 35% chance to win in Tampa. Road teams on the second night of a back-to-back against a rested team win 39% of the time, and Tampa Bay is 10-1 at home.",
      "sabres-tbl-nov22-rest.png"),

@@ -1,0 +1,108 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "574b13cfb15fa33018eb70ea1c3d3dbad7c0086f13030408998e710bf1a8ef0e",
+   "at_utc": "2026-11-23T00:13:31Z",
+   "notes": "New Week 11 recap built on nflverse cp; all key numbers asserted; charts opened; P0021 graded; FTN/NGS charting not yet posted for this game, disclosed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "574b13cfb15fa33018eb70ea1c3d3dbad7c0086f13030408998e710bf1a8ef0e",
+   "at_utc": "2026-11-23T00:18:55Z",
+   "notes": "Bass made 4 of 5 FGs not all 4; efficiency filter keeps no-plays (Miami really -0.26/55 plays/22nd-worst/25%, BUF +0.04); garbage time undisclosed (wp .10-.90: Allen 18/25 vs 15.9 exp, 1 of 5 easy misses); career rank query unpinned + no AS_OF; 'targeted' label vs all-45 counts; NOT_FINAL wording. Verified 9-1, NOT_FINAL pin, 27/45/304, 29 vs 27, rank 32/133, miss table and clocks, deep 5/2, red zone 5/2/3, 2 sacks 1 INT, P0021 pre-kickoff and Brier .0361, 13/20 and 8/13, no betting terms, byte-identical rebuild.",
+   "report": "2026-wk11-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "574b13cfb15fa33018eb70ea1c3d3dbad7c0086f13030408998e710bf1a8ef0e",
+   "at_utc": "2026-11-23T00:18:56Z",
+   "notes": "Headline/hero/dek blame Allen ('left easy throws on the field', 'misses') though body allows drops; lead stacks four points; jargon 'percentage points below expected', 'count as successful', 'expected points'; stilted '2 times'/'1 time', 'Miami 20 5 times'; chart titles need standalone fixes; garbage-time context missing; carry Quant number fixes.",
+   "report": "2026-wk11-postgame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "9afdd130057247ce00df2a73a3379caa9e959b1abd4e9d4ce14b2632c8d04b27",
+   "at_utc": "2026-11-23T00:20:45Z",
+   "notes": "Round 1 fixes: Bass 4 of 5 with the 54-yd miss; no-plays excluded (MIA -0.26, 22nd of 316, +0.04 BUF); garbage-time paragraph + score column + filtered numbers; career rank pinned; projection from logged P0021 notes; 'passes' wording; INT depths computed; all editor rewrites; chart titles/footers."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "9afdd130057247ce00df2a73a3379caa9e959b1abd4e9d4ce14b2632c8d04b27",
+   "at_utc": "2026-11-23T00:21:47Z",
+   "notes": "Round 2: all round-1 fixes verified against independent queries (Bass 4/5, no-plays out: MIA -0.26/55/22nd/25%, BUF +0.04; wp .10-.90 18/25 vs 15.9, 1 of 5; 4 of 5 up 14+, Score column correct; career pinned thru wk11; projection from P0021 notes; passes 67/63/67, targeted 62.1; int depths computed). Clean-copy rerun byte-identical md/hero/both PNGs. Chart 1 title clipped (editor item).",
+   "report": "2026-wk11-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "9afdd130057247ce00df2a73a3379caa9e959b1abd4e9d4ce14b2632c8d04b27",
+   "at_utc": "2026-11-23T00:21:47Z",
+   "notes": "Round 2: all 13 edits landed; headline/lead/hero/card/body agree, no blame overclaim. One must-fix: chart 1 PNG title clipped at right edge ('picked of'); shorten to 'Five easy Josh Allen throws fell incomplete or were picked off' or wrap.",
+   "report": "2026-wk11-postgame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+   "at_utc": "2026-11-23T00:22:17Z",
+   "notes": "Round 2: chart 1 title shortened (fits); polish: 'Two of his seven', '10 and a half', 'Four of those five came'."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+   "at_utc": "2026-11-23T00:22:48Z",
+   "notes": "Round 3: only 3 text lines changed vs round 2 (no new numbers; counts still asserted; 10.5 gap exact). Hero and chart 2 unchanged; chart 1 title only.",
+   "report": "2026-wk11-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+   "at_utc": "2026-11-23T00:22:49Z",
+   "notes": "Round 3: chart 1 title fits and reads alone; polish edits clean; headline/lead/hero/card/body/charts agree; no blame overclaim, no jargon, no banned phrasing.",
+   "report": "2026-wk11-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+   "at_utc": "2026-11-23T00:22:49Z",
+   "notes": "Edited text re-verified; all round-2 fixes and round-3 wording correct. Clean-copy rerun byte-identical: md 9d8fe7e2, hero c294a79b, throws 88462be1, deep fbac6a32. To do at publish: commit generator+grader, freeze images.",
+   "report": "2026-wk11-postgame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+  "at_utc": "2026-11-23T00:22:17Z",
+  "notes": "Round 2: chart 1 title shortened (fits); polish: 'Two of his seven', '10 and a half', 'Four of those five came'."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+  "at_utc": "2026-11-23T00:22:48Z",
+  "notes": "Round 3: only 3 text lines changed vs round 2 (no new numbers; counts still asserted; 10.5 gap exact). Hero and chart 2 unchanged; chart 1 title only.",
+  "report": "2026-wk11-postgame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+  "at_utc": "2026-11-23T00:22:49Z",
+  "notes": "Round 3: chart 1 title fits and reads alone; polish edits clean; headline/lead/hero/card/body/charts agree; no blame overclaim, no jargon, no banned phrasing.",
+  "report": "2026-wk11-postgame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "9d8fe7e2c13aaf22580bfdd7171cd721e5bca93d428038ddc7948569d145f253",
+  "at_utc": "2026-11-23T00:22:49Z",
+  "notes": "Edited text re-verified; all round-2 fixes and round-3 wording correct. Clean-copy rerun byte-identical: md 9d8fe7e2, hero c294a79b, throws 88462be1, deep fbac6a32. To do at publish: commit generator+grader, freeze images.",
+  "report": "2026-wk11-postgame-final.md"
+ }
+}
