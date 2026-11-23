@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-lab-game-wk11", "2026-wk11-lab.md", "2026-11-23", "Bills &middot; Analysis",
+     "For the first time in 135 regular-season games, Josh Allen didn't run once. A fake punt, an onside look with a 14-point lead, and more: the Bills' lab game against Miami.",
+     "wk11lab-season.png"),
     ("bills-dolphins-postgame-wk11", "2026-wk11-postgame.md", "2026-11-22", "Bills &middot; Post-game",
      "Bills 26, Dolphins 9. The defense held Miami without a touchdown. Five Josh Allen throws that usually get caught fell incomplete or were picked off.",
      "wk11d-allen-throws.png"),

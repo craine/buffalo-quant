@@ -1,0 +1,47 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:10:55Z",
+   "notes": "New analysis; all claims computed and asserted; names from raw_players by gsis id; onside claim rewritten after checking all 28 onside kicks; chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:17:18Z",
+   "notes": "All 7 claims reproduce (0 runs; 135 games at 20+ plays; avg 6.2; 6 of 9 4th-and-1; 5 fake-punt teams; 28 onside all trailing; 4 eligible, max 2; 54/316; shotgun 59% vs 37-53%, lg 62%; Q1 5/11). Byte-identical regen. Fails on: 135 needs qualifier (136 appearances, 2019 wk17 also 0 runs); fake punt 27 air yds/30 gain; TD was Corbett not Grable; stat-heads kneel note wrong (Kyle Allen kneeled); hero 'fake onside look' claims intent; 'than ever'; blowout logic vs 3-0 timing; literal 'twice'; chart footer lacks sample size.",
+   "report": "2026-wk11-lab-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:17:18Z",
+   "notes": "Needs edits: 'lab game' headline/hero/card states intent the lead only hedges; lead sentence 3 stacks four actions; body lacks how-we-counted for headline number (needs 3 new computed numbers); 'Seven things don't add up to a secret', 'jumbo packages', 'package on film' jargon/stilted. Chart reads on its own; footer needs sample size.",
+   "report": "2026-wk11-lab-editor.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+  "at_utc": "2026-11-23T03:10:55Z",
+  "notes": "New analysis; all claims computed and asserted; names from raw_players by gsis id; onside claim rewritten after checking all 28 onside kicks; chart opened."
+ },
+ "quant": {
+  "verdict": "fail",
+  "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+  "at_utc": "2026-11-23T03:17:18Z",
+  "notes": "All 7 claims reproduce (0 runs; 135 games at 20+ plays; avg 6.2; 6 of 9 4th-and-1; 5 fake-punt teams; 28 onside all trailing; 4 eligible, max 2; 54/316; shotgun 59% vs 37-53%, lg 62%; Q1 5/11). Byte-identical regen. Fails on: 135 needs qualifier (136 appearances, 2019 wk17 also 0 runs); fake punt 27 air yds/30 gain; TD was Corbett not Grable; stat-heads kneel note wrong (Kyle Allen kneeled); hero 'fake onside look' claims intent; 'than ever'; blowout logic vs 3-0 timing; literal 'twice'; chart footer lacks sample size.",
+  "report": "2026-wk11-lab-quant.md"
+ },
+ "editor": {
+  "verdict": "fail",
+  "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+  "at_utc": "2026-11-23T03:17:18Z",
+  "notes": "Needs edits: 'lab game' headline/hero/card states intent the lead only hedges; lead sentence 3 stacks four actions; body lacks how-we-counted for headline number (needs 3 new computed numbers); 'Seven things don't add up to a secret', 'jumbo packages', 'package on film' jargon/stilted. Chart reads on its own; footer needs sample size.",
+  "report": "2026-wk11-lab-editor.md"
+ }
+}

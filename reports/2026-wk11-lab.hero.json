@@ -1,0 +1,30 @@
+{
+ "label": "The Bills' lab game",
+ "big": [
+  [
+   0,
+   "Josh Allen runs vs. Miami"
+  ],
+  [
+   135,
+   "Allen's regular-season games since 2018. This is the first with no runs."
+  ]
+ ],
+ "note": "A fake punt, a fake onside look, four extra-lineman plays and the most shotgun of the season.",
+ "explainer": {
+  "kicker": "Allen's runs",
+  "title": "Runs a game, 2026",
+  "text": "Designed runs plus scrambles:",
+  "fmt": "num",
+  "bars": [
+   [
+    "First nine games, average",
+    6.2
+   ],
+   [
+    "vs. Miami",
+    0
+   ]
+  ]
+ }
+}
