@@ -1,0 +1,116 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8411d59d8b60db6c30679feabc892801e4f6b73ab09a6216e282c58f756ca821",
+   "at_utc": "2026-11-23T03:48:17Z",
+   "notes": "Rewrite of the template recap at Charlie's request. New angle: the two Tampa games and what carries over (odd/even split, 96 team-seasons). All numbers computed and asserted; Nov 11 two-goalie case handled; removed an unsupported goalie claim; best-chance games computed (hand-typed ones were wrong); chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "8411d59d8b60db6c30679feabc892801e4f6b73ab09a6216e282c58f756ca821",
+   "at_utc": "2026-11-23T03:54:36Z",
+   "notes": "Numbers reproduce, byte-identical regen. Must-fix: odd/even r=0.01 is a bottom-2% draw (random splits r~0.15, halves 0.31); goaltending carries over (r 0.16-0.22, top quarter 14->4), so 'hasn't carried over'/'told you nothing' overclaims; 'only 6 teams less often' wrong by rate (8 lower, WPG tied); key 2 'half' not a grade; hero big 9 vs 9 drawn on one bar scale.",
+   "report": "2026-11-22-sabres-tbl-swing-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "8411d59d8b60db6c30679feabc892801e4f6b73ab09a6216e282c58f756ca821",
+   "at_utc": "2026-11-23T03:54:36Z",
+   "notes": "Good angle, chart reads. Must-fix: lead line 'chances moved 0.5 of a goal Tampa Bay's way' stilted; overclaim in lead/body/hero/card/chart title; stacked finishing+saves definition; 'half' key; hero two 9s and unclear explainer title.",
+   "report": "2026-11-22-sabres-tbl-swing-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "26c7dad1b9b74a68679e6ad065a1cbe7e1aafd01273cdcefad0122ad56515fcc",
+   "at_utc": "2026-11-23T03:57:09Z",
+   "notes": "Round 2: switched to first-half vs second-half split (odd/even was a low draw); finishing and saves reported separately (14->-1, 13->5), computed and asserted; headline, lead, card, hero, chart title updated; rank by rate (8); key 2 missed; hero second value 8.5; definitions split; goalie rows split; 11 behind non-empty-net; best nights margin computed; chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "26c7dad1b9b74a68679e6ad065a1cbe7e1aafd01273cdcefad0122ad56515fcc",
+   "at_utc": "2026-11-23T03:58:35Z",
+   "notes": "Round 2: all numbers re-derived on first/second-half split and match; byte-identical regen; build renders. Required outside md: hero note and card dek 'those rarely last' lumps saves (combined halves r=0.31, top quarter 17.7->6.3); change to 'Finishing rarely lasts, and goaltending only partly'.",
+   "report": "2026-11-22-sabres-tbl-swing-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "26c7dad1b9b74a68679e6ad065a1cbe7e1aafd01273cdcefad0122ad56515fcc",
+   "at_utc": "2026-11-23T03:58:36Z",
+   "notes": "Round 2: headline, lead and finishing/saves/chances sections read cleanly; luck framing fair. Required: same hero note/dek fix. Polish: '1 worse' -> 'right at average', chart subtitle 'each dot' covers bars panel.",
+   "report": "2026-11-22-sabres-tbl-swing-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "fail",
+   "sha256": "26c7dad1b9b74a68679e6ad065a1cbe7e1aafd01273cdcefad0122ad56515fcc",
+   "at_utc": "2026-11-23T03:58:46Z",
+   "notes": "Markdown passes; round-1 fixes verified. Blocked on hero note (hero.json) and card dek (build.py) still saying finishing and saves 'rarely last' (combined halves r=0.31, ~1/3 kept). Gate hashes md only, so not passing until those change.",
+   "report": "2026-11-22-sabres-tbl-swing-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+   "at_utc": "2026-11-23T03:59:45Z",
+   "notes": "Round 3: hero note and card dek fixed (finishing rarely lasts, goaltending only partly); polish: half a goal, about average (top-quarter finishing -0.50), chart subtitle and right-panel title, 0 label. Chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+   "at_utc": "2026-11-23T04:00:22Z",
+   "notes": "Round 3 delta: 'half a goal' (0.49) and 'about average' (-0.50) correct and asserted; chart 0 label on -0.5 bar fair; hero note and dek match required wording; byte-identical regen; build renders.",
+   "report": "2026-11-22-sabres-tbl-swing-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+   "at_utc": "2026-11-23T04:00:22Z",
+   "notes": "Round 3 delta: polish applied, hero/dek now agree with story; chart reads alone. Ready.",
+   "report": "2026-11-22-sabres-tbl-swing-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+   "at_utc": "2026-11-23T04:00:23Z",
+   "notes": "All round-1/2 fixes verified on current text, hero.json and build.py dek; byte-identical regen. Freeze PNG at publish.",
+   "report": "2026-11-22-sabres-tbl-swing-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+  "at_utc": "2026-11-23T03:59:45Z",
+  "notes": "Round 3: hero note and card dek fixed (finishing rarely lasts, goaltending only partly); polish: half a goal, about average (top-quarter finishing -0.50), chart subtitle and right-panel title, 0 label. Chart opened."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+  "at_utc": "2026-11-23T04:00:22Z",
+  "notes": "Round 3 delta: 'half a goal' (0.49) and 'about average' (-0.50) correct and asserted; chart 0 label on -0.5 bar fair; hero note and dek match required wording; byte-identical regen; build renders.",
+  "report": "2026-11-22-sabres-tbl-swing-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+  "at_utc": "2026-11-23T04:00:22Z",
+  "notes": "Round 3 delta: polish applied, hero/dek now agree with story; chart reads alone. Ready.",
+  "report": "2026-11-22-sabres-tbl-swing-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "65dca0992995eb6cf07fd0bf1d19b836dd12a6e3829d54676daed075a8051bbc",
+  "at_utc": "2026-11-23T04:00:23Z",
+  "notes": "All round-1/2 fixes verified on current text, hero.json and build.py dek; byte-identical regen. Freeze PNG at publish.",
+  "report": "2026-11-22-sabres-tbl-swing-final.md"
+ }
+}
