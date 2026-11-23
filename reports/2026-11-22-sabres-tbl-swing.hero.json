@@ -1,0 +1,30 @@
+{
+ "label": "Same matchup, 11 days apart",
+ "big": [
+  [
+   9,
+   "goal swing between the two games"
+  ],
+  [
+   8.5,
+   "goals of it from finishing and saves"
+  ]
+ ],
+ "note": "Finishing and saves swung it. Finishing rarely lasts, and goaltending only partly. Chances do, and Buffalo has had more of them in only 9 of 24 games.",
+ "explainer": {
+  "kicker": "What lasts",
+  "title": "The best finishing teams in the first half were average in the second",
+  "text": "Top quarter of teams by finishing, goals above average:",
+  "fmt": "num",
+  "bars": [
+   [
+    "First half",
+    14
+   ],
+   [
+    "Second half",
+    0
+   ]
+  ]
+ }
+}
