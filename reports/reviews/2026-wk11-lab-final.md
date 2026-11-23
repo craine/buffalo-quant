@@ -1,18 +1,11 @@
-# Final check (stage 4): reports/2026-wk11-lab.md
+# Final check (stage 4), round 4: reports/2026-wk11-lab.md
 
-Reviewer: independent Quant. Date: 2026-11-22. Commit 6948c64a. Story sha256: 24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca
+Date: 2026-11-23. Story sha256: b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2.
 
-**PASS.** The text is the same text the round-2 Quant and Editor passed (same sha256). Every change since round 1 was
-checked against my own queries. The new or reworded claims are:
-- "How we counted": 136 / 1 left out (5 plays) / fewest 1, six times
-- the 30-yard gain
-- Grable twice and Corbett twice, with the TD on Corbett
-- "this season" scoping
-- "home game against a struggling division rival"
-- "one of only 5 teams"
-- the new chart title and footer
-- the hero and card
+**PASS.** The text is identical to what the round-4 Quant and Editor passed. Since the last READY state (round 2), these are the only changes:
+- the sneak paragraph (verified)
+- the source-first trick-play sentence and its caveat
+- the section 3 header
 
-They are all correct, and none breaks a number or adds intent. Clean regeneration reproduces the md, the hero and the PNG byte-identically.
-The Editor's optional polish was not applied. If it is applied later, the story's sha changes and this check must be redone.
-At publish: run scripts/freeze_images.py for wk11lab-season.png.
+The comparison FTN couldn't support has been removed. No number changed, and regeneration is byte-identical.
+At publish, run scripts/freeze_images.py for wk11lab-season.png.

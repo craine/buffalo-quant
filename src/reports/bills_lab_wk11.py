@@ -42,6 +42,16 @@ def main():
     runs_avg = float(others.runs.mean())
 
     # Allen's career: regular-season games since 2018 where he was involved in 20+ plays
+    # QB sneaks and trick plays, weeks 1-10 (FTN charting; the Miami game wasn't charted at publish)
+    ftn = query(f"""SELECT p.game_id, p.week, f.is_qb_sneak, f.is_trick_play, p.rusher_player_id FROM raw_pbp p
+                    JOIN raw_ftn f ON f.nflverse_game_id = p.game_id AND f.nflverse_play_id = p.play_id
+                    WHERE p.season={SEASON} AND p.season_type='REG' AND p.posteam='BUF' AND p.week < {WEEK}""")
+    assert query(f"SELECT COUNT(*) n FROM raw_ftn WHERE nflverse_game_id='{GAME}'").n.iloc[0] == 0
+    sn = ftn[(ftn.is_qb_sneak == 1) & (ftn.rusher_player_id == ALLEN)].groupby("game_id").size()
+    n_ftn_games = ftn.game_id.nunique()
+    sneak_min = int(sn.reindex(ftn.game_id.unique()).fillna(0).min())
+    assert n_ftn_games == 9 and sneak_min == 1
+
     # runs exclude kneel-downs and two-point tries (same definition as the season numbers, which use rush == 1 plays)
     carall = query(f"""SELECT game_id, season,
                     SUM(CASE WHEN rusher_player_id='{ALLEN}' AND COALESCE(qb_kneel,0)=0 AND COALESCE(two_point_attempt,0)=0 THEN 1 ELSE 0 END) AS runs,
@@ -163,15 +173,21 @@ How we counted: we went through the play-by-play of every Bills regular-season g
 kneel-downs. We kept the {car_n} games where he threw, ran or was sacked at least 20 times. That leaves out one game, the 2019 finale, when he was in for {int(lo.inv)} plays.
 Before Sunday, his fewest runs in any of those games was {car_min_before}, and that happened {car_min_n} times. Never zero.
 
+That means no quarterback sneak, either. Allen ran at least one in each of the Bills' first {n_ftn_games} games this season, according to FTN's play charting.
+Against Miami, the Bills' fourth-and-1 went to {N['cook']} instead.
+
 ## 2. Fourth-and-1 went to Cook, not Allen
 
 On the opening drive, the Bills went for it on fourth-and-1 near midfield. Before Sunday, Allen had carried {sneak_before} of the Bills' {short_before} fourth-and-1 plays this season.
 This time guard {N['corbett']} checked in with the referee as an eligible receiver, an extra blocker on the field, and {N['cook']} ran it up the middle for {fd_gain} yards.
 
-## 3. The punter threw a pass
+## 3. The punter threw a pass, and more trick plays
 
 On fourth-and-8 from their own {fp_own}, up 3-0 in the first quarter, punter {N['doman']} threw to tight end {N['latu']} for a {fp_gain}-yard gain and a first down.
 It was the Bills' first fake punt this season. Buffalo is one of only {n_fake_teams} teams to run a fake punt this season (not counting botched snaps).
+
+The Palm Beach Post's Tom D'Angelo [also counted](https://sports.yahoo.com/articles/were-bills-looking-ahead-chiefs-001633008.html) a flea flicker and an end-around.
+The play-by-play doesn't mark trick plays, and FTN hasn't charted this game yet, so we can't pin down those two plays.
 
 ## 4. They showed an onside kick, then didn't kick it
 
