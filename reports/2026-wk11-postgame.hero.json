@@ -1,0 +1,30 @@
+{
+ "label": "Josh Allen vs. Miami",
+ "big": [
+  [
+   27,
+   "Completions"
+  ],
+  [
+   29,
+   "Expected from an average QB on the same throws"
+  ]
+ ],
+ "note": "Bills 26, Dolphins 9. Five Allen throws that usually get caught (70%+ of the time) fell incomplete or were picked off.",
+ "explainer": {
+  "kicker": "The defense",
+  "title": "Miami's points per play",
+  "text": "How much each play helped Miami, on average:",
+  "fmt": "score",
+  "bars": [
+   [
+    "League average",
+    0.0
+   ],
+   [
+    "Miami on Sunday",
+    -0.26
+   ]
+  ]
+ }
+}
