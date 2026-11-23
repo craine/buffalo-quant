@@ -1,0 +1,30 @@
+{
+ "label": "Scoring chances, worth this many goals",
+ "big": [
+  [
+   3.0,
+   "Sabres"
+  ],
+  [
+   3.6,
+   "Lightning"
+  ]
+ ],
+ "note": "Final: Sabres 6, Lightning 2. Tampa Bay had more of the chances; Buffalo finished them.",
+ "explainer": {
+  "kicker": "In goal",
+  "title": "Goals allowed vs. chances, Ukko-Pekka Luukkonen",
+  "text": "Goals Tampa Bay scored and what its chances were worth:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Goals allowed",
+    2
+   ],
+   [
+    "Chances were worth",
+    3.6
+   ]
+  ]
+ }
+}

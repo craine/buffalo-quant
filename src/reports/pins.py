@@ -11,6 +11,8 @@ NOT_IN_FEED = {
     "2026-11-19": {2026020356, 2026020357, 2026020358},
     # Nov. 21, 2026: nine games still in progress or later when the Sabres-Panthers recap was built.
     "2026-11-21": {2026020363, 2026020364, 2026020365, 2026020366, 2026020368, 2026020369, 2026020370, 2026020371, 2026020372},
+    # Nov. 22, 2026: VAN-CHI was still in progress when the Sabres-Lightning recap was built.
+    "2026-11-22": {2026020377},
 }
 
 
