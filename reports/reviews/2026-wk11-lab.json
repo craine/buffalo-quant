@@ -1,0 +1,139 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:10:55Z",
+   "notes": "New analysis; all claims computed and asserted; names from raw_players by gsis id; onside claim rewritten after checking all 28 onside kicks; chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:17:18Z",
+   "notes": "All 7 claims reproduce (0 runs; 135 games at 20+ plays; avg 6.2; 6 of 9 4th-and-1; 5 fake-punt teams; 28 onside all trailing; 4 eligible, max 2; 54/316; shotgun 59% vs 37-53%, lg 62%; Q1 5/11). Byte-identical regen. Fails on: 135 needs qualifier (136 appearances, 2019 wk17 also 0 runs); fake punt 27 air yds/30 gain; TD was Corbett not Grable; stat-heads kneel note wrong (Kyle Allen kneeled); hero 'fake onside look' claims intent; 'than ever'; blowout logic vs 3-0 timing; literal 'twice'; chart footer lacks sample size.",
+   "report": "2026-wk11-lab-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "0b3c3eaff56e4112372dbcc9046051adbcfe8353d1c788065caf2ff924e023f6",
+   "at_utc": "2026-11-23T03:17:18Z",
+   "notes": "Needs edits: 'lab game' headline/hero/card states intent the lead only hedges; lead sentence 3 stacks four actions; body lacks how-we-counted for headline number (needs 3 new computed numbers); 'Seven things don't add up to a secret', 'jumbo packages', 'package on film' jargon/stilted. Chart reads on its own; footer needs sample size.",
+   "report": "2026-wk11-lab-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+   "at_utc": "2026-11-23T03:22:56Z",
+   "notes": "Round 2: all quant and editor must-fixes applied; typed numbers now computed and asserted; career runs exclude kneels and two-point tries; chart footer has sample size; chart title no longer claims firsts."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+   "at_utc": "2026-11-23T03:24:12Z",
+   "notes": "Round 2: all 9 r1 must-fixes applied correctly; new numbers (136/1 left out at 5 plays/min 1 x6, 30-yd gain, 27 air, own 34, 23-9, 2 yds, 1-yd TD Corbett, twice, 26-9, 78 plays) match independent queries and are asserted; clean regen byte-identical; new chart title verified. Optional: 2pt filter in season table, move fake-punt stat-heads line.",
+   "report": "2026-wk11-lab-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+   "at_utc": "2026-11-23T03:24:13Z",
+   "notes": "Round 2: lab-game intent removed from headline/hero/card; lead split into short sentences; how-we-counted added; stilted/jargon lines fixed; all surfaces agree; chart reads alone. Optional: double 'this season' in sec 3, split sec 2 sentence.",
+   "report": "2026-wk11-lab-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "24cffa72118e72df6dc0b991b1a46ecc5979200caf2438fa096bd0b0181ae1ca",
+   "at_utc": "2026-11-23T03:24:21Z",
+   "notes": "Final on sha 24cffa72: identical to round-2 reviewed text; every r1 change verified against independent queries; regen byte-identical; no new claims or intent. Freeze image at publish.",
+   "report": "2026-wk11-lab-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "94c973b3a1b2f1cd937142c3e867b785d1db242f5ed094b047747616adf7e76c",
+   "at_utc": "2026-11-23T13:40:52Z",
+   "notes": "Round 3: added the no-QB-sneak line (FTN, first 9 games, asserted) and the flea flicker and end-around, cited to Tom D'Angelo (Palm Beach Post via Yahoo); disclosed that neither play can be pinned down yet; Week 1 hook-and-lateral asserted from FTN and the play description."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "94c973b3a1b2f1cd937142c3e867b785d1db242f5ed094b047747616adf7e76c",
+   "at_utc": "2026-11-23T13:43:00Z",
+   "notes": "Round 3: sneak paragraph verified (FTN sneaks per game 1,4,3,2,1,1,2,2,3; 100% FTN join wk1-10; MIA_BUF uncharted). Fails: FTN trick-play baseline unfair (flag marks only 1 of 4 charted fake punts, missed wk3 direct snap) -> drop context sentence; attribute flea flicker/end-around up front. Source use fair; headline count fits; regen byte-identical.",
+   "report": "2026-wk11-lab-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "94c973b3a1b2f1cd937142c3e867b785d1db242f5ed094b047747616adf7e76c",
+   "at_utc": "2026-11-23T13:43:00Z",
+   "notes": "Round 3: additions plain and honest; headline 'six more signs' still fits (7 sections). Polish: drop '(item 2)', 'no quarterback sneak, either'. Assumes Quant's two fixes.",
+   "report": "2026-wk11-lab-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+   "at_utc": "2026-11-23T13:43:28Z",
+   "notes": "Round 4: source named before the claim; FTN trick-play comparison and its asserts removed; section 1 polish applied."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+   "at_utc": "2026-11-23T13:43:52Z",
+   "notes": "Round 4: both r3 must-fixes applied verbatim (FTN trick-play comparison+asserts removed; D'Angelo named first). Polish adds no numbers; Cook from raw_players. Sneak claim verified r3. Regen byte-identical; PNG/hero/card unchanged.",
+   "report": "2026-wk11-lab-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+   "at_utc": "2026-11-23T13:43:52Z",
+   "notes": "Round 4: section 1 polish reads cleanly, '(item 2)' gone; source-first sentence plain; all surfaces agree; headline count fits.",
+   "report": "2026-wk11-lab-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+   "at_utc": "2026-11-23T13:43:52Z",
+   "notes": "Final on sha b826da3b: identical to round-4 reviewed text; changes since round 2 verified; no numbers changed; regen byte-identical. Freeze PNG at publish.",
+   "report": "2026-wk11-lab-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+  "at_utc": "2026-11-23T13:43:28Z",
+  "notes": "Round 4: source named before the claim; FTN trick-play comparison and its asserts removed; section 1 polish applied."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+  "at_utc": "2026-11-23T13:43:52Z",
+  "notes": "Round 4: both r3 must-fixes applied verbatim (FTN trick-play comparison+asserts removed; D'Angelo named first). Polish adds no numbers; Cook from raw_players. Sneak claim verified r3. Regen byte-identical; PNG/hero/card unchanged.",
+  "report": "2026-wk11-lab-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+  "at_utc": "2026-11-23T13:43:52Z",
+  "notes": "Round 4: section 1 polish reads cleanly, '(item 2)' gone; source-first sentence plain; all surfaces agree; headline count fits.",
+  "report": "2026-wk11-lab-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "b826da3bbdc21814575aac24084a262b6e24d35beb061363cc1c6b92ad1eb0f2",
+  "at_utc": "2026-11-23T13:43:52Z",
+  "notes": "Final on sha b826da3b: identical to round-4 reviewed text; changes since round 2 verified; no numbers changed; regen byte-identical. Freeze PNG at publish.",
+  "report": "2026-wk11-lab-final.md"
+ }
+}
