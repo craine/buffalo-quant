@@ -76,33 +76,87 @@
    "at_utc": "2026-11-24T01:14:14Z",
    "notes": "All quant and editor fixes from rounds 1-3 applied; every number re-verified independently; generator reproduces md/hero/PNG byte-identically; no overclaims, jargon or betting language. Freeze the current PNG at publish.",
    "report": "2026-wk12-kc-leonhard-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "81a8d4b8263ff2dab5796f72c2d97a70859c2f0faa6097d7fdd82fe42df235e4",
+   "at_utc": "2026-11-24T12:35:07Z",
+   "notes": "Round 4 rework at Charlie's request: story now leads with pressure vs. sacks. PFR pressures weeks 1-10 both seasons (every game charted, asserted); Rousseau 37 pressures 1st, 8 sacks wk1-10, 10 through wk11 (gsis looked up from PFR id after a typed id failed the check); conversion 30% -> 20%; rest of defense 13 sacks; 2025 late-season fade 25 -> 36. Chart: 4 panels, Bills bars are first nine games of each season. Unpublished image re-frozen later."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "81a8d4b8263ff2dab5796f72c2d97a70859c2f0faa6097d7fdd82fe42df235e4",
+   "at_utc": "2026-11-24T12:39:05Z",
+   "notes": "Round 4 full re-review. Must fix: (1) 2025 fade paragraph - pressure also collapsed in the last 8 (28th) and '20th' was a tied total rank, use per-dropback 14th; (2) team pressures tied 3rd with DEN (lead, hero, card); (3) PFR pressures are player credits, not % of plays - reword as 'about 29 for every 100'; (4) 2025 5+ rushers body 25%/21st full season vs chart 24% first nine - use 24% (22nd); (5) Crosby 35 in 10 games - hero explainer 'first nine games' wrong; (6) 'most of any player through Week 10'. Everything else verified; reproduces byte-identically.",
+   "report": "2026-wk12-kc-leonhard-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "81a8d4b8263ff2dab5796f72c2d97a70859c2f0faa6097d7fdd82fe42df235e4",
+   "at_utc": "2026-11-24T12:39:05Z",
+   "notes": "Round 4 full re-review. Strong new angle. Must fix: 2025 fade paragraph argues the wrong lesson; 24% vs 25% for the same stat; '28.5% of dropbacks' wording; tie/date labels in hero and card.",
+   "report": "2026-wk12-kc-leonhard-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+   "at_utc": "2026-11-24T12:40:19Z",
+   "notes": "Round 5: all 6 round-4 must-fixes and the polish applied, every number computed and asserted (late-2025 ranks 28th/27th, 14th per dropback, tied-for-3rd detection, first-nine 5+ rank 22nd with jump recomputed on the same basis, Rousseau 9 vs Crosby 10 games). Chart pressure panel per 100 dropbacks."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+   "at_utc": "2026-11-24T12:40:54Z",
+   "notes": "Round 5. All 6 round-4 fixes verified against independent queries (late-2025 28th/27th, 14th per db; tied 3rd; per-100 pressures; first-nine 24%/22nd; Crosby 10 games; through Week 10). Reproduces byte-identically. Minor: chart subtitle/footer still say share/% for the per-100 pressure panel.",
+   "report": "2026-wk12-kc-leonhard-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+   "at_utc": "2026-11-24T12:40:55Z",
+   "notes": "Round 5. All round-4 items applied; lead, hero, card, chart agree; plain English; no overclaim.",
+   "report": "2026-wk12-kc-leonhard-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+   "at_utc": "2026-11-24T12:40:55Z",
+   "notes": "Final on round-5 text: all numbers re-verified, ties labelled, windows consistent, reproduces byte-identically. Freeze the new PNG at publish; re-check the headline if PFR Week 11 loads first.",
+   "report": "2026-wk12-kc-leonhard-final.md"
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
-  "at_utc": "2026-11-24T01:13:41Z",
-  "notes": "Round 3: closing line replaced with computed 5+ rusher sack rate (6.8%, 25th, league 8.6%, asserted); FTN blitzer note now computed (1 of 11,091; 89%); polish applied."
+  "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+  "at_utc": "2026-11-24T12:40:19Z",
+  "notes": "Round 5: all 6 round-4 must-fixes and the polish applied, every number computed and asserted (late-2025 ranks 28th/27th, 14th per dropback, tied-for-3rd detection, first-nine 5+ rank 22nd with jump recomputed on the same basis, Rousseau 9 vs Crosby 10 games). Chart pressure panel per 100 dropbacks."
  },
  "quant": {
   "verdict": "pass",
-  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
-  "at_utc": "2026-11-24T01:14:13Z",
-  "notes": "Round 3. Closing line verified: BUF 9/133 = 6.8% sacks on 5+ plays, 25th (no tie; LAC .0685, BAL .0684), league 298/3,474 = 8.6%. FTN check now computed: 1 mismatch of 11,091; 89% in 2025. Polish edits change no numbers. Reproduces byte-identically.",
+  "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+  "at_utc": "2026-11-24T12:40:54Z",
+  "notes": "Round 5. All 6 round-4 fixes verified against independent queries (late-2025 28th/27th, 14th per db; tied 3rd; per-100 pressures; first-nine 24%/22nd; Crosby 10 games; through Week 10). Reproduces byte-identically. Minor: chart subtitle/footer still say share/% for the per-100 pressure panel.",
   "report": "2026-wk12-kc-leonhard-quant.md"
  },
  "editor": {
   "verdict": "pass",
-  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
-  "at_utc": "2026-11-24T01:14:13Z",
-  "notes": "Round 3. Changed lines read cleanly; Thursday section ends on a concrete Buffalo fact; repetition and stacked clause fixed. No jargon or rejected phrases.",
+  "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+  "at_utc": "2026-11-24T12:40:55Z",
+  "notes": "Round 5. All round-4 items applied; lead, hero, card, chart agree; plain English; no overclaim.",
   "report": "2026-wk12-kc-leonhard-editor.md"
  },
  "final": {
   "verdict": "pass",
-  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
-  "at_utc": "2026-11-24T01:14:14Z",
-  "notes": "All quant and editor fixes from rounds 1-3 applied; every number re-verified independently; generator reproduces md/hero/PNG byte-identically; no overclaims, jargon or betting language. Freeze the current PNG at publish.",
+  "sha256": "8e0d0c3c0b3597bfb911b699b1d23b91a7e6d707a29fdc85d3e92afd2731933a",
+  "at_utc": "2026-11-24T12:40:55Z",
+  "notes": "Final on round-5 text: all numbers re-verified, ties labelled, windows consistent, reproduces byte-identically. Freeze the new PNG at publish; re-check the headline if PFR Week 11 loads first.",
   "report": "2026-wk12-kc-leonhard-final.md"
  }
 }

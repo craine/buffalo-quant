@@ -1,29 +1,29 @@
 {
- "label": "Buffalo's pass rush under Jim Leonhard",
+ "label": "Buffalo's pass rush, first nine games",
  "big": [
   [
-   35,
-   "% of pass plays with 5+ rushers, 2026"
+   107,
+   "QB pressures, tied for 3rd in the NFL"
   ],
   [
-   25,
-   "% in 2025"
+   21,
+   "sacks (25 at this point last year)"
   ]
  ],
- "note": "Since Leonhard arrived from Denver, the Bills send extra rushers far more often. The sacks haven't followed: Buffalo is 20th in sack rate.",
+ "note": "Greg Rousseau leads the NFL with 37 pressures. Less of Buffalo's pressure is turning into sacks: 20% this year, 30% last year.",
  "explainer": {
-  "kicker": "Denver 2025",
-  "title": "Man coverage: Denver vs. the NFL, 2025",
-  "text": "Share of dropbacks in man coverage:",
-  "fmt": "pct",
+  "kicker": "Greg Rousseau",
+  "title": "Most QB pressures in the NFL, Weeks 1-10 of 2026",
+  "text": "Pressures, Weeks 1-10:",
+  "fmt": "num",
   "bars": [
    [
-    "Denver",
-    0.444
+    "Greg Rousseau",
+    37
    ],
    [
-    "NFL average",
-    0.308
+    "Maxx Crosby",
+    35
    ]
   ]
  }

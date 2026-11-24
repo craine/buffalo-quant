@@ -19,7 +19,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-chiefs-leonhard-file", "2026-wk12-kc-leonhard.md", "2026-11-24", "Bills &middot; Chiefs week, part 1",
-     "Jim Leonhard coached Denver's pass defense: the most man coverage in the NFL and the most sacks. Now the Bills send extra rushers like Denver did. The sacks haven't followed.",
+     "Greg Rousseau leads the NFL in pressures and Buffalo is tied for 3rd as a team. But the Bills have fewer sacks than at this point last year. Here's where the pass rush stands before Mahomes.",
      "bills-kc-wk12-leonhard.png"),
     ("bills-lab-game-wk11", "2026-wk11-lab.md", "2026-11-23", "Bills &middot; Analysis",
      "For the first time in 135 regular-season games where he played more than a handful of plays, Josh Allen didn't run once. A fake punt, an onside-kick look with a 14-point lead, and more. Against Miami, the Bills looked like a team trying things out.",
