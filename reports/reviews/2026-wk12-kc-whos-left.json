@@ -1,0 +1,85 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "daff9996da1cdc29aa225d34aad88c07d1061e93ffa380b788b2e061ae318291",
+   "at_utc": "2026-11-24T01:07:34Z",
+   "notes": "New story. Snap counts refreshed to Week 11 (162 games, pinned). Every named still-with-team player asserted; caught a false 'all five linemen' (Edwards gone) and a wrong claim that Buffalo's play-caller changed (Brady still calls plays); DEs split out of the KC secondary list; team names spelled out; coaching changes cited to NFL.com and Yardbarker. Chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "daff9996da1cdc29aa225d34aad88c07d1061e93ffa380b788b2e061ae318291",
+   "at_utc": "2026-11-24T01:12:42Z",
+   "notes": "Justin Reid released by NO Nov 19-20 (roster wk11 CUT), not 'now with New Orleans'; 2-pt tries counted as targets (KC 317->316, BUF 291->287; Walker 36 11%, Moore 17%, Kincaid 41, Coleman 40; 35%/71% hold); Week 11 missing MNF CIN-WAS (162 of 163); Bishop labeled CB, is S; overclaims 'defensive staff' and 'sideline changed more than the roster'. Core counts verified; reproduces byte-identically.",
+   "report": "2026-wk12-kc-whos-left-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "daff9996da1cdc29aa225d34aad88c07d1061e93ffa380b788b2e061ae318291",
+   "at_utc": "2026-11-24T01:12:43Z",
+   "notes": "Overclaim 'defenders who made it' and 'defensive staff'; Danna repeated; Reid fix; Gone lists heavy, rewrite suggested. Angle and agreement across hero/card/body good.",
+   "report": "2026-wk12-kc-whos-left-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+   "at_utc": "2026-11-24T01:15:10Z",
+   "notes": "Round 2: Reid released and Elam practice squad from Week 12 weekly roster (asserted); Watson IR noted; targets exclude two-point tries and sacks; Week 11 incomplete game named (CIN-WAS) and asserted; DB labels unified; overclaims and Danna duplication fixed; gone lists rewritten without positions. Chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+   "at_utc": "2026-11-24T01:16:05Z",
+   "notes": "Round 2: all must-fixes applied and verified. Reid CUT wk11-12; targets exclude sacks/2-pt (KC 316, BUF 287; 35%/71%); 162 of 163 games disclosed (CIN_WAS); DB labels; Elam DEV, Watson RES. Byte-identical rerun.",
+   "report": "2026-wk12-kc-whos-left-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+   "at_utc": "2026-11-24T01:16:05Z",
+   "notes": "Round 2: overclaims removed, Danna repeat fixed, Gone lists readable, chart stands alone. Optional: takeaway chart title.",
+   "report": "2026-wk12-kc-whos-left-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+   "at_utc": "2026-11-24T01:16:05Z",
+   "notes": "Changed text and numbers re-verified against raw data; reproduces byte-identically. Part 1 (PR #60) must merge first.",
+   "report": "2026-wk12-kc-whos-left-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+  "at_utc": "2026-11-24T01:15:10Z",
+  "notes": "Round 2: Reid released and Elam practice squad from Week 12 weekly roster (asserted); Watson IR noted; targets exclude two-point tries and sacks; Week 11 incomplete game named (CIN-WAS) and asserted; DB labels unified; overclaims and Danna duplication fixed; gone lists rewritten without positions. Chart opened."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+  "at_utc": "2026-11-24T01:16:05Z",
+  "notes": "Round 2: all must-fixes applied and verified. Reid CUT wk11-12; targets exclude sacks/2-pt (KC 316, BUF 287; 35%/71%); 162 of 163 games disclosed (CIN_WAS); DB labels; Elam DEV, Watson RES. Byte-identical rerun.",
+  "report": "2026-wk12-kc-whos-left-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+  "at_utc": "2026-11-24T01:16:05Z",
+  "notes": "Round 2: overclaims removed, Danna repeat fixed, Gone lists readable, chart stands alone. Optional: takeaway chart title.",
+  "report": "2026-wk12-kc-whos-left-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "89e48fb22d69779dc635d1d3583502c3ea092c2cc2b9aec577051a059a2ee5ae",
+  "at_utc": "2026-11-24T01:16:05Z",
+  "notes": "Changed text and numbers re-verified against raw data; reproduces byte-identically. Part 1 (PR #60) must merge first.",
+  "report": "2026-wk12-kc-whos-left-final.md"
+ }
+}

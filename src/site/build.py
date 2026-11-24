@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-chiefs-whos-left", "2026-wk12-kc-whos-left.md", "2026-11-24", "Bills &middot; Chiefs week, part 2",
+     "From the January 2025 AFC title game, 13 of 21 Bills regulars are still Bills and 12 of 23 Chiefs are still Chiefs. Buffalo kept its offense. Both secondaries turned over.",
+     "bills-kc-wk12-whos-left.png"),
     ("bills-chiefs-leonhard-file", "2026-wk12-kc-leonhard.md", "2026-11-24", "Bills &middot; Chiefs week, part 1",
      "Greg Rousseau leads the NFL in pressures and Buffalo is tied for 3rd as a team. But the Bills have fewer sacks than at this point last year. Here's where the pass rush stands before Mahomes.",
      "bills-kc-wk12-leonhard.png"),
