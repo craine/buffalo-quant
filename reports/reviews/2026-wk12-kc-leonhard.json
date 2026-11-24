@@ -1,0 +1,108 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "f3c6e45a557876c7e634c575009d1624d58a6f7a8493d34884bda526597c171d",
+   "at_utc": "2026-11-24T01:03:53Z",
+   "notes": "New story. All numbers computed; no-plays excluded (first pass included them, caught); Mahomes missed DEN wk17 so only wk11 used; 2026 pinned to weeks 1-10 (FTN 100%); man coverage 2025 only, disclosed; Leonhard's titles from NFL.com/ESPN/AP reporting; fixed a wrong claim about Mahomes vs extra rushers; 2026 league averages added. Chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "f3c6e45a557876c7e634c575009d1624d58a6f7a8493d34884bda526597c171d",
+   "at_utc": "2026-11-24T01:09:28Z",
+   "notes": "Most numbers verified and reproduce byte-identically. Must fix: (1) Week 11 Mahomes paragraph wrong - Denver's man rate had already fallen to 36% from Week 9 on (56% wks 1-8), so 33% vs KC wasn't 'going away from its style'; drop the cause claim; (2) delete 2026 'blitz' line - FTN 2026 blitzers = rushers minus 4 on 11,092/11,093 db, same stat as 5+; (3) add league rise 27%->31% next to Buffalo's 25%->35%; (4) 'pressure' -> 'extra rushers' (2026 pressure not measured); (5) Mahomes split: small-sample label + league context (+0.06 vs +0.01); (6) hero note overclaims cause.",
+   "report": "2026-wk12-kc-leonhard-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "f3c6e45a557876c7e634c575009d1624d58a6f7a8493d34884bda526597c171d",
+   "at_utc": "2026-11-24T01:09:29Z",
+   "notes": "Needs edits: headline and hero claim cause ('came with him'); Week 11 paragraph (per Quant); lead's last line and Thursday section lack a so-what; 'points per dropback' used before explained and explained with 'expected points'; delete redundant blitz line; fix stilted 'Whether Buffalo plays Denver's man coverage, we can't say yet'; 'pressure' -> 'extra rushers'; add league context to the rise.",
+   "report": "2026-wk12-kc-leonhard-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "010565da4cdbc6cf4eb05d86d41b6d72ac9fb111884cc8dac169fa20f0fb4c66",
+   "at_utc": "2026-11-24T01:11:19Z",
+   "notes": "Round 2: all 9 must-fixes applied (Denver man split computed 56%/35%; blitz stat removed; league context for 5+ rushers and Mahomes split computed; headline/hero/card reworded; points-per-dropback defined at first use; stilted line fixed). Polish: dropback defined up top, Week 11 exclusion stated, nflverse charting wording, bad FTN rows dropped, blank coverage rows dropped."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "010565da4cdbc6cf4eb05d86d41b6d72ac9fb111884cc8dac169fa20f0fb4c66",
+   "at_utc": "2026-11-24T01:12:51Z",
+   "notes": "Round 2. All round-1 fixes verified; reproduces byte-identically. Must fix: (1) closing line 'Extra rushers only pay off if they get home, and this year Buffalo's mostly haven't' is contradicted (BUF allows -0.013/db with 5+ vs +0.026 with 4 or fewer); replace with 'When Buffalo does send five or more, it gets a sack on 6.8% of those dropbacks, 25th in the league (league average: 8.6%).' (computed in generator) or delete; (2) generator hard-codes 'all but 1' and '89%' in stat-heads (both correct) - compute them.",
+   "report": "2026-wk12-kc-leonhard-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "010565da4cdbc6cf4eb05d86d41b6d72ac9fb111884cc8dac169fa20f0fb4c66",
+   "at_utc": "2026-11-24T01:12:51Z",
+   "notes": "Round 2. All 10 round-1 items applied; lead passes the radio test; headline/hero/card/chart agree; no jargon or rejected phrases. Closing line must follow the Quant's fix. Optional: de-duplicate 'Through 9 games under Leonhard', split the Week 11 gloss sentence.",
+   "report": "2026-wk12-kc-leonhard-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+   "at_utc": "2026-11-24T01:13:41Z",
+   "notes": "Round 3: closing line replaced with computed 5+ rusher sack rate (6.8%, 25th, league 8.6%, asserted); FTN blitzer note now computed (1 of 11,091; 89%); polish applied."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+   "at_utc": "2026-11-24T01:14:13Z",
+   "notes": "Round 3. Closing line verified: BUF 9/133 = 6.8% sacks on 5+ plays, 25th (no tie; LAC .0685, BAL .0684), league 298/3,474 = 8.6%. FTN check now computed: 1 mismatch of 11,091; 89% in 2025. Polish edits change no numbers. Reproduces byte-identically.",
+   "report": "2026-wk12-kc-leonhard-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+   "at_utc": "2026-11-24T01:14:13Z",
+   "notes": "Round 3. Changed lines read cleanly; Thursday section ends on a concrete Buffalo fact; repetition and stacked clause fixed. No jargon or rejected phrases.",
+   "report": "2026-wk12-kc-leonhard-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+   "at_utc": "2026-11-24T01:14:14Z",
+   "notes": "All quant and editor fixes from rounds 1-3 applied; every number re-verified independently; generator reproduces md/hero/PNG byte-identically; no overclaims, jargon or betting language. Freeze the current PNG at publish.",
+   "report": "2026-wk12-kc-leonhard-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+  "at_utc": "2026-11-24T01:13:41Z",
+  "notes": "Round 3: closing line replaced with computed 5+ rusher sack rate (6.8%, 25th, league 8.6%, asserted); FTN blitzer note now computed (1 of 11,091; 89%); polish applied."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+  "at_utc": "2026-11-24T01:14:13Z",
+  "notes": "Round 3. Closing line verified: BUF 9/133 = 6.8% sacks on 5+ plays, 25th (no tie; LAC .0685, BAL .0684), league 298/3,474 = 8.6%. FTN check now computed: 1 mismatch of 11,091; 89% in 2025. Polish edits change no numbers. Reproduces byte-identically.",
+  "report": "2026-wk12-kc-leonhard-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+  "at_utc": "2026-11-24T01:14:13Z",
+  "notes": "Round 3. Changed lines read cleanly; Thursday section ends on a concrete Buffalo fact; repetition and stacked clause fixed. No jargon or rejected phrases.",
+  "report": "2026-wk12-kc-leonhard-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "1a3ed5c5207512a91c7690f91f141f01c4a4e24ff047009d91b1a4a9f974c3cf",
+  "at_utc": "2026-11-24T01:14:14Z",
+  "notes": "All quant and editor fixes from rounds 1-3 applied; every number re-verified independently; generator reproduces md/hero/PNG byte-identically; no overclaims, jargon or betting language. Freeze the current PNG at publish.",
+  "report": "2026-wk12-kc-leonhard-final.md"
+ }
+}

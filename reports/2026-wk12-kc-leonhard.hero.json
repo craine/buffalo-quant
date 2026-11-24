@@ -1,0 +1,30 @@
+{
+ "label": "Buffalo's pass rush under Jim Leonhard",
+ "big": [
+  [
+   35,
+   "% of pass plays with 5+ rushers, 2026"
+  ],
+  [
+   25,
+   "% in 2025"
+  ]
+ ],
+ "note": "Since Leonhard arrived from Denver, the Bills send extra rushers far more often. The sacks haven't followed: Buffalo is 20th in sack rate.",
+ "explainer": {
+  "kicker": "Denver 2025",
+  "title": "Man coverage: Denver vs. the NFL, 2025",
+  "text": "Share of dropbacks in man coverage:",
+  "fmt": "pct",
+  "bars": [
+   [
+    "Denver",
+    0.444
+   ],
+   [
+    "NFL average",
+    0.308
+   ]
+  ]
+ }
+}
