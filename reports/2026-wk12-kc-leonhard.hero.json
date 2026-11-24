@@ -1,0 +1,30 @@
+{
+ "label": "Buffalo's pass rush, first nine games",
+ "big": [
+  [
+   107,
+   "QB pressures, tied for 3rd in the NFL"
+  ],
+  [
+   21,
+   "sacks (25 at this point last year)"
+  ]
+ ],
+ "note": "Greg Rousseau leads the NFL with 37 pressures. Less of Buffalo's pressure is turning into sacks: 20% this year, 30% last year.",
+ "explainer": {
+  "kicker": "Greg Rousseau",
+  "title": "Most QB pressures in the NFL, Weeks 1-10 of 2026",
+  "text": "Pressures, Weeks 1-10:",
+  "fmt": "num",
+  "bars": [
+   [
+    "Greg Rousseau",
+    37
+   ],
+   [
+    "Maxx Crosby",
+    35
+   ]
+  ]
+ }
+}
