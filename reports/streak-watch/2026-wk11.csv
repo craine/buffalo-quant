@@ -1,0 +1,7 @@
+kind,unit,who,key,team,length,league_rank,league_runs,franchise_rank,last_as_long,last_as_long_len,start_game,end_game,name,bills
+drives without allowing a touchdown,drives,team,BUF,BUF,43,7,26950,1,,,2026_08_BAL_BUF,2026_11_MIA_BUF,BUF,True
+games with a touchdown,games,player,00-0037248,BUF,9,13,20435,1,,,2026_02_DET_BUF,2026_11_MIA_BUF,J.Cook,True
+games scoring 20 or more points,games,team,BUF,BUF,13,38,3293,1,2024.0,13.0,2025_18_NYJ_BUF,2026_11_MIA_BUF,BUF,True
+games with a sack,games,team,MIN,MIN,38,13,1718,1,,,2024_09_IND_MIN,2026_11_MIN_SF,MIN,False
+games with a sack,games,team,NE,NE,28,41,1718,1,,,2025_04_CAR_NE,2026_10_NE_DET,NE,False
+games with a sack,games,team,ATL,ATL,27,47,1718,1,,,2025_01_TB_ATL,2026_10_KC_ATL,ATL,False
