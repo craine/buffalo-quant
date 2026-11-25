@@ -1,9 +1,7 @@
-# Editor review, round 3: 2026-wk12-kc-weather (stage 3)
+# Editor confirm, round 5: 2026-wk12-kc-weather
 
-**Verdict: PASS (ready).** Rounds 1 and 2 are saved as -editor-r1.md and -editor-r2.md.
+**Verdict: PASS (ready).**
 
-The round-2 pass still holds. This round's only body change is "Each team scored 19.0 points a game." That matches the lead's per-team wording and fixes the round-2 polish item.
+The Thursday paragraph reads cleanly without the pressure sentences. It goes from part 3's recipe straight to the two things rain touches, with Buffalo's rank for each.
 
-The other change is in "For the stat-heads", which the editor doesn't review for jargon. It reads cleanly.
-
-No new issues.
+No stacked clauses, jargon, rejected phrases or betting language. The part 3 link is intact.
