@@ -225,7 +225,7 @@ def main():
 
     # ---- chart: left, every champion by interceptions (x) and completion distance (y), Allen's seasons on top; right, the three counts
     fig, (ax, bx) = plt.subplots(1, 2, figsize=(13, 6.2), dpi=200, gridspec_kw={"width_ratios": [1.35, 1]})
-    ax.axvspan(0, 50, ymin=0.5, ymax=1, color="#EEF2F9", zorder=0)
+    ax.fill_between([-3, 50], 50, 113, color="#EEF2F9", zorder=0, lw=0)
     ax.axvline(50, color="#D5D8DE", lw=1); ax.axhline(50, color="#D5D8DE", lw=1)
     ax.scatter(C.int_p * 100, C.ypc_p * 100, s=34, color=GRAY, edgecolor="white", linewidth=0.8, zorder=2, label="Super Bowl-winning QB, that season")
     ax.text(1, 111.5, f"Few interceptions, long completions: {len(both)} of {len(C)} champions", fontsize=9, color=BLUE, va="top", fontweight="bold",

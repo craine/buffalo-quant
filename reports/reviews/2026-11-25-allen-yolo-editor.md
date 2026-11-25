@@ -1,36 +1,18 @@
-# Editor review: 2026-11-25-allen-yolo (round 2)
+# Editor review: 2026-11-25-allen-yolo (round 3)
 
-**One-sentence version:** "Most Super Bowl quarterbacks threw downfield and protected the ball. Josh Allen almost always
-does the first, but this year he's 6th in the league in interception rate."
-
-**Verdict: needs edits (recorded as fail). There is one must-fix, in the chart.** All round-1 text edits landed and read
-well. The chance baseline in the lead ("when chance would put about 15 there") is exactly what a fan needs. "Other part",
-the percentile headers and the new footnote are clear. The card dek reads on its own. There's no jargon in the body,
-no betting language, and none of Charlie's rejected phrases.
+**Verdict: needs one chart edit (recorded as fail).** The text is ready. The changed stat-heads lines read clearly. The
+lead, headline, hero, card and chart agree. There's no jargon in the body, no betting language and none of the rejected
+phrases. The headline "throw it deep" is Charlie's call, noted as polish.
 
 ## Must-fix
-
-1. **The chart label now collides with Allen's '19 marker.** The longer annotation `Few interceptions, long completions:` runs
-   into the `'19` label and dot at the middle line, and the Favre dot sits on the start of "Few". On a screenshot it reads
-   "completions:'19". Fix any of these ways:
-   - Break it into three lines: `Few interceptions,\nlong completions:\n27 of 60 champions`.
-   - Move it to the top-left corner of the shaded box.
-   - Give it a white semi-transparent background (`bbox=dict(facecolor="white", alpha=0.8, edgecolor="none")`).
-
-   Then reopen the PNG to check it.
-2. **Endorse Quant must-fixes 1-2.** The boundary sentence (stat-heads only) and the typed "15" and "7 or 8". The words don't change.
-
-## Polish (optional)
-
-- **Headline "throw it deep": polish, not a must-fix.** "Deep" vs. the chart's "downfield" is a small mismatch, but the body
-  explains it, and "throw it deep" is the better radio line. It's Charlie's call.
-- Lead: `Allen throws downfield like a champion.` and later `7 of his 8 full seasons`. Fine as is. "Allen almost always
-  throws downfield like a champion" would preview the exception.
-- Stat-heads `p = 8e-05` -> `p < 0.001`.
+1. **The shaded box no longer lines up with the middle line.** When the y-axis was extended to 113, the box (drawn as a
+   fraction of the axes height) moved: its bottom edge now sits at about the 55th percentile, with a visible white gap
+   above the "middle" line. Allen's '19 dot sits just below the shading, so a fan reads it as outside the "few
+   interceptions, long completions" group, even though it's in it. Draw the box in data coordinates, so its bottom sits on
+   the middle line, e.g. `ax.add_patch(plt.Rectangle((-3, 50), 53, 63, color="#EEF2F9", zorder=0))`. Then reopen the PNG.
+   The new label box itself is good: one line, no collisions.
 
 ## Checked and fine
-
-- Lead, headline, hero, card and chart agree (25, 10, 29, 60, 6th of 31).
-- The new halves paragraph is clear. "Close to chance" is plain English.
-- The Darnold repeat is gone, and "did both" and "protected the ball" read well.
-- Table rows read alone with the percentile footnote.
+- The label reads on its own and covers no markers.
+- All the Allen year labels are legible, and the Favre dot is clear.
+- Right panel unchanged.
