@@ -30,7 +30,7 @@ That's about 0.35 of an inch of rain from 7 p.m. to 1 a.m. It's not a snow game,
 We sorted every regular-season outdoor game since 2018 by the weather note recorded for it: 1,461 dry, 107 with rain, and 23 with
 snow or only a chance of rain (left out). In 131 of the dry games the note doesn't describe conditions at all, so we counted them as dry. Then we compared them. In the rain:
 
-- **Teams scored 19.0 points a game.** In dry games: 22.7.
+- **Each team scored 19.0 points a game.** In dry games: 22.7.
 - **They completed 61% of their passes**, against 65%.
 - **7.5 of every 100 dropbacks went for 20 yards or more**, against 8.2.
 - **They ran 25.8 times a game**, against 24.0.
@@ -72,7 +72,8 @@ pressure, doesn't depend on the weather. The other two do: rain has meant slight
   This is a pregame or game-time note, not a measured rain total. 131 dry games have no conditions text (temperature/humidity/wind only, or no note);
   dropping them from the dry baseline: rain 19.0 vs 22.3 expected; rain + wind 10+ 18.3 vs 22.6.
 - Wind: nflverse `wind` (mph), filled from the description's "Wind: N mph" when empty. Where both exist they agree within 1 mph 85% of the time.
-  Rain games with no wind reading after the fill: 0. The column often reads 0 where the note gives 10-14 mph; reading the note first
+  Rain games with no wind reading after the fill: 0. Of 1,337 games with both, 194 disagree by more than 1 mph, and in 21 of those
+  the column reads 0 when the note gives a real wind. Reading the note first
   makes the rain + wind 10+ group 47 games, 18.8 vs 22.8 expected.
 - Rates: completions = `complete_pass` / (`pass_attempt` minus sacks); 20+ rate = dropbacks (`pass` = 1, incl. sacks and scrambles) with `yards_gained` >= 20;
   runs = `rush` = 1 per team-game. nflverse codes QB scrambles as `pass` = 1, so runs are designed runs (including QB keepers and sneaks).

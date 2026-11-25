@@ -126,6 +126,9 @@ def main():
     ER, ERW = expected(rain, dry), expected(rw, dry)
     gw = G[G.roof.isin(["outdoors", "open"])].dropna(subset=["wind", "wtxt"])
     agree = float(((gw.wind - gw.wtxt).abs() <= 1).mean())
+    dis = gw[(gw.wind - gw.wtxt).abs() > 1]
+    n_both, n_dis, n_dis0 = len(gw), len(dis), int((dis.wind == 0).sum())
+    assert (n_both, n_dis, n_dis0) == (1337, 194, 21)
     n_wind_missing = int(out[out.cls == "rain"].groupby("game_id").w.first().isna().sum())
 
     # third check: regression with offense-season and defense-season terms (dry and rain games with wind known)
@@ -263,7 +266,7 @@ That's about {rain_in:.2f} of an inch of rain from 7 p.m. to 1 a.m. It's not a s
 We sorted every regular-season outdoor game since 2018 by the weather note recorded for it: {gcls['dry']:,} dry, {gcls['rain']} with rain, and {n_left_out} with
 snow or only a chance of rain (left out). In {n_nodesc} of the dry games the note doesn't describe conditions at all, so we counted them as dry. Then we compared them. In the rain:
 
-- **Teams scored {R['pts']:.1f} points a game.** In dry games: {D['pts']:.1f}.
+- **Each team scored {R['pts']:.1f} points a game.** In dry games: {D['pts']:.1f}.
 - **They completed {R['cmp']:.0%} of their passes**, against {D['cmp']:.0%}.
 - **{R['big'] * 100:.1f} of every 100 dropbacks went for 20 yards or more**, against {D['big'] * 100:.1f}.
 - **They ran {R['ru']:.1f} times a game**, against {D['ru']:.1f}.
@@ -305,7 +308,8 @@ pressure, doesn't depend on the weather. The other two do: rain has meant slight
   This is a pregame or game-time note, not a measured rain total. {n_nodesc} dry games have no conditions text (temperature/humidity/wind only, or no note);
   dropping them from the dry baseline: rain {R['pts']:.1f} vs {ER2['pts']:.1f} expected; rain + wind 10+ {RW['pts']:.1f} vs {ERW2['pts']:.1f}.
 - Wind: nflverse `wind` (mph), filled from the description's "Wind: N mph" when empty. Where both exist they agree within 1 mph {agree:.0%} of the time.
-  Rain games with no wind reading after the fill: {n_wind_missing}. The column often reads 0 where the note gives 10-14 mph; reading the note first
+  Rain games with no wind reading after the fill: {n_wind_missing}. Of {n_both:,} games with both, {n_dis} disagree by more than 1 mph, and in {n_dis0} of those
+  the column reads 0 when the note gives a real wind. Reading the note first
   makes the rain + wind 10+ group {RW2['games']} games, {RW2['pts']:.1f} vs {ERW3['pts']:.1f} expected.
 - Rates: completions = `complete_pass` / (`pass_attempt` minus sacks); 20+ rate = dropbacks (`pass` = 1, incl. sacks and scrambles) with `yards_gained` >= 20;
   runs = `rush` = 1 per team-game. nflverse codes QB scrambles as `pass` = 1, so runs are designed runs (including QB keepers and sneaks).
