@@ -68,6 +68,22 @@
    "at_utc": "2026-11-25T16:50:17Z",
    "notes": "Round 3. Text ready. Must fix: chart shaded box (axvspan ymin=0.5 in axes fraction) sits at ~55th pct after ylim(-3,113), leaving a gap above the middle line; Allen '19 appears outside the quadrant. Draw it in data coords and re-view. Headline 'deep' = Charlie's call.",
    "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:51:07Z",
+   "notes": "Round 4. Only change: shaded box now fill_between in data units; bottom on middle line, Allen '19 inside, label covers nothing. Text/hero unchanged from round-3 (ready). Headline 'deep' = Charlie's call.",
+   "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:51:08Z",
+   "notes": "Byte-identical rerun from git archive HEAD c3307169 (md/PNG/hero); md SHA 3df3b439 same as round-3 quant pass; only change since is chart shading in data units, no number changed. Freeze PNG before publish.",
+   "report": "2026-11-25-allen-yolo-final.md"
   }
  ],
  "self": {
@@ -84,10 +100,17 @@
   "report": "2026-11-25-allen-yolo-quant.md"
  },
  "editor": {
-  "verdict": "fail",
+  "verdict": "pass",
   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
-  "at_utc": "2026-11-25T16:50:17Z",
-  "notes": "Round 3. Text ready. Must fix: chart shaded box (axvspan ymin=0.5 in axes fraction) sits at ~55th pct after ylim(-3,113), leaving a gap above the middle line; Allen '19 appears outside the quadrant. Draw it in data coords and re-view. Headline 'deep' = Charlie's call.",
+  "at_utc": "2026-11-25T16:51:07Z",
+  "notes": "Round 4. Only change: shaded box now fill_between in data units; bottom on middle line, Allen '19 inside, label covers nothing. Text/hero unchanged from round-3 (ready). Headline 'deep' = Charlie's call.",
   "report": "2026-11-25-allen-yolo-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+  "at_utc": "2026-11-25T16:51:08Z",
+  "notes": "Byte-identical rerun from git archive HEAD c3307169 (md/PNG/hero); md SHA 3df3b439 same as round-3 quant pass; only change since is chart shading in data units, no number changed. Freeze PNG before publish.",
+  "report": "2026-11-25-allen-yolo-final.md"
  }
 }
