@@ -144,6 +144,17 @@ def main():
     assert 3 <= ER["pts"] - R["pts"] <= 5 and 3.5 <= ERW["pts"] - RW["pts"] <= 5.5 and -4.5 <= b_pts[0] <= -2.5
     assert R["big"] < ER["big"] and RW["big"] < ERW["big"] and b_big[0] < 0 and R["cmp"] < ER["cmp"] - 0.02
     assert R["ru"] > ER["ru"] and b_ru[0] > 0
+    # dry games whose note gives no conditions at all (only temperature, humidity, wind, or nothing)
+    desc = G.weather.map(lambda x: (x if isinstance(x, str) else "").split("Temp:")[0].strip())
+    nodesc = set(G.index[desc == ""]) & set(dry.game_id)
+    n_nodesc, n_left_out = len(nodesc), int(gcls.get("snow", 0) + gcls.get("unsure", 0))
+    dry2 = dry[~dry.game_id.isin(nodesc)]
+    ER2, ERW2 = expected(rain, dry2), expected(rw, dry2)
+    # sensitivity: wind read from the note first, column second
+    G["w2"] = G.wtxt.fillna(G.wind)
+    rw2 = rain[rain.game_id.map(G.w2) >= 10]
+    RW2, ERW3 = rates(rw2), expected(rw2, dry)
+    assert (n_nodesc, n_left_out, RW2["games"]) == (131, 23, 47)
 
     # ---- what that means in a game like Thursday's: both teams' 20-yard passes
     big_drop = 2 * RW["db"] * (ERW["big"] - RW["big"])
@@ -213,7 +224,7 @@ def main():
         ax.tick_params(axis="x", length=0)
         ax.grid(axis="y", color="#EEF0F3"); ax.set_axisbelow(True)
     fig.subplots_adjust(bottom=0.2, top=0.74, wspace=0.28)
-    finish(fig, "Rain has cost NFL offenses 3 to 4 points a game, and teams run more",
+    finish(fig, "Rain has cost NFL teams 3 to 4 points each, and they run more",
            f"Every regular-season outdoor game, 2018 through Week {WK26} of 2026, by the weather recorded for it. Bars: what happened. Diamonds: what those same teams usually did in dry games.",
            "x")
     fig.texts[-1].set_text(f"Source: nflverse play-by-play and game weather; National Weather Service forecast (Nov. 25). "
@@ -223,17 +234,19 @@ def main():
 
     # ---- story
     tbl = "\n".join(f"| {r[0]} | {r[1]}° | {r[3]} {r[2]} mph | {r[4]} mph | {r[5]}%, {r[6].lower()} |" for r in rows)
-    md = f"""# Rain and wind Thursday night. Rain has cost NFL offenses 3 to 4 points a game, and it brings on the run
+    md = f"""# Rain and wind Thursday night. Rain has cost NFL teams 3 to 4 points each, and it brings on the run
 
-**The forecast for Thursday night in Orchard Park is light rain the whole game, with a {w_lo} to {w_hi} mph wind and gusts near {g_hi} mph. In {R['games']} rainy NFL games
-since 2018, teams scored {R['pts']:.1f} points a game, about 3½ fewer than the same teams usually scored against the same opponents in dry weather.
-They completed fewer passes, hit fewer long ones, and ran more. For Buffalo that cuts both ways. Rain takes away some of the long passes Buffalo's defense
-has had trouble stopping, and brings more runs, which it has had even more trouble stopping.**
+**The forecast for Thursday night in Orchard Park is light rain the whole game, with a {w_lo} to {w_hi} mph wind and gusts up to {g_hi} mph. In {R['games']} rainy NFL games
+since 2018, each team scored {R['pts']:.1f} points, about 3½ fewer than the same teams usually scored against the same opponents in dry weather.
+They completed fewer passes, hit fewer long ones, and ran more. For Buffalo that cuts both ways. Rain means a few fewer long passes to defend, but more runs,
+and Buffalo ranks {ordn(run_rk)} against the run.**
 
 *Part 4 of our Bills-Chiefs series. [Part 1: Rousseau and the pass rush](bills-chiefs-leonhard-file.html). [Part 2: who's left](bills-chiefs-whos-left.html).
 [Part 3: slowing Mahomes](bills-chiefs-slowing-mahomes.html).*
 
-![Rain has cost NFL offenses 3 to 4 points a game]({PNG})
+*A "dropback" is any pass play: completions, incompletions, sacks and scrambles.*
+
+![Rain has cost NFL teams 3 to 4 points each]({PNG})
 
 ## The forecast
 
@@ -247,8 +260,8 @@ That's about {rain_in:.2f} of an inch of rain from 7 p.m. to 1 a.m. It's not a s
 
 ## What rain does to an offense
 
-We sorted every regular-season outdoor game since 2018 by the weather recorded for it: {gcls['dry']:,} dry, {gcls['rain']} with rain, and a handful with snow
-or only a chance of rain (left out). Then we compared them. In the rain:
+We sorted every regular-season outdoor game since 2018 by the weather note recorded for it: {gcls['dry']:,} dry, {gcls['rain']} with rain, and {n_left_out} with
+snow or only a chance of rain (left out). In {n_nodesc} of the dry games the note doesn't describe conditions at all, so we counted them as dry. Then we compared them. In the rain:
 
 - **Teams scored {R['pts']:.1f} points a game.** In dry games: {D['pts']:.1f}.
 - **They completed {R['cmp']:.0%} of their passes**, against {D['cmp']:.0%}.
@@ -256,17 +269,17 @@ or only a chance of rain (left out). Then we compared them. In the rain:
 - **They ran {R['ru']:.1f} times a game**, against {D['ru']:.1f}.
 
 Thursday looks most like the {RW['games']} games with rain and a wind of 10 mph or more. In those, teams scored {RW['pts']:.1f} points a game, completed
-{RW['cmp']:.0%} of their passes and ran {RW['ru']:.1f} times. For two teams throwing about {RW['db']:.0f} times each, that's roughly one fewer 20-yard pass
+{RW['cmp']:.0%} of their passes and ran {RW['ru']:.1f} times. For two teams dropping back about {RW['db']:.0f} times each, that's roughly one fewer 20-yard pass
 every other game. Long passes get harder, but they don't go away.
 
 **How we checked it.** Rainy games could just involve worse teams. So for each rainy game we worked out what that offense usually did in dry outdoor games that
 season, and what that defense usually allowed, and compared. The answer held: in the rain, teams scored {R['pts']:.1f} points when we'd expect {ER['pts']:.1f}. In rain with wind,
-{RW['pts']:.1f} when we'd expect {ERW['pts']:.1f}, about 4½ fewer. A third check, one calculation with every team's season built in, put rain at {-b_pts[0]:.1f} fewer
+{RW['pts']:.1f} when we'd expect {ERW['pts']:.1f}. A third check, one calculation with every team's season built in, put rain at {-b_pts[0]:.1f} fewer
 points a team, and about {-b_pts[1] * 10:.1f} more for every 10 mph of wind.
 
 ## Buffalo's two weak spots
 
-In part 3, Buffalo's defense ranked {ordn(big_rk)} at stopping big pass plays and {ordn(run_rk)} against the run. Rain helps with the first and leans on the second.
+In part 3, Buffalo's defense ranked {ordn(big_rk)} at stopping big pass plays and {ordn(run_rk)} against the run. Rain helps a little with the first and leans on the second.
 Kansas City's running game ranks {ordn(kc_rk)} this season.
 
 The last time these teams played in the rain in Orchard Park, on Oct. 19, 2020, Kansas City ran the ball {kc_runs} times for {kc_ryds} yards and won
@@ -281,17 +294,19 @@ Patrick Mahomes has started only two rainy games in that time. That's too few to
 
 ## What it means Thursday
 
-Expect a lower-scoring game than either offense usually plays, more runs, and fewer long passes on both sides. The first part of slowing Mahomes in part 3,
-pressure, doesn't depend on the weather. The other two do: the rain should help Buffalo against big plays, and put more weight on its run defense.
+In past games like this one, teams scored less than usual, ran more and hit a few fewer long passes. The first part of slowing Mahomes in part 3,
+pressure, doesn't depend on the weather. The other two do: rain has meant slightly fewer big plays, and more weight on the run defense.
 
 ## For the stat-heads
 
 - Games: regular season, `roof` outdoors or open, 2018 to 2026 Week {WK26}. Team-game rows: pass + run plays, EPA not null, no two-point tries, kneels, spikes or no-plays.
 - Weather class from the nflverse `weather` description (text before "Temp:"): rain/shower/drizzle = rain unless worded as a forecast
-  ("possible", "chance", "threat", "scattered", "forecasted"); snow/flurries = snow. Games: dry {gcls['dry']:,}, rain {gcls['rain']}, snow {gcls['snow']}, unsure {gcls['unsure']}.
-  This is a pregame or game-time note, not a measured rain total.
+  ("possible", "chance", "change of", "threat", "scattered", "forecasted"); snow/flurries = snow. Games: dry {gcls['dry']:,}, rain {gcls['rain']}, snow {gcls['snow']}, unsure {gcls['unsure']}.
+  This is a pregame or game-time note, not a measured rain total. {n_nodesc} dry games have no conditions text (temperature/humidity/wind only, or no note);
+  dropping them from the dry baseline: rain {R['pts']:.1f} vs {ER2['pts']:.1f} expected; rain + wind 10+ {RW['pts']:.1f} vs {ERW2['pts']:.1f}.
 - Wind: nflverse `wind` (mph), filled from the description's "Wind: N mph" when empty. Where both exist they agree within 1 mph {agree:.0%} of the time.
-  Rain games with no wind reading after the fill: {n_wind_missing}.
+  Rain games with no wind reading after the fill: {n_wind_missing}. The column often reads 0 where the note gives 10-14 mph; reading the note first
+  makes the rain + wind 10+ group {RW2['games']} games, {RW2['pts']:.1f} vs {ERW3['pts']:.1f} expected.
 - Rates: completions = `complete_pass` / (`pass_attempt` minus sacks); 20+ rate = dropbacks (`pass` = 1, incl. sacks and scrambles) with `yards_gained` >= 20;
   runs = `rush` = 1 per team-game. nflverse codes QB scrambles as `pass` = 1, so runs are designed runs (including QB keepers and sneaks).
 - Expected values: offense's season rate in dry outdoor games + defense's season rate allowed in dry outdoor games - league dry outdoor rate, per team-game.
@@ -309,7 +324,7 @@ pressure, doesn't depend on the weather. The other two do: the rain should help 
         "label": "Rain and wind Thursday",
         "big": [[round(RW["pts"], 1), f"points a team in {RW['games']} NFL games with rain and 10+ mph wind since 2018"],
                 [round(ERW["pts"], 1), "what those same teams usually scored in dry games"]],
-        "note": f"Forecast: light rain all game, {w_lo}-{w_hi} mph wind. Rain takes away long passes and brings more runs. Buffalo is {ordn(run_rk)} against the run.",
+        "note": f"Forecast: light rain all game, {w_lo}-{w_hi} mph wind. Rain has meant a few fewer long passes and more runs. Buffalo is {ordn(run_rk)} against the run.",
     }, indent=1))
     print(md)
 

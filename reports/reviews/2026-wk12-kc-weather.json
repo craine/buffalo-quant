@@ -6,12 +6,57 @@
    "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
    "at_utc": "2026-11-25T14:41:21Z",
    "notes": "Round 1: all numbers computed and asserted; forecast saved from NWS and read from the repo copy; rain effect checked three ways (raw, same-team expectation, fixed-effects OLS); chart baselines at zero."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:03Z",
+   "notes": "Reproduces byte-identically; core numbers re-derived (rain 19.0 vs 22.43 exp, OLS -3.42, 107/44 games, Allen 13 .578/.651, 2020 game, ranks). Must-fix: 131(+2) 'dry' games have no conditions note, undisclosed (excl: 3.2 gap); 'handful' = 23 games; 'about 4 1/2' fragile (4.0-4.6 by wind source); headline/chart 'a game' must be per team; unlogged 'Expect' prediction; 'should help'/'takes away long passes'/'helps with' overclaim small passing effect. NWS live check blocked (proxy 403, robots); tz/gust/QPF internally correct.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:03Z",
+   "notes": "Needs edits: endorse Quant fixes 1-7; lead last sentence stacked clauses; per-team wording; define dropback.",
+   "report": "2026-wk12-kc-weather-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:13Z",
+   "notes": "Corrected count in report: 131 'dry' games without a conditions note (incl. 2 with no note). Otherwise as previous quant record.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "49e59ad97c22e2e41117e0f7906aa25252b709a1e6eaf5a9f48464289933ecfd",
+   "at_utc": "2026-11-25T14:46:57Z",
+   "notes": "Round 2: all 11 must-fixes applied verbatim; 131 no-description dry games and 23 left-out games computed and disclosed; both sensitivity checks computed in the generator; polish applied; forecast file note says 'Extracted'."
   }
  ],
  "self": {
   "verdict": "pass",
+  "sha256": "49e59ad97c22e2e41117e0f7906aa25252b709a1e6eaf5a9f48464289933ecfd",
+  "at_utc": "2026-11-25T14:46:57Z",
+  "notes": "Round 2: all 11 must-fixes applied verbatim; 131 no-description dry games and 23 left-out games computed and disclosed; both sensitivity checks computed in the generator; polish applied; forecast file note says 'Extracted'."
+ },
+ "quant": {
+  "verdict": "fail",
   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
-  "at_utc": "2026-11-25T14:41:21Z",
-  "notes": "Round 1: all numbers computed and asserted; forecast saved from NWS and read from the repo copy; rain effect checked three ways (raw, same-team expectation, fixed-effects OLS); chart baselines at zero."
+  "at_utc": "2026-11-25T14:45:13Z",
+  "notes": "Corrected count in report: 131 'dry' games without a conditions note (incl. 2 with no note). Otherwise as previous quant record.",
+  "report": "2026-wk12-kc-weather-quant.md"
+ },
+ "editor": {
+  "verdict": "fail",
+  "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+  "at_utc": "2026-11-25T14:45:03Z",
+  "notes": "Needs edits: endorse Quant fixes 1-7; lead last sentence stacked clauses; per-team wording; define dropback.",
+  "report": "2026-wk12-kc-weather-editor.md"
  }
 }
