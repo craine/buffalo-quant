@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:41:21Z",
+   "notes": "Round 1: all numbers computed and asserted; forecast saved from NWS and read from the repo copy; rain effect checked three ways (raw, same-team expectation, fixed-effects OLS); chart baselines at zero."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+  "at_utc": "2026-11-25T14:41:21Z",
+  "notes": "Round 1: all numbers computed and asserted; forecast saved from NWS and read from the repo copy; rain effect checked three ways (raw, same-team expectation, fixed-effects OLS); chart baselines at zero."
+ }
+}

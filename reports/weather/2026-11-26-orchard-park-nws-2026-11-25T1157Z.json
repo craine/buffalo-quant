@@ -1,0 +1,35 @@
+{
+  "note": "National Weather Service forecast for Highmark Stadium (Orchard Park, NY), captured 2026-11-25 for Bills-Chiefs (2026_12_KC_BUF), kickoff 2026-11-26 8:20 p.m. ET (2026-11-27T01:20Z). Copied verbatim from api.weather.gov; units as served.",
+  "source_points": "https://api.weather.gov/points/42.7738,-78.787",
+  "forecastHourly": "https://api.weather.gov/gridpoints/BUF/39,42/forecast/hourly",
+  "forecastGridData": "https://api.weather.gov/gridpoints/BUF/39,42",
+  "updateTime": "2026-11-25T11:57:35+00:00",
+  "hourly": [
+    ["2026-11-26T19:00:00-05:00", 38, "13 mph", "NE", 100, "Light Rain"],
+    ["2026-11-26T20:00:00-05:00", 37, "13 mph", "NE", 100, "Light Rain"],
+    ["2026-11-26T21:00:00-05:00", 37, "13 mph", "NE", 100, "Light Rain"],
+    ["2026-11-26T22:00:00-05:00", 36, "12 mph", "NE", 100, "Light Rain"],
+    ["2026-11-26T23:00:00-05:00", 37, "10 mph", "NE", 100, "Light Rain"],
+    ["2026-11-27T00:00:00-05:00", 38, "10 mph", "NE", 100, "Light Rain"]
+  ],
+  "windGust_kmh": [
+    ["2026-11-26T22:00:00+00:00/PT2H", 53.708],
+    ["2026-11-27T00:00:00+00:00/PT1H", 48.152],
+    ["2026-11-27T01:00:00+00:00/PT1H", 46.3],
+    ["2026-11-27T02:00:00+00:00/PT1H", 44.448],
+    ["2026-11-27T03:00:00+00:00/PT1H", 40.744],
+    ["2026-11-27T04:00:00+00:00/PT1H", 37.04],
+    ["2026-11-27T05:00:00+00:00/PT1H", 33.336]
+  ],
+  "windSpeed_kmh": [
+    ["2026-11-26T23:00:00+00:00/PT1H", 22.224],
+    ["2026-11-27T00:00:00+00:00/PT3H", 20.372],
+    ["2026-11-27T03:00:00+00:00/PT1H", 18.52],
+    ["2026-11-27T04:00:00+00:00/PT2H", 16.668]
+  ],
+  "qpf_mm": [
+    ["2026-11-26T18:00:00+00:00/PT6H", 13.208],
+    ["2026-11-27T00:00:00+00:00/PT6H", 8.89],
+    ["2026-11-27T06:00:00+00:00/PT6H", 3.048]
+  ]
+}
