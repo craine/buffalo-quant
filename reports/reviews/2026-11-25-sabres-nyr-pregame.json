@@ -1,0 +1,85 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "6c8c0af23bda852562832b1ecc7a46871285075a568e41b30d40d37f8fea9f80",
+   "at_utc": "2026-11-25T13:01:24Z",
+   "notes": "New preview, new angle (finishing vs goaltending, tied to the Nov 22 split-half finding). NHL data refreshed; every Nov 24 game final. All numbers computed and asserted; fixed 'started' (appearances), softened regression/causal claims. Chart opened. Ledger call not logged yet (needs Charlie's go)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "6c8c0af23bda852562832b1ecc7a46871285075a568e41b30d40d37f8fea9f80",
+   "at_utc": "2026-11-25T13:07:06Z",
+   "notes": "All numbers verified independently (records, ranks, goalies 16 app/14 starts, Lafreniere 10 incl 2 EN, Dorofeyev 6 on 9.03, split-half -11.9->-1.7 and +13.4->+4.8, model 0.4887, BUF-home arg order correct); byte-identical rerun. Fail: lead/body overclaim 'better than their goal totals look'/'better team than its record' - NYR finishing -8.4 and saves +7.2 nearly cancel (net -1.1). Should-fix: saves rank is per game (7th by total); disclose EN in player goals.",
+   "report": "2026-11-25-sabres-nyr-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "6c8c0af23bda852562832b1ecc7a46871285075a568e41b30d40d37f8fea9f80",
+   "at_utc": "2026-11-25T13:07:06Z",
+   "notes": "Angle fresh and consistent across headline/hero/card/chart; no banned phrases; chart reads alone. Fix: lead overclaim (same as Quant), stacked-parenthetical first sentence and card wording, missing real computed example of chance values (writer computes, e.g. within 10 ft vs 40+ ft).",
+   "report": "2026-11-25-sabres-nyr-pregame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+   "at_utc": "2026-11-25T13:08:14Z",
+   "notes": "Round 2: overclaims replaced (net -1, finishing bounces back -> more Rangers goals); lead rewritten for radio; shot-distance example computed (13.5%, 2.2%); polish applied incl. empty-net note, per-game saves rank, chart corner labels."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+   "at_utc": "2026-11-25T13:09:14Z",
+   "notes": "Round 2: all fixes applied and verified. Net -1.1 (-8.35+7.25); kept 14%/35% (-1.73/-11.94, 4.76/13.45); saves 6th per game, 7th total; EN Lafreniere 2 of 10, Thompson 0 of 17; shots <10ft 13.49% (n 4500) -> 'about 13%', 40+ft 2.22% (n 10911); shares 53%/48%. Byte-identical rerun (md 4b4c3488). Final on hold until Ledger logged and regenerated.",
+   "report": "2026-11-25-sabres-nyr-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+   "at_utc": "2026-11-25T13:09:14Z",
+   "notes": "Round 2: lead overclaim fixed, opening sentence radio-ready, card/hero stand alone, shot example added, chart corners clear. Headline/lead/hero/card/body agree; no jargon or banned phrases. Optional: name style in stat-heads.",
+   "report": "2026-11-25-sabres-nyr-pregame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "ed8795febe3e8df188a3c2fa428c4d5689737ca133344844a40b46cbc15199c7",
+   "at_utc": "2026-11-25T14:47:56Z",
+   "notes": "Clean-copy regen byte-identical (md, hero JSON, PNG). Ledger P0023 0.49 at 2026-11-25T14:42:57Z matches story, before 00:00Z puck drop; xG 3.09/3.21 and tie 0.162 match. Numbers internally consistent (NYR goalie table +10.1 vs team +7.2 reconciled: two 1-game goalies -2.0/-0.9). Links resolve; no body jargon; no betting language. Open publish step: freeze PNG.",
+   "report": "2026-11-25-sabres-nyr-pregame-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+  "at_utc": "2026-11-25T13:08:14Z",
+  "notes": "Round 2: overclaims replaced (net -1, finishing bounces back -> more Rangers goals); lead rewritten for radio; shot-distance example computed (13.5%, 2.2%); polish applied incl. empty-net note, per-game saves rank, chart corner labels."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+  "at_utc": "2026-11-25T13:09:14Z",
+  "notes": "Round 2: all fixes applied and verified. Net -1.1 (-8.35+7.25); kept 14%/35% (-1.73/-11.94, 4.76/13.45); saves 6th per game, 7th total; EN Lafreniere 2 of 10, Thompson 0 of 17; shots <10ft 13.49% (n 4500) -> 'about 13%', 40+ft 2.22% (n 10911); shares 53%/48%. Byte-identical rerun (md 4b4c3488). Final on hold until Ledger logged and regenerated.",
+  "report": "2026-11-25-sabres-nyr-pregame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "4b4c34882394b55f220deaa4c2fdea635d89e6eef83e1fdcd63308c4067332ab",
+  "at_utc": "2026-11-25T13:09:14Z",
+  "notes": "Round 2: lead overclaim fixed, opening sentence radio-ready, card/hero stand alone, shot example added, chart corners clear. Headline/lead/hero/card/body agree; no jargon or banned phrases. Optional: name style in stat-heads.",
+  "report": "2026-11-25-sabres-nyr-pregame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "ed8795febe3e8df188a3c2fa428c4d5689737ca133344844a40b46cbc15199c7",
+  "at_utc": "2026-11-25T14:47:56Z",
+  "notes": "Clean-copy regen byte-identical (md, hero JSON, PNG). Ledger P0023 0.49 at 2026-11-25T14:42:57Z matches story, before 00:00Z puck drop; xG 3.09/3.21 and tie 0.162 match. Numbers internally consistent (NYR goalie table +10.1 vs team +7.2 reconciled: two 1-game goalies -2.0/-0.9). Links resolve; no body jargon; no betting language. Open publish step: freeze PNG.",
+  "report": "2026-11-25-sabres-nyr-pregame-final.md"
+ }
+}
