@@ -150,8 +150,14 @@ def main():
     p_lo = binom(qc["int_p"][0], len(C), ">=")
     p_hi = binom(qc["int_p"][3], len(C), "<=")
     p_ypc = binom(qc["ypc_p"][3], len(C), ">=")
+    assert p_ypc < 0.001
     # boundary sensitivity: strict inequalities put exact 25%/75% ties in the middle quarters
-    strict = [int((C.int_p < 0.25).sum()), int(((C.int_p >= 0.25) & (C.int_p <= 0.5)).sum()), int(((C.int_p > 0.5) & (C.int_p <= 0.75)).sum()), int((C.int_p > 0.75).sum())]
+    mid = [int((C.int_p < 0.25).sum()), int(((C.int_p >= 0.25) & (C.int_p <= 0.5)).sum()), int(((C.int_p > 0.5) & (C.int_p <= 0.75)).sum()), int((C.int_p > 0.75).sum())]
+    outer = [int((C.int_p <= 0.25).sum()), int(((C.int_p > 0.25) & (C.int_p <= 0.5)).sum()), int(((C.int_p > 0.5) & (C.int_p < 0.75)).sum()), int((C.int_p >= 0.75).sum())]
+    assert mid == [23, 18, 9, 10] and outer == [25, 16, 8, 11], (mid, outer)
+    exp_all = len(C) / 4
+    exp_half = halves["late"][3] / 4
+    assert exp_all == 15 and (int(np.floor(exp_half)), int(np.ceil(exp_half))) == (7, 8)
     on_edge = C[C.int_p.isin([0.25, 0.75])].sort_values("yr")
     pool60s = C[C.yr <= 1969].n_pool
     assert (int(pool60s.min()), int(pool60s.max())) == (9, 15)
@@ -222,14 +228,15 @@ def main():
     ax.axvspan(0, 50, ymin=0.5, ymax=1, color="#EEF2F9", zorder=0)
     ax.axvline(50, color="#D5D8DE", lw=1); ax.axhline(50, color="#D5D8DE", lw=1)
     ax.scatter(C.int_p * 100, C.ypc_p * 100, s=34, color=GRAY, edgecolor="white", linewidth=0.8, zorder=2, label="Super Bowl-winning QB, that season")
-    ax.text(2, 53, f"Few interceptions, long completions:\n{len(both)} of {len(C)} champions", fontsize=9.5, color=BLUE, va="bottom", fontweight="bold")
+    ax.text(1, 111.5, f"Few interceptions, long completions: {len(both)} of {len(C)} champions", fontsize=9, color=BLUE, va="top", fontweight="bold",
+            bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.9), zorder=5)
     AA = A[A.yr >= 2018]
     ax.scatter(AA.int_rt_p * 100, AA.ypc_p * 100, s=60, color=BLUE, edgecolor="white", linewidth=1, zorder=4, label="Josh Allen, 2018-2026")
     for r in AA.itertuples():
         lab = f"'{str(r.yr)[2:]}" + ("*" if r.yr == 2026 else "")
         ax.annotate(lab, (r.int_rt_p * 100, r.ypc_p * 100), xytext=(5, 4), textcoords="offset points", fontsize=8.5, color=BLUE, fontweight="bold")
     ax.scatter([f96.int_rt_p * 100], [f96.ypc_p * 100], s=60, color=RED, edgecolor="white", linewidth=1, zorder=4, label="Brett Favre, 1996 (won it all)")
-    ax.set_xlim(-3, 103); ax.set_ylim(-3, 103)
+    ax.set_xlim(-3, 103); ax.set_ylim(-3, 113)
     ax.set_xlabel("Interceptions per throw, rank among that season's starters\n(left = fewest, right = most)")
     ax.set_ylabel("Yards per completion, rank among starters\n(top = longest)")
     ax.set_xticks([0, 50, 100], ["fewest", "middle", "most"]); ax.set_yticks([0, 50, 100], ["shortest", "middle", "longest"])
@@ -267,7 +274,7 @@ def main():
 **Allen had a rough day against Miami, and the question came back: is he too much of a gunslinger to win a Super Bowl? We ranked all {len(C)}
 Super Bowl-winning quarterbacks against the other starters the year they won. Champions weren't timid: {hi_ypc} of {len(C)} ranked in the top quarter
 for how far their completions went. And they protected the ball: {lo_int} were in the quarter with the fewest interceptions, when chance
-would put about 15 there. Only {hi_int} were in the quarter with the most. Allen throws downfield like a champion. In 2024 he also protected the ball like one.
+would put about {exp_all:.0f} there. Only {hi_int} were in the quarter with the most. Allen throws downfield like a champion. In 2024 he also protected the ball like one.
 This season, his interception rate ranks {ordn(r26)} highest of {n26} starters.**
 
 ![Champions throw the ball downfield. They don't throw it to the other team]({PNG})
@@ -289,7 +296,7 @@ For every season since 1966, we took every starter (at least 14 throws per team 
 - **Passing value:** yards per throw, with each touchdown worth 20 extra yards and each interception costing 45. Favre in 1996: {f_val:.1f}.
 
 Then we found where each Super Bowl winner ranked the year he won: top quarter, bottom quarter, or in between.
-If a stat had nothing to do with winning, about 15 of the {len(C)} champions would land in each quarter.
+If a stat had nothing to do with winning, about {exp_all:.0f} of the {len(C)} champions would land in each quarter.
 
 ## What the champions had in common
 
@@ -303,7 +310,7 @@ careful but short.
 **How we checked it.** {len(C) - n_qual} champions didn't throw enough that season to count as starters, such as Jeff Hostetler, a backup for most of 1990.
 We ranked them against the starters anyway. Without them, the pattern is the same: {qc_q['int_p'][0]} of {n_qual} in the fewest-interceptions quarter, {qc_q['int_p'][3]} in the most.
 The few-interceptions side holds in both halves of Super Bowl history: {halves['early'][0]} of the first {halves['early'][3]} champions (1966-1995) and
-{halves['late'][0]} of the last {halves['late'][3]} (1996-2025), where chance would give 7 or 8. The other side is weaker: {halves['early'][1]} of the first {halves['early'][3]}
+{halves['late'][0]} of the last {halves['late'][3]} (1996-2025), where chance would give {int(np.floor(exp_half))} or {int(np.ceil(exp_half))}. The other side is weaker: {halves['early'][1]} of the first {halves['early'][3]}
 were in the most-interceptions quarter, but {halves['late'][1]} of the last {halves['late'][3]}, close to chance. Champions mostly avoided interceptions, but a high
 interception rate hasn't kept as many quarterbacks from winning as you might think.
 
@@ -356,10 +363,10 @@ other part: they kept the ball away from the defense. Allen has done it before, 
 - Miami game: Allen EPA per dropback {mia.e:+.3f} on {int(mia.db)} dropbacks (scrambles included); his career regular-season games with 15+ dropbacks: {len(g)}
   (league QB games with 15+ dropbacks this season: {len(lg)}).
 - Chance check (binomial, p = 0.25, n = {len(C)}): {lo_int}+ in the fewest-interceptions quarter, p = {p_lo:.3f}; {hi_int} or fewer in the most, p = {p_hi:.2f};
-  {hi_ypc}+ in the longest-completions quarter, p = {p_ypc:.1g}.
-- Percentiles: share of the other qualified starters that season below the player (ties count half). Quarter boundaries are inclusive at 25% and 75%;
-  {len(on_edge)} champions sit exactly on one ({", ".join(f"{r.qb} {r.yr}" for r in on_edge.itertuples())}). With strict boundaries the interception
-  counts are {"/".join(map(str, strict))} instead of {"/".join(map(str, qc["int_p"]))}. The direction holds either way.
+  {hi_ypc}+ in the longest-completions quarter, p < 0.001.
+- Percentiles: share of the other qualified starters that season below the player (ties count half). {len(on_edge)} champions sit exactly on an
+  interception-quarter boundary ({", ".join(f"{r.qb} {r.yr} at {r.int_p:.0%}" for r in on_edge.itertuples())}); we count them in the lower quarter.
+  Counting them in the middle quarters gives {"/".join(map(str, mid))}; counting them in the outer quarters gives {"/".join(map(str, outer))}. The direction holds either way.
 - Data pins: nflverse weekly stats 1999-2026 (week <= {WK26}) attempts and yards {fp}; 2026 play-by-play fingerprint {PBP26_FINGERPRINT}.
 """
     (OUT / f"{SLUG}.md").write_text(md)

@@ -100,8 +100,8 @@ other part: they kept the ball away from the defense. Allen has done it before, 
 - Miami game: Allen EPA per dropback -0.032 on 48 dropbacks (scrambles included); his career regular-season games with 15+ dropbacks: 135
   (league QB games with 15+ dropbacks this season: 330).
 - Chance check (binomial, p = 0.25, n = 60): 25+ in the fewest-interceptions quarter, p = 0.003; 10 or fewer in the most, p = 0.09;
-  29+ in the longest-completions quarter, p = 8e-05.
-- Percentiles: share of the other qualified starters that season below the player (ties count half). Quarter boundaries are inclusive at 25% and 75%;
-  3 champions sit exactly on one (Joe Namath 1968, Ken Stabler 1976, Jim McMahon 1985). With strict boundaries the interception
-  counts are 23/18/9/10 instead of 25/16/9/10. The direction holds either way.
+  29+ in the longest-completions quarter, p < 0.001.
+- Percentiles: share of the other qualified starters that season below the player (ties count half). 3 champions sit exactly on an
+  interception-quarter boundary (Joe Namath 1968 at 25%, Ken Stabler 1976 at 75%, Jim McMahon 1985 at 25%); we count them in the lower quarter.
+  Counting them in the middle quarters gives 23/18/9/10; counting them in the outer quarters gives 25/16/8/11. The direction holds either way.
 - Data pins: nflverse weekly stats 1999-2026 (week <= 11) attempts and yards (479872, 3367804); 2026 play-by-play fingerprint (28141, -186.8888).
