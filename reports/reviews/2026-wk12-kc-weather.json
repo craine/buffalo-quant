@@ -1,0 +1,162 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:41:21Z",
+   "notes": "Round 1: all numbers computed and asserted; forecast saved from NWS and read from the repo copy; rain effect checked three ways (raw, same-team expectation, fixed-effects OLS); chart baselines at zero."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:03Z",
+   "notes": "Reproduces byte-identically; core numbers re-derived (rain 19.0 vs 22.43 exp, OLS -3.42, 107/44 games, Allen 13 .578/.651, 2020 game, ranks). Must-fix: 131(+2) 'dry' games have no conditions note, undisclosed (excl: 3.2 gap); 'handful' = 23 games; 'about 4 1/2' fragile (4.0-4.6 by wind source); headline/chart 'a game' must be per team; unlogged 'Expect' prediction; 'should help'/'takes away long passes'/'helps with' overclaim small passing effect. NWS live check blocked (proxy 403, robots); tz/gust/QPF internally correct.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:03Z",
+   "notes": "Needs edits: endorse Quant fixes 1-7; lead last sentence stacked clauses; per-team wording; define dropback.",
+   "report": "2026-wk12-kc-weather-editor.md"
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "592704b3b156a06401ec68b3e6863ecb3376200df4f623856767c8f9d9b07b91",
+   "at_utc": "2026-11-25T14:45:13Z",
+   "notes": "Corrected count in report: 131 'dry' games without a conditions note (incl. 2 with no note). Otherwise as previous quant record.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "49e59ad97c22e2e41117e0f7906aa25252b709a1e6eaf5a9f48464289933ecfd",
+   "at_utc": "2026-11-25T14:46:57Z",
+   "notes": "Round 2: all 11 must-fixes applied verbatim; 131 no-description dry games and 23 left-out games computed and disclosed; both sensitivity checks computed in the generator; polish applied; forecast file note says 'Extracted'."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "49e59ad97c22e2e41117e0f7906aa25252b709a1e6eaf5a9f48464289933ecfd",
+   "at_utc": "2026-11-25T14:47:42Z",
+   "notes": "Round 2: byte-identical from git archive HEAD; all 11 fixes and new sensitivity numbers re-derived (131/23; 22.27/22.64; 47 games 18.83 vs 22.80). One must-fix: stat-heads 'column often reads 0 where the note gives 10-14 mph' is uncomputed and overstated (21 of 194 disagreements read 0; 5 with note 10+). NWS live check still blocked here; coordinator reports Chrome fetch.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "49e59ad97c22e2e41117e0f7906aa25252b709a1e6eaf5a9f48464289933ecfd",
+   "at_utc": "2026-11-25T14:47:43Z",
+   "notes": "Round 2: ready. Lead, headline, hero, card, chart agree (per team, 3-4/about 3.5, 27th); no overclaims, jargon defined, no rejected phrases or betting language; chart reads alone.",
+   "report": "2026-wk12-kc-weather-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
+   "at_utc": "2026-11-25T14:48:08Z",
+   "notes": "Round 3: wind disagreement counts computed and asserted (1,337 / 194 / 21); bullet now 'Each team scored'."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
+   "at_utc": "2026-11-25T14:48:37Z",
+   "notes": "Round 3: wind bullet now computed/asserted (1,337/194/21, matches independent counts); 'Each team' polish; byte-identical from git archive HEAD; prior verifications hold. Forecast unverified from shell; rely on coordinator's Chrome fetch noted in PR.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
+   "at_utc": "2026-11-25T14:48:37Z",
+   "notes": "Round 3: round-2 pass holds; only body change 'Each team scored' matches lead.",
+   "report": "2026-wk12-kc-weather-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
+   "at_utc": "2026-11-25T14:48:37Z",
+   "notes": "Final on HEAD 6f614df7 text: byte-identical reproduction; all round-1/2 fixes and numbers re-checked; headline/lead/hero/card/chart consistent; no unlogged prediction or betting framing.",
+   "report": "2026-wk12-kc-weather-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+   "at_utc": "2026-11-25T15:24:07Z",
+   "notes": "Round 4 (Charlie's ask): Thursday section ties rain to part 3's three-part recipe, linked; ranks computed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+   "at_utc": "2026-11-25T15:25:57Z",
+   "notes": "New Thursday text: 'Pressure doesn't depend on the weather. The other two do.' is uncomputed and not supported: PFR pressure per dropback rain 24.7 vs 23.9 expected (dry 23.9). Remove or compute. Reproduction byte-identical; links resolve; rest of change passes.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+   "at_utc": "2026-11-25T15:26:25Z",
+   "notes": "Round 5: removed unmeasured pressure claim per Quant."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+   "at_utc": "2026-11-25T15:26:52Z",
+   "notes": "Round 5: pressure claim removed from md and generator; byte-identical reproduction from git archive HEAD 23ca304f; PNG matches frozen hash; prior verifications hold.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+   "at_utc": "2026-11-25T15:26:52Z",
+   "notes": "Round 5 confirm: Thursday paragraph reads cleanly; no new issues.",
+   "report": "2026-wk12-kc-weather-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+   "at_utc": "2026-11-25T15:26:53Z",
+   "notes": "Final on HEAD 23ca304f: byte-identical reproduction of both stories; PNGs match frozen hashes; cross-links resolve; no overclaim; no betting framing. Forecast live check relies on coordinator's Chrome fetch (note in PR).",
+   "report": "2026-wk12-kc-weather-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+  "at_utc": "2026-11-25T15:26:25Z",
+  "notes": "Round 5: removed unmeasured pressure claim per Quant."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+  "at_utc": "2026-11-25T15:26:52Z",
+  "notes": "Round 5: pressure claim removed from md and generator; byte-identical reproduction from git archive HEAD 23ca304f; PNG matches frozen hash; prior verifications hold.",
+  "report": "2026-wk12-kc-weather-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+  "at_utc": "2026-11-25T15:26:52Z",
+  "notes": "Round 5 confirm: Thursday paragraph reads cleanly; no new issues.",
+  "report": "2026-wk12-kc-weather-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+  "at_utc": "2026-11-25T15:26:53Z",
+  "notes": "Final on HEAD 23ca304f: byte-identical reproduction of both stories; PNGs match frozen hashes; cross-links resolve; no overclaim; no betting framing. Forecast live check relies on coordinator's Chrome fetch (note in PR).",
+  "report": "2026-wk12-kc-weather-final.md"
+ }
+}

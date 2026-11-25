@@ -1,0 +1,100 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "a4756304364ad8bb95ca15988f5dc1c4bdd7c73630b384e36ff3de2863657992",
+   "at_utc": "2026-11-25T13:04:56Z",
+   "notes": "New story at Charlie's suggestion (how teams have slowed Mahomes, incl. run game). 55 regular-season starts, 2026 pinned to weeks 1-10; PFR pressure on Mahomes, nflverse plays, FTN rushers. Median splits plus an OLS second check; all key figures asserted. Fixed pinned counts, overclaims, chart labels. Chart opened."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "a4756304364ad8bb95ca15988f5dc1c4bdd7c73630b384e36ff3de2863657992",
+   "at_utc": "2026-11-25T13:12:37Z",
+   "notes": "Not reproducible: nflverse revised all 2026 EPA (release 2026-11-25 10:02 GMT, DB reload 08:05 EST, 27s after generation); generator assert fails. On current data BUF run success allowed 45.6% 27th (not 42% 20th), league 43%, KC run 48% 5th, low-score runs 35%, OLS changes. Success described as yards rule but code uses EPA>0. Also: 'running backs', 8-game label, unsupported 'better defenses' clause, 'a bit worse than middle' wrong. Splits, medians, game selection, PFR matching, pressure and big-play ranks verified.",
+   "report": "2026-wk12-kc-mahomes-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "a4756304364ad8bb95ca15988f5dc1c4bdd7c73630b384e36ff3de2863657992",
+   "at_utc": "2026-11-25T13:12:37Z",
+   "notes": "Needs edits: refresh to 27th vs run changes lead/Thursday section/hero/card/chart; overclaim 'had three things in common'; 'running backs'/'success rate'; 8-game label; success definition text; selective none-group comparison; 'better defenses' clause.",
+   "report": "2026-wk12-kc-mahomes-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+   "at_utc": "2026-11-25T13:13:57Z",
+   "notes": "Round 2: rebuilt on the Nov 25 nflverse re-post (fingerprint asserted); run defense now 27th; all 13 must-fixes applied; success defined as EPA>0 with computed examples; 'all three' compared with the other 47 games."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+   "at_utc": "2026-11-25T13:15:01Z",
+   "notes": "Round 2: clean-copy rerun byte-identical (md/hero/PNG); fingerprint (25946, -222.5969) matches independent query and live nflverse file. All numbers re-derived: 55 games 38-17, splits, all-three 8 g 16.5 4-4 vs other 47 25.0/72%, BUF 4/20/27 (league .245/.083/.426), KC run .477 5th, run examples 9/69/96/99%, OLS -2.26/+3.25/+2.47/+0.92. Success definition now correct. Rec: extend fingerprint to 2023-25/PFR/FTN.",
+   "report": "2026-wk12-kc-mahomes-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+   "at_utc": "2026-11-25T13:15:01Z",
+   "notes": "Round 2: ready. Lead says the story; headline/lead/hero/card/chart agree on 4th/20th/27th; 8-game sample labeled; no jargon in body; no rejected phrases; chart reads alone. Optional polish: 'counted'->'worked' in method bullet, chart footer 'went 4-4', move dropback note.",
+   "report": "2026-wk12-kc-mahomes-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+   "at_utc": "2026-11-25T13:15:02Z",
+   "notes": "Final on current text: byte-identical reproduction, fingerprint verified, all changed numbers and the 13 fixes re-checked; hero/card/chart consistent. Any polish edit requires a new final check.",
+   "report": "2026-wk12-kc-mahomes-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+   "at_utc": "2026-11-25T15:24:04Z",
+   "notes": "Round 3 (Charlie's ask): added part 4 link to the series line and a weather paragraph in 'What it means Thursday' (no new numbers)."
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+   "at_utc": "2026-11-25T15:25:57Z",
+   "notes": "Re-run on 1bf10c2e/HEAD 44569e55 text: only changes are Part 4 link and a no-number weather paragraph consistent with part 4; byte-identical reproduction; PNG matches frozen hash; slugs resolve.",
+   "report": "2026-wk12-kc-mahomes-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+  "at_utc": "2026-11-25T15:24:04Z",
+  "notes": "Round 3 (Charlie's ask): added part 4 link to the series line and a weather paragraph in 'What it means Thursday' (no new numbers)."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+  "at_utc": "2026-11-25T13:15:01Z",
+  "notes": "Round 2: clean-copy rerun byte-identical (md/hero/PNG); fingerprint (25946, -222.5969) matches independent query and live nflverse file. All numbers re-derived: 55 games 38-17, splits, all-three 8 g 16.5 4-4 vs other 47 25.0/72%, BUF 4/20/27 (league .245/.083/.426), KC run .477 5th, run examples 9/69/96/99%, OLS -2.26/+3.25/+2.47/+0.92. Success definition now correct. Rec: extend fingerprint to 2023-25/PFR/FTN.",
+  "report": "2026-wk12-kc-mahomes-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
+  "at_utc": "2026-11-25T13:15:01Z",
+  "notes": "Round 2: ready. Lead says the story; headline/lead/hero/card/chart agree on 4th/20th/27th; 8-game sample labeled; no jargon in body; no rejected phrases; chart reads alone. Optional polish: 'counted'->'worked' in method bullet, chart footer 'went 4-4', move dropback note.",
+  "report": "2026-wk12-kc-mahomes-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+  "at_utc": "2026-11-25T15:25:57Z",
+  "notes": "Re-run on 1bf10c2e/HEAD 44569e55 text: only changes are Part 4 link and a no-number weather paragraph consistent with part 4; byte-identical reproduction; PNG matches frozen hash; slugs resolve.",
+  "report": "2026-wk12-kc-mahomes-final.md"
+ }
+}

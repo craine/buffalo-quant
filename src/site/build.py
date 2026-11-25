@@ -18,6 +18,12 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-chiefs-rain-and-wind", "2026-wk12-kc-weather.md", "2026-11-25", "Bills &middot; Chiefs week, part 4",
+     "Thursday's forecast is light rain all game with a 10-13 mph wind. In rain, NFL teams have each scored 3 to 4 fewer points, hit a few fewer long passes and run more. That leans on Buffalo's run defense.",
+     "bills-kc-wk12-weather.png"),
+    ("bills-chiefs-slowing-mahomes", "2026-wk12-kc-mahomes.md", "2026-11-25", "Bills &middot; Chiefs week, part 3",
+     "In 55 Mahomes starts since 2023, defenses that slowed him got pressure, took away big plays and stopped the run. Buffalo is 4th in pressure, 20th against big plays and 27th against the run.",
+     "bills-kc-wk12-mahomes.png"),
     ("sabres-rangers-pregame-nov-25", "2026-11-25-sabres-nyr-pregame.md", "2026-11-25", "Sabres &middot; Preview",
      "The Rangers get more of the chances in their games than Buffalo does, but only two teams finish them worse. Their goalies have covered for it. Our model: Sabres 49%.",
      "sabres-nyr-nov25-finish.png"),
