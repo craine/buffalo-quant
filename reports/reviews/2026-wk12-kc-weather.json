@@ -84,13 +84,20 @@
    "at_utc": "2026-11-25T14:48:37Z",
    "notes": "Final on HEAD 6f614df7 text: byte-identical reproduction; all round-1/2 fixes and numbers re-checked; headline/lead/hero/card/chart consistent; no unlogged prediction or betting framing.",
    "report": "2026-wk12-kc-weather-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+   "at_utc": "2026-11-25T15:24:07Z",
+   "notes": "Round 4 (Charlie's ask): Thursday section ties rain to part 3's three-part recipe, linked; ranks computed."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
-  "at_utc": "2026-11-25T14:48:08Z",
-  "notes": "Round 3: wind disagreement counts computed and asserted (1,337 / 194 / 21); bullet now 'Each team scored'."
+  "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+  "at_utc": "2026-11-25T15:24:07Z",
+  "notes": "Round 4 (Charlie's ask): Thursday section ties rain to part 3's three-part recipe, linked; ranks computed."
  },
  "quant": {
   "verdict": "pass",
