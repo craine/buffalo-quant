@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-chiefs-slowing-mahomes", "2026-wk12-kc-mahomes.md", "2026-11-25", "Bills &middot; Chiefs week, part 3",
+     "In 55 Mahomes starts since 2023, defenses that slowed him got pressure, took away big plays and stopped the run. Buffalo is 4th in pressure, 20th against big plays and 27th against the run.",
+     "bills-kc-wk12-mahomes.png"),
     ("bills-chiefs-whos-left", "2026-wk12-kc-whos-left.md", "2026-11-24", "Bills &middot; Chiefs week, part 2",
      "From the January 2025 AFC title game, 13 of 21 Bills regulars are still Bills and 12 of 23 Chiefs are still Chiefs. Buffalo kept its offense. Both secondaries turned over.",
      "bills-kc-wk12-whos-left.png"),
