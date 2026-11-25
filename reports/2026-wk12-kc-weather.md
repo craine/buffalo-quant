@@ -64,7 +64,7 @@ Patrick Mahomes has started only two rainy games in that time. That's too few to
 In past games like this one, teams scored less than usual, ran more and hit a few fewer long passes.
 
 That matters for the recipe in [part 3](bills-chiefs-slowing-mahomes.html). Defenses that slowed Mahomes tended to do three things: get pressure, take away big
-passes and stop the run. Pressure doesn't depend on the weather. The other two do. Rain has meant slightly fewer big plays, which helps a little
+passes and stop the run. Rain has meant slightly fewer big plays, which helps a little
 where Buffalo ranks 20th. It has also meant more runs, which puts more weight on a run defense that ranks 27th.
 
 ## For the stat-heads

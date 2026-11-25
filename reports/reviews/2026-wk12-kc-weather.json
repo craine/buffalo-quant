@@ -91,19 +91,34 @@
    "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
    "at_utc": "2026-11-25T15:24:07Z",
    "notes": "Round 4 (Charlie's ask): Thursday section ties rain to part 3's three-part recipe, linked; ranks computed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+   "at_utc": "2026-11-25T15:25:57Z",
+   "notes": "New Thursday text: 'Pressure doesn't depend on the weather. The other two do.' is uncomputed and not supported: PFR pressure per dropback rain 24.7 vs 23.9 expected (dry 23.9). Remove or compute. Reproduction byte-identical; links resolve; rest of change passes.",
+   "report": "2026-wk12-kc-weather-quant.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+   "at_utc": "2026-11-25T15:26:25Z",
+   "notes": "Round 5: removed unmeasured pressure claim per Quant."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
-  "at_utc": "2026-11-25T15:24:07Z",
-  "notes": "Round 4 (Charlie's ask): Thursday section ties rain to part 3's three-part recipe, linked; ranks computed."
+  "sha256": "e4ee48b9f3a4615bf0d298dbc04f9f2181bde1181f6815afc07293e7a7defce5",
+  "at_utc": "2026-11-25T15:26:25Z",
+  "notes": "Round 5: removed unmeasured pressure claim per Quant."
  },
  "quant": {
-  "verdict": "pass",
-  "sha256": "ac2fd2aca08fc61f63c4c40879e3affa454e37fb9aed0cf8c1d1eda0facafac8",
-  "at_utc": "2026-11-25T14:48:37Z",
-  "notes": "Round 3: wind bullet now computed/asserted (1,337/194/21, matches independent counts); 'Each team' polish; byte-identical from git archive HEAD; prior verifications hold. Forecast unverified from shell; rely on coordinator's Chrome fetch noted in PR.",
+  "verdict": "fail",
+  "sha256": "2bfaaa924e2264baccf642e8d4fc67d84072ce4061ace182eb068731f1427ac6",
+  "at_utc": "2026-11-25T15:25:57Z",
+  "notes": "New Thursday text: 'Pressure doesn't depend on the weather. The other two do.' is uncomputed and not supported: PFR pressure per dropback rain 24.7 vs 23.9 expected (dry 23.9). Remove or compute. Reproduction byte-identical; links resolve; rest of change passes.",
   "report": "2026-wk12-kc-weather-quant.md"
  },
  "editor": {

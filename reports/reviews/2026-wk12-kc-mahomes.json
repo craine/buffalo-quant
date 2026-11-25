@@ -60,6 +60,14 @@
    "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
    "at_utc": "2026-11-25T15:24:04Z",
    "notes": "Round 3 (Charlie's ask): added part 4 link to the series line and a weather paragraph in 'What it means Thursday' (no new numbers)."
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+   "at_utc": "2026-11-25T15:25:57Z",
+   "notes": "Re-run on 1bf10c2e/HEAD 44569e55 text: only changes are Part 4 link and a no-number weather paragraph consistent with part 4; byte-identical reproduction; PNG matches frozen hash; slugs resolve.",
+   "report": "2026-wk12-kc-mahomes-final.md"
   }
  ],
  "self": {
@@ -84,9 +92,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "a53c48f309fb0189708faee6055ea6b22d2f46dfbd9b8f25d783f491ac90706b",
-  "at_utc": "2026-11-25T13:15:02Z",
-  "notes": "Final on current text: byte-identical reproduction, fingerprint verified, all changed numbers and the 13 fixes re-checked; hero/card/chart consistent. Any polish edit requires a new final check.",
+  "sha256": "a5f42bbd0a2601d982ec37102a8e19569ffd0568c9743b3599d97846633373e2",
+  "at_utc": "2026-11-25T15:25:57Z",
+  "notes": "Re-run on 1bf10c2e/HEAD 44569e55 text: only changes are Part 4 link and a no-number weather paragraph consistent with part 4; byte-identical reproduction; PNG matches frozen hash; slugs resolve.",
   "report": "2026-wk12-kc-mahomes-final.md"
  }
 }

@@ -1,13 +1,23 @@
-# Quant review, round 3: 2026-wk12-kc-weather (stage 2)
+# Quant review, round 4 (re-opened by the final check): 2026-wk12-kc-weather
 
-**Verdict: PASS (publish).** Rounds 1 and 2 are saved as -quant-r1.md and -quant-r2.md.
+**Verdict: FAIL. One must-fix.**
 
-This round changed two lines in the md (`git diff HEAD~1`). The hero, card and PNG are unchanged.
+The new "What it means Thursday" text (commit 44569e55) says: "Pressure doesn't depend on the weather. The other two do."
+- No code supports this. Part 4 never measures pressure.
+- I checked it against the same games. PFR defensive pressures per dropback:
+  - Dry games (1,461): 23.9 per 100
+  - Rain games (107): 24.7 per 100
+  - Same-team expectation for the rain games: 23.9 per 100
+- So pressure was slightly higher in rain, not unaffected.
+- I also missed the earlier version of this claim ("pressure, doesn't depend on the weather") in round 2. That was my error.
 
-- **Stat-heads wind bullet.** The generator computes and asserts 1,337 games with both a column and a note, 194 that disagree by more than 1 mph, and 21 where the column reads 0. I got the same three counts independently in round 2.
-  - The 21 all disagree by more than 1 mph with a 0 column, so the note gives at least 2 mph. "A real wind" is accurate.
-  - The overstated "often … 10-14 mph" wording is gone.
-- **First bullet** now reads "Each team scored 19.0 points a game." The number is unchanged.
-- **Reproduction:** a `git archive HEAD` clean copy re-runs to byte-identical md, hero JSON and PNG.
-- Everything verified in rounds 1 and 2 still holds.
-- **Forecast:** unverified from this shell (api.weather.gov blocked). Rely on the coordinator's Chrome fetch, which needs a note in the PR.
+## Must-fix
+- **Now:** "Pressure doesn't depend on the weather. The other two do. Rain has meant slightly fewer big plays, which helps a little where Buffalo ranks 20th. It has also meant more runs, which puts more weight on a run defense that ranks 27th."
+- **Replace:** "Rain has meant slightly fewer big plays, which helps a little where Buffalo ranks 20th. It has also meant more runs, which puts more weight on a run defense that ranks 27th."
+- **Alternative:** if the writer wants to keep a pressure line, compute it in the generator and assert it (rain 24.7 vs 23.9 expected per 100 dropbacks). Write something like "Rain hasn't cut down on pressure."
+
+## Everything else in the change passes
+- The part 3 link and slug resolve.
+- "tended to do three things" matches part 3.
+- The ranks 20th and 27th are computed.
+- Clean `git archive HEAD` reproduction: md, hero JSON and PNG are byte-identical. The PNG matches `published_images.json` (208591…).
