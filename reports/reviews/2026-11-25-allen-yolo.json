@@ -1,0 +1,116 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "78f5b97000fd6209907a89bfdb6506049fd9f37349893f1bb68d18bec64a9585",
+   "at_utc": "2026-11-25T16:39:38Z",
+   "notes": "Round 1: PFR 1966-2002 saved with decade totals asserted; nflverse 2003+ with coverage check (19 missing team-games 1999-2002 found, PFR used instead); 1999-2002 cross-check 135/136 exact; champion counts asserted; proxy checked against air yards (0.42)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "78f5b97000fd6209907a89bfdb6506049fd9f37349893f1bb68d18bec64a9585",
+   "at_utc": "2026-11-25T16:46:03Z",
+   "notes": "Round 1. Byte-identical clean-copy rerun; all numbers re-derived independently (quartiles 25/16/9/10, 7/13/11/29, 3/6/12/39; both 27/timid 14; qual-only 24/9 of 53; halves 14/4, 11/6; Favre 1996; Allen table, 4th of 36, 6th of 31; Miami 48/-0.032/22%/2nd/39%). Must fix: (1) 'Allen does that every year' false (2021 ypc 39th); (2) 135 'starts' are games w/15+ dropbacks (2018 Wk1 relief; 134 starts); (3) add chance baseline (15 per quarter); most-INT side near chance (10/60 P=.09; late half 6/30 vs 7.5); (4) game-script caveat; (5) '9 to 15' typed; (6) disclose boundary/method sensitivity (23/18/8/11 strict, 22/19/8/11 self-included rank); (7) chart 'picks'.",
+   "report": "2026-11-25-allen-yolo-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "78f5b97000fd6209907a89bfdb6506049fd9f37349893f1bb68d18bec64a9585",
+   "at_utc": "2026-11-25T16:46:03Z",
+   "notes": "Round 1. Needs edits: 'second half' reads as game half -> 'the other part'; 'champion half'; table headers say rank but show percentiles (11th vs '4th lowest of 36') -> percentile; chart 'Few picks' -> interceptions and label overlaps dot; endorse Quant 1-4 (every year, starts, chance baseline, game script). Polish: 'rarely threw it', 'was both', Darnold repeat, card dek 'among the most', headline deep->downfield.",
+   "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "6d563dd26e08d83a42076f43150d1e581e7194af38bd62868754c413cb19f708",
+   "at_utc": "2026-11-25T16:47:20Z",
+   "notes": "Round 2: all 8 must-fixes; one percentile method (others-only) everywhere; chance baseline and binomial p-values computed; game-script caveat; boundary sensitivity computed; 60s pool sizes computed; 'picks' removed from chart; polish applied."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "6d563dd26e08d83a42076f43150d1e581e7194af38bd62868754c413cb19f708",
+   "at_utc": "2026-11-25T16:48:44Z",
+   "notes": "Round 2. All 7 round-1 fixes verified; byte-identical rerun from git archive HEAD 3d6bb360; Allen table (27 cells), Favre 94%, 4th/36, 6th/31, counts, binomial p's re-derived independently. Must fix: (1) boundary sentence: 'strict' counts 23/18/9/10 move only the 25% ties (ties-to-middle); truly strict = 23/18/8/11 and 'inclusive at 75%' misdescribes - state both variants; (2) '15' (x2) and '7 or 8' are typed literals - compute. Headline 'deep' = polish.",
+   "report": "2026-11-25-allen-yolo-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "6d563dd26e08d83a42076f43150d1e581e7194af38bd62868754c413cb19f708",
+   "at_utc": "2026-11-25T16:48:44Z",
+   "notes": "Round 2. Text edits all landed and read well. Must fix: chart annotation 'Few interceptions, long completions:' now collides with Allen '19 label/dot (and Favre dot) - wrap to 3 lines/move/bbox and re-view. Endorse Quant 1-2. Headline 'deep' = polish.",
+   "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:49:32Z",
+   "notes": "Round 3: boundary sentence uses your wording with both lists computed and asserted; chance expectations computed (15; 7 or 8); chart label moved above the dots on a white box, no collisions; p<0.001."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:50:17Z",
+   "notes": "Round 3. Byte-identical rerun from git archive HEAD 25af6574; boundary variants 23/18/9/10 and 25/16/8/11 re-derived independently and match; 15 and 7/8 computed+asserted; p<0.001 asserted. All other numbers unchanged from verified round 2. Chart: shaded quadrant drawn in axes fraction now starts at y=55 not 50 after ylim change (no champion misplaced; Allen '19 looks outside) - see Editor must-fix.",
+   "report": "2026-11-25-allen-yolo-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:50:17Z",
+   "notes": "Round 3. Text ready. Must fix: chart shaded box (axvspan ymin=0.5 in axes fraction) sits at ~55th pct after ylim(-3,113), leaving a gap above the middle line; Allen '19 appears outside the quadrant. Draw it in data coords and re-view. Headline 'deep' = Charlie's call.",
+   "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:51:07Z",
+   "notes": "Round 4. Only change: shaded box now fill_between in data units; bottom on middle line, Allen '19 inside, label covers nothing. Text/hero unchanged from round-3 (ready). Headline 'deep' = Charlie's call.",
+   "report": "2026-11-25-allen-yolo-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+   "at_utc": "2026-11-25T16:51:08Z",
+   "notes": "Byte-identical rerun from git archive HEAD c3307169 (md/PNG/hero); md SHA 3df3b439 same as round-3 quant pass; only change since is chart shading in data units, no number changed. Freeze PNG before publish.",
+   "report": "2026-11-25-allen-yolo-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+  "at_utc": "2026-11-25T16:49:32Z",
+  "notes": "Round 3: boundary sentence uses your wording with both lists computed and asserted; chance expectations computed (15; 7 or 8); chart label moved above the dots on a white box, no collisions; p<0.001."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+  "at_utc": "2026-11-25T16:50:17Z",
+  "notes": "Round 3. Byte-identical rerun from git archive HEAD 25af6574; boundary variants 23/18/9/10 and 25/16/8/11 re-derived independently and match; 15 and 7/8 computed+asserted; p<0.001 asserted. All other numbers unchanged from verified round 2. Chart: shaded quadrant drawn in axes fraction now starts at y=55 not 50 after ylim change (no champion misplaced; Allen '19 looks outside) - see Editor must-fix.",
+  "report": "2026-11-25-allen-yolo-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+  "at_utc": "2026-11-25T16:51:07Z",
+  "notes": "Round 4. Only change: shaded box now fill_between in data units; bottom on middle line, Allen '19 inside, label covers nothing. Text/hero unchanged from round-3 (ready). Headline 'deep' = Charlie's call.",
+  "report": "2026-11-25-allen-yolo-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "3df3b4393af28a4256c4a043b62cfa9768d95f790652e84b6e34ded3a32328e7",
+  "at_utc": "2026-11-25T16:51:08Z",
+  "notes": "Byte-identical rerun from git archive HEAD c3307169 (md/PNG/hero); md SHA 3df3b439 same as round-3 quant pass; only change since is chart shading in data units, no number changed. Freeze PNG before publish.",
+  "report": "2026-11-25-allen-yolo-final.md"
+ }
+}
