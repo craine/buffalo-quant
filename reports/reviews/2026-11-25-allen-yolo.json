@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "78f5b97000fd6209907a89bfdb6506049fd9f37349893f1bb68d18bec64a9585",
+   "at_utc": "2026-11-25T16:39:38Z",
+   "notes": "Round 1: PFR 1966-2002 saved with decade totals asserted; nflverse 2003+ with coverage check (19 missing team-games 1999-2002 found, PFR used instead); 1999-2002 cross-check 135/136 exact; champion counts asserted; proxy checked against air yards (0.42)."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "78f5b97000fd6209907a89bfdb6506049fd9f37349893f1bb68d18bec64a9585",
+  "at_utc": "2026-11-25T16:39:38Z",
+  "notes": "Round 1: PFR 1966-2002 saved with decade totals asserted; nflverse 2003+ with coverage check (19 missing team-games 1999-2002 found, PFR used instead); 1999-2002 cross-check 135/136 exact; champion counts asserted; proxy checked against air yards (0.42)."
+ }
+}

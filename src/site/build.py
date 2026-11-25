@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("josh-allen-gunslinger-champions", "2026-11-25-allen-yolo.md", "2026-11-25", "Bills &middot; Josh Allen",
+     "We ranked all 60 Super Bowl-winning QBs against that season's starters. Champions threw downfield, but 25 of 60 were among the quarter with the fewest interceptions. Only 10 were among the most.",
+     "allen-yolo-nov25-champions.png"),
     ("bills-chiefs-rain-and-wind", "2026-wk12-kc-weather.md", "2026-11-25", "Bills &middot; Chiefs week, part 4",
      "Thursday's forecast is light rain all game with a 10-13 mph wind. In rain, NFL teams have each scored 3 to 4 fewer points, hit a few fewer long passes and run more. That leans on Buffalo's run defense.",
      "bills-kc-wk12-weather.png"),

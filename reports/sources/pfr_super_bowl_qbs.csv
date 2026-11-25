@@ -1,0 +1,61 @@
+game_date,sb,winner,team,qb_id,qb,sb_att,qb2,qb2_att
+"Feb 8, 2026",LX (60),Seattle Seahawks,SEA,DarnSa00,Sam Darnold,38,Kenneth Walker III,0
+"Feb 9, 2025",LIX (59),Philadelphia Eagles,PHI,HurtJa00,Jalen Hurts,22,Kenny Pickett,1
+"Feb 11, 2024",LVIII (58),Kansas City Chiefs,KAN,MahoPa00,Patrick Mahomes,46,Isiah Pacheco,0
+"Feb 12, 2023",LVII (57),Kansas City Chiefs,KAN,MahoPa00,Patrick Mahomes,27,Isiah Pacheco,0
+"Feb 13, 2022",LVI (56),Los Angeles Rams,LAR,StafMa00,Matthew Stafford,40,Cooper Kupp,1
+"Feb 7, 2021",LV (55),Tampa Bay Buccaneers,TAM,BradTo00,Tom Brady,29,Leonard Fournette,0
+"Feb 2, 2020",LIV (54),Kansas City Chiefs,KAN,MahoPa00,Patrick Mahomes,42,Damien Williams,0
+"Feb 3, 2019",LIII (53),New England Patriots,NWE,BradTo00,Tom Brady,35,Sony Michel,0
+"Feb 4, 2018",LII (52),Philadelphia Eagles,PHI,FoleNi00,Nick Foles,43,Trey Burton,1
+"Feb 5, 2017",LI (51),New England Patriots,NWE,BradTo00,Tom Brady,62,Julian Edelman,1
+"Feb 7, 2016",50,Denver Broncos,DEN,MannPe00,Peyton Manning,23,C.J. Anderson,0
+"Feb 1, 2015",XLIX (49),New England Patriots,NWE,BradTo00,Tom Brady,50,LeGarrette Blount,0
+"Feb 2, 2014",XLVIII (48),Seattle Seahawks,SEA,WilsRu00,Russell Wilson,25,Tarvaris Jackson,1
+"Feb 3, 2013",XLVII (47),Baltimore Ravens,BAL,FlacJo00,Joe Flacco,33,Ray Rice,0
+"Feb 5, 2012",XLVI (46),New York Giants,NYG,MannEl00,Eli Manning,40,Ahmad Bradshaw,0
+"Feb 6, 2011",XLV (45),Green Bay Packers,GNB,RodgAa00,Aaron Rodgers,39,James Starks,0
+"Feb 7, 2010",XLIV (44),New Orleans Saints,NOR,BreeDr00,Drew Brees,39,Pierre Thomas,0
+"Feb 1, 2009",XLIII (43),Pittsburgh Steelers,PIT,RoetBe00,Ben Roethlisberger,30,Willie Parker,0
+"Feb 3, 2008",XLII (42),New York Giants,NYG,MannEl00,Eli Manning,34,Ahmad Bradshaw,0
+"Feb 4, 2007",XLI (41),Indianapolis Colts,IND,MannPe00,Peyton Manning,38,Dominic Rhodes,0
+"Feb 5, 2006",XL (40),Pittsburgh Steelers,PIT,RoetBe00,Ben Roethlisberger,21,Antwaan Randle El,1
+"Feb 6, 2005",XXXIX (39),New England Patriots,NWE,BradTo00,Tom Brady,33,Corey Dillon,0
+"Feb 1, 2004",XXXVIII (38),New England Patriots,NWE,BradTo00,Tom Brady,48,Antowain Smith,0
+"Jan 26, 2003",XXXVII (37),Tampa Bay Buccaneers,TAM,JohnBr00,Brad Johnson,34,Michael Pittman,0
+"Feb 3, 2002",XXXVI (36),New England Patriots,NWE,BradTo00,Tom Brady,27,Kevin Faulk,0
+"Jan 28, 2001",XXXV (35),Baltimore Ravens,BAL,DilfTr00,Trent Dilfer,25,Tony Banks,1
+"Jan 30, 2000",XXXIV (34),St. Louis Rams,STL,WarnKu00,Kurt Warner,45,Marshall Faulk,0
+"Jan 31, 1999",XXXIII (33),Denver Broncos,DEN,ElwaJo00,John Elway,29,Terrell Davis,0
+"Jan 25, 1998",XXXII (32),Denver Broncos,DEN,ElwaJo00,John Elway,22,Terrell Davis,0
+"Jan 26, 1997",XXXI (31),Green Bay Packers,GNB,FavrBr00,Brett Favre,27,Dorsey Levens,0
+"Jan 28, 1996",XXX (30),Dallas Cowboys,DAL,AikmTr00,Troy Aikman,23,Emmitt Smith,0
+"Jan 29, 1995",XXIX (29),San Francisco 49ers,SFO,YounSt00,Steve Young,36,Bill Musgrave,1
+"Jan 30, 1994",XXVIII (28),Dallas Cowboys,DAL,AikmTr00,Troy Aikman,27,Alvin Harper,0
+"Jan 31, 1993",XXVII (27),Dallas Cowboys,DAL,AikmTr00,Troy Aikman,30,Emmitt Smith,0
+"Jan 26, 1992",XXVI (26),Washington Redskins,WAS,RypiMa00,Mark Rypien,33,Ricky Ervins,0
+"Jan 27, 1991",XXV (25),New York Giants,NYG,HostJe00,Jeff Hostetler,32,Dave Meggett,0
+"Jan 28, 1990",XXIV (24),San Francisco 49ers,SFO,MontJo01,Joe Montana,29,Steve Young,3
+"Jan 22, 1989",XXIII (23),San Francisco 49ers,SFO,MontJo01,Joe Montana,36,Roger Craig,0
+"Jan 31, 1988",XXII (22),Washington Redskins,WAS,WillDo01,Doug Williams,29,Jay Schroeder,1
+"Jan 25, 1987",XXI (21),New York Giants,NYG,SimmPh00,Phil Simms,25,Jeff Rutledge,0
+"Jan 26, 1986",XX (20),Chicago Bears,CHI,McMaJi00,Jim McMahon,20,Steve Fuller,4
+"Jan 20, 1985",XIX (19),San Francisco 49ers,SFO,MontJo01,Joe Montana,35,Wendell Tyler,0
+"Jan 22, 1984",XVIII (18),Los Angeles Raiders,RAI,PlunJi00,Jim Plunkett,25,Malcolm Barnwell,0
+"Jan 30, 1983",XVII (17),Washington Redskins,WAS,TheiJo00,Joe Theismann,23,John Riggins,0
+"Jan 24, 1982",XVI (16),San Francisco 49ers,SFO,MontJo01,Joe Montana,22,Ricky Patton,0
+"Jan 25, 1981",XV (15),Oakland Raiders,OAK,PlunJi00,Jim Plunkett,21,Mark van Eeghen,0
+"Jan 20, 1980",XIV (14),Pittsburgh Steelers,PIT,BradTe00,Terry Bradshaw,21,Franco Harris,0
+"Jan 21, 1979",XIII (13),Pittsburgh Steelers,PIT,BradTe00,Terry Bradshaw,30,Franco Harris,0
+"Jan 15, 1978",XII (12),Dallas Cowboys,DAL,StauRo00,Roger Staubach,25,Danny White,2
+"Jan 9, 1977",XI (11),Oakland Raiders,OAK,StabKe00,Ken Stabler,19,Mike Rae,0
+"Jan 18, 1976",X (10),Pittsburgh Steelers,PIT,BradTe00,Terry Bradshaw,19,Franco Harris,0
+"Jan 12, 1975",IX (9),Pittsburgh Steelers,PIT,BradTe00,Terry Bradshaw,14,Franco Harris,0
+"Jan 13, 1974",VIII (8),Miami Dolphins,MIA,GrieBo00,Bob Griese,7,Larry Csonka,0
+"Jan 14, 1973",VII (7),Miami Dolphins,MIA,GrieBo00,Bob Griese,11,Larry Csonka,0
+"Jan 16, 1972",VI (6),Dallas Cowboys,DAL,StauRo00,Roger Staubach,19,Duane Thomas,0
+"Jan 17, 1971",V (5),Baltimore Colts,BAL,MorrEa00,Earl Morrall,15,Johnny Unitas,9
+"Jan 11, 1970",IV (4),Kansas City Chiefs,KAN,DawsLe00,Len Dawson,17,Mike Garrett,0
+"Jan 12, 1969",III (3),New York Jets,NYJ,NamaJo00,Joe Namath,28,Babe Parilli,1
+"Jan 14, 1968",II (2),Green Bay Packers,GNB,StarBa00,Bart Starr,24,Zeke Bratkowski,0
+"Jan 15, 1967",I (1),Green Bay Packers,GNB,StarBa00,Bart Starr,23,Zeke Bratkowski,1
