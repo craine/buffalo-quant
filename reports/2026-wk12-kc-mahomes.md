@@ -6,7 +6,8 @@ from hitting big passes, and stop the Chiefs' running game. In the only 8 games 
 
 *A "dropback" is any pass play: completions, incompletions, sacks and scrambles.*
 
-*Part 3 of our Bills-Chiefs series. [Part 1: Rousseau and the pass rush](bills-chiefs-leonhard-file.html). [Part 2: who's left](bills-chiefs-whos-left.html).*
+*Part 3 of our Bills-Chiefs series. [Part 1: Rousseau and the pass rush](bills-chiefs-leonhard-file.html). [Part 2: who's left](bills-chiefs-whos-left.html).
+[Part 4: rain and wind](bills-chiefs-rain-and-wind.html).*
 
 ![Three things that have slowed Patrick Mahomes. Buffalo does one of them](bills-kc-wk12-mahomes.png)
 
@@ -46,6 +47,11 @@ In their other 47 games: 25.0 points, and they won 72%. Mahomes still wins plent
 
 Buffalo's pass rush gives it a real shot at the first part. The question is everything else. Buffalo is 20th at stopping big pass plays and 27th against the run,
 and Kansas City runs the ball well (5th).
+
+The weather could shift that. The forecast for Thursday is rain the whole game, with wind. In past rainy games, teams hit a few fewer long passes
+and ran more. That could help Buffalo a little against big plays and put more of the load on its run defense. [Part 4](bills-chiefs-rain-and-wind.html)
+has the numbers.
+
 Watch two things early: whether the Chiefs can run the ball, and whether Mahomes finds anything deep.
 
 ## How we measured it
