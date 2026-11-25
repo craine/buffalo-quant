@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-rangers-pregame-nov-25", "2026-11-25-sabres-nyr-pregame.md", "2026-11-25", "Sabres &middot; Preview",
+     "The Rangers get more of the chances in their games than Buffalo does, but only two teams finish them worse. Their goalies have covered for it. Our model: Sabres 49%.",
+     "sabres-nyr-nov25-finish.png"),
     ("bills-chiefs-whos-left", "2026-wk12-kc-whos-left.md", "2026-11-24", "Bills &middot; Chiefs week, part 2",
      "From the January 2025 AFC title game, 13 of 21 Bills regulars are still Bills and 12 of 23 Chiefs are still Chiefs. Buffalo kept its offense. Both secondaries turned over.",
      "bills-kc-wk12-whos-left.png"),
