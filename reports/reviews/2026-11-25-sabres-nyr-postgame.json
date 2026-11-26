@@ -52,6 +52,30 @@
    "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
    "at_utc": "2026-11-26T13:17:03Z",
    "notes": "Round 3: 'empty-net or shootout goals' wording; thousands separators."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+   "at_utc": "2026-11-26T13:17:39Z",
+   "notes": "Round 3: shootout label fix correct (75-82 excludes EN and SO); commas formatting only; all numbers re-derived in r1-r2 stand.",
+   "report": "2026-11-25-sabres-nyr-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+   "at_utc": "2026-11-26T13:17:39Z",
+   "notes": "Round 3: only commas and the quant label fix changed; round-2 ready verdict stands.",
+   "report": "2026-11-25-sabres-nyr-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+   "at_utc": "2026-11-26T13:17:39Z",
+   "notes": "Changes since review verified; clean-copy reproduction of 5408f9d9 byte-identical for md, hero JSON, PNG.",
+   "report": "2026-11-25-sabres-nyr-postgame-final.md"
   }
  ],
  "self": {
@@ -61,17 +85,24 @@
   "notes": "Round 3: 'empty-net or shootout goals' wording; thousands separators."
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "c9cc0f28e3f99890b94fe3a66ec4f5f87551dcd916b222d0c3d4f0dd5a27771b",
-  "at_utc": "2026-11-26T13:16:40Z",
-  "notes": "Round 2: all r1 fixes verified; repro byte-identical. Must-fix: 'Not counting empty nets, outscored 75-82' - 82 also excludes the Oct 13 shootout goal (scoreboard less EN = 83). Say 'empty-net or shootout goals'.",
+  "verdict": "pass",
+  "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+  "at_utc": "2026-11-26T13:17:39Z",
+  "notes": "Round 3: shootout label fix correct (75-82 excludes EN and SO); commas formatting only; all numbers re-derived in r1-r2 stand.",
   "report": "2026-11-25-sabres-nyr-postgame-quant.md"
  },
  "editor": {
   "verdict": "pass",
-  "sha256": "c9cc0f28e3f99890b94fe3a66ec4f5f87551dcd916b222d0c3d4f0dd5a27771b",
-  "at_utc": "2026-11-26T13:16:41Z",
-  "notes": "Round 2: ready. Headline hook, lead, plain English, how-we-checked-it, receipts all good. Optional: commas in 2,367/2,370; trim repeated carry-over line.",
+  "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+  "at_utc": "2026-11-26T13:17:39Z",
+  "notes": "Round 3: only commas and the quant label fix changed; round-2 ready verdict stands.",
   "report": "2026-11-25-sabres-nyr-postgame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "10dad776310ccf344efe6f6c69a04147e4a2fd6661e0020414b86d00f8d20102",
+  "at_utc": "2026-11-26T13:17:39Z",
+  "notes": "Changes since review verified; clean-copy reproduction of 5408f9d9 byte-identical for md, hero JSON, PNG.",
+  "report": "2026-11-25-sabres-nyr-postgame-final.md"
  }
 }
