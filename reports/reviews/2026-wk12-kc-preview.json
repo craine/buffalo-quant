@@ -1,0 +1,85 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "83808cd00197b13682b9c1b69053cea0d73b78cc481797d73b85e30380f42008",
+   "at_utc": "2026-11-26T21:34:10Z",
+   "notes": "Round 1: calls read from the Ledger and recomputed (assert match); backtest numbers computed; Allen per-game runs computed; Thursday forecast saved and asserted; part 4 numbers read from its hero JSON."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "83808cd00197b13682b9c1b69053cea0d73b78cc481797d73b85e30380f42008",
+   "at_utc": "2026-11-26T21:38:54Z",
+   "notes": "Numbers re-derived and match (25.6/23.9, 55%, 7.5 vs 7.9, 55% within 7, 64% of 657, Brier 0.224, Allen 8 of 10, weather, 18.3 vs 22.9). Must-fix: model is not schedule-adjusted ('adjusted for who it played'); rain->Allen runs line cites team designed-run evidence; 9 p.m. wind is E not NE; Brier is on 659 games not 657 and tie exclusion is silent; label 10-game sample.",
+   "report": "2026-wk12-kc-preview-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "83808cd00197b13682b9c1b69053cea0d73b78cc481797d73b85e30380f42008",
+   "at_utc": "2026-11-26T21:39:16Z",
+   "notes": "Lead and chart work; links valid; no rejected phrases. Must-fix: 'Its favorite won' (betting word + silent ties); rain line overclaims for a QB; raw UTC timestamp in Receipts; model description ('adjusted for who it played') wrong and unclear. Recommended: small-sample label, NE/E wind, define 'games like it'.",
+   "report": "2026-wk12-kc-preview-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+   "at_utc": "2026-11-26T21:40:18Z",
+   "notes": "Round 2: all 6 must-fixes verbatim; wind direction and ET timestamp computed from files; tie counts asserted; weather sentence per recommendation."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+   "at_utc": "2026-11-26T21:41:38Z",
+   "notes": "Round 2: all six round-1 must-fixes verified against re-derived numbers (659/657 games, Brier 0.2237, 419/657, NE/E wind, 9:44 a.m. ET). Non-blocking: one 0.500 game is counted as a miss, so the stat-heads '63.8% of the 657' is 63.9% of 656 with a side above 50%; the body's 64% holds.",
+   "report": "2026-wk12-kc-preview-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+   "at_utc": "2026-11-26T21:41:38Z",
+   "notes": "Round 2: all round-1 must-fixes in, plain English, no betting words or rejected phrases, links valid, chart and dek read alone.",
+   "report": "2026-wk12-kc-preview-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+   "at_utc": "2026-11-26T21:41:45Z",
+   "notes": "Round-2 edits checked; byte-identical reproduction of md, png and hero JSON from a clean clone of b2d857cc with data symlinked; all generator asserts pass.",
+   "report": "2026-wk12-kc-preview-final.md"
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+  "at_utc": "2026-11-26T21:40:18Z",
+  "notes": "Round 2: all 6 must-fixes verbatim; wind direction and ET timestamp computed from files; tie counts asserted; weather sentence per recommendation."
+ },
+ "quant": {
+  "verdict": "pass",
+  "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+  "at_utc": "2026-11-26T21:41:38Z",
+  "notes": "Round 2: all six round-1 must-fixes verified against re-derived numbers (659/657 games, Brier 0.2237, 419/657, NE/E wind, 9:44 a.m. ET). Non-blocking: one 0.500 game is counted as a miss, so the stat-heads '63.8% of the 657' is 63.9% of 656 with a side above 50%; the body's 64% holds.",
+  "report": "2026-wk12-kc-preview-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+  "at_utc": "2026-11-26T21:41:38Z",
+  "notes": "Round 2: all round-1 must-fixes in, plain English, no betting words or rejected phrases, links valid, chart and dek read alone.",
+  "report": "2026-wk12-kc-preview-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "8a76608dc35d98a960f7d422931d605b233873029be5387e671ca86d966056e8",
+  "at_utc": "2026-11-26T21:41:45Z",
+  "notes": "Round-2 edits checked; byte-identical reproduction of md, png and hero JSON from a clean clone of b2d857cc with data symlinked; all generator asserts pass.",
+  "report": "2026-wk12-kc-preview-final.md"
+ }
+}
