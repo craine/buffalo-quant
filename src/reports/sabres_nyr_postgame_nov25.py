@@ -52,9 +52,12 @@ def main(as_of=AS_OF):
     nyr_goalie, buf_goalie = names[nyr_g], names[buf_g]
     gb = u[(u.goalie_id == nyr_g) & (u.game_date < as_of)]
     k_before, k_games = float(gb.xg.sum() - gb.goal.sum()), int(gb.game_id.nunique())
-    nyr_starts = u[(u.team != "NYR") & (u.opp == "NYR") & (u.game_date < as_of)].groupby("goalie_id").game_id.nunique().sort_values()
-    nyr_top = names[int(nyr_starts.index[-1])]
-    assert nyr_starts.index[-1] != nyr_g and nyr_starts.iloc[-1] > 3 * k_games
+    # who started each Rangers game since Nov. 7: the goalie facing the first Buffalo-or-other shot of the game
+    nyr_sh = s[(s.opp == "NYR") & (s.game_date >= "2026-11-07") & (s.game_date <= as_of) & s.goalie_id.notna()].sort_values(["game_date", "period", "t"])
+    starters = nyr_sh.groupby("game_id").first().sort_values("game_date").goalie_id.astype(int).tolist()
+    alternate = all(a != b for a, b in zip(starters, starters[1:]))
+    other = names[[x for x in starters if x != nyr_g][0]]
+    assert alternate and starters[-1] == nyr_g and len(set(starters)) == 2 and len(starters) >= 6, starters
     long_g = goals[goals.team == "NYR"].iloc[0]
     close_b = goals[goals.team == "BUF"].sort_values("dist").iloc[0]
     assert (round(x_b, 1), round(x_n, 1), int(sog["BUF"]), int(sog["NYR"])) == (2.5, 2.3, 30, 30)
@@ -74,6 +77,10 @@ def main(as_of=AS_OF):
     e = dict(n=len(early), gf=int(early.ngf.sum()), xgf=float(early.xgf.sum()), ga=int(early.nga.sum()), xga=float(early.xga.sum()))
     l = dict(n=len(late), w=int(late.w.sum()), gf=int(late.ngf.sum()), xgf=float(late.xgf.sum()), ga=int(late.nga.sum()), xga=float(late.xga.sum()),
              gf_all=int(late.gf.sum()))
+    gf_ne, ga_ne, xgf_t, xga_t = int(gg.ngf.sum()), int(gg.nga.sum()), float(gg.xgf.sum()), float(gg.xga.sum())
+    raw_lg = float(s[(s.unblocked == 1) & (s.empty_net_against == 0)].xg.sum())
+    lg_goals = int(u.goal.sum())
+    assert (gf_ne, ga_ne) == (75, 82)
     tot_fin = float(gg.ngf.sum() - gg.xgf.sum())
     tot_sv = float(gg.xga.sum() - gg.nga.sum())
     assert (e["n"], l["n"], l["w"], l["gf_all"], e["gf"], round(e["xgf"]), e["ga"]) == (21, 4, 3, 20, 57, 64, 72) and l["gf"] == 18 and round(l["xgf"]) == 10
@@ -133,13 +140,12 @@ def main(as_of=AS_OF):
 
     bl = [r.name for r in goals[goals.team == "BUF"].itertuples()]
     gl = ", ".join(bl[:-1]) + " and " + bl[-1]
-    md = f"""# Sabres 5, Rangers 1: {l['gf_all']} goals in four games, and the early bad luck has evened out
+    md = f"""# Sabres 5, Rangers 1: a hot week cancels out a cold start
 
-**The chances were close to even on Wednesday: the Sabres' shots were worth {x_b:.1f} goals and the Rangers' {x_n:.1f}. Buffalo scored {int(g.home_score)}.
-That's the fourth game of a run in which the Sabres have gone {l['w']}-{l['n'] - l['w']} and scored {l['gf_all']} goals. Leaving out {l['gf_all'] - l['gf']}
-empty-net goals, that's {l['gf']} on chances worth about {l['xgf']:.0f}. It isn't a new team. Through the first {e['n']} games they scored {e['gf']} goals on chances worth {e['xgf']:.0f} and allowed {e['ga']} on
-chances worth {e['xga']:.0f}. The last four games paid most of that back. What's left is the part that lasts: the Sabres get {B.share:.0%} of the
-chances in their games, {ordn(rk['share']['BUF'])} in the NHL.**
+**Through {e['n']} games the Sabres had scored {e['gf']} goals on chances worth {e['xgf']:.0f}, and allowed {e['ga']} on chances worth {e['xga']:.0f}. Four games later,
+both running totals are back near zero. Wednesday was the latest: even chances, {x_b:.1f} to {x_n:.1f}, and a {int(g.home_score)}-{int(g.away_score)} win. A hot four games has
+cancelled out the cold start, and the hot streak is no more likely to last than the cold start was. Underneath, the Sabres get {B.share:.0%} of the chances
+in their games, {ordn(rk['share']['BUF'])} in the NHL.**
 
 ![The Sabres' early bad luck has evened out]({PNG})
 
@@ -148,14 +154,19 @@ chances in their games, {ordn(rk['share']['BUF'])} in the NHL.**
 Both teams had {int(sog['BUF'])} shots on goal. Buffalo's goals came from {gl}. New York's lone goal was {long_g['name']}'s shot from {long_g.dist:.0f} feet,
 a chance worth about {long_g.xg:.0%} of a goal. {buf_goalie} stopped everything else, about {x_n - 1:.1f} goals better than the chances he faced.
 
-At the other end, the Rangers started {nyr_goalie} instead of their usual starter, {nyr_top} ({int(nyr_starts.iloc[-1])} games). {nyr_goalie.split()[-1]} had saved about {k_before:.1f} goals more than expected in his first {k_games} games.
+At the other end, the Rangers started {nyr_goalie}, who has been taking turns with {other} since early November. {nyr_goalie.split()[-1]} had saved about
+{k_before:.1f} more goals than an average goalie would have in his first {k_games} games.
 On Wednesday he allowed {int(g.home_score)} on chances worth {x_b:.1f}.
 
 ## How we count chances
 
-Every unblocked shot gets a value: the share of similar shots that go in, based on distance, angle, shot type and whether it's a rebound or rush.
+Every shot that isn't blocked gets a value: the share of similar shots that go in, based on distance, angle, shot type and whether it's a rebound or rush.
 Buffalo's closest goal came from {close_b.dist:.0f} feet, a chance worth about {close_b.xg:.0%}. Add up a team's shots and you get what its chances
 were worth in goals. Score more than that and you finished well; allow fewer and your goalie saved some.
+
+**How we checked it.** The model's values are set so that, across the league, chances add up to goals: this season its raw values came to
+{raw_lg:.0f} goals and teams scored {lg_goals} on those shots, so we scaled them by {cal:.3f}. And in the [Tampa recap](sabres-lightning-postgame-nov-22.html)
+we checked what carries over: a team's share of chances in the first half of a season predicts the second half far better than its finishing or goaltending.
 
 ## The season, evened out
 
@@ -164,30 +175,32 @@ were worth in goals. Score more than that and you finished well; allow fewer and
 | First {e['n']} games | {e['n']} | {e['gf']} | {e['xgf']:.1f} | {e['ga']} | {e['xga']:.1f} |
 | Last {l['n']} games | {l['n']} | {l['gf']} | {l['xgf']:.1f} | {l['ga']} | {l['xga']:.1f} |
 
-*Goals in the table leave out empty-net goals.*
+*Goals in the table leave out empty-net and shootout goals.*
 
 Over the whole season, the Sabres have now scored {abs(tot_fin):.1f} {"more" if tot_fin > 0 else "fewer"} goals than their chances were worth, and their goalies
 have allowed {abs(tot_sv):.1f} {"more" if tot_sv < 0 else "fewer"} than expected. Both are close to zero.
-That's why the record, {W}-{L}-{OTL}, looks like a team that gets a little less than half the chances.
+Not counting empty nets, they've been outscored {gf_ne}-{ga_ne}, almost exactly what their chances say ({xgf_t:.1f} to {xga_t:.1f}).
 
 ## What to expect
 
-Finishing and goaltending streaks come and go; we showed in the [Tampa recap](sabres-lightning-postgame-nov-22.html) that a team's chances carry over far better than either. The Sabres'
-chance share, {B.share:.0%}, is {ordn(rk['share']['BUF'])} in the league. Expect them to look like that team, a little below average, rather than the one that
+Finishing and goaltending streaks come and go; a team's chances carry over far better than either. The Sabres get {B.share:.0%} of the chances,
+{ordn(rk['share']['BUF'])} in the league. Expect them to look like that team, a little below average, rather than the one that
 scored {l['gf_all']} in four games.
 
 ## Receipts
 
-- **Our preview** said the Rangers' finishing ({ordn(rk['fin']['NYR'])} in the NHL) probably wouldn't last. It lasted one more night: {int(g.away_score)} goal on
-  chances worth {x_n:.1f}. It said their goaltending would probably cool off. It did, though with {nyr_goalie.split()[-1]}, not {nyr_top.split()[-1]}, in net: {int(g.home_score)} goals allowed.
+- **Our preview** said the Rangers' poor finishing ({ordn(rk['fin']['NYR'])} in the NHL) probably wouldn't last and their goaltending would probably cool off.
+  It also said one game wouldn't settle either. On Wednesday New York scored {int(g.away_score)} goal on chances worth {x_n:.1f}, and {nyr_goalie.split()[-1]} allowed
+  {int(g.home_score)} on chances worth {x_b:.1f}. Both are season-long calls, and we'll keep tracking them.
 - **The Ledger** gave the Sabres {pr.probability:.0%}. They won, so the call leaned the wrong way and counts as a miss, though the chances themselves came out
-  close to even. Its score was {me.brier:.2f}, about what a coin flip earns. Our record is {right} of {len(m)}.
+  close to even. On our scorecard, where 0 is perfect and a coin flip scores 0.25, it scored {me.brier:.2f}. Our record is {right} of {len(m)}.
 
 ## For the stat-heads
 
+- Rangers starters since Nov. 7 (first goalie faced each game): {", ".join(names[x].split()[-1] for x in starters)}.
 - xG model: unblocked non-empty-net shots, rescaled so 2026-27 league xG equals league goals through {as_of} (factor {cal:.3f}).
 - Game: xGF {x_b:.2f}, xGA {x_n:.2f}; all situations. Korpisalo GSAx {x_b - int(g.home_score):+.2f} on the night, {k_before:+.2f} in {k_games} games before it.
-- Season (25 games): xGF% {B.share:.3f} ({ordn(rk['share']['BUF'])}); finishing (G - xG) {B.fin:+.2f} per game ({ordn(rk['fin']['BUF'])}); GSAx {B.sv:+.2f} per game ({ordn(rk['sv']['BUF'])}).
+- Season ({len(gg)} games): xGF% {B.share:.3f} ({ordn(rk['share']['BUF'])}); finishing (G - xG) {B.fin:+.2f} per game ({ordn(rk['fin']['BUF'])}); GSAx {B.sv:+.2f} per game ({ordn(rk['sv']['BUF'])}).
 - Ledger {PRED}: p = {pr.probability:.2f}, outcome {int(me.outcome)}, Brier {me.brier:.4f}. "Right" = the side above 50% won.
 """
     (OUT / f"{SLUG}.md").write_text(md)

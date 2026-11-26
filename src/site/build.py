@@ -19,7 +19,7 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("sabres-rangers-postgame-nov-25", "2026-11-25-sabres-nyr-postgame.md", "2026-11-26", "Sabres &middot; Recap",
-     "Even chances, a 5-1 win. Over four games the Sabres scored 18 goals on chances worth about 10, paying back an unlucky first 21 games. What lasts: they get 48% of the chances, 22nd.",
+     "Even chances, a 5-1 win. Over four games the Sabres scored 18 goals on chances worth about 10, cancelling out an unlucky first 21 games. What lasts: they get 48% of the chances, 22nd.",
      "sabres-nyr-nov25-postgame.png"),
     ("josh-allen-gunslinger-champions", "2026-11-25-allen-yolo.md", "2026-11-25", "Bills &middot; Josh Allen",
      "We ranked all 60 Super Bowl-winning QBs against that season's starters. Champions threw downfield, but 25 of 60 were among the quarter with the fewest interceptions. Only 10 were in the quarter with the most.",
