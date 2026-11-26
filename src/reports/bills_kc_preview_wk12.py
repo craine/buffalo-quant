@@ -37,6 +37,9 @@ def main():
     led = pd.read_csv(ROOT / "ledger" / "predictions.csv").set_index("id")
     p_log, r_log = float(led.loc["P0024", "probability"]), float(led.loc["P0025", "probability"])
     logged_at = led.loc["P0024", "created_at_utc"]
+    lt = pd.Timestamp(logged_at).tz_convert("America/New_York")
+    logged_et = f"{lt.strftime('%A')} at {lt.strftime('%-I:%M %p').replace('AM', 'a.m.').replace('PM', 'p.m.')} Eastern"
+    assert logged_et == "Wednesday at 9:44 a.m. Eastern"
     p_win, pb, pk = win_call()
     p_run, n_g, k_g = allen_call()
     assert round(p_win, 2) == p_log == 0.55 and round(p_run, 2) == r_log == 0.80 and (round(pb, 1), round(pk, 1)) == (25.6, 23.9)
@@ -49,7 +52,7 @@ def main():
     brier = float(((g.p - g.won) ** 2).mean())
     fav_right = float(((g.p > 0.5) == (g.won == 1)).loc[g.won != 0.5].mean())
     n_games = int((g.won != 0.5).sum())
-    assert miss_model < miss_lg and brier < 0.25
+    assert miss_model < miss_lg and brier < 0.25 and (len(g), n_games) == (659, 657)
 
     # ---- Allen's runs, game by game
     allen = query(f"SELECT DISTINCT gsis_id FROM raw_rosters_weekly WHERE pfr_id = '{ALLEN_PFR}'").gsis_id.iloc[0]
@@ -70,6 +73,10 @@ def main():
     t = [h[1] for h in fc["hourly_et"]]
     w = [int(h[2].split()[0]) for h in fc["hourly_et"]]
     pop = [h[4] for h in fc["hourly_et"]]
+    dirs = {"NE": "northeast", "E": "east", "N": "north", "SE": "southeast"}
+    dset = list(dict.fromkeys(h[3] for h in fc["hourly_et"]))
+    dtxt = " to ".join(dirs[d] for d in dset)
+    assert dset == ["NE", "E"]
     gusts = [x[1] for x in fc["gust_mph_utc"] if x[0] >= "2026-11-27T01"]       # 8 p.m. ET onward
     rain = fc["rain_in_7pm_to_1am_et"]
     assert (min(t), max(t), min(w), max(w), min(pop), min(gusts), max(gusts), rain) == (37, 38, 10, 13, 88, 29, 35, 0.66)
@@ -108,27 +115,29 @@ times ({p_run:.0%}). Our scoring model has Buffalo by about {pb - pk:.0f} point{
 
 ## Call 1: Bills win, {p_win:.0%}
 
-The model projects each team's points from how many points it scores and allows per drive this season, adjusted for who it played, plus home
-field. Buffalo projects to {pb:.1f} and Kansas City to {pk:.1f}. To turn that into a win chance, we replay how far real games have landed from the
+The model projects each team's points from how many points its offense scores per drive this season and how many the other team's defense gives up,
+blended with last season's numbers, plus home field. Buffalo projects to {pb:.1f} and Kansas City to {pk:.1f}. To turn that into a win chance, we replay how far real games have landed from the
 model's projections. A gap of under two points leaves plenty of room for either team, which is why it's {p_win:.0%}.
 
 **How good is it?** In seasons it never saw (2024, 2025 and 2026 so far), its projections missed a team's actual score by {miss_model:.1f} points on
-average, against {miss_lg:.1f} for just guessing the league average. It landed within 7 points {within7:.0%} of the time. Its favorite won
-{fav_right:.0%} of {n_games} games.
+average, against {miss_lg:.1f} for just guessing the league average. It landed within 7 points {within7:.0%} of the time. The team it gave the better chance won
+{fav_right:.0%} of the {n_games} games that didn't end in a tie.
 
 ## Call 2: Allen runs 4+ times, {p_run:.0%}
 
 This one is simple: the share of Allen's games this season with 4 or more runs, counting designed runs and scrambles but not kneel-downs. He did it
-in {k_g} of {n_g}. The two times he didn't: {lowtxt}. His typical game this season has {med_runs:.0f} runs. It's a plain season rate, not a model, and
+in {k_g} of {n_g}. Ten games is a small sample. The two times he didn't: {lowtxt}. His typical game this season has {med_runs:.0f} runs. It's a plain season rate, not a model, and
 the Ledger says so.
 
-The rain could push it up. In [part 4](bills-chiefs-rain-and-wind.html) we found NFL teams run more in the rain.
+Will the rain change it? [Part 4](bills-chiefs-rain-and-wind.html) found NFL teams run more in the rain, but that counted designed runs by everyone,
+mostly running backs, and no scrambles. It doesn't tell us about quarterbacks, so the {p_run:.0%} leaves the weather out.
 
 ## The weather, updated
 
 Thursday morning's National Weather Service forecast for Orchard Park, from 8 to 11 p.m.: rain ({min(pop)}-{max(pop)}% chance each hour), {min(t)}-{max(t)} degrees,
-a northeast wind of {min(w)}-{max(w)} mph with gusts of {min(gusts)}-{max(gusts)} mph, and about {rain:.2f} of an inch of rain from 7 p.m. to 1 a.m. That's wetter
-than Wednesday's forecast in part 4. In games like it since 2018, each team scored {p4_rain_pts} points on average, against {p4_usual} for the same teams in dry games.
+a {dtxt} wind of {min(w)}-{max(w)} mph with gusts of {min(gusts)}-{max(gusts)} mph, and about {rain:.2f} of an inch of rain from 7 p.m. to 1 a.m. That's wetter
+than Wednesday's forecast in part 4. In games with rain and a 10+ mph wind since 2018, each team scored {p4_rain_pts} points on average, against the {p4_usual} we'd expect from the same offenses
+and defenses in dry games.
 The model above doesn't know about the weather; it projects a normal game.
 
 ## Catch up on Chiefs week
@@ -140,15 +149,16 @@ The model above doesn't know about the weather; it projects a normal game.
 
 ## Receipts
 
-Both calls were logged at {logged_at} UTC, before kickoff, and we'll grade them Friday. Win or lose, they stay on the [Ledger](../ledger.html).
+Both calls were logged {logged_et}, before kickoff, and we'll grade them Friday. Win or lose, they stay on the [Ledger](../ledger.html).
 
 ## For the stat-heads
 
 - Win: points-win-v0.1 (src/ledger/points_model.py), drive-level ratings through 2026 Week {THRU}, home = BUF. Projections {pb:.2f} / {pk:.2f}. Win chance = share
   of paired training misses (home, away) replayed on the projections in which BUF finishes ahead; ties after regulation split 50/50.
-- Out-of-sample: mean absolute error {miss_model:.2f} vs {miss_lg:.2f} (league-average guess); within 7 points {within7:.1%}; win Brier {brier:.3f} on {n_games} games
-  (50/50 guess = 0.250); favorite won {fav_right:.1%}.
+- Out-of-sample: mean absolute error {miss_model:.2f} vs {miss_lg:.2f} (league-average guess); within 7 points {within7:.1%}; win Brier {brier:.3f} on {len(g)} games, ties scored as half
+  (50/50 guess = 0.250); the side given more than 50% won {fav_right:.1%} of the {n_games} games without a tie.
 - Allen runs: play-by-play `rush` with Allen as rusher plus `qb_scramble`; excludes kneels, two-point tries and no-plays; games with 15+ Allen plays. Per game: {", ".join(str(int(x)) for x in r.runs)}.
+- Ledger timestamps: P0024 and P0025 logged {logged_at} UTC.
 - 2026 play-by-play fingerprint {PBP26_FINGERPRINT}. Weather: NWS gridpoint BUF/39,42, updated {fc["updateTime"]}; saved in reports/weather/.
 """
     (OUT / f"{SLUG}.md").write_text(md)
