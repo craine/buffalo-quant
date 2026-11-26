@@ -2073,15 +2073,15 @@
    "team": "MIN",
    "number": 30,
    "gp": 23,
-   "sog": 598,
+   "sog": 599,
    "sv": 0.92,
    "xsv": 0.893,
    "gsax": 16.1,
    "rk": 1,
    "of": 79,
-   "close_sv": 0.878,
-   "close_sog": 181,
-   "blend": 1.07,
+   "close_sv": 0.879,
+   "close_sog": 182,
+   "blend": 1.06,
    "blend_rk": 2,
    "spark": [
     0.72,
@@ -2137,7 +2137,7 @@
      "season": "2026-27",
      "team": "MIN",
      "gp": 23,
-     "sog": 598,
+     "sog": 599,
      "sv": 0.92,
      "gsax": 16.1
     }
