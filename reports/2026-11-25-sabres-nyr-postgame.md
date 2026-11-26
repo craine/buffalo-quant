@@ -23,7 +23,7 @@ Buffalo's closest goal came from 13 feet, a chance worth about 12%. Add up a tea
 were worth in goals. Score more than that and you finished well; allow fewer and your goalie saved some.
 
 **How we checked it.** The model's values are set so that, across the league, chances add up to goals: this season its raw values came to
-2367 goals and teams scored 2370 on those shots, so we scaled them by 1.001. And in the [Tampa recap](sabres-lightning-postgame-nov-22.html)
+2,367 goals and teams scored 2,370 on those shots, so we scaled them by 1.001. And in the [Tampa recap](sabres-lightning-postgame-nov-22.html)
 we checked what carries over: a team's share of chances in the first half of a season predicts the second half far better than its finishing or goaltending.
 
 ## The season, evened out
@@ -37,7 +37,7 @@ we checked what carries over: a team's share of chances in the first half of a s
 
 Over the whole season, the Sabres have now scored 0.5 more goals than their chances were worth, and their goalies
 have allowed 1.0 more than expected. Both are close to zero.
-Not counting empty nets, they've been outscored 75-82, almost exactly what their chances say (74.5 to 81.0).
+Not counting empty-net or shootout goals, they've been outscored 75-82, almost exactly what their chances say (74.5 to 81.0).
 
 ## What to expect
 
