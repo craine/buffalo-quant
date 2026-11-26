@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "83808cd00197b13682b9c1b69053cea0d73b78cc481797d73b85e30380f42008",
+   "at_utc": "2026-11-26T21:34:10Z",
+   "notes": "Round 1: calls read from the Ledger and recomputed (assert match); backtest numbers computed; Allen per-game runs computed; Thursday forecast saved and asserted; part 4 numbers read from its hero JSON."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "83808cd00197b13682b9c1b69053cea0d73b78cc481797d73b85e30380f42008",
+  "at_utc": "2026-11-26T21:34:10Z",
+  "notes": "Round 1: calls read from the Ledger and recomputed (assert match); backtest numbers computed; Allen per-game runs computed; Thursday forecast saved and asserted; part 4 numbers read from its hero JSON."
+ }
+}

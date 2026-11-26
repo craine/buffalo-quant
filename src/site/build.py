@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("bills-chiefs-preview-wk12", "2026-wk12-kc-preview.md", "2026-11-26", "Bills &middot; Preview",
+     "Our two Ledger calls for Thursday night: Bills win, 55%, and Josh Allen runs 4+ times, 80%. Where they come from, and a wetter forecast.",
+     "bills-kc-wk12-preview.png"),
     ("sabres-rangers-postgame-nov-25", "2026-11-25-sabres-nyr-postgame.md", "2026-11-26", "Sabres &middot; Recap",
      "Even chances, a 5-1 win. Over four games the Sabres scored 18 goals on chances worth about 10, cancelling out an unlucky first 21 games. What lasts: they get 48% of the chances, 22nd.",
      "sabres-nyr-nov25-postgame.png"),
