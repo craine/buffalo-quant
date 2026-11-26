@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "d6824a2d0392ed76a12114160feef7ca9a6997277103f9900470f8a31d30f708",
+   "at_utc": "2026-11-26T13:09:26Z",
+   "notes": "Round 1: all numbers computed and asserted; P0023 graded (miss by side, Brier 0.26) and record 13 of 22 computed; goalie names and starter computed; rescale pinned to games through AS_OF."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "d6824a2d0392ed76a12114160feef7ca9a6997277103f9900470f8a31d30f708",
+  "at_utc": "2026-11-26T13:09:26Z",
+  "notes": "Round 1: all numbers computed and asserted; P0023 graded (miss by side, Brier 0.26) and record 13 of 22 computed; goalie names and starter computed; rescale pinned to games through AS_OF."
+ }
+}
