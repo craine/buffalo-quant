@@ -1,20 +1,39 @@
-# Bills 13, Chiefs 10: Josh Allen threw for 81 yards, the fewest in any of his 105 career wins
+# Bills 13, Chiefs 10: James Cook carried it, the kicking game won it, Tyler Bass finished it
 
-**In the rain, with the wind listed at 19 mph, the Bills beat Kansas City on Tyler Bass's 57-yard field goal with 4 seconds left.
-Josh Allen completed 10 of 21 passes for 81 yards with 2 interceptions, his lowest total in any win of his career.
-Buffalo ran instead: 40 designed runs, 61% of its plays, and James Cook carried 32 times for 117 yards. The defense
-held Patrick Mahomes' Chiefs to 10 points, something that has happened in only 5 of his 137 regular-season starts.**
+**Buffalo beat Kansas City in the rain without much of a passing game. James Cook carried 32 times for 117 yards and scored the only Bills
+touchdown. Tyler Bass tied the game from 54 yards and won it from 57 with 4 seconds left. By our count, the
+kicking game and returns added about 64 percentage points to the Bills' chance to win, far more than the passing game took away (36).**
 
-![81 yards: the fewest Josh Allen has thrown for in any of his 105 wins](bills-kc-wk12-postgame.png)
+![The kicking game won it](bills-kc-wk12-postgame.png)
 
-## A different kind of win
+## The kicking game
 
-Allen has thrown 15 or more passes in 151 games, regular season and playoffs. Only 1 of them had fewer passing yards than Thursday, and that
-one was a loss. His next-lowest total in a win is 82. Buffalo didn't complete a pass of 20 yards or more, the 5th time that's happened in
-143 Bills regular-season games since 2018.
+Every play changes a team's chance to win. Add up those changes by type of play and Thursday's game splits cleanly: the kicks, punts and returns were worth
+about **+64 points** of win chance to Buffalo, the runs about +20, and the passing game about -36, most of that from Josh Allen's two interceptions (-33).
 
-What it did instead: 40 designed runs, 61% of its plays, the 6th-highest share in those 143 games. Cook scored the only Bills
-touchdown, his 10th straight game with a touchdown.
+- **Bass from 54**, early in the fourth quarter, tied it 10-10.
+- **Harrison Butker missed from 46** with 6 minutes left and the game still tied.
+- **Kansas City's punt unit** had a bad day: punter Matt Araiza fumbled in the second quarter and got off only a 13-yard punt, and with 15 seconds left
+  Greg Dortch returned a punt 17 yards to the Kansas City 39.
+- **Bass from 57**, 4 seconds left, won it.
+
+Kicks from 57 yards or more have been good 60% of the time since 2023 (205 tries). Since 1999, there have been 11 field goals of 57 yards or more that tied
+or won a game in its last 10 seconds. Bass has 2 of them, this one and his 61-yarder against Miami in 2024. No other kicker has more than one.
+It was also only the 2nd game of his career with two makes from 54 or longer.
+
+## Cook
+
+Cook's 32 carries tied his career high, set at Pittsburgh in 2025. Those are the only 2 games since 1999 in which any Bill has carried 32 times. His runs worked, leaving
+Buffalo more likely to score, 56% of the time; the average NFL run this season works 43% of the time. He scored the only Bills touchdown, his 10th
+straight game with a touchdown.
+
+Buffalo ran 40 designed runs, 61% of its plays, the 6th-highest share in its 143 regular-season games since 2018.
+
+## Allen's quiet day
+
+The flip side: Allen completed 10 of 21 passes for 81 yards with 2 interceptions, the fewest passing yards in any of his 105
+career wins. Only 1 of his 151 games with 15 or more throws had fewer yards, and that one was a loss. Buffalo didn't complete a pass of 20 yards
+or more, the 5th time that's happened in those 143 games. He did run 7 times.
 
 ## The rain, as forecast
 
@@ -40,6 +59,12 @@ Both of our calls hit. The Bills won (55%), and Allen ran 7 times (4 designed ru
 
 ## For the stat-heads
 
+- Win chance by play type: nflverse `wpa` from Buffalo's side, summed by play type. Kicking game = nflverse `special` = 1 (field goals,
+  extra points, punts, kickoffs; nflverse leaves `special_teams_play` = 0 on field goals). Passing = `pass` = 1, runs = `rush` = 1, no-plays left out.
+- Long field goals: every attempt in nflverse since 1999. Late = made, 10 seconds or fewer left, kicking team tied or down 1-2 before the kick.
+  57+ make rate 0.595 on 205 attempts, 2023 through Week 12 of 2026. Bass's earlier one: 2024_09_MIA_BUF, 61 yards.
+- Cook: 32 carries tie his max in nflverse; Bills games with a 32+ carry rusher since 1999: 2. Run "worked" = nflverse `success`;
+  league = 2026 designed runs through Week 12 (0.428).
 - Allen games: passer with 15+ attempts (sacks excluded), regular season and playoffs, 2018 through 2026 Week 12. Wins: 105. Median passing yards in wins 239.
 - Designed run share: `rush` = 1 over pass + rush plays (no kneels, spikes, two-point tries, no-plays). 20+ passes: dropbacks with `yards_gained` >= 20.
 - Mahomes starts: starting QB per the nflverse schedule, regular season, 2017 on (137). Part 3 measures use 2023 on, as part 3 did; run "worked" = nflverse `success`.

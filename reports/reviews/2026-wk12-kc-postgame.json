@@ -53,13 +53,20 @@
    "at_utc": "2026-11-27T16:04:46Z",
    "notes": "Round-2 diff re-checked; md, PNG and hero reproduce byte-for-byte from a clean git archive of 32a781f3 with data symlinked. PNG still needs freeze_images.py at publish.",
    "report": "2026-wk12-kc-postgame-final.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+   "at_utc": "2026-11-27T16:25:25Z",
+   "notes": "Round 3: reframed on Charlie's direction around Cook, the kicking game and Bass. New: win chance by play type (special = 1, since nflverse leaves special_teams_play = 0 on field goals), Bass/late 57+ FG history since 1999, Cook carries since 1999, league run success; new win-chance chart. All values asserted; chart checked by eye."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
-  "at_utc": "2026-11-27T16:03:53Z",
-  "notes": "Round 2: Mahomes starts from schedule QB ids (137, computed, asserted); big-play line per Quant; small-sample label (19 runs computed); rain sentence; accuracy-score wording; legend dated; headline per Editor. Kept part 3's 'worked' definition instead of 'stay on schedule' (success = EPA > 0)."
+  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+  "at_utc": "2026-11-27T16:25:25Z",
+  "notes": "Round 3: reframed on Charlie's direction around Cook, the kicking game and Bass. New: win chance by play type (special = 1, since nflverse leaves special_teams_play = 0 on field goals), Bass/late 57+ FG history since 1999, Cook carries since 1999, league run success; new win-chance chart. All values asserted; chart checked by eye."
  },
  "quant": {
   "verdict": "pass",

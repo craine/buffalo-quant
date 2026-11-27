@@ -1,4 +1,4 @@
-"""Bills-Chiefs recap (Week 12, Thursday Nov. 26, 2026): Josh Allen's fewest passing yards in a win, the run game, the rain, the kick.
+"""Bills-Chiefs recap (Week 12, Thursday Nov. 26, 2026): Cook carried it, the kicking game won it, Bass finished it.
 
 Writes reports/2026-wk12-kc-postgame.md, one PNG (bills-kc-wk12-postgame.png) and a hero JSON.
 Sources: nflverse play-by-play and schedules (2018 on; 2026 through Week 12, fingerprint asserted), the Ledger, and the published
@@ -123,47 +123,124 @@ def main():
     right = int((((led.probability > 0.5) & (led.outcome == 1)) | ((led.probability < 0.5) & (led.outcome == 0))).sum())
     assert (int(g24.outcome), int(g25.outcome), right, len(led)) == (1, 1, 15, 24)
 
-    # ---- chart: Allen's passing yards in each of his wins
-    wy = wins.sort_values("y").reset_index(drop=True)
-    fig, ax = plt.subplots(figsize=(11, 5.0), dpi=200)
-    rng = np.random.default_rng(12)
-    jit = rng.uniform(-0.28, 0.28, len(wy))
-    is_me = wy.game_id == GAME
-    ax.scatter(wy.y[~is_me], jit[~is_me], s=34, color=GRAY, alpha=0.8, edgecolor="white", linewidth=0.6, zorder=2, label="Other wins")
-    ax.scatter(wy.y[is_me], [0], s=150, color=BLUE, edgecolor="white", linewidth=1.5, zorder=3, label="Nov. 26, 2026 vs. Kansas City")
-    ax.annotate(f"{int(me.y)} yards", (me.y, 0), xytext=(0, 22), textcoords="offset points", ha="center", fontsize=11, color=BLUE, fontweight="bold")
+    # ---- special teams and the kicks. nflverse flags field goals special = 1 but special_teams_play = 0, so use `special`.
+    gp = query(f"""SELECT play_id, qtr, game_seconds_remaining gs, posteam, play_type, special, pass, rush, interception, wpa, home_wp_post,
+                   kicker_player_id, kick_distance, field_goal_result, punt_returner_player_name, return_yards, fumble, punter_player_name, "desc" d
+                   FROM raw_pbp WHERE game_id = '{GAME}' ORDER BY play_id""")
+    gp["bw"] = np.where(gp.posteam == "BUF", gp.wpa, -gp.wpa)
+    w_st = float(gp[gp.special == 1].bw.sum())
+    w_pass = float(gp[(gp.special == 0) & (gp.play_type != "no_play") & (gp["pass"] == 1)].bw.sum())
+    w_run = float(gp[(gp.special == 0) & (gp.play_type != "no_play") & (gp.rush == 1)].bw.sum())
+    w_int = float(gp[gp.interception == 1].bw.sum())
+    fgs = gp[gp.field_goal_result.notna()]
+    b54 = fgs[(fgs.posteam == "BUF") & (fgs.kick_distance == 54)].iloc[0]
+    b57 = fgs[(fgs.posteam == "BUF") & (fgs.kick_distance == 57)].iloc[0]
+    miss = fgs[(fgs.posteam == "KC") & (fgs.field_goal_result == "missed")].iloc[0]
+    ret = gp[(gp.play_type == "punt") & (gp.posteam == "KC") & (gp.qtr == 4) & (gp.gs == 15)].iloc[0]
+    muff = gp[(gp.play_type == "punt") & (gp.posteam == "KC") & (gp.fumble == 1)].iloc[0]
+    bass = b57.kicker_player_id
+    assert (int(miss.kick_distance), int(ret.return_yards), int(b57.gs), int(b54.gs), int(muff.kick_distance), int(miss.gs) // 60) == (46, 17, 4, 723, 13, 6)
     med = float(wins.y.median())
-    ax.axvline(med, color=MUTED, lw=1, ls="--", zorder=1)
-    ax.text(med, 0.42, f"Typical win: {med:.0f}", ha="center", fontsize=9, color=MUTED)
-    ax.set_yticks([]); ax.set_ylim(-0.5, 0.55)
-    ax.set_xlabel("Josh Allen passing yards")
-    ax.legend(loc="upper right", fontsize=9, frameon=False)
-    for sp in ("left", "top", "right"):
+    assert (round(w_st, 2), round(w_pass, 2), round(w_run, 2), round(w_int, 2)) == (0.64, -0.36, 0.20, -0.33)
+    # every field goal since 1999, for how rare the finish was
+    fga = query("""SELECT game_id, season, kicker_player_id kid, kick_distance d, field_goal_result r, game_seconds_remaining s, score_differential sd
+                   FROM raw_pbp WHERE field_goal_attempt = 1 AND season >= 1999""")
+    fga["made"] = fga.r == "made"
+    long_ = fga[(fga.d >= 57) & fga.season.between(2023, 2026)]
+    p57 = float(long_.made.mean())
+    late = fga[fga.made & (fga.s <= 10) & fga.sd.between(-2, 0) & (fga.d >= 57)]
+    late_bass = late[late.kid == bass]
+    two54 = fga[fga.made & (fga.d >= 54) & (fga.kid == bass)].groupby("game_id").size()
+    assert (len(late), len(late_bass), int(late.kid.value_counts().max()), int((two54 >= 2).sum())) == (11, 2, 2, 2)
+    assert round(p57, 2) == 0.60 and len(long_) == 205
+    bass_prev = late_bass[late_bass.game_id != GAME].iloc[0]
+    prev_opp = query(f"SELECT home_team, away_team FROM raw_schedules WHERE game_id = '{bass_prev.game_id}'").iloc[0]
+    prev_opp = {"MIA": "Miami"}[prev_opp.away_team if prev_opp.home_team == "BUF" else prev_opp.home_team]
+    import re as _re
+    ret_spot = int(_re.search(r"to KC (\d+) for", ret.d).group(1))
+    tie = query(f"SELECT total_home_score h, total_away_score a FROM raw_pbp WHERE game_id = '{GAME}' AND play_id = {int(b54.play_id)}").iloc[0]
+    assert (ret_spot, int(tie.h), int(tie.a), int(bass_prev.d), bass_prev.season) == (39, 10, 10, 61, 2024)
+    # ---- Cook: carries in every Bills game since 1999, and how often his runs worked vs. the league this season
+    car = query("""SELECT game_id, rusher_player_id rid, COUNT(*) n FROM raw_pbp WHERE posteam = 'BUF' AND rush = 1 AND play_type <> 'no_play'
+                   AND rusher_player_id IS NOT NULL AND season >= 1999 GROUP BY 1, 2""")
+    big_car = car[car.n >= int(cook.n)]
+    ck = query(f"""SELECT AVG(success) sr FROM raw_pbp p WHERE p.game_id = '{GAME}' AND p.rusher_player_id = '{cook.rusher_player_id}' AND {PLAYS}""").sr.iloc[0]
+    lg = query(f"""SELECT AVG(success) sr FROM raw_pbp p WHERE p.season = 2026 AND p.season_type = 'REG' AND p.week <= {WK} AND p.rush = 1
+                   AND COALESCE(p.qb_scramble, 0) = 0 AND {PLAYS}""").sr.iloc[0]
+    prev_ck = car[(car.rid == cook.rusher_player_id) & (car.n == int(cook.n)) & (car.game_id != GAME)].game_id.iloc[0]
+    prev_ck_opp = {"PIT": "Pittsburgh"}[prev_ck.split("_")[2] if prev_ck.split("_")[3] == "BUF" else prev_ck.split("_")[3]]
+    assert prev_ck[:4] == "2025"
+    assert len(big_car) == 2 and set(big_car.rid) == {cook.rusher_player_id} and int(car[car.rid == cook.rusher_player_id].n.max()) == 32
+    assert round(ck, 2) == 0.56 and ck > lg
+
+    # ---- chart: Buffalo's win chance through the game, with the kicking plays marked
+    wc = gp[gp.home_wp_post.notna()].copy()
+    wc["t"] = (3600 - wc.gs) / 60
+    fig, ax = plt.subplots(figsize=(11, 5.6), dpi=200)
+    ax.plot(np.r_[0, wc.t], np.r_[0.5, wc.home_wp_post], color=BLUE, lw=2, zorder=2)
+    ax.axhline(0.5, color="#D5D8DE", lw=1, zorder=1)
+    marks = [(muff, "Chiefs punter fumbles,\n13-yard punt", RED, (20, 0.95), "left"),
+             (b54, "Bass, 54 yards: tied 10-10", BLUE, (42, 0.22), "right"),
+             (miss, "Butker misses from 46", RED, (50.5, 0.06), "right"),
+             (ret, f"Dortch returns a punt {int(ret.return_yards)} yards", BLUE, (59.6, 0.30), "right"),
+             (b57, f"Bass, 57 yards, {int(b57.gs)} seconds left", BLUE, (57.6, 0.93), "right")]
+    for r_, lab, col, (tx, ty), ha in marks:
+        x_ = (3600 - r_.gs) / 60
+        y_ = float(r_.home_wp_post)
+        ax.scatter([x_], [y_], s=60, color=col, edgecolor="white", lw=1.2, zorder=4)
+        ax.annotate(lab, (x_, y_), xytext=(tx, ty), textcoords="data", fontsize=9.5, color=INK, ha=ha, va="center",
+                    arrowprops=dict(arrowstyle="-", color=MUTED, lw=0.8, shrinkA=2, shrinkB=4))
+    for q in (15, 30, 45):
+        ax.axvline(q, color="#EEF0F3", lw=1, zorder=0)
+    ax.set_xlim(0, 60.5); ax.set_ylim(0, 1.02)
+    ax.set_xticks([0, 15, 30, 45, 60]); ax.set_xticklabels(["Kickoff", "End of 1st", "Half", "End of 3rd", "Final"])
+    ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(1.0))
+    ax.set_ylabel("Bills' chance to win")
+    for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
-    fig.subplots_adjust(left=0.04, right=0.98, bottom=0.17, top=0.78)
-    finish(fig, f"{int(me.y)} yards: the fewest Josh Allen has thrown for in any of his {len(wins)} wins",
-           f"Each dot is a Bills win with Allen throwing 15+ passes, regular season and playoffs, 2018 through Week {WK} of 2026.", "x")
-    fig.texts[-1].set_text(f"Source: nflverse play-by-play. {len(py)} Allen games with 15+ throws; {len(wins)} wins.")
+    fig.subplots_adjust(left=0.09, right=0.97, bottom=0.12, top=0.80)
+    finish(fig, "The kicking game won it",
+           "Buffalo's chance to win after every play, Bills vs. Chiefs, Nov. 26, 2026. Blue dots: Bills kicking plays. Red: Chiefs mistakes.", "y")
+    fig.texts[-1].set_text(f"Source: nflverse play-by-play and win-probability model. {len(wc)} plays.")
     fig.savefig(OUT / PNG)
     plt.close(fig)
 
-    md = f"""# Bills {bs}, Chiefs {ks}: Josh Allen threw for {int(me.y)} yards, the fewest in any of his {len(wins)} career wins
+    md = f"""# Bills {bs}, Chiefs {ks}: James Cook carried it, the kicking game won it, Tyler Bass finished it
 
-**In the rain, with the wind listed at {wind_note} mph, the Bills beat Kansas City on Tyler Bass's {int(winner.d)}-yard field goal with {int(winner.s)} seconds left.
-Josh Allen completed {int(me.cmp)} of {int(me.att)} passes for {int(me.y)} yards with {int(me.ints)} interceptions, his lowest total in any win of his career.
-Buffalo ran instead: {int(g0.ru)} designed runs, {g0.share:.0%} of its plays, and James Cook carried {int(cook.n)} times for {int(cook.y)} yards. The defense
-held Patrick Mahomes' Chiefs to {ks} points, something that has happened in only {low10} of his {len(kc)} regular-season starts.**
+**Buffalo beat Kansas City in the rain without much of a passing game. James Cook carried {int(cook.n)} times for {int(cook.y)} yards and scored the only Bills
+touchdown. Tyler Bass tied the game from {int(b54.kick_distance)} yards and won it from {int(b57.kick_distance)} with {int(b57.gs)} seconds left. By our count, the
+kicking game and returns added about {w_st * 100:.0f} percentage points to the Bills' chance to win, far more than the passing game took away ({abs(w_pass) * 100:.0f}).**
 
-![{int(me.y)} yards: the fewest Josh Allen has thrown for in any of his {len(wins)} wins]({PNG})
+![The kicking game won it]({PNG})
 
-## A different kind of win
+## The kicking game
 
-Allen has thrown 15 or more passes in {len(py)} games, regular season and playoffs. Only {len(below_any)} of them had fewer passing yards than Thursday, and that
-one was a loss. His next-lowest total in a win is {int(second)}. Buffalo didn't complete a pass of 20 yards or more, the {ordn(no_big)} time that's happened in
-{len(bg)} Bills regular-season games since 2018.
+Every play changes a team's chance to win. Add up those changes by type of play and Thursday's game splits cleanly: the kicks, punts and returns were worth
+about **{w_st * 100:+.0f} points** of win chance to Buffalo, the runs about {w_run * 100:+.0f}, and the passing game about {w_pass * 100:+.0f}, most of that from Josh Allen's two interceptions ({w_int * 100:+.0f}).
 
-What it did instead: {int(g0.ru)} designed runs, {g0.share:.0%} of its plays, the {"tied for " if ties else ""}{ordn(share_rank)}-highest share in those {len(bg)} games. Cook scored the only Bills
-touchdown, his {ordn(cook_streak)} straight game with a touchdown.
+- **Bass from {int(b54.kick_distance)}**, early in the fourth quarter, tied it {int(tie.h)}-{int(tie.a)}.
+- **Harrison Butker missed from {int(miss.kick_distance)}** with {int(miss.gs) // 60} minutes left and the game still tied.
+- **Kansas City's punt unit** had a bad day: punter Matt Araiza fumbled in the second quarter and got off only a {int(muff.kick_distance)}-yard punt, and with {int(ret.gs)} seconds left
+  Greg Dortch returned a punt {int(ret.return_yards)} yards to the Kansas City {ret_spot}.
+- **Bass from {int(b57.kick_distance)}**, {int(b57.gs)} seconds left, won it.
+
+Kicks from 57 yards or more have been good {p57:.0%} of the time since 2023 ({len(long_)} tries). Since 1999, there have been {len(late)} field goals of 57 yards or more that tied
+or won a game in its last 10 seconds. Bass has {len(late_bass)} of them, this one and his {int(bass_prev.d)}-yarder against {prev_opp} in {bass_prev.season}. No other kicker has more than one.
+It was also only the {ordn(int((two54 >= 2).sum()))} game of his career with two makes from 54 or longer.
+
+## Cook
+
+Cook's {int(cook.n)} carries tied his career high, set at {prev_ck_opp} in {prev_ck[:4]}. Those are the only {len(big_car)} games since 1999 in which any Bill has carried {int(cook.n)} times. His runs worked, leaving
+Buffalo more likely to score, {ck:.0%} of the time; the average NFL run this season works {lg:.0%} of the time. He scored the only Bills touchdown, his {ordn(cook_streak)}
+straight game with a touchdown.
+
+Buffalo ran {int(g0.ru)} designed runs, {g0.share:.0%} of its plays, the {"tied for " if ties else ""}{ordn(share_rank)}-highest share in its {len(bg)} regular-season games since 2018.
+
+## Allen's quiet day
+
+The flip side: Allen completed {int(me.cmp)} of {int(me.att)} passes for {int(me.y)} yards with {int(me.ints)} interceptions, the fewest passing yards in any of his {len(wins)}
+career wins. Only {len(below_any)} of his {len(py)} games with 15 or more throws had fewer yards, and that one was a loss. Buffalo didn't complete a pass of 20 yards
+or more, the {ordn(no_big)} time that's happened in those {len(bg)} games. He did run {a_runs} times.
 
 ## The rain, as forecast
 
@@ -189,6 +266,12 @@ Both of our calls hit. The Bills won ({g24.probability:.0%}), and Allen ran {a_r
 
 ## For the stat-heads
 
+- Win chance by play type: nflverse `wpa` from Buffalo's side, summed by play type. Kicking game = nflverse `special` = 1 (field goals,
+  extra points, punts, kickoffs; nflverse leaves `special_teams_play` = 0 on field goals). Passing = `pass` = 1, runs = `rush` = 1, no-plays left out.
+- Long field goals: every attempt in nflverse since 1999. Late = made, 10 seconds or fewer left, kicking team tied or down 1-2 before the kick.
+  57+ make rate {p57:.3f} on {len(long_)} attempts, 2023 through Week {WK} of 2026. Bass's earlier one: {bass_prev.game_id}, {int(bass_prev.d)} yards.
+- Cook: 32 carries tie his max in nflverse; Bills games with a 32+ carry rusher since 1999: {len(big_car)}. Run "worked" = nflverse `success`;
+  league = 2026 designed runs through Week {WK} ({lg:.3f}).
 - Allen games: passer with 15+ attempts (sacks excluded), regular season and playoffs, 2018 through 2026 Week {WK}. Wins: {len(wins)}. Median passing yards in wins {med:.0f}.
 - Designed run share: `rush` = 1 over pass + rush plays (no kneels, spikes, two-point tries, no-plays). 20+ passes: dropbacks with `yards_gained` >= 20.
 - Mahomes starts: starting QB per the nflverse schedule, regular season, 2017 on ({len(kc)}). Part 3 measures use 2023 on, as part 3 did; run "worked" = nflverse `success`.
@@ -198,8 +281,8 @@ Both of our calls hit. The Bills won ({g24.probability:.0%}), and Allen ran {a_r
     (OUT / f"{SLUG}.md").write_text(md)
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": f"Bills {bs}, Chiefs {ks}",
-        "big": [[int(me.y), "Josh Allen passing yards, his fewest in any of his wins"], [int(g0.ru), "Bills designed runs"]],
-        "note": f"Rain, a {wind_note} mph wind and a {int(winner.d)}-yard field goal with {int(winner.s)} seconds left. Both of our Ledger calls hit.",
+        "big": [[int(b57.kick_distance), f"yards: Tyler Bass's winning field goal, {int(b57.gs)} seconds left"], [int(cook.n), "James Cook carries, tied for the most by a Bill since 1999"]],
+        "note": f"The kicking game added about {w_st * 100:.0f} points to Buffalo's chance to win; the passing game took away {abs(w_pass) * 100:.0f}. Both of our Ledger calls hit.",
     }, indent=1))
     print(md)
 
