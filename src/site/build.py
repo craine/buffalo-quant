@@ -19,8 +19,8 @@ SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
     ("bills-chiefs-postgame-wk12", "2026-wk12-kc-postgame.md", "2026-11-27", "Bills &middot; Recap",
-     "Josh Allen threw for 81 yards, his fewest in any of his 105 wins. Buffalo ran 40 times, held Kansas City to 10 and won on a 57-yard kick. Both Ledger calls hit.",
-     "bills-kc-wk12-postgame.png"),
+     "James Cook carried 32 times, Tyler Bass hit from 54 and 57, and the kicks and returns swung Buffalo's chances more than anything else. Both Ledger calls hit.",
+     "bills-kc-wk12-postgame-wp.png"),
     ("bills-chiefs-preview-wk12", "2026-wk12-kc-preview.md", "2026-11-26", "Bills &middot; Preview",
      "Our two Ledger calls for Thursday night: Bills win, 55%, and Josh Allen runs 4+ times, 80%. Where they come from, and a wetter forecast.",
      "bills-kc-wk12-preview.png"),

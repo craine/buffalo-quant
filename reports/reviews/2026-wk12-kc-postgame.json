@@ -60,26 +60,49 @@
    "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
    "at_utc": "2026-11-27T16:25:25Z",
    "notes": "Round 3: reframed on Charlie's direction around Cook, the kicking game and Bass. New: win chance by play type (special = 1, since nflverse leaves special_teams_play = 0 on field goals), Bass/late 57+ FG history since 1999, Cook carries since 1999, league run success; new win-chance chart. All values asserted; chart checked by eye."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+   "at_utc": "2026-11-27T16:28:47Z",
+   "notes": "Round 3 FAIL: raw_pbp is 2018+ so 'since 1999' claims are really 2018+; Cook 'only 2 Bills 32-carry games since 1999' false (7 incl McGahee 37, Henry 35, F.Jackson 33, Henry 32, McCoy 32 in raw_pbp_history); late-FG definition counts go-ahead/winning kicks, not ties; new PNG breaks frozen-image test. WPA numbers verified (+63.6/+20.0/-36.2/-33.1); other new facts correct.",
+   "report": "2026-wk12-kc-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+   "at_utc": "2026-11-27T16:28:48Z",
+   "notes": "Round 3: needs edits. Explain +64 with start/end chance and a real example; 'percentage points' not 'points'; say both teams' kicks; punt-unit wording; chart leader lines cross, start at pregame chance; site dek still Allen-led.",
+   "report": "2026-wk12-kc-postgame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+   "at_utc": "2026-11-27T16:30:54Z",
+   "notes": "Round 4: all round-3 must-fixes. FG window 2018 on (asserted; history table has no kick columns), 'won' not 'tied or won'; Cook claim from both tables 1999 on (no Bill above 32 since F.Jackson 33, 2009; asserted); new chart file -wp.png, unpublished old PNG removed from manifest; win-chance walkthrough (55% start, 76->100 on the 57, return +22, components sum to 1, asserted); percentage points; both teams' kicks; punting bullet with computed 13-yard net; Mahomes stat-heads line removed; site dek; chart starts at pregame chance, labels uncrossed."
   }
  ],
  "self": {
   "verdict": "pass",
-  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
-  "at_utc": "2026-11-27T16:25:25Z",
-  "notes": "Round 3: reframed on Charlie's direction around Cook, the kicking game and Bass. New: win chance by play type (special = 1, since nflverse leaves special_teams_play = 0 on field goals), Bass/late 57+ FG history since 1999, Cook carries since 1999, league run success; new win-chance chart. All values asserted; chart checked by eye."
+  "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+  "at_utc": "2026-11-27T16:30:54Z",
+  "notes": "Round 4: all round-3 must-fixes. FG window 2018 on (asserted; history table has no kick columns), 'won' not 'tied or won'; Cook claim from both tables 1999 on (no Bill above 32 since F.Jackson 33, 2009; asserted); new chart file -wp.png, unpublished old PNG removed from manifest; win-chance walkthrough (55% start, 76->100 on the 57, return +22, components sum to 1, asserted); percentage points; both teams' kicks; punting bullet with computed 13-yard net; Mahomes stat-heads line removed; site dek; chart starts at pregame chance, labels uncrossed."
  },
  "quant": {
-  "verdict": "pass",
-  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
-  "at_utc": "2026-11-27T16:04:45Z",
-  "notes": "Round 2: both must-fixes applied and verified (137 starts from schedule QB ids; big-play line softened). New numbers (19 runs, 31 pass plays) verified; writer's 'more likely to score' wording accepted (success = EPA>0). All other numbers unchanged and match.",
+  "verdict": "fail",
+  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+  "at_utc": "2026-11-27T16:28:47Z",
+  "notes": "Round 3 FAIL: raw_pbp is 2018+ so 'since 1999' claims are really 2018+; Cook 'only 2 Bills 32-carry games since 1999' false (7 incl McGahee 37, Henry 35, F.Jackson 33, Henry 32, McCoy 32 in raw_pbp_history); late-FG definition counts go-ahead/winning kicks, not ties; new PNG breaks frozen-image test. WPA numbers verified (+63.6/+20.0/-36.2/-33.1); other new facts correct.",
   "report": "2026-wk12-kc-postgame-quant.md"
  },
  "editor": {
-  "verdict": "pass",
-  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
-  "at_utc": "2026-11-27T16:04:45Z",
-  "notes": "Round 2: all edits applied or acceptably varied; plain English, no jargon in body, no betting or rejected phrases, links valid, chart legend stands alone, hook shareable.",
+  "verdict": "fail",
+  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
+  "at_utc": "2026-11-27T16:28:48Z",
+  "notes": "Round 3: needs edits. Explain +64 with start/end chance and a real example; 'percentage points' not 'points'; say both teams' kicks; punt-unit wording; chart leader lines cross, start at pregame chance; site dek still Allen-led.",
   "report": "2026-wk12-kc-postgame-editor.md"
  },
  "final": {
