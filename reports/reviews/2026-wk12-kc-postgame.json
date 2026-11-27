@@ -29,6 +29,30 @@
    "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
    "at_utc": "2026-11-27T16:03:53Z",
    "notes": "Round 2: Mahomes starts from schedule QB ids (137, computed, asserted); big-play line per Quant; small-sample label (19 runs computed); rain sentence; accuracy-score wording; legend dated; headline per Editor. Kept part 3's 'worked' definition instead of 'stay on schedule' (success = EPA > 0)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+   "at_utc": "2026-11-27T16:04:45Z",
+   "notes": "Round 2: both must-fixes applied and verified (137 starts from schedule QB ids; big-play line softened). New numbers (19 runs, 31 pass plays) verified; writer's 'more likely to score' wording accepted (success = EPA>0). All other numbers unchanged and match.",
+   "report": "2026-wk12-kc-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+   "at_utc": "2026-11-27T16:04:45Z",
+   "notes": "Round 2: all edits applied or acceptably varied; plain English, no jargon in body, no betting or rejected phrases, links valid, chart legend stands alone, hook shareable.",
+   "report": "2026-wk12-kc-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+   "at_utc": "2026-11-27T16:04:46Z",
+   "notes": "Round-2 diff re-checked; md, PNG and hero reproduce byte-for-byte from a clean git archive of 32a781f3 with data symlinked. PNG still needs freeze_images.py at publish.",
+   "report": "2026-wk12-kc-postgame-final.md"
   }
  ],
  "self": {
@@ -38,17 +62,24 @@
   "notes": "Round 2: Mahomes starts from schedule QB ids (137, computed, asserted); big-play line per Quant; small-sample label (19 runs computed); rain sentence; accuracy-score wording; legend dated; headline per Editor. Kept part 3's 'worked' definition instead of 'stay on schedule' (success = EPA > 0)."
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
-  "at_utc": "2026-11-27T16:02:54Z",
-  "notes": "Must-fix: Mahomes 135 starts should be 137 (schedule QB ids; filter dropped 2017 W17 and 2019 W7); 'Buffalo did this one' overclaims (6.45% vs 7.60%, <half a play). All other numbers re-derived and match; Allen scope is full career; Cook streak correct; rain fair.",
+  "verdict": "pass",
+  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+  "at_utc": "2026-11-27T16:04:45Z",
+  "notes": "Round 2: both must-fixes applied and verified (137 starts from schedule QB ids; big-play line softened). New numbers (19 runs, 31 pass plays) verified; writer's 'more likely to score' wording accepted (success = EPA>0). All other numbers unchanged and match.",
   "report": "2026-wk12-kc-postgame-quant.md"
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
-  "at_utc": "2026-11-27T16:02:54Z",
-  "notes": "Needs light edits: Quant fixes; explain 'runs worked'; 'dropbacks'->'pass plays'; chart legend 'Thursday' -> date; Brier line wording; optional headline trim. No jargon/betting/rejected phrases otherwise; links valid; hook shareable.",
+  "verdict": "pass",
+  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+  "at_utc": "2026-11-27T16:04:45Z",
+  "notes": "Round 2: all edits applied or acceptably varied; plain English, no jargon in body, no betting or rejected phrases, links valid, chart legend stands alone, hook shareable.",
   "report": "2026-wk12-kc-postgame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+  "at_utc": "2026-11-27T16:04:46Z",
+  "notes": "Round-2 diff re-checked; md, PNG and hero reproduce byte-for-byte from a clean git archive of 32a781f3 with data symlinked. PNG still needs freeze_images.py at publish.",
+  "report": "2026-wk12-kc-postgame-final.md"
  }
 }
