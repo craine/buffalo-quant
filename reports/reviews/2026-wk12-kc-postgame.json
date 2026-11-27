@@ -6,12 +6,49 @@
    "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
    "at_utc": "2026-11-27T15:58:38Z",
    "notes": "Round 1: P0024/P0025 graded; every number computed and asserted; projections, part 3 run rank and part 4 rain numbers parsed from published hero files; 2026 pbp fingerprint pinned through Week 12; pressure left out (PFR charting through Week 11 only)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
+   "at_utc": "2026-11-27T16:02:54Z",
+   "notes": "Must-fix: Mahomes 135 starts should be 137 (schedule QB ids; filter dropped 2017 W17 and 2019 W7); 'Buffalo did this one' overclaims (6.45% vs 7.60%, <half a play). All other numbers re-derived and match; Allen scope is full career; Cook streak correct; rain fair.",
+   "report": "2026-wk12-kc-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "fail",
+   "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
+   "at_utc": "2026-11-27T16:02:54Z",
+   "notes": "Needs light edits: Quant fixes; explain 'runs worked'; 'dropbacks'->'pass plays'; chart legend 'Thursday' -> date; Brier line wording; optional headline trim. No jargon/betting/rejected phrases otherwise; links valid; hook shareable.",
+   "report": "2026-wk12-kc-postgame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+   "at_utc": "2026-11-27T16:03:53Z",
+   "notes": "Round 2: Mahomes starts from schedule QB ids (137, computed, asserted); big-play line per Quant; small-sample label (19 runs computed); rain sentence; accuracy-score wording; legend dated; headline per Editor. Kept part 3's 'worked' definition instead of 'stay on schedule' (success = EPA > 0)."
   }
  ],
  "self": {
   "verdict": "pass",
+  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
+  "at_utc": "2026-11-27T16:03:53Z",
+  "notes": "Round 2: Mahomes starts from schedule QB ids (137, computed, asserted); big-play line per Quant; small-sample label (19 runs computed); rain sentence; accuracy-score wording; legend dated; headline per Editor. Kept part 3's 'worked' definition instead of 'stay on schedule' (success = EPA > 0)."
+ },
+ "quant": {
+  "verdict": "fail",
   "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
-  "at_utc": "2026-11-27T15:58:38Z",
-  "notes": "Round 1: P0024/P0025 graded; every number computed and asserted; projections, part 3 run rank and part 4 rain numbers parsed from published hero files; 2026 pbp fingerprint pinned through Week 12; pressure left out (PFR charting through Week 11 only)."
+  "at_utc": "2026-11-27T16:02:54Z",
+  "notes": "Must-fix: Mahomes 135 starts should be 137 (schedule QB ids; filter dropped 2017 W17 and 2019 W7); 'Buffalo did this one' overclaims (6.45% vs 7.60%, <half a play). All other numbers re-derived and match; Allen scope is full career; Cook streak correct; rain fair.",
+  "report": "2026-wk12-kc-postgame-quant.md"
+ },
+ "editor": {
+  "verdict": "fail",
+  "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
+  "at_utc": "2026-11-27T16:02:54Z",
+  "notes": "Needs light edits: Quant fixes; explain 'runs worked'; 'dropbacks'->'pass plays'; chart legend 'Thursday' -> date; Brier line wording; optional headline trim. No jargon/betting/rejected phrases otherwise; links valid; hook shareable.",
+  "report": "2026-wk12-kc-postgame-editor.md"
  }
 }

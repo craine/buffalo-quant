@@ -94,7 +94,8 @@ def main():
     # ---- Mahomes: how often Kansas City scored 10 or fewer in his regular-season starts (2018 on)
     ms = query(f"""SELECT p.game_id FROM raw_pbp p WHERE COALESCE(p.passer_player_id, p.rusher_player_id) = '{mahomes}' AND p.pass = 1
                    AND p.season_type = 'REG' AND {SCOPE} GROUP BY 1 HAVING COUNT(*) >= 15""")
-    kc = query("SELECT game_id, home_team, home_score, away_score FROM raw_schedules").merge(ms, on="game_id")
+    kc = query(f"""SELECT game_id, home_team, home_score, away_score FROM raw_schedules WHERE game_type = 'REG' AND home_score IS NOT NULL
+                   AND (home_qb_id = '{mahomes}' OR away_qb_id = '{mahomes}') AND (season < 2026 OR week <= {WK})""")
     kc["pts"] = np.where(kc.home_team == "KC", kc.home_score, kc.away_score)
     low10 = int((kc.pts <= 10).sum())
     # part 3's measures for this game: big pass plays and run success, against Mahomes' typical game (2023 on, as in part 3)
@@ -104,7 +105,8 @@ def main():
                    AND p.game_id IN ({",".join(repr(x) for x in ms.game_id)}) GROUP BY 1""")
     med_big, med_run = float(m3[m3.game_id != GAME].big.median()), float(m3[m3.game_id != GAME].run_sr.median())
     kc_big, kc_run = float(t.loc["KC", "big"] / t.loc["KC", "db"]), float(t.loc["KC", "run_sr"])
-    assert (len(kc), low10) == (135, 5) and kc_big < med_big and kc_run > med_run
+    kc_runs = int(t.loc["KC", "ru"])
+    assert (len(kc), low10) == (137, 5) and kc_big < med_big and kc_run > med_run
 
     # ---- our numbers: model projection, part 4 rain finding, Ledger
     pv = json.loads((OUT / "2026-wk12-kc-preview.hero.json").read_text())
@@ -128,7 +130,7 @@ def main():
     jit = rng.uniform(-0.28, 0.28, len(wy))
     is_me = wy.game_id == GAME
     ax.scatter(wy.y[~is_me], jit[~is_me], s=34, color=GRAY, alpha=0.8, edgecolor="white", linewidth=0.6, zorder=2, label="Other wins")
-    ax.scatter(wy.y[is_me], [0], s=150, color=BLUE, edgecolor="white", linewidth=1.5, zorder=3, label="Thursday vs. Kansas City")
+    ax.scatter(wy.y[is_me], [0], s=150, color=BLUE, edgecolor="white", linewidth=1.5, zorder=3, label="Nov. 26, 2026 vs. Kansas City")
     ax.annotate(f"{int(me.y)} yards", (me.y, 0), xytext=(0, 22), textcoords="offset points", ha="center", fontsize=11, color=BLUE, fontweight="bold")
     med = float(wins.y.median())
     ax.axvline(med, color=MUTED, lw=1, ls="--", zorder=1)
@@ -145,7 +147,7 @@ def main():
     fig.savefig(OUT / PNG)
     plt.close(fig)
 
-    md = f"""# Bills {bs}, Chiefs {ks}: Josh Allen threw for {int(me.y)} yards, the fewest in any of his {len(wins)} wins, and Buffalo won anyway
+    md = f"""# Bills {bs}, Chiefs {ks}: Josh Allen threw for {int(me.y)} yards, the fewest in any of his {len(wins)} career wins
 
 **In the rain, with the wind listed at {wind_note} mph, the Bills beat Kansas City on Tyler Bass's {int(winner.d)}-yard field goal with {int(winner.s)} seconds left.
 Josh Allen completed {int(me.cmp)} of {int(me.att)} passes for {int(me.y)} yards with {int(me.ints)} interceptions, his lowest total in any win of his career.
@@ -166,28 +168,30 @@ touchdown, his {ordn(cook_streak)} straight game with a touchdown.
 ## The rain, as forecast
 
 Our model, which doesn't know about weather, projected {proj_b} to {proj_k}. The teams scored {bs} and {ks}. In [part 4](bills-chiefs-rain-and-wind.html)
-we found teams in rain and a 10+ mph wind had scored about {rain_pts} points each, against {rain_usual} expected in dry games. Thursday came in well below even
+we found teams in rain and a 10+ mph wind had scored about {rain_pts} points each, against the {rain_usual} we'd expect from the same teams in dry weather. Thursday came in well below even
 that. One game proves nothing, but it was the kind of game the forecast pointed to.
 
 ## The recipe from part 3
 
 [Part 3](bills-chiefs-slowing-mahomes.html) named three things that slowed Mahomes: pressure, no big pass plays, and stopping the run.
 
-- **Big plays:** {int(t.loc['KC', 'big'])} of Kansas City's {int(t.loc['KC', 'db'])} dropbacks gained 20 or more yards ({kc_big:.0%}). In Mahomes' typical game since
-  2023 it's {med_big:.0%}. Buffalo did this one.
-- **The run:** Kansas City's runs worked {kc_run:.0%} of the time, above Mahomes' typical game ({med_run:.0%}). Buffalo, {ordn(run_rank)} against the run in part 3, didn't stop it.
+- **Big plays:** {int(t.loc['KC', 'big'])} of Kansas City's {int(t.loc['KC', 'db'])} pass plays gained 20 or more yards ({kc_big:.0%}). In Mahomes' typical game since
+  2023 it's {med_big:.0%}. That's close to normal, so call this one even, not a win for Buffalo.
+- **The run:** Kansas City's runs worked, leaving it more likely to score, {kc_run:.0%} of the time ({kc_runs} runs), above Mahomes' typical game ({med_run:.0%}). Buffalo, {ordn(run_rank)} against the run in part 3, didn't stop it.
 - **Pressure:** the charting data isn't out yet. We'll add it when it is.
+
+This is one game, {int(t.loc['KC', 'db'])} pass plays and {kc_runs} runs, so it's a small sample.
 
 ## Receipts
 
 Both of our calls hit. The Bills won ({g24.probability:.0%}), and Allen ran {a_runs} times ({int(runs.d)} designed runs, {int(runs.sc)} scrambles), so "4 or more"
-({g25.probability:.0%}) came in. Scores: {g24.brier:.2f} and {g25.brier:.2f}, where 0 is perfect. Our record is now {right} of {len(led)}.
+({g25.probability:.0%}) came in. Our accuracy scores: {g24.brier:.2f} and {g25.brier:.2f}, where 0 is a perfect call. Our record is now {right} of {len(led)}.
 
 ## For the stat-heads
 
 - Allen games: passer with 15+ attempts (sacks excluded), regular season and playoffs, 2018 through 2026 Week {WK}. Wins: {len(wins)}. Median passing yards in wins {med:.0f}.
 - Designed run share: `rush` = 1 over pass + rush plays (no kneels, spikes, two-point tries, no-plays). 20+ passes: dropbacks with `yards_gained` >= 20.
-- Mahomes starts: 15+ dropbacks, regular season, 2018 on. Part 3 measures use 2023 on, as part 3 did; run "worked" = nflverse `success`.
+- Mahomes starts: starting QB per the nflverse schedule, regular season, 2017 on ({len(kc)}). Part 3 measures use 2023 on, as part 3 did; run "worked" = nflverse `success`.
 - Weather from nflverse's game note ("{wx}").
 - Ledger: P0024 Brier {g24.brier:.4f}; P0025 Brier {g25.brier:.4f}. 2026 play-by-play fingerprint through Week {WK}: {(int(fp.n), float(fp.s))}.
 """
