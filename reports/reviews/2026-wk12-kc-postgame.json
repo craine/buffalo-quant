@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
+   "at_utc": "2026-11-27T15:58:38Z",
+   "notes": "Round 1: P0024/P0025 graded; every number computed and asserted; projections, part 3 run rank and part 4 rain numbers parsed from published hero files; 2026 pbp fingerprint pinned through Week 12; pressure left out (PFR charting through Week 11 only)."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "b6ca2661577462a2682fbbc1d757c368c50dc7cf18f7198546889edcd6302b8d",
+  "at_utc": "2026-11-27T15:58:38Z",
+  "notes": "Round 1: P0024/P0025 graded; every number computed and asserted; projections, part 3 run rank and part 4 rain numbers parsed from published hero files; 2026 pbp fingerprint pinned through Week 12; pressure left out (PFR charting through Week 11 only)."
+ }
+}
