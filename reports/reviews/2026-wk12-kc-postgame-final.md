@@ -1,14 +1,11 @@
-# Final check: 2026-wk12-kc-postgame (stage 4)
+# Final check, round 4: 2026-wk12-kc-postgame (stage 4)
 
-**Verdict: pass.** Story sha256: bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99.
+**Verdict: pass.** Story sha256 68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35 (commit a16a0435).
 
-Reviewed the round-2 diff (commit 32a781f3 vs a60dd0d6) and everything it touches: Mahomes start count and rule, big-play line,
-run line and sample sentence, rain sentence, Receipts wording, headline, chart legend. No number or claim broke; see quant round 2.
-
-Reproduction: `git archive HEAD` into a clean directory, data/ symlinked to the working copy's database, ran
-`python3 -m src.reports.bills_kc_postgame_wk12`. All asserts passed (incl. 2026 pbp fingerprint (28843, -180.1391)). Byte-identical:
-- reports/2026-wk12-kc-postgame.md  bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99
-- reports/bills-kc-wk12-postgame.png  b3c448bc13036551c168e2f5e061d7cb07871e9aecdd22d499668e7f5abca300
-- reports/2026-wk12-kc-postgame.hero.json  6f595a796aa0fb3761fa0750af945feeaa490d960eb82904a8e11b41d90f57c7
-
-Still to do at publish: the PNG is not in reports/published_images.json; run scripts/freeze_images.py.
+This was a full review of the reframed story (see quant and editor round 4); no edits came after it.
+Reproduction: `git archive HEAD` into a clean directory with data/ symlinked, then ran `python3 -m src.reports.bills_kc_postgame_wk12`.
+All asserts passed, including the 2026 fingerprint (28843, -180.1391), and the run wrote no other PNG. Byte-identical:
+- reports/2026-wk12-kc-postgame.md  68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35
+- reports/bills-kc-wk12-postgame-wp.png  96d56453c205a65855fe9f57096c625e132787c62a03042f6ca8ed9d413f0a61 (matches published_images.json)
+- reports/2026-wk12-kc-postgame.hero.json  f335a90e857cbb3916424f77b518a5e87a3399db9611b508051a247f6420eecd
+tests/test_published_images.py passes.

@@ -83,6 +83,30 @@
    "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
    "at_utc": "2026-11-27T16:30:54Z",
    "notes": "Round 4: all round-3 must-fixes. FG window 2018 on (asserted; history table has no kick columns), 'won' not 'tied or won'; Cook claim from both tables 1999 on (no Bill above 32 since F.Jackson 33, 2009; asserted); new chart file -wp.png, unpublished old PNG removed from manifest; win-chance walkthrough (55% start, 76->100 on the 57, return +22, components sum to 1, asserted); percentage points; both teams' kicks; punting bullet with computed 13-yard net; Mahomes stat-heads line removed; site dek; chart starts at pregame chance, labels uncrossed."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+   "at_utc": "2026-11-27T16:32:16Z",
+   "notes": "Round 4: all round-3 must-fixes verified (2018 FG window, Cook 1999+ via history: since-2009 claim correct, 'won' wording, new frozen chart file). New win-chance numbers verified and sum to 100%. Non-blocking: 2000_06_BUF_MIA missing from raw_pbp_history (affects only the stat-heads 'since 1999: 7').",
+   "report": "2026-wk12-kc-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+   "at_utc": "2026-11-27T16:32:17Z",
+   "notes": "Round 4: ready. +64 explained with start/finish and examples; percentage points throughout; both teams' kicks named; chart clean; dek and hero stand alone; no jargon, betting or rejected phrases.",
+   "report": "2026-wk12-kc-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+   "at_utc": "2026-11-27T16:32:17Z",
+   "notes": "Round 4: full-review text unchanged since quant/editor; md, PNG (-wp) and hero reproduce byte-for-byte from clean git archive of a16a0435 with data symlinked; frozen-image test passes.",
+   "report": "2026-wk12-kc-postgame-final.md"
   }
  ],
  "self": {
@@ -92,24 +116,24 @@
   "notes": "Round 4: all round-3 must-fixes. FG window 2018 on (asserted; history table has no kick columns), 'won' not 'tied or won'; Cook claim from both tables 1999 on (no Bill above 32 since F.Jackson 33, 2009; asserted); new chart file -wp.png, unpublished old PNG removed from manifest; win-chance walkthrough (55% start, 76->100 on the 57, return +22, components sum to 1, asserted); percentage points; both teams' kicks; punting bullet with computed 13-yard net; Mahomes stat-heads line removed; site dek; chart starts at pregame chance, labels uncrossed."
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
-  "at_utc": "2026-11-27T16:28:47Z",
-  "notes": "Round 3 FAIL: raw_pbp is 2018+ so 'since 1999' claims are really 2018+; Cook 'only 2 Bills 32-carry games since 1999' false (7 incl McGahee 37, Henry 35, F.Jackson 33, Henry 32, McCoy 32 in raw_pbp_history); late-FG definition counts go-ahead/winning kicks, not ties; new PNG breaks frozen-image test. WPA numbers verified (+63.6/+20.0/-36.2/-33.1); other new facts correct.",
+  "verdict": "pass",
+  "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+  "at_utc": "2026-11-27T16:32:16Z",
+  "notes": "Round 4: all round-3 must-fixes verified (2018 FG window, Cook 1999+ via history: since-2009 claim correct, 'won' wording, new frozen chart file). New win-chance numbers verified and sum to 100%. Non-blocking: 2000_06_BUF_MIA missing from raw_pbp_history (affects only the stat-heads 'since 1999: 7').",
   "report": "2026-wk12-kc-postgame-quant.md"
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "7c3c4cbecc17a9cb733fefa6143406441db3d18a143ac5ecbd460a3d29e6ecb1",
-  "at_utc": "2026-11-27T16:28:48Z",
-  "notes": "Round 3: needs edits. Explain +64 with start/end chance and a real example; 'percentage points' not 'points'; say both teams' kicks; punt-unit wording; chart leader lines cross, start at pregame chance; site dek still Allen-led.",
+  "verdict": "pass",
+  "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+  "at_utc": "2026-11-27T16:32:17Z",
+  "notes": "Round 4: ready. +64 explained with start/finish and examples; percentage points throughout; both teams' kicks named; chart clean; dek and hero stand alone; no jargon, betting or rejected phrases.",
   "report": "2026-wk12-kc-postgame-editor.md"
  },
  "final": {
   "verdict": "pass",
-  "sha256": "bf4236b5214965fa0bee01944b9119696bcfc865b20831a8fc11f48ed1e48b99",
-  "at_utc": "2026-11-27T16:04:46Z",
-  "notes": "Round-2 diff re-checked; md, PNG and hero reproduce byte-for-byte from a clean git archive of 32a781f3 with data symlinked. PNG still needs freeze_images.py at publish.",
+  "sha256": "68ec3c001e8aafe1229e2563ac8247f8a259e625f6425aa4e5d0323ca7b56f35",
+  "at_utc": "2026-11-27T16:32:17Z",
+  "notes": "Round 4: full-review text unchanged since quant/editor; md, PNG (-wp) and hero reproduce byte-for-byte from clean git archive of a16a0435 with data symlinked; frozen-image test passes.",
   "report": "2026-wk12-kc-postgame-final.md"
  }
 }
