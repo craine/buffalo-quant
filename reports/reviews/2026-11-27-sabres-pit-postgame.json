@@ -29,6 +29,30 @@
    "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
    "at_utc": "2026-11-28T12:46:33Z",
    "notes": "Round 2: all round-1 fixes applied verbatim (rarity cutoff = Pittsburgh's own value; 1 in 400 computed and asserted; headline, lead and receipts no longer treat one game as proof; Lyon unblocked; Norris sentence; site dek; hero; grader comment). Chart title changed; PNG re-frozen (never published)."
+  },
+  {
+   "stage": "quant",
+   "verdict": "pass",
+   "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+   "at_utc": "2026-11-28T12:47:42Z",
+   "notes": "Round 2 (117133bd): all round-1 fixes applied as specified; cutoff wording now matches the <= PIT 1.755 query (21 of 8,700, PIT 5); 1 in 400 asserted; one-game overclaim removed; all numbers re-verified against current DB.",
+   "report": "2026-11-27-sabres-pit-postgame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+   "at_utc": "2026-11-28T12:47:42Z",
+   "notes": "Round 2: headline agrees with body; chart title, dek and hero each stand alone; Norris merged; no rejected phrases; PNG title fits, no overlaps. Optional: one-game hedge appears 3 times.",
+   "report": "2026-11-27-sabres-pit-postgame-editor.md"
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+   "at_utc": "2026-11-28T12:47:42Z",
+   "notes": "Clean clone of 117133bd + data symlink: md, PNG and hero regenerate byte-identical; PNG hash matches published_images.json.",
+   "report": "2026-11-27-sabres-pit-postgame-final.md"
   }
  ],
  "self": {
@@ -38,17 +62,24 @@
   "notes": "Round 2: all round-1 fixes applied verbatim (rarity cutoff = Pittsburgh's own value; 1 in 400 computed and asserted; headline, lead and receipts no longer treat one game as proof; Lyon unblocked; Norris sentence; site dek; hero; grader comment). Chart title changed; PNG re-frozen (never published)."
  },
  "quant": {
-  "verdict": "fail",
-  "sha256": "bc655a71e177c91da69ad7f4b264fedc4bd2cde944fbf7dc4d7354c3c25d7537",
-  "at_utc": "2026-11-28T12:45:43Z",
-  "notes": "Numbers all re-derived and correct. Required: rarity cutoff is PIT's own 1.755, not '1.8 or less' (26 at <=1.8) in lead, body, chart title, dek, hero; headline/lead treat one game as proof ('came back all at once', 'It didn't take long'). Minor: Lyon '20 shots' -> unblocked; 414 -> about 400; grader docstring 49%.",
+  "verdict": "pass",
+  "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+  "at_utc": "2026-11-28T12:47:42Z",
+  "notes": "Round 2 (117133bd): all round-1 fixes applied as specified; cutoff wording now matches the <= PIT 1.755 query (21 of 8,700, PIT 5); 1 in 400 asserted; one-game overclaim removed; all numbers re-verified against current DB.",
   "report": "2026-11-27-sabres-pit-postgame-quant.md"
  },
  "editor": {
-  "verdict": "fail",
-  "sha256": "bc655a71e177c91da69ad7f4b264fedc4bd2cde944fbf7dc4d7354c3c25d7537",
-  "at_utc": "2026-11-28T12:45:43Z",
-  "notes": "Headline contradicts body (one game); chart title/dek/hero cutoff wording; hero line 2 doesn't stand alone; Norris repetition; 'unblocked' used before defined. No rejected phrases, chart readable, no broken links.",
+  "verdict": "pass",
+  "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+  "at_utc": "2026-11-28T12:47:42Z",
+  "notes": "Round 2: headline agrees with body; chart title, dek and hero each stand alone; Norris merged; no rejected phrases; PNG title fits, no overlaps. Optional: one-game hedge appears 3 times.",
   "report": "2026-11-27-sabres-pit-postgame-editor.md"
+ },
+ "final": {
+  "verdict": "pass",
+  "sha256": "2ac6cbd6268374a812ee12b48ef695a8bad94fbfe2f0a3e119fa6706659f1188",
+  "at_utc": "2026-11-28T12:47:42Z",
+  "notes": "Clean clone of 117133bd + data symlink: md, PNG and hero regenerate byte-identical; PNG hash matches published_images.json.",
+  "report": "2026-11-27-sabres-pit-postgame-final.md"
  }
 }
