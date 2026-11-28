@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-penguins-pregame-nov-27", "2026-11-27-sabres-pit-pregame.md", "2026-11-27", "Sabres &middot; Preview",
+     "Pittsburgh has the 2nd-fewest points in the NHL but gets half the chances. Its shooting and goaltending have let it down, and history says neither usually lasts. Our model: Sabres 51%.",
+     "sabres-pit-nov27-chances.png"),
     ("bills-chiefs-postgame-wk12", "2026-wk12-kc-postgame.md", "2026-11-27", "Bills &middot; Recap",
      "James Cook carried 32 times, Tyler Bass hit from 54 and 57, and the kicks and returns swung Buffalo's chances more than anything else. Both Ledger calls hit.",
      "bills-kc-wk12-postgame-wp.png"),
