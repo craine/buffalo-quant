@@ -71,6 +71,7 @@ def main(as_of=AS_OF):
     assert liz_before == 41
     far = pg.sort_values("dist").iloc[-1]
     close_b = goals[goals.team == "BUF"].sort_values("dist").iloc[0]
+    assert close_b.shooter_id == goals[goals.team == "BUF"].shooter_id.iloc[-1]
 
     # ---- how rare: every team-game since 2023-24
     tg = u.groupby(["game_id", "season", "team"]).agg(gl=("goal", "sum"), x=("xg", "sum")).reset_index()
@@ -78,6 +79,8 @@ def main(as_of=AS_OF):
     rare = tg[(tg.gl >= me.gl) & (tg.x <= me.x)]
     rare_pit = int((rare.team == "PIT").sum())
     assert (len(rare), len(tg), rare_pit, int(me.gl)) == (21, 8700, 5, 5)
+    every = int(round(len(tg) / len(rare), -2))
+    assert every == 400
     near = tg[(tg.x - me.x).abs() <= 0.25]
     avg_near = float(near.gl.mean())
 
@@ -133,7 +136,7 @@ def main(as_of=AS_OF):
     for sp in ("top", "right"):
         ax.spines[sp].set_visible(False)
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.13, top=0.80)
-    finish(fig, f"{int(me.gl)} goals on chances worth {me.x:.1f}: {len(rare)} times in {len(tg):,} NHL team-games",
+    finish(fig, f"{int(me.gl)}+ goals on chances as thin as Pittsburgh's: {len(rare)} times in {len(tg):,} NHL team-games",
            "Every NHL team's game since 2023-24. Each gray dot is one team in one game.", "x")
     fig.texts[-1].set_text(f"Source: NHL play-by-play; Buffalo Quant Desk chance model. Regular season through {as_of}. {len(tg):,} team-games.")
     fig.savefig(OUT / PNG)
@@ -141,29 +144,28 @@ def main(as_of=AS_OF):
 
     plist = "; ".join(f"{r.name} from {r.dist:.0f} feet ({r.xg:.0%})" for r in pg.itertuples())
     bl = [r.name for r in goals[goals.team == "BUF"].itertuples()]
-    md = f"""# Penguins 6, Sabres 3: Pittsburgh's finishing came back all at once
+    md = f"""# Penguins 6, Sabres 3: Buffalo had the chances, Pittsburgh had the finish
 
 **Buffalo had the better chances on Friday, worth about {x_b:.1f} goals to Pittsburgh's {x_p:.1f}. The Penguins scored {int(me.gl)} anyway, plus an empty-netter.
-Since 2023-24, a team has scored {int(me.gl)} or more on chances worth {me.x:.1f} or less only {len(rare)} times in {len(tg):,} team-games, about once every
-{len(tg) / len(rare):,.0f}. Our preview said Pittsburgh's poor finishing probably wouldn't last. It didn't take long. Our call, Sabres {pr.probability:.0%}, was a miss.**
+Since 2023-24, a team has scored {int(me.gl)} or more on chances worth no more than Pittsburgh's only {len(rare)} times in {len(tg):,} team-games, about once every
+{every}. Our preview said Pittsburgh's poor finishing probably wouldn't last over the season. One game doesn't prove that, but Friday was a big swing. Our call, Sabres {pr.probability:.0%}, was a miss.**
 
-![{int(me.gl)} goals on chances worth {me.x:.1f}: {len(rare)} times in {len(tg):,} NHL team-games]({PNG})
+![{int(me.gl)}+ goals on chances as thin as Pittsburgh's: {len(rare)} times in {len(tg):,} NHL team-games]({PNG})
 
 ## The game
 
-Buffalo had {n_b} unblocked shots to Pittsburgh's {n_p}, and {share_g:.0%} of the chances. Buffalo's goals came from {", ".join(bl[:-1])} and {bl[-1]};
-{close_b['name']}'s came from {close_b.dist:.0f} feet, a chance worth about {close_b.xg:.0%}.
+Buffalo had {n_b} shots that weren't blocked to Pittsburgh's {n_p}, and {share_g:.0%} of the chances. Buffalo's goals came from {", ".join(bl[:-1])} and {bl[-1]}, whose goal came from {close_b.dist:.0f} feet, a chance worth about {close_b.xg:.0%}.
 
 Pittsburgh's five: {plist}. The percentages are each shot's chance of going in. {en_name} added an empty-netter late.
 
 **In goal:** {g1n} allowed {int(g1.ga)} goals on {int(g1.n)} unblocked shots worth about {g1.x:.1f} and was replaced after Lizotte's goal, {pull_c} into the {ordn(pull_p)} period.
-{g2n} allowed {int(g2.ga)} on {int(g2.n)} shots worth about {g2.x:.1f}. {pit_g} was in net for Pittsburgh and allowed {int(g.home_score)} on chances worth {x_b:.1f}, about what an average goalie would.
+{g2n} allowed {int(g2.ga)} on {int(g2.n)} unblocked shots worth about {g2.x:.1f}. {pit_g} was in net for Pittsburgh and allowed {int(g.home_score)} on chances worth {x_b:.1f}, about what an average goalie would.
 
 ## How rare that is
 
 Every shot that isn't blocked gets a value: the share of similar shots that go in, based on distance, angle, shot type and whether it's a rebound or rush.
 Add them up and you get what a team's chances were worth. Teams with chances worth about {me.x:.1f} (within a quarter-goal) have scored {avg_near:.1f} goals on average.
-Pittsburgh scored {int(me.gl)}. The chart shows every team-game since 2023-24; only {len(rare)} had {int(me.gl)} or more goals on chances worth {me.x:.1f} or less, and {rare_pit} of them, counting Friday, are Pittsburgh's.
+Pittsburgh scored {int(me.gl)}. The chart shows every team-game since 2023-24; only {len(rare)} had {int(me.gl)} or more goals on chances worth no more than Pittsburgh's, and {rare_pit} of them, counting Friday, are Pittsburgh's.
 
 **How we checked it.** The shot values are scaled each season so that, across the league, chances add up to goals. And the 41-shot example in our preview,
 Blake Lizotte with no goals on chances worth about 3, scored on Friday from {liz.dist.iloc[0]:.0f} feet, a chance worth about {liz.xg.iloc[0]:.0%}. That's what finishing luck looks like
@@ -172,12 +174,12 @@ when it turns.
 ## What it means
 
 One game doesn't change much. Buffalo gets {B.share:.0%} of the chances in its games, {ordn(rk['share']['BUF'])} in the NHL, and that's the number that carries forward.
-Pittsburgh is still {ordn(rk['fin']['PIT'])} in finishing after Friday; one big night only moves a season so far. The Sabres are {W}-{L}-{OTL}.
+Pittsburgh is {ordn(rk['fin']['PIT'])} in finishing after Friday; one big night only moves a season so far. The Sabres are {W}-{L}-{OTL}.
 
 ## Receipts
 
 - **Our preview** said Pittsburgh's finishing and goaltending would probably come back toward average, and that it wouldn't necessarily show up in one game.
-  The finishing showed up in one game, though one game is mostly luck either way. Murashov had an average night. We'll keep tracking both over the season.
+  One game is mostly luck either way, so Friday doesn't settle a season-long call. Murashov had an average night. We'll keep tracking both over the season.
 - **The Ledger** gave the Sabres {pr.probability:.0%}. They lost, so it's a miss. On our scorecard, where 0 is perfect and a coin flip scores 0.25, it scored {mg.brier:.2f}.
   Our record is {right} of {len(m)}.
 
@@ -193,7 +195,7 @@ Pittsburgh is still {ordn(rk['fin']['PIT'])} in finishing after Friday; one big 
     (OUT / f"{SLUG}.hero.json").write_text(json.dumps({
         "label": "Penguins 6, Sabres 3",
         "big": [[int(me.gl), f"Pittsburgh goals on chances worth {me.x:.1f}, not counting the empty-netter"],
-                [f"1 in {len(tg) / len(rare):,.0f}", "how often a team does that, since 2023-24"]],
+                [f"1 in {every}", "how often a team scores 5+ on chances that thin, since 2023-24"]],
         "note": f"Buffalo had {share_g:.0%} of the chances. Our 51% Sabres call was a miss.",
     }, indent=1))
     print(md)

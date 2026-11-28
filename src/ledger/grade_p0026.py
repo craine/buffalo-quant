@@ -1,4 +1,4 @@
-"""Grade Ledger P0026 (Sabres beat the Penguins, Nov 27, 2026, 49%). Run once; grades are append-only."""
+"""Grade Ledger P0026 (Sabres beat the Penguins, Nov 27, 2026, 51%). Run once; grades are append-only."""
 from src.db import query
 from src.ledger.ledger import grade, load_to_db
 
