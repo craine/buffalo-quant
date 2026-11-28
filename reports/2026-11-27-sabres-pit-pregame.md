@@ -53,7 +53,7 @@ Ranks are among all 79 goalies this season. Starters weren't confirmed when we p
 
 ## Our prediction: Sabres 51%, Penguins 49%
 
-**This is our model's number.** It counts once it's logged on the [Ledger](../ledger.html) before puck drop; every logged call is graded after the game, hit or miss.
+**Logged on the [Ledger](../ledger.html) at 2026-11-28 00:32:32 UTC, before puck drop.** It gets graded after the game, hit or miss.
 
 Our model expects about **3.3 goals for Buffalo and 3.3 for Pittsburgh**, with about a 16% chance the game is tied after 60 minutes. It works from each team's chances
 this season, blended with last season's, plus home ice. Pittsburgh gets more of the chances; Buffalo has home ice; the two about cancel out. The model doesn't count finishing or
