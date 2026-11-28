@@ -101,7 +101,7 @@ def main(as_of=AS_OF):
     botsv = r[r.sv_o <= r.sv_o.quantile(0.25)]
     bot_sv_o, bot_sv_e = float(botsv.sv_o.mean()), float(botsv.sv_e.mean())
     assert bot_sv_o < -10 and abs(bot_sv_e) < abs(bot_sv_o) / 4
-    gk_line = "So does the goaltending."
+    gk_line = "So, mostly, does the goaltending."
     top_sv_o, top_sv_e = float(topsv.sv_o.mean()), float(topsv.sv_e.mean())
     assert bot_fin_o < -10 and abs(bot_fin_e) < abs(bot_fin_o) / 2 and top_sv_e > 0
 
@@ -145,6 +145,8 @@ def main(as_of=AS_OF):
     cold = nyx.sort_values("gap").iloc[0]
     cold_id = nyx.sort_values("gap").index[0]
     cold_name = names[cold_id]
+    cold_n = int((cur[cur.team == THEM].shooter_id == cold_id).sum())
+    assert cold_n < 100
 
     # rest and meetings
     last_b = rec[rec.team == US].game_date.max()
@@ -223,7 +225,7 @@ Our model, which looks at chances, not finishing or goaltending, calls tonight c
 **Finishing.** Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays.
 This season, a shot from within 10 feet has gone in about {p10:.0%} of the time; one from 40 feet or more, about {p40:.0%}. Add those up and you get
 what a team's chances were worth. The Penguins' chances have been worth about {n.ngf + abs(n.fin_tot):.0f} goals this season; they've scored {int(n.ngf)} (not counting empty nets).
-Only {n_fin_bottom} {'team has' if n_fin_bottom == 1 else 'teams have'} finished worse. {cold_name} has the biggest gap on the team: {int(cold.g)} goals on chances worth about {cold.x:.0f}.
+Only {n_fin_bottom} {'team has' if n_fin_bottom == 1 else 'teams have'} finished worse. {cold_name} has the biggest gap on the team: {int(cold.g)} goals on chances worth about {cold.x:.0f}, from {cold_n} shots, a small sample.
 
 **Goaltending.** {g1['name']} has played in {int(g1.gp)} of their {int(n.gp)} games, {g2['name']} in {int(g2.gp)}. Both have allowed more goals than an average goalie would have on the same shots.
 
@@ -268,7 +270,7 @@ Last season Buffalo won {ly_w} of the {len(ly)} games between them.
 ## For the stat-heads
 
 - xG: our model on unblocked, non-empty-net shots, rescaled per season (2026-27 factor {cal.loc[SEASON]:.3f}). Data through {as_of} ({len(g26)} games; none on Nov. 26).
-- Goalie games are appearances, including relief. Player goal totals are official, including empty-net goals (Novak and Rakell {n1_en} combined, Thompson {tom_en} of {tom_g}).
+- Goalie games are appearances, including relief. Player goal totals are official, including empty-net goals (Novak and Rakell {n1_en} of {n1_g * len(lead_ids)} combined, Thompson {tom_en} of {tom_g}).
 - PIT: xG share {n.share:.3f} ({int(n.share_rk)}); G - xG {n.fin_tot:+.1f} ({n.fin:+.2f}/gp, {int(n.fin_rk)}); xGA - GA {n.sv_tot:+.1f} ({n.sv:+.2f}/gp, {int(n.sv_rk)}); net {net:+.1f}.
   BUF: share {b.share:.3f} ({int(b.share_rk)}); G - xG {b.fin_tot:+.1f} ({int(b.fin_rk)}); xGA - GA {b.sv_tot:+.1f} ({int(b.sv_rk)}).
 - Split-half (games 1-41 vs 42-82), 2023-24 to 2025-26, {len(r)} team-seasons: bottom-quartile first-half finishing {bot_fin_o:+.1f} -> {bot_fin_e:+.1f} (n {len(botf)});

@@ -14,7 +14,7 @@ Our model, which looks at chances, not finishing or goaltending, calls tonight c
 **Finishing.** Every shot has a chance of going in, based on where it was taken, what kind of shot it was, and things like rebounds and power plays.
 This season, a shot from within 10 feet has gone in about 14% of the time; one from 40 feet or more, about 2%. Add those up and you get
 what a team's chances were worth. The Penguins' chances have been worth about 74 goals this season; they've scored 66 (not counting empty nets).
-Only 4 teams have finished worse. Blake Lizotte has the biggest gap on the team: 0 goals on chances worth about 3.
+Only 4 teams have finished worse. Blake Lizotte has the biggest gap on the team: 0 goals on chances worth about 3, from 41 shots, a small sample.
 
 **Goaltending.** Arturs Silovs has played in 15 of their 24 games, Sergei Murashov in 9. Both have allowed more goals than an average goalie would have on the same shots.
 
@@ -28,7 +28,7 @@ and its last 41. For the teams in Pittsburgh's spot:
 - **Teams in the bottom quarter for finishing** in the first half were about 12 goals below average. In the second half, about 2 below.
 - **Teams in the bottom quarter for goaltending** in the first half were about 14 goals worse than average. In the second half, about 2 worse.
 
-So if the Penguins follow the pattern, the finishing comes around. So does the goaltending. It won't necessarily show up in one game. Buffalo, for its part, finishes and saves at about an average rate (15th and 18th).
+So if the Penguins follow the pattern, the finishing comes around. So, mostly, does the goaltending. It won't necessarily show up in one game. Buffalo, for its part, finishes and saves at about an average rate (15th and 18th).
 
 ## Who to watch
 
@@ -63,7 +63,7 @@ Last season Buffalo won 1 of the 3 games between them.
 ## For the stat-heads
 
 - xG: our model on unblocked, non-empty-net shots, rescaled per season (2026-27 factor 1.001). Data through 2026-11-25 (399 games; none on Nov. 26).
-- Goalie games are appearances, including relief. Player goal totals are official, including empty-net goals (Novak and Rakell 0 combined, Thompson 0 of 17).
+- Goalie games are appearances, including relief. Player goal totals are official, including empty-net goals (Novak and Rakell 0 of 18 combined, Thompson 0 of 17).
 - PIT: xG share 0.504 (14); G - xG -8.2 (-0.34/gp, 28); xGA - GA -7.0 (-0.29/gp, 27); net -15.2.
   BUF: share 0.479 (22); G - xG +0.5 (15); xGA - GA -1.0 (18).
 - Split-half (games 1-41 vs 42-82), 2023-24 to 2025-26, 96 team-seasons: bottom-quartile first-half finishing -11.9 -> -1.7 (n 24);

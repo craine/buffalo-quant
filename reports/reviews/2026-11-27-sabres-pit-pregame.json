@@ -6,12 +6,49 @@
    "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
    "at_utc": "2026-11-28T00:20:17Z",
    "notes": "Penguins preview built from the Nov 25 Rangers generator with new file names. All numbers computed and asserted (records, ranks 28/27/14/22, points rank, goalies, scorers tie, split-half for bottom-quarter finishing and goaltending, rest, last season 1 of 3, puck drop). Chart title shortened to fit. Model 0.508 matches the logger."
+  },
+  {
+   "stage": "quant",
+   "verdict": "fail",
+   "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
+   "at_utc": "2026-11-28T00:23:54Z",
+   "notes": "All numbers re-derived and match (records, points rank no tie, share 14/22, fin 28, sv 27, goalies, split-half, scorers tie, model 0.508, logger id/puck drop). Required fix: Lizotte 0 G on ~3 xG is 41 shots with no small-sample label. Advisory: goaltending bounce-back 16/24 still below avg; card values differ slightly; published_images.json freeze uncommitted.",
+   "report": "2026-11-27-sabres-pit-pregame-quant.md"
+  },
+  {
+   "stage": "editor",
+   "verdict": "pass",
+   "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
+   "at_utc": "2026-11-28T00:23:54Z",
+   "notes": "Plain English, no jargon in body, no rejected phrases, chart title fits, hero/dek read alone, all links resolve. Optional: clarify stat-heads empty-net line; soften 'So does the goaltending.'",
+   "report": "2026-11-27-sabres-pit-pregame-editor.md"
+  },
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "f1102b3be277185c6d4e7b396d1f0d561f6079c39f3691820aaebe031aea2a7d",
+   "at_utc": "2026-11-28T00:24:35Z",
+   "notes": "Round 2: small-sample label on Lizotte (41 shots, computed); 'So, mostly, does the goaltending.'; stat-heads empty-net line clarified."
   }
  ],
  "self": {
   "verdict": "pass",
+  "sha256": "f1102b3be277185c6d4e7b396d1f0d561f6079c39f3691820aaebe031aea2a7d",
+  "at_utc": "2026-11-28T00:24:35Z",
+  "notes": "Round 2: small-sample label on Lizotte (41 shots, computed); 'So, mostly, does the goaltending.'; stat-heads empty-net line clarified."
+ },
+ "quant": {
+  "verdict": "fail",
   "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
-  "at_utc": "2026-11-28T00:20:17Z",
-  "notes": "Penguins preview built from the Nov 25 Rangers generator with new file names. All numbers computed and asserted (records, ranks 28/27/14/22, points rank, goalies, scorers tie, split-half for bottom-quarter finishing and goaltending, rest, last season 1 of 3, puck drop). Chart title shortened to fit. Model 0.508 matches the logger."
+  "at_utc": "2026-11-28T00:23:54Z",
+  "notes": "All numbers re-derived and match (records, points rank no tie, share 14/22, fin 28, sv 27, goalies, split-half, scorers tie, model 0.508, logger id/puck drop). Required fix: Lizotte 0 G on ~3 xG is 41 shots with no small-sample label. Advisory: goaltending bounce-back 16/24 still below avg; card values differ slightly; published_images.json freeze uncommitted.",
+  "report": "2026-11-27-sabres-pit-pregame-quant.md"
+ },
+ "editor": {
+  "verdict": "pass",
+  "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
+  "at_utc": "2026-11-28T00:23:54Z",
+  "notes": "Plain English, no jargon in body, no rejected phrases, chart title fits, hero/dek read alone, all links resolve. Optional: clarify stat-heads empty-net line; soften 'So does the goaltending.'",
+  "report": "2026-11-27-sabres-pit-pregame-editor.md"
  }
 }
