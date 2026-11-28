@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "bc655a71e177c91da69ad7f4b264fedc4bd2cde944fbf7dc4d7354c3c25d7537",
+   "at_utc": "2026-11-28T12:41:50Z",
+   "notes": "Recap of PIT 6, BUF 3. P0026 graded (miss, Brier 0.2601; record 15 of 25). All numbers computed and asserted: game chances 2.9/1.8, rarity 21 of 8,700 team-games (PIT 5 incl. Friday), goalie split (UPL 4 on 12 / Lyon 1 on 20, replacement after Lizotte's goal asserted), Lizotte 41-shot callback, season ranks 21/25, 11-11-4. Chart checked by eye."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "bc655a71e177c91da69ad7f4b264fedc4bd2cde944fbf7dc4d7354c3c25d7537",
+  "at_utc": "2026-11-28T12:41:50Z",
+  "notes": "Recap of PIT 6, BUF 3. P0026 graded (miss, Brier 0.2601; record 15 of 25). All numbers computed and asserted: game chances 2.9/1.8, rarity 21 of 8,700 team-games (PIT 5 incl. Friday), goalie split (UPL 4 on 12 / Lyon 1 on 20, replacement after Lizotte's goal asserted), Lizotte 41-shot callback, season ranks 21/25, 11-11-4. Chart checked by eye."
+ }
+}
