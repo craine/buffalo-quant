@@ -1,0 +1,17 @@
+{
+ "history": [
+  {
+   "stage": "self",
+   "verdict": "pass",
+   "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
+   "at_utc": "2026-11-28T00:20:17Z",
+   "notes": "Penguins preview built from the Nov 25 Rangers generator with new file names. All numbers computed and asserted (records, ranks 28/27/14/22, points rank, goalies, scorers tie, split-half for bottom-quarter finishing and goaltending, rest, last season 1 of 3, puck drop). Chart title shortened to fit. Model 0.508 matches the logger."
+  }
+ ],
+ "self": {
+  "verdict": "pass",
+  "sha256": "340d8d1bdc71082fa4c586c156bdd9805f59b370ff2cf543d3f70fd6b826069d",
+  "at_utc": "2026-11-28T00:20:17Z",
+  "notes": "Penguins preview built from the Nov 25 Rangers generator with new file names. All numbers computed and asserted (records, ranks 28/27/14/22, points rank, goalies, scorers tie, split-half for bottom-quarter finishing and goaltending, rest, last season 1 of 3, puck drop). Chart title shortened to fit. Model 0.508 matches the logger."
+ }
+}
