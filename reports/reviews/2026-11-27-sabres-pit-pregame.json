@@ -60,6 +60,14 @@
    "sha256": "7d34e541dea4f3c0f85b2147d09cedb906871ec045f69da318ad8a787b4f8044",
    "at_utc": "2026-11-28T00:32:56Z",
    "notes": "Round 3: P0026 logged 00:32:32Z (before 01:00Z puck drop); only the Ledger status line changed, generated from ledger/predictions.csv."
+  },
+  {
+   "stage": "final",
+   "verdict": "pass",
+   "sha256": "7d34e541dea4f3c0f85b2147d09cedb906871ec045f69da318ad8a787b4f8044",
+   "at_utc": "2026-11-28T00:33:29Z",
+   "notes": "Round 3 (3f00953c): story differs from b88bf96c only in Ledger status line; P0026 matches logger (0.51, game id, resolves 01:00Z, created 00:32:32Z); clean clone reproduces md/PNG/hero byte-identical.",
+   "report": "2026-11-27-sabres-pit-pregame-final.md"
   }
  ],
  "self": {
@@ -84,9 +92,9 @@
  },
  "final": {
   "verdict": "pass",
-  "sha256": "f1102b3be277185c6d4e7b396d1f0d561f6079c39f3691820aaebe031aea2a7d",
-  "at_utc": "2026-11-28T00:25:25Z",
-  "notes": "Clean clone of b88bf96c: generator exit 0, md/PNG/hero byte-identical to committed; PNG matches frozen manifest.",
+  "sha256": "7d34e541dea4f3c0f85b2147d09cedb906871ec045f69da318ad8a787b4f8044",
+  "at_utc": "2026-11-28T00:33:29Z",
+  "notes": "Round 3 (3f00953c): story differs from b88bf96c only in Ledger status line; P0026 matches logger (0.51, game id, resolves 01:00Z, created 00:32:32Z); clean clone reproduces md/PNG/hero byte-identical.",
   "report": "2026-11-27-sabres-pit-pregame-final.md"
  }
 }
