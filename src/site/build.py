@@ -18,6 +18,9 @@ from src.ledger.ledger import GRADE_COLS, GRADE_CSV, PRED_COLS, PRED_CSV, _read
 SITE = ROOT / "site"
 DOMAIN = "https://buffaloquant.com"
 ARTICLES = [  # newest first: (slug, report file, date, kicker, dek, hero image)
+    ("sabres-penguins-postgame-nov-27", "2026-11-27-sabres-pit-postgame.md", "2026-11-28", "Sabres &middot; Recap",
+     "Buffalo had 62% of the chances and lost 6-3. Pittsburgh scored 5 on chances worth 1.8. Since 2023-24, a team has scored 5 or more on chances that thin only 21 times in 8,700 team-games.",
+     "sabres-pit-nov27-postgame.png"),
     ("sabres-penguins-pregame-nov-27", "2026-11-27-sabres-pit-pregame.md", "2026-11-27", "Sabres &middot; Preview",
      "Pittsburgh has the 2nd-fewest points in the NHL but gets half the chances. Its shooting and goaltending have let it down, and history says neither usually lasts. Our model: Sabres 51%.",
      "sabres-pit-nov27-chances.png"),
